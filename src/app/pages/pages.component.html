@@ -1,0 +1,26 @@
+<h1 *ngIf="!finishedAuthCheck()">
+  Loading
+</h1>
+
+
+
+
+<div *ngIf="finishedAuthCheck()" [ngClass]="{'toggle-sidebar':menuStatus}">
+
+  <app-header (toggleSidebarButton)="menuStatus = $event" ></app-header>
+  <!-- ======= Sidebar ======= -->
+  <app-sidebar></app-sidebar>
+
+  <!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+  <router-outlet></router-outlet>
+
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <app-footer></app-footer>
+  <!-- End Footer -->
+</div>

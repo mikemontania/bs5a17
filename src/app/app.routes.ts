@@ -1,18 +1,24 @@
 import { Routes } from '@angular/router';
+import { isAuthenticatedGuard } from './auth/guards/is-authenticated.guard';
+import { isNotAuthenticatedGuard } from './auth/guards/is-not-authenticated.guard';
 
 export const routes: Routes = [
 
+
+  {
+    path: 'login',
+    canActivate: [ isNotAuthenticatedGuard ],
+    loadComponent: () => import('./auth/login/login.component').then(c=>c.LoginComponent),
+  },
   {
     path: '',
-    loadComponent: () => import('./pages/dashbard/dashbard.component').then(m => m.DashbardComponent)
+    canActivate: [ isAuthenticatedGuard ],
+    loadChildren: () => import('./pages/pages-routing.module'),
   },
   {
-    path: 'user',
-    loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent)
+    path: '**',
+    redirectTo: 'login'
   },
-  {
-    path: 'settings',
-    loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
-  },
+
 
 ];
