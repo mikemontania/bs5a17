@@ -7,7 +7,8 @@ import { LoginResponse } from '../interfaces/login-response.interface';
 import { User } from '../interfaces/user.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BASE_URL } from '../../config';
-
+import { Router  } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -16,72 +17,99 @@ export class AuthService {
 
   private readonly baseUrl: string = BASE_URL;
   private http = inject( HttpClient );
-
-  private _currentUser = signal<User|null>(null);
+  private router = inject( Router );
+  public _token = signal<string|null>(null);
+  private user = signal<User|null>(null);
   private _authStatus = signal<AuthStatus>( AuthStatus.checking );
 
   //! Valores publicos
-  public currentUser = computed( () => this._currentUser() );
+  public currentUser = computed( () => this.user() );
   public authStatus = computed( () => this._authStatus() );
-
+  public token = computed( () => this._token() );
 
   constructor() {
-    this.checkAuthStatus().subscribe();
+
+      this.cargarStorage();
+
   }
 
   private setAuthentication(user: User, token:string): boolean {
 
-    this._currentUser.set( user );
+    this.user.set( user );
     this._authStatus.set( AuthStatus.authenticated );
     localStorage.setItem('token', token);
-
+    localStorage.setItem('user', JSON.stringify(user));
     return true;
   }
 
 
 
-
-  login( email: string, password: string ): Observable<boolean> {
-
-    const url  = `${ this.baseUrl }/login/login`;
-    const body = { email, password };
-
-    return this.http.post<LoginResponse>( url, body )
-      .pipe(
-        map( ({ user, token }) => this.setAuthentication( user, token )),
-        catchError( err => throwError( () => err.error.message ))
-      );
+  cargarStorage() {
+    localStorage.getItem('token')? this._token.set(localStorage.getItem('token')):null ;
+    localStorage.getItem('user')? this.user.set(JSON.parse((localStorage.getItem('user')!))):null ;
   }
 
-  checkAuthStatus():Observable<boolean> {
+  login(email: string, password: string, recordar: boolean = false): Observable<boolean> {
+    const url = `${this.baseUrl}/auth/login`;
+    console.log('login2')
 
-    const url   = `${ this.baseUrl }/auth/check-token`;
-    const token = localStorage.getItem('token');
+    // Remove token on login attempt
+    localStorage.removeItem('token');
 
-    if ( !token ) {
-      this.logout();
-      return of(false);
+    if (recordar) {
+      localStorage.setItem('username', email);
+    } else {
+      localStorage.removeItem('username');
     }
 
-    const headers = new HttpHeaders()
-      .set('Authorization', `Bearer ${ token }`);
+    const body = JSON.stringify({
+      username: email,
+      password: password,
+    });
 
-
-      return this.http.get<CheckTokenResponse>(url, { headers })
-        .pipe(
-          map( ({ user, token }) => this.setAuthentication( user, token )),
-          catchError(() => {
-            this._authStatus.set( AuthStatus.notAuthenticated );
-            return of(false);
-          })
-        );
-
-
+    return this.http.post<LoginResponse>(url, body).pipe(
+      map((response) => {
+        const decode = response.token.split('.');
+        this.setAuthentication(JSON.parse(window.atob(decode[1])), response.token);
+        return true;
+      }),
+      catchError((err) => {
+        // Handle different types of errors appropriately
+        console.error(err)
+        if (err.error && err.error.message) {
+          return throwError(() => err.error.message);
+        } else {
+          return throwError(() => 'An unknown error occurred during login.');
+        }
+      })
+    );
   }
+
+  actualizarToken() {
+
+    return this.http.get(this.baseUrl + 'auth/token')
+      .pipe(
+        map((response: any) => {
+        const decode = response.token.split('.');
+        this.setAuthentication(JSON.parse(window.atob(decode[1])), response.token);
+          console.log('tokenRenovado:');
+          return true;
+        }),
+
+        catchError((err) => {
+          // Handle different types of errors appropriately
+          if (err.error && err.error.message) {
+            return throwError(() => err.error.message);
+          } else {
+            return throwError(() => 'An unknown error occurred during login.');
+          }
+        })
+      );
+    }
 
   logout() {
     localStorage.removeItem('token');
-    this._currentUser.set(null);
+    this.user.set(null);
     this._authStatus.set( AuthStatus.notAuthenticated );
 
   }

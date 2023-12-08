@@ -1,9 +1,24 @@
 
 
 export interface User {
-  id:      string;
-  email:    string;
-  name:     string;
-  isActive: boolean;
-  roles:    string[];
+   codUsuario: number,
+   codEmpresa: number,
+   codSucursal: number,
+   codEmpresaErp: string,
+   codSucursalErp: string,
+   nombre: string,
+   username: string,
+   password: string,
+   authorities?: Authorities,
+   img?: string,
+   maxDescuentoImp?: number,
+   maxDescuentoPorc?: number,
+   cantItem?: number
 }
+export interface Authorities {
+
+            id: number,
+            nombreRol: string,
+
+
+  }

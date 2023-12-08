@@ -21,14 +21,14 @@ export class LoginComponent {
 
 
   public myForm: FormGroup = this.fb.group({
-    email:    ['mikemontania@gmail.com', [ Validators.required, Validators.email ]],
-    password: ['123456', [ Validators.required, Validators.minLength(6) ]],
+    email:    ['miguel.montania@cavallaro.com.py', [ Validators.required, Validators.email ]],
+    password: ['Cavainfo.MM', [ Validators.required, Validators.minLength(6) ]],
   });
 
 
   login() {
     const { email, password } = this.myForm.value;
-
+console.log('login')
     this.authService.login(email, password)
       .subscribe({
         next: () => this.router.navigateByUrl('/dashboard'),
