@@ -3,15 +3,15 @@ import { inject } from '@angular/core';
 import { AuthService } from '../auth/services/auth.service';
 
 export const interceptorServ: HttpInterceptorFn = (req, next) => {
-  const service = inject(AuthService);
+ const token = localStorage.getItem('token') ;
   const request = req.clone();
-  console.log('1')
-  if (service?.token()) {
-    console.log(service?.token())
-    console.log('2')
+  console.log('Interceptado')
+  if (token) {
+    console.log(token)
+
     req = request.clone({
       setHeaders: {
-        Authorization: `Bearer ${service.token()}`
+        Authorization: `Bearer ${token}`
       }
     });
 

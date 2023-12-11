@@ -7,8 +7,6 @@ import { LoginResponse } from '../interfaces/login-response.interface';
 import { User } from '../interfaces/user.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BASE_URL } from '../../config';
-import { Router  } from '@angular/router';
-import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -17,16 +15,12 @@ export class AuthService {
 
   private readonly baseUrl: string = BASE_URL;
   private http = inject( HttpClient );
-  private router = inject( Router );
-  public _token = signal<string|null>(null);
   private user = signal<User|null>(null);
   private _authStatus = signal<AuthStatus>( AuthStatus.checking );
 
   //! Valores publicos
   public currentUser = computed( () => this.user() );
   public authStatus = computed( () => this._authStatus() );
-  public token = computed( () => this._token() );
-
   constructor() {
 
     this.checkAuthStatus().subscribe();
@@ -45,7 +39,6 @@ export class AuthService {
 
 
   cargarStorage() {
-    localStorage.getItem('token')? this._token.set(localStorage.getItem('token')):null ;
     localStorage.getItem('user')? this.user.set(JSON.parse((localStorage.getItem('user')!))):null ;
   }
 
@@ -85,8 +78,6 @@ export class AuthService {
     );
   }
   checkAuthStatus():Observable<boolean> {
-
-    const url   = `${ this.baseUrl }/auth/check-token`;
     const token = localStorage.getItem('token');
 
     if ( !token ) {
@@ -94,20 +85,10 @@ export class AuthService {
       return of(false);
     }
 
-
-
-
-      return this.http.get<CheckTokenResponse>(this.baseUrl + 'auth/token')
+      return this.http.get<CheckTokenResponse>(this.baseUrl + '/auth/token')
       .pipe(
-        map((response: any) => {
-        const decode = response.token.split('.');
-        this.setAuthentication(JSON.parse(window.atob(decode[1])), response.token);
-          console.log('tokenRenovado:');
-          return true;
-        }),
-
+        map((response: any) =>  this.setAuthentication(JSON.parse(window.atob(response.token.split('.')[1])), response.token)       )       ,
         catchError((err) => {
-          // Handle different types of errors appropriately
           this._authStatus.set( AuthStatus.notAuthenticated );
           console.log(err)
           return of(false);
