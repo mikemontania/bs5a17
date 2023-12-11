@@ -1,13 +1,12 @@
 import { Component, computed, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
-import { ThemeService } from './theme.service';
-import { HeaderComponent } from './layout/header/HeaderComponent';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { AuthStatus } from './auth/interfaces/auth-status.enum';
 import { AuthService } from './auth/services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { HeaderComponent } from './layout/header/header.component';
 
 @Component({
   selector: 'app-root',

@@ -29,7 +29,7 @@ export class AuthService {
 
   constructor() {
 
-      this.cargarStorage();
+    this.checkAuthStatus().subscribe();
 
   }
 
@@ -84,10 +84,20 @@ export class AuthService {
       })
     );
   }
+  checkAuthStatus():Observable<boolean> {
 
-  actualizarToken() {
+    const url   = `${ this.baseUrl }/auth/check-token`;
+    const token = localStorage.getItem('token');
 
-    return this.http.get(this.baseUrl + 'auth/token')
+    if ( !token ) {
+      this.logout();
+      return of(false);
+    }
+
+
+
+
+      return this.http.get<CheckTokenResponse>(this.baseUrl + 'auth/token')
       .pipe(
         map((response: any) => {
         const decode = response.token.split('.');
@@ -98,14 +108,16 @@ export class AuthService {
 
         catchError((err) => {
           // Handle different types of errors appropriately
-          if (err.error && err.error.message) {
-            return throwError(() => err.error.message);
-          } else {
-            return throwError(() => 'An unknown error occurred during login.');
-          }
+          this._authStatus.set( AuthStatus.notAuthenticated );
+          console.log(err)
+          return of(false);
         })
       );
-    }
+
+
+  }
+
+
 
   logout() {
     localStorage.removeItem('token');

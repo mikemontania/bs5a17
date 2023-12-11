@@ -4,8 +4,8 @@ import { AuthStatus } from '../auth/interfaces/auth-status.enum';
 import { AuthService } from '../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../layout/footer/footer.component';
-import { HeaderComponent } from '../layout/header/HeaderComponent';
 import { SidebarComponent } from '../layout/sidebar/sidebar.component';
+import { HeaderComponent } from '../layout/header/header.component';
 
 @Component({
   selector: 'app-pages',
