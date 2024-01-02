@@ -24,7 +24,7 @@ export class AuthService {
   constructor() {
 
     this.checkAuthStatus().subscribe();
-
+this.cargarStorage()
   }
 
   private setAuthentication(user: User, token:string): boolean {
@@ -42,7 +42,7 @@ export class AuthService {
     localStorage.getItem('user')? this.user.set(JSON.parse((localStorage.getItem('user')!))):null ;
   }
 
-  login(email: string, password: string, recordar: boolean = false): Observable<boolean> {
+  login(username: string, password: string, recordar: boolean = false): Observable<boolean> {
     const url = `${this.baseUrl}/auth/login`;
     console.log('login2')
 
@@ -50,17 +50,15 @@ export class AuthService {
     localStorage.removeItem('token');
 
     if (recordar) {
-      localStorage.setItem('username', email);
+      localStorage.setItem('username', username);
     } else {
       localStorage.removeItem('username');
     }
 
-    const body = JSON.stringify({
-      username: email,
-      password: password,
-    });
 
-    return this.http.post<LoginResponse>(url, body).pipe(
+    return this.http.post<LoginResponse>(url, {
+      username,       password,
+    }).pipe(
       map((response) => {
         const decode = response.token.split('.');
         this.setAuthentication(JSON.parse(window.atob(decode[1])), response.token);
@@ -85,7 +83,7 @@ export class AuthService {
       return of(false);
     }
 
-      return this.http.get<CheckTokenResponse>(this.baseUrl + '/auth/token')
+      return this.http.get<CheckTokenResponse>(this.baseUrl + '/auth/renew')
       .pipe(
         map((response: any) =>  this.setAuthentication(JSON.parse(window.atob(response.token.split('.')[1])), response.token)       )       ,
         catchError((err) => {

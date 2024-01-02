@@ -3,98 +3,82 @@ import { Component, EventEmitter, HostListener, Input, Output } from '@angular/c
 import { Router, RouterModule } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
-
+import { INavbarData, fadeInOut } from './helper';
+import { navbarData } from './side-data';
+import { SublevelMenuComponent } from './sub-menu-level';
+export interface SideNavToggle {
+  screenWidth: number;
+  collapsed: boolean;
+}
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule,  ],
+  imports: [CommonModule, RouterModule, SublevelMenuComponent ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
-
+  animations: [
+    fadeInOut,
+    trigger('rotate', [
+      transition(':enter', [
+        animate('1000ms',
+          keyframes([
+            style({transform: 'rotate(0deg)', offset: '0'}),
+            style({transform: 'rotate(2turn)', offset: '1'})
+          ])
+        )
+      ])
+    ])
+  ]
 })
 export class SidebarComponent {
+  @Input() collapsed: boolean = true;
+  @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
+   screenWidth = 0;
+   navData = navbarData;
+   multiple: boolean = false;
 
-  menuItems = [
-    {
-      title: 'Dashboard',
-      icon: 'bi bi-grid',
-      url: 'index.html'
-    },
-    {
-      title: 'Components',
-      icon: 'bi bi-menu-button-wide',
-      subitems: [
-        { title: 'Alsdsdferts', url: '' },
-        { title: 'Accordion', url: '' },
-        { title: 'Badges', url: '' },
-        { title: 'Breadcrumbs', url: '' },
-        { title: 'Buttons', url: '' },
-        { title: 'Cards', url: '' },
-        { title: 'Carousel', url: '' },
-        { title: 'List group', url: '' },
-        { title: 'Modal', url: '' },
-        { title: 'Tabs', url: '' },
-        { title: 'Pagination', url: '' },
-        { title: 'Progress', url: '' },
-        { title: 'Spinners', url: '' },
-        { title: 'Tooltips', url: '' }
-      ]
-    },
-    {
-      title: 'Forms',
-      icon: 'bi bi-journal-text',
-      subitems: [
-        { title: 'Form Elements', url: 'user' },
-        { title: 'Form Layouts', url: 'user' },
-        { title: 'Form Editors', url: 'user' },
-        { title: 'Form Validation', url: 'user' }
-      ]
-    },
-    {
-      title: 'Tables',
-      icon: 'bi bi-layout-text-window-reverse',
-      subitems: [
-        { title: 'General Tables', url: 'tables-general.html' },
-        { title: 'Data Tables', url: 'tables-data.html' }
-      ]
-    },
-    {
-      title: 'Charts',
-      icon: 'bi bi-bar-chart',
-      subitems: [
-        { title: 'Chart.js', url: 'charts-chartjs.html' },
-        { title: 'ApexCharts', url: 'charts-apexcharts.html' },
-        { title: 'ECharts', url: 'charts-echarts.html' }
-      ]
-    },
-    {
-      title: 'Icons',
-      icon: 'bi bi-gem',
-      subitems: [
-        { title: 'Bootstrap Icons', url: 'icons-bootstrap.html' },
-        { title: 'Remix Icons', url: 'icons-remix.html' },
-        { title: 'Boxicons', url: 'icons-boxicons.html' },
-        { title: 'Bootstrap Icons', url: 'icons-bootstrap.html' },
-        { title: 'Remix Icons', url: 'icons-remix.html' },
-        { title: 'Boxicons', url: 'icons-boxicons.html' }
-      ]
-    },
-    {
-      title: 'Pages',
-      icon: 'bi bi-gem',
-      subitems: [
-        { title: 'Bootstrap Icons', url: 'icons-bootstrap.html' },
-        { title: 'Remix Icons', url: 'icons-remix.html' },
-        { title: 'Boxicons', url: 'icons-boxicons.html' },
-        { title: 'Bootstrap Icons', url: 'icons-bootstrap.html' },
-        { title: 'Remix Icons', url: 'icons-remix.html' },
-        { title: 'Boxicons', url: 'icons-boxicons.html' }
-      ]
-    },
-    {
-      title: 'Otros',
-      icon: 'bi bi-grid',
-      url: 'index.html'
-    },
-  ];
-}
+   @HostListener('window:resize', ['$event'])
+   onResize(event: any) {
+     this.screenWidth = window.innerWidth;
+     if(this.screenWidth <= 768 ) {
+       this.collapsed = false;
+       this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+     }
+   }
+
+   constructor(public router: Router) {}
+
+   ngOnInit(): void {
+       this.screenWidth = window.innerWidth;
+   }
+
+   toggleCollapse(): void {
+     this.collapsed = !this.collapsed;
+     this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+   }
+
+   closeSidenav(): void {
+     this.collapsed = false;
+     this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+   }
+
+   handleClick(item: INavbarData): void {
+     this.shrinkItems(item);
+     item.expanded = !item.expanded
+   }
+
+   getActiveClass(data: INavbarData): string {
+     return this.router.url.includes(data.routeLink) ? 'active' : '';
+   }
+
+
+   shrinkItems(item: INavbarData): void {
+     if (!this.multiple) {
+       for(let modelItem of this.navData) {
+         if (item !== modelItem && modelItem.expanded) {
+           modelItem.expanded = false;
+         }
+       }
+     }
+   }
+ }

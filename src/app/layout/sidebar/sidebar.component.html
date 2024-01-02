@@ -1,25 +1,29 @@
-<!-- sidebar.component.html -->
-<aside id="sidebar" class="sidebar"  >
-  <ul class="sidebar-nav" id="sidebar-nav">
-    <li *ngFor="let item of menuItems" class="nav-item">
-      <a *ngIf="item.url; else subItems" class="nav-link" [routerLink]="item.url">
-        <i [class]="item.icon"></i>
-        <span>{{ item.title }}</span>
-      </a>
-      <ng-template #subItems>
-        <a class="nav-link collapsed" [attr.data-bs-target]="'#' + item.title.toLowerCase() + '-nav'"
-           data-bs-toggle="collapse" href="#">
-          <i [class]="item.icon"></i>
-          <span>{{ item.title }}</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul [attr.id]="item.title.toLowerCase() + '-nav'" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-          <li *ngFor="let subitem of item.subitems">
-            <a [routerLink]="subitem.url">
-              <i class="bi bi-circle"></i><span>{{ subitem.title }}</span>
-            </a>
+<aside class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
+  <div class="scrollwrap scrollwrap_delayed">
+      <ul class="sidenav-nav">
+          <li class="sidenav-nav-item" *ngFor="let data of navData">
+              <a class="sidenav-nav-link" (click)="handleClick(data)" *ngIf="data.items && data.items.length > 0"
+                  [ngClass]="getActiveClass(data)">
+                  <i class="sidenav-link-icon" [class]="data.icon"></i>
+                  <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
+                      {{data.label}}
+                  </span>
+                  <i *ngIf="data.items && collapsed" class="menu-collapse-icon"
+                      [ngClass]="!data.expanded ? 'fal fa-angle-right' : 'fal fa-angle-down'"></i>
+              </a>
+              <a class="sidenav-nav-link" *ngIf="!data.items || (data.items && data.items.length === 0)"
+                  [routerLink]="[data.routeLink]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                  (click)="shrinkItems(data)">
+                  <i class="sidenav-link-icon" [class]="data.icon"></i>
+                  <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
+                      {{data.label}}
+                  </span>
+              </a>
+              <div *ngIf="collapsed && data.items && data.items.length > 0">
+                  <app-sublevel-menu [data]="data" [collapsed]="collapsed" [multiple]="multiple"
+                      [expanded]="data.expanded"></app-sublevel-menu>
+              </div>
           </li>
-        </ul>
-      </ng-template>
-    </li>
-  </ul>
+      </ul>
+  </div>
 </aside>

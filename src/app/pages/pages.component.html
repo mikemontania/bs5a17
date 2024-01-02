@@ -5,22 +5,20 @@
 
 
 
-<div *ngIf="finishedAuthCheck()" [ngClass]="{'toggle-sidebar':menuStatus}">
+<div *ngIf="finishedAuthCheck()" [ngClass]="{'toggle-sidebar':collapsed}">
+  <div class="container-fluid g-0">
 
-  <app-header (toggleSidebarButton)="menuStatus = $event" ></app-header>
-  <!-- ======= Sidebar ======= -->
-  <app-sidebar></app-sidebar>
+    <app-header (menuToggled)="collapsed = $event;"></app-header>
+    <main>
+        <app-sidebar class="black-border" (onToggleSideNav)="onToggleSideNav($event)" [collapsed]="collapsed" [ngClass]="{'sidenav-collapsed':collapsed}">
+        </app-sidebar>
+        <div class="display-area p-3" [ngClass]="{'display-area-shrink':collapsed}">
+            <router-outlet></router-outlet>
+         <!--    <div [appTheme]="selectedTheme.name">This div will have dynamic theme</div>
+            <app-theme-toggle (themeChanged)="onThemeChanged($event)"></app-theme-toggle> -->
 
-  <!-- End Sidebar-->
-
-  <main id="main" class="main">
-
-  <router-outlet></router-outlet>
-
-
-  </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
-  <app-footer></app-footer>
-  <!-- End Footer -->
+            <app-footer></app-footer>
+        </div>
+    </main>
+</div>
 </div>

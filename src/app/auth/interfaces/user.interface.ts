@@ -1,24 +1,11 @@
 
 
 export interface User {
-   codUsuario: number,
-   codEmpresa: number,
-   codSucursal: number,
-   codEmpresaErp: string,
-   codSucursalErp: string,
-   nombre: string,
+   id: number,
+   empresaId: number
+   sucursalesId: number,
    username: string,
-   password: string,
-   authorities?: Authorities,
-   img?: string,
-   maxDescuentoImp?: number,
-   maxDescuentoPorc?: number,
-   cantItem?: number
+   usuario: string,
+   img: string,
+   rol: string,
 }
-export interface Authorities {
-
-            id: number,
-            nombreRol: string,
-
-
-  }

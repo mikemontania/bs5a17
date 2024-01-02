@@ -4,7 +4,7 @@ import { AuthStatus } from '../auth/interfaces/auth-status.enum';
 import { AuthService } from '../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../layout/footer/footer.component';
-import { SidebarComponent } from '../layout/sidebar/sidebar.component';
+import { SideNavToggle, SidebarComponent } from '../layout/sidebar/sidebar.component';
 import { HeaderComponent } from '../layout/header/header.component';
 
 @Component({
@@ -15,7 +15,8 @@ import { HeaderComponent } from '../layout/header/header.component';
   styleUrl: './pages.component.css'
 })
 export class PagesComponent {
-  menuStatus: boolean = false;
+  collapsed: boolean = true;
+
   private authService = inject( AuthService );
   private router = inject( Router );
 
@@ -24,10 +25,8 @@ export class PagesComponent {
     if ( this.authService.authStatus() === AuthStatus.checking ) {
       return false;
     }
-
     return true;
   });
-
 
   public authStatusChangedEffect = effect(() => {
 
@@ -46,10 +45,12 @@ export class PagesComponent {
 
     }
 
-
-
-
   });
+  onToggleSideNav(event: SideNavToggle): void {
+    this.collapsed = event.collapsed;
+    console.log('Collapsed:', this.collapsed);
+  }
+
 
 
 }
