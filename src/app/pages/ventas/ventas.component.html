@@ -1,0 +1,193 @@
+<section class="section profile">
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="card">
+        <div class="card-body pt-4 d-flex flex-column align-items-center">
+          <div class="input-group mb-3 w-100 d-flex">
+            <span
+              class="input-group-text flex-grow-1 d-flex justify-content-between"
+              id="basic-addon3"
+            >
+              <span class="client-info">Cliente Mostrador-99999999-0</span>
+              <span class="dropdown-icon">
+                <i class="mh-1 fa-solid fa-sort-down"></i>
+              </span>
+            </span>
+            <span class="input-group-text" id="basic-addon3">
+              <i class="fa-solid fa-user-plus"></i>
+            </span>
+          </div>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">producto</th>
+                <th scope="col">cantidad</th>
+                <th scope="col">precio</th>
+                <th scope="col">total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Brandon Jacob</td>
+                <td>Designer</td>
+                <td>28</td>
+                <td>2016-05-25</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Bridie Kessler</td>
+                <td>Developer</td>
+                <td>35</td>
+                <td>2014-12-05</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Ashleigh Langosh</td>
+                <td>Finance</td>
+                <td>45</td>
+                <td>2011-08-12</td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td>Angus Grady</td>
+                <td>HR</td>
+                <td>34</td>
+                <td>2012-06-11</td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td>Raheem Lehner</td>
+                <td>Dynamic Division Officer</td>
+                <td>47</td>
+                <td>2011-04-19</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title">Totales <span> </span></h5>
+
+          <div class="d-flex align-items-center">
+            <div
+              class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+            >
+              <i class="bi bi-cash"></i>
+            </div>
+            <div class="ps-3">
+              <h6>165.000 Gs</h6>
+              <span class="text-danger small pt-1 fw-bold">15%</span>
+              <span class="text-muted small pt-2 ps-1">-28.000 Gs</span>
+            </div>
+            <div class="ps-3">
+              <h6>165.000 Gs</h6>
+              <span class="text-danger small pt-1 fw-bold">15%</span>
+              <span class="text-muted small pt-2 ps-1">-28.000 Gs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-8">
+      <div class="card">
+        <div class="card-body pt-3">
+          <input-debounce
+            #inputPremio
+            [delay]="500"
+            id="input"
+            height="15px"
+            type="text"
+            placeholder="Buscar..."
+            required=""
+            aria-invalid="false"
+            (value)="buscar($event)"
+          ></input-debounce>
+       <!--    <app-product-card
+          [productName]="'Torn Jeans for Men'"
+          [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
+          [originalPrice]="5500"
+          [discountedPrice]="4500"
+        ></app-product-card> -->
+        <div id="products">
+
+          <div class="row mx-0 card-container">
+              <app-product-card
+              [productName]="'Torn Jeans for Men'"
+              [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
+              [originalPrice]="5500"
+              [discountedPrice]="4500"
+            ></app-product-card>
+
+            <app-product-card
+            [productName]="'Torn Jeans for Men'"
+            [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
+            [originalPrice]="5500"
+            [discountedPrice]="4500"
+          ></app-product-card>
+
+          <app-product-card
+          [productName]="'Torn Jeans for Men'"
+          [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
+          [originalPrice]="5500"
+          [discountedPrice]="4500"
+        ></app-product-card>
+
+        <app-product-card
+        [productName]="'Torn Jeans for Men'"
+        [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
+        [originalPrice]="5500"
+        [discountedPrice]="4500"
+      ></app-product-card>
+
+      <app-product-card
+      [productName]="'Torn Jeans for Men'"
+      [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
+      [originalPrice]="5500"
+      [discountedPrice]="4500"
+    ></app-product-card>
+
+    <app-product-card
+    [productName]="'Torn Jeans for Men'"
+    [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
+    [originalPrice]="5500"
+    [discountedPrice]="4500"
+  ></app-product-card>
+
+
+  <app-product-card
+  [productName]="'Torn Jeans for Men'"
+  [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
+  [originalPrice]="5500"
+  [discountedPrice]="4500"
+></app-product-card>
+
+<app-product-card
+[productName]="'Torn Jeans for Men'"
+[imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
+[originalPrice]="5500"
+[discountedPrice]="4500"
+></app-product-card>
+
+<app-product-card
+[productName]="'Torn Jeans for Men'"
+[imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
+[originalPrice]="5500"
+[discountedPrice]="4500"
+></app-product-card>
+
+
+
+            </div>
+
+
+        </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

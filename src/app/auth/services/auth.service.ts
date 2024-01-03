@@ -24,7 +24,7 @@ export class AuthService {
   constructor() {
 
     this.checkAuthStatus().subscribe();
-this.cargarStorage()
+
   }
 
   private setAuthentication(user: User, token:string): boolean {

@@ -1,0 +1,28 @@
+.card {
+  padding: 10px;
+  cursor: pointer;
+  transition: .3s all ease-in-out;
+  height: 230px;
+}
+
+.card:hover {
+  box-shadow: 2px 2px 15px #fd9a6ce5;
+  transform: scale(1.02);
+}
+
+.card .product-name {
+  font-weight: 600;
+}
+
+.card-body {
+  padding-bottom: 0;
+}
+
+.card-img img {
+  padding-top: 10px;
+  width: inherit;
+  height: 120px;
+  object-fit: contain;
+  display: block;
+}
+

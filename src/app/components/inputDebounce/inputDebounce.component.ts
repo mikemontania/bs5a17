@@ -1,0 +1,47 @@
+ import { Component, Input, Output, ElementRef, EventEmitter, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { fromEvent, map } from 'rxjs';
+import {   debounceTime } from 'rxjs/operators';
+
+@Component({
+  standalone:true,
+  imports:[FormsModule],
+    selector: 'input-debounce',
+    template: `
+    <div class="input-group" >
+            <input type="text" #inputDebounce
+                   id="inputDebounce"
+                   class="form-control"
+                   width="100%"
+                   [placeholder] = "placeholder"
+                   [(ngModel)] = "inputValue"
+                   (ngModelChange) = "inputValue = toUpeCaseEvent($event)" >
+    </div>
+    `
+})
+
+export class InputDebounceComponent {
+    @Input() placeholder: string= '';
+    @Input() delay: number = 1000;
+    @Output() value: EventEmitter<any> = new EventEmitter();
+    @ViewChild('inputDebounce') inputDebounce!: ElementRef;
+    public inputValue: string ='';
+
+    constructor(private elementRef: ElementRef) {
+      const eventStream = fromEvent(this.elementRef.nativeElement, 'keyup')
+        .pipe(
+          map(() => this.inputValue),
+          debounceTime(this.delay)
+        );
+
+      eventStream.subscribe(input => this.value.emit(input));
+    }
+
+    toUpeCaseEvent(evento: string) {
+        return evento.toLocaleUpperCase();
+    }
+
+    enfocar() {
+        this.inputDebounce.nativeElement.focus();
+    }
+}

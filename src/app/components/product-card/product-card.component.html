@@ -1,0 +1,13 @@
+<div class="card d-flex flex-column align-items-center" (click)="onCardClick()">
+  <div class="product-name">{{ productName }}</div>
+  <div class="card-img">
+    <img [src]="imageSrc" alt="">
+  </div>
+  <div class="card-body pt-2">
+
+    <div class="d-flex align-items-center price">
+      <div class="del mr-2"><span class="text-dark">{{ originalPrice }} GS</span></div>
+      <div class="font-weight-bold">{{ - discountedPrice }} GS</div>
+    </div>
+  </div>
+</div>

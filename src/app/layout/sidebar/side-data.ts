@@ -3,13 +3,20 @@ import { INavbarData } from "./helper";
 export const navbarData: INavbarData[] = [
     {
         routeLink: 'dashboard',
-        icon: 'fal fa-home',
+        icon: 'fa-solid fa-house',
         label: 'Dashboard'
     },
 
+
+
+     {
+      routeLink: 'ventas',
+      icon: 'fa-solid fa-cash-register',
+      label: 'Ventas'
+  },
     {
         routeLink: 'parametros',
-        icon: 'fal fa-tags',
+        icon: 'fa-solid fa-tag',
         label: 'Parametros',
         items: [
             {
@@ -26,19 +33,14 @@ export const navbarData: INavbarData[] = [
             }
         ]
     },
-    {
+     {
         routeLink: 'pages',
-        icon: 'fal fa-file',
+        icon: 'fa-regular fa-file',
         label: 'Pages'
     },
-    {
-        routeLink: 'media',
-        icon: 'fal fa-camera',
-        label: 'Media'
-    },
-    {
+     {
         routeLink: 'settings',
-        icon: 'fal fa-cog',
+        icon: 'fa-solid fa-gear',
         label: 'Settings',
 
     },

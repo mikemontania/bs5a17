@@ -4,6 +4,7 @@ export const interceptorServ: HttpInterceptorFn = (req, next) => {
  const token = localStorage.getItem('token') ;
   const request = req.clone();
   console.log('Interceptado')
+  console.log(token)
   if (token) {
     console.log(token)
 

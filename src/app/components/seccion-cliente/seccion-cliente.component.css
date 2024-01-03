@@ -1,0 +1,21 @@
+/* app/details-section/customer-details/customer-details.component.css */
+.customer-details {
+  display: flex;
+  align-items: center;
+}
+
+.input-container {
+  position: relative;
+}
+
+input {
+  padding-right: 30px; /* Espacio para los botones */
+}
+
+button {
+  position: absolute;
+  right: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
