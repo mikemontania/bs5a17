@@ -8,10 +8,10 @@ import { Component, Input } from '@angular/core';
   styleUrl: './product-card.component.css'
 })
 export class ProductCardComponent {
-  @Input() productName: string = '';
+  @Input() producto: string = '';
   @Input() imageSrc: string = '';
-  @Input() originalPrice: number = 0;
-  @Input() discountedPrice: number = 0;
+  @Input() precio: number = 0;
+  @Input() descuento: number = 0;
 
   onCardClick() {
     // Add your logic when the card is clicked

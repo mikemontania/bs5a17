@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   padding: 10px;
   cursor: pointer;
   transition: .3s all ease-in-out;
@@ -11,18 +12,41 @@
 }
 
 .card .product-name {
-  font-weight: 600;
+  font-weight: 400;
+}
+
+.card-body {
+  padding-bottom: 0;
+}
+.card-img{
+  position: relative; /* Añadido para posicionar elementos hijos relativos a este contenedor */
+
+}
+.card-img img {
+  padding-top: 10px;
+  width: inherit;
+  height: 160px;
+  object-fit: contain;
+  display: block;
+}
+
+
+.discount-badge {
+  position: absolute;
+  top: 10px; /* Ajusta según tu preferencia */
+  right: 10px; /* Ajusta según tu preferencia */
+  background-color: #fd9a6ce5; /* Color del fondo del descuento */
+  color: #fff; /* Color del texto del descuento */
+  padding: 5px; /* Ajusta según tu preferencia */
+  border-radius: 5px; /* Ajusta según tu preferencia */
 }
 
 .card-body {
   padding-bottom: 0;
 }
 
-.card-img img {
-  padding-top: 10px;
-  width: inherit;
-  height: 120px;
-  object-fit: contain;
-  display: block;
+.card .price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-

@@ -95,97 +95,179 @@
     <div class="col-xl-8">
       <div class="card">
         <div class="card-body pt-3">
-          <input-debounce
-            #inputPremio
-            [delay]="500"
-            id="input"
-            height="15px"
-            type="text"
-            placeholder="Buscar..."
-            required=""
-            aria-invalid="false"
-            (value)="buscar($event)"
-          ></input-debounce>
-       <!--    <app-product-card
-          [productName]="'Torn Jeans for Men'"
-          [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
-          [originalPrice]="5500"
-          [discountedPrice]="4500"
-        ></app-product-card> -->
-        <div id="products">
-
-          <div class="row mx-0 card-container">
-              <app-product-card
-              [productName]="'Torn Jeans for Men'"
-              [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
-              [originalPrice]="5500"
-              [discountedPrice]="4500"
-            ></app-product-card>
-
-            <app-product-card
-            [productName]="'Torn Jeans for Men'"
-            [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
-            [originalPrice]="5500"
-            [discountedPrice]="4500"
-          ></app-product-card>
-
-          <app-product-card
-          [productName]="'Torn Jeans for Men'"
-          [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
-          [originalPrice]="5500"
-          [discountedPrice]="4500"
-        ></app-product-card>
-
-        <app-product-card
-        [productName]="'Torn Jeans for Men'"
-        [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
-        [originalPrice]="5500"
-        [discountedPrice]="4500"
-      ></app-product-card>
-
-      <app-product-card
-      [productName]="'Torn Jeans for Men'"
-      [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
-      [originalPrice]="5500"
-      [discountedPrice]="4500"
-    ></app-product-card>
-
-    <app-product-card
-    [productName]="'Torn Jeans for Men'"
-    [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
-    [originalPrice]="5500"
-    [discountedPrice]="4500"
-  ></app-product-card>
 
 
-  <app-product-card
-  [productName]="'Torn Jeans for Men'"
-  [imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
-  [originalPrice]="5500"
-  [discountedPrice]="4500"
-></app-product-card>
-
-<app-product-card
-[productName]="'Torn Jeans for Men'"
-[imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
-[originalPrice]="5500"
-[discountedPrice]="4500"
-></app-product-card>
-
-<app-product-card
-[productName]="'Torn Jeans for Men'"
-[imageSrc]="'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'"
-[originalPrice]="5500"
-[discountedPrice]="4500"
-></app-product-card>
 
 
+
+          <div class="row mb-2">
+            <div class="col-xl-6 col-lg-6 col-md-6">
+                 <input-debounce #input  [delay]="500" id="inputProducto"
+                    height="15px" type="text" placeholder="Buscar" required="" aria-invalid="false"
+                    (value)="buscar($event)">
+                </input-debounce>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3">
+              <app-incrementador [cantidad]="cantidad"></app-incrementador>
 
             </div>
-
-
+            <div class="col-xl-3 col-lg-3 col-md-3">
+                <!-- <label class="small text-uppercase m-1" for="categorias">Categorías:</label> -->
+               <!--  <ng-select-categoria *ngIf="!deshabilitarBuscador" #searchCategoria id="ngSelectCategoria"
+                    [cargadorCategoria]="categoriaSeleccionada" name="ngSelectCategoria"
+                    (retornoObjeto)="filtrarCategoria($event)">
+                </ng-select-categoria> -->
+            </div>
         </div>
 
+
+
+
+
+
+
+
+
+
+
+          <div id="products">
+            <div class="row  product-card-container">
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="25"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="25"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="25"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="25"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="25"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="25"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="25"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="4500"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="4500"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="4500"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="4500"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="4500"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="4500"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="4500"
+              ></app-product-card>
+
+              <app-product-card
+                [producto]="'Torn Jeans for Men'"
+                [imageSrc]="
+                  'https://www.shoppingchina.com.py/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNUg3Qmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--718bc7577fbf6d181601cc0a0282aa27176818c0/888166.jpg'
+                "
+                [precio]="5500"
+                [descuento]="4500"
+              ></app-product-card>
+            </div>
+          </div>
         </div>
       </div>
     </div>

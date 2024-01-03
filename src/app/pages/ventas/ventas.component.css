@@ -1,9 +1,49 @@
-.card-container {
+#products {
+  height: 650px;
+  overflow-y: auto;  /* Solo mostrará la barra de desplazamiento vertical */
+  overflow-x: hidden; /* Ocultará la barra de desplazamiento horizontal */
+}
+/* Estilos del scrollbar */
+#products::-webkit-scrollbar {
+  width: 10px; /* Ancho del scrollbar */
+}
+
+#products::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color del scrollbar */
+  border-radius: 5px; /* Radio de la esquina del thumb */
+}
+.product-card-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  padding-right: 3px;
 }
 
 app-product-card {
-  flex: 0 0 25%;
+  flex: 0 0 calc(20% - 20px);  /* Inicialmente, mostrar 5 tarjetas por fila */
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1200px) {
+  app-product-card {
+    flex: 0 0 calc(25% - 20px);  /* Cuando el ancho de la pantalla sea 1200px o menos, mostrar 4 tarjetas por fila */
+  }
+}
+
+@media (max-width: 992px) {
+  app-product-card {
+    flex: 0 0 calc(33.33% - 20px);  /* Cuando el ancho de la pantalla sea 992px o menos, mostrar 3 tarjetas por fila */
+  }
+}
+
+@media (max-width: 768px) {
+  app-product-card {
+    flex: 0 0 calc(50% - 20px);  /* Cuando el ancho de la pantalla sea 768px o menos, mostrar 2 tarjetas por fila */
+  }
+}
+
+@media (max-width: 480px) {
+  app-product-card {
+    flex: 0 0 calc(100% - 20px);  /* Cuando el ancho de la pantalla sea 480px o menos, mostrar 1 tarjeta por fila */
+  }
 }
