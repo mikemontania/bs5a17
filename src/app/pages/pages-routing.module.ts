@@ -1,10 +1,8 @@
-import { NgModule } from "@angular/core";
-import { Route } from "@angular/router";
-import { PagesComponent } from "./pages.component";
-import { DashbardComponent } from "./dashbard/dashbard.component";
-import { UsersComponent } from "./users/users.component";
-import { verifyTokenGuard } from "../guards/verify-token.guard";
-import { VentasComponent } from "./ventas/ventas.component";
+import { Route } from '@angular/router';
+import { DashbardComponent } from './dashbard/dashbard.component';
+import { PagesComponent } from './pages.component';
+import { UsersComponent } from './users/users.component';
+import { authGuard } from '../guards/auth-guard.guard';
 
 export default [
   {
@@ -13,17 +11,17 @@ export default [
     children: [
       {
         path: "dashboard",
-        canActivate: [verifyTokenGuard],
+        canActivate: [authGuard],
         component: DashbardComponent
       },
       {
         path: "ventas",
-        canActivate: [verifyTokenGuard],
-        loadComponent: ()=> import('./ventas/ventas.component').then((c)=>c.VentasComponent)
+        canActivate: [authGuard],
+        loadComponent: () => import('./ventas/ventas.component').then((c) => c.VentasComponent)
       },
       {
         path: "user",
-        canActivate: [verifyTokenGuard],
+        canActivate: [authGuard],
         component: UsersComponent
       },
       { path: "**", redirectTo: "dashboard" }

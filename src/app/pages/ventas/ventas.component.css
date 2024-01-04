@@ -15,8 +15,7 @@
 .product-card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  padding-right: 3px;
+  justify-content: space-around;
 }
 
 app-product-card {

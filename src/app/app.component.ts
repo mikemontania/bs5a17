@@ -1,56 +1,56 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
-import { SidebarComponent } from './layout/sidebar/sidebar.component';
-import { FooterComponent } from './layout/footer/footer.component';
 import { AuthStatus } from './auth/interfaces/auth-status.enum';
 import { AuthService } from './auth/services/auth.service';
-import { HttpClientModule } from '@angular/common/http';
-import { HeaderComponent } from './layout/header/header.component';
 
+// @Component: Decorador para definir el componente AppComponent
 @Component({
-  selector: 'app-root',
+  selector: 'app-root', // Selector del componente
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent,SidebarComponent, FooterComponent  ],
+  imports: [CommonModule, RouterOutlet, ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  menuStatus: boolean = false;
-  private authService = inject( AuthService );
-  private router = inject( Router );
+export class AppComponent implements OnInit{
 
-  public finishedAuthCheck = computed<boolean>( () => {
-    console.log(this.authService.authStatus() )
-    if ( this.authService.authStatus() === AuthStatus.checking ) {
-      return false;
-    }
+  // Inyección de servicios
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-    return true;
+  // Propiedades para la ruta actual y la ruta almacenada
+  path = '';
+  storedPath: string | null = ''; // Se inicializa con valor vacío
+
+  // Propiedad computada para indicar si la comprobación de autenticación ha finalizado
+  public finishedAuthCheck = computed<boolean>(() => {
+    console.log(this.authService.authStatus());
+    return this.authService.authStatus() !== AuthStatus.checking;
   });
 
-
+  // Efecto para reaccionar a cambios en el estado de autenticación
   public authStatusChangedEffect = effect(() => {
-
-    switch( this.authService.authStatus() ) {
-
+    switch (this.authService.authStatus()) {
       case AuthStatus.checking:
-        return;
-
+        return; // No se realizan acciones mientras se verifica la autenticación
       case AuthStatus.authenticated:
-        this.router.navigateByUrl('/dashboard');
-        return;
-
+        return; // El guard se encarga de las redirecciones en este caso
       case AuthStatus.notAuthenticated:
-        this.router.navigateByUrl('/login');
+        this.router.navigateByUrl('/login'); // Redirige al login si no está autenticado
         return;
-
     }
-
-
-
-
   });
 
+  // Constructor del componente
+  constructor() {
+    this.path = this.router.url; // Asigna la ruta actual
+    this.storedPath = localStorage.getItem('app-path'); // Obtiene la ruta almacenada
+  }
 
+  // ngOnInit: Se ejecuta al iniciar el componente
+  ngOnInit() {
+    if (this.storedPath) {
+      this.router.navigateByUrl(this.storedPath); // Redirige a la ruta almacenada si existe
+    }
+  }
 }

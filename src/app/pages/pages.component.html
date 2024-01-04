@@ -1,11 +1,6 @@
-<h1 *ngIf="!finishedAuthCheck()">
-  Loading
-</h1>
 
 
-
-
-<div *ngIf="finishedAuthCheck()" [ngClass]="{'toggle-sidebar':collapsed}">
+<div  [ngClass]="{'toggle-sidebar':collapsed}">
   <div class="container-fluid g-0">
 
     <app-header (menuToggled)="collapsed = $event;"></app-header>
