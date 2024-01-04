@@ -1,3 +1,12 @@
+
+
+
+
+
+.selector{
+  cursor: pointer;
+}
+
 #products {
   height: 650px;
   overflow-y: auto;  /* Solo mostrará la barra de desplazamiento vertical */

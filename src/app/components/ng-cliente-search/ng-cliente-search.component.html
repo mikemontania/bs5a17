@@ -1,0 +1,26 @@
+<div class="modal-background" *ngIf="isOpen" (click)="close()">
+  <div class="modal-container" [ngClass]="{'small': size === 'small', 'medium': size === 'medium', 'large': size === 'large'}">
+
+ <!-- Contenido del modal -->
+ <div (click)="$event.stopPropagation()">
+  <input-debounce #inputSearch [delay]="500" id="inputSearch" height="15px" type="text"
+                    placeholder="Ingrese el cliente buscado ..." required="" aria-invalid="false"
+                    (value)="buscar($event)"></input-debounce>
+
+                    <ul class="list-group">
+                        @for (cliente of clientes; track cliente.id) {
+                        <li class="list-group-item">
+                          <span class="text-center">
+                            {{cliente.nroDocumento}} - {{cliente.razonSocial}}
+                          </span>
+                        </li>
+                      } @empty {
+                        <li class="list-group-item">No se han encontrado items</li>
+                      }
+                      </ul>
+  <button (click)="close()">Cerrar</button>
+</div>
+
+
+  </div>
+</div>

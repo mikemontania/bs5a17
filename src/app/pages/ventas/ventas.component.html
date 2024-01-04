@@ -3,8 +3,8 @@
     <div class="col-xl-4">
       <div class="card">
         <div class="card-body pt-4 d-flex flex-column align-items-center">
-          <div class="input-group mb-3 w-100 d-flex">
-            <span
+          <div class="input-group mb-3 w-100 d-flex selector">
+            <span (click)="abrirBuscador()"
               class="input-group-text flex-grow-1 d-flex justify-content-between"
               id="basic-addon3"
             >
@@ -273,3 +273,5 @@
     </div>
   </div>
 </section>
+<!-- Contenido adicional aquí -->
+<app-cliente-search [isOpen]="searchCliente" (closeModal)="searchCliente = false">

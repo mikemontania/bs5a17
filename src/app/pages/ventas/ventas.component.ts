@@ -5,6 +5,7 @@ import { ProductCardComponent } from "../../components/product-card/product-card
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { IncrementadorComponent } from "../../components/incrementador/incrementador.component";
+import { NgClienteSearchComponent } from "../../components/ng-cliente-search/ng-cliente-search.component";
 
 @Component({
   selector: "app-ventas",
@@ -15,12 +16,31 @@ import { IncrementadorComponent } from "../../components/incrementador/increment
     SeccionClienteComponent,
     InputDebounceComponent,
     ProductCardComponent,
-    IncrementadorComponent
+    IncrementadorComponent,
+    NgClienteSearchComponent
   ],
   templateUrl: "./ventas.component.html",
   styleUrl: "./ventas.component.css"
 })
 export class VentasComponent {
   cantidad: number = 0;
+  searchCliente = false;
+
+  abrirBuscador() {
+    console.log(this.searchCliente)
+    this.searchCliente = true;
+    console.log(this.searchCliente)
+  }
+
+  cerrarBuscador() {
+    this.searchCliente = false;
+  }
+
+  itemSeleccionado(item: any) {
+    // Procesa el item seleccionado
+    console.log('Item seleccionado:', item);
+    this.cerrarBuscador(); // Cierra el modal al seleccionar un item
+  }
+
   buscar(event: any) {}
 }
