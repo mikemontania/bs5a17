@@ -8,7 +8,12 @@
               class="input-group-text flex-grow-1 d-flex justify-content-between"
               id="basic-addon3"
             >
-              <span class="client-info">Cliente Mostrador-99999999-0</span>
+
+            @if(cliente().nroDocumento != '') {
+              <span class="client-info">{{cliente().nroDocumento}} - {{cliente().razonSocial}}</span>
+             }  @else {
+              <span class="client-info">cargando ...</span>
+             }
               <span class="dropdown-icon">
                 <i class="mh-1 fa-solid fa-sort-down"></i>
               </span>
@@ -274,4 +279,4 @@
   </div>
 </section>
 <!-- Contenido adicional aquí -->
-<app-cliente-search [isOpen]="searchCliente" (closeModal)="searchCliente = false">
+<app-cliente-search [isOpen]="searchCliente" (cliente)="selectCliente($event)" (closeModal)="searchCliente = false">

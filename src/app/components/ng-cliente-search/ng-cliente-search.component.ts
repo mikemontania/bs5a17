@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, Output, inject } from "@angular/core";
+import { Component,       EventEmitter, Input, OnInit, Output, ViewContainerRef, inject } from "@angular/core";
 import { debounceTime, distinctUntilChanged } from "rxjs";
 import { InputDebounceComponent } from "../inputDebounce/inputDebounce.component";
 import { Cliente } from '../../interfaces/clientes.interface';
@@ -12,19 +12,32 @@ import { ClientesService } from "../../services/clientes.service";
   templateUrl: "./ng-cliente-search.component.html",
   styleUrl: "./ng-cliente-search.component.css"
 })
-export class NgClienteSearchComponent {
+export class NgClienteSearchComponent implements OnInit {
   size = "medium";
+  delay=200;
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
-  clienteSelecionado:Cliente={}as Cliente;
+  @Output() cliente = new EventEmitter<Cliente>();
+
   clientes: Cliente[] = [];
-_clientesService = inject(ClientesService);
+  _clientesService = inject(ClientesService);
+
+  ngOnInit(): void {
+    this.clientes =[];
+
+    this.buscar('');
+  }
 
 
-constructor(){
-  this.clientes = []
-  this.buscar('')
+selectCliente(cliente: Cliente) {
+  this.cliente.emit(cliente);
+
 }
+trackCliente(index: number, cliente: Cliente): number {
+  return cliente.id; // Assuming cliente has a unique ID
+}
+
+
   close() {
     this.closeModal.emit();
   }
@@ -32,7 +45,7 @@ constructor(){
   buscar(termino: string) {
 
     this._clientesService.searchClientes(1, 10, termino)
-    .pipe(debounceTime(3000), distinctUntilChanged())
+    .pipe(debounceTime(1500), distinctUntilChanged())
     .subscribe((response: any) => {
       console.log(response);
       this.clientes = response.rows as Cliente[];
