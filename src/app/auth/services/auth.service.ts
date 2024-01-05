@@ -37,11 +37,6 @@ export class AuthService {
   }
 
 
-
-  cargarStorage() {
-    localStorage.getItem('user')? this.user.set(JSON.parse((localStorage.getItem('user')!))):null ;
-  }
-
   login(username: string, password: string, recordar: boolean = false): Observable<boolean> {
     const url = `${this.baseUrl}/auth/login`;
     console.log('login2')
