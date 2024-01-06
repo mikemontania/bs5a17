@@ -7,6 +7,20 @@ import {   debounceTime } from 'rxjs/operators';
   standalone:true,
   imports:[FormsModule],
     selector: 'input-debounce',
+    styles: [`
+    .input-group input:focus,
+.input-group input:hover {
+  box-shadow: 0 0 5px rgba(253, 154, 108, 0.8); /* Cambia el color del borde al hacer hover o focus */
+}
+
+.input-group input {
+  border-color: #ccc; /* Agregado para establecer un color de borde predeterminado */
+}
+
+.input-group:hover input {
+  border-color: #fd9a6ce5; /* Cambia el color del borde al hacer hover o focus */
+}
+  `],
     template: `
     <div class="input-group" >
             <input type="text" #inputDebounce

@@ -4,16 +4,19 @@
       <div class="card">
         <div class="card-body pt-4 d-flex flex-column align-items-center">
           <div class="input-group mb-3 w-100 d-flex selector">
-            <span (click)="abrirBuscador()"
+            <span
+              (click)="abrirBuscador()"
               class="input-group-text flex-grow-1 d-flex justify-content-between"
               id="basic-addon3"
             >
-
-            @if(cliente().nroDocumento != '') {
-              <span class="client-info">{{cliente().nroDocumento}} - {{cliente().razonSocial}}</span>
-             }  @else {
+              @if(cliente().nroDocumento != '') {
+              <span class="client-info"
+                >{{ cliente().nroDocumento }} -
+                {{ cliente().razonSocial }}</span
+              >
+              } @else {
               <span class="client-info">cargando ...</span>
-             }
+              }
               <span class="dropdown-icon">
                 <i class="mh-1 fa-solid fa-sort-down"></i>
               </span>
@@ -100,46 +103,53 @@
     <div class="col-xl-8">
       <div class="card">
         <div class="card-body pt-3">
-
-
-
-
-
           <div class="row mb-2">
             <div class="col-xl-6 col-lg-6 col-md-6">
-                 <input-debounce #input  [delay]="500" id="inputProducto"
-                    height="15px" type="text" placeholder="Buscar" required="" aria-invalid="false"
-                    (value)="buscar($event)">
-                </input-debounce>
+              <input-debounce
+                #input
+                [delay]="500"
+                id="inputProducto"
+                height="15px"
+                type="text"
+                placeholder="Buscar"
+                required=""
+                aria-invalid="false"
+                (value)="buscar($event)"
+              >
+              </input-debounce>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-3">
               <app-incrementador [cantidad]="cantidad"></app-incrementador>
-
             </div>
             <div class="col-xl-3 col-lg-3 col-md-3">
-                <!-- <label class="small text-uppercase m-1" for="categorias">Categorías:</label> -->
-               <!--  <ng-select-categoria *ngIf="!deshabilitarBuscador" #searchCategoria id="ngSelectCategoria"
+              <!-- <label class="small text-uppercase m-1" for="categorias">Categorías:</label> -->
+              <!--  <ng-select-categoria *ngIf="!deshabilitarBuscador" #searchCategoria id="ngSelectCategoria"
                     [cargadorCategoria]="categoriaSeleccionada" name="ngSelectCategoria"
                     (retornoObjeto)="filtrarCategoria($event)">
                 </ng-select-categoria> -->
             </div>
-        </div>
+          </div>
 
-
-
-          <div id="products" >
-            <div class="row  product-card-container">
+          <div id="products">
+            <div class="row product-card-container">
               @for (producto of productos(); track producto.id) {
-                <app-product-card
+              <app-product-card
                 [producto]="producto"
                 [precio]="5500"
                 [descuento]="25"
               ></app-product-card>
-                } @empty {
-                <li class="list-group-item">No se han encontrado items</li>
-                }
-
+              } @empty {
+              <li class="list-group-item">No se han encontrado items</li>
+              }
             </div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <app-paginator
+              [totalPages]="totalPages()"
+              [currentPage]="page()"
+              (pageChanged)="onPageChanged($event)"
+            >
+            </app-paginator>
           </div>
         </div>
       </div>
@@ -147,4 +157,9 @@
   </div>
 </section>
 <!-- Contenido adicional aquí -->
-<app-cliente-search [isOpen]="searchCliente" (cliente)="selectCliente($event)" (closeModal)="searchCliente = false">
+<app-cliente-search
+  [isOpen]="searchCliente"
+  (cliente)="selectCliente($event)"
+  (closeModal)="searchCliente = false"
+>
+</app-cliente-search>

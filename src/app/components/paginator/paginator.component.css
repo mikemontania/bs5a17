@@ -1,0 +1,68 @@
+/* paginator.component.css */
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.page-item {
+  margin-right: 5px;
+}
+
+.page-link {
+  color: #fd9a6ce5;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #fd9a6ce5;
+  border-radius: 0.25rem;
+}
+
+.page-link:hover {
+  background-color: #fd9a6ce5;
+  color: #fff;
+}
+
+.page-link.active { /* Corrected selector */
+  background-color: #fd9a6ce5;
+  color: #fff;
+  /* pointer-events: none; <-- Remove this line */
+}
+
+.active > .page-link, .page-link.active {
+  z-index: 3;
+  color: #fff;
+  background-color:  #fd9a6ce5;
+  border-color: #fd8a55e5;
+}
+
+.page-link .disabled {
+  color: #6c757d;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* Customize the "Primera", "Atrás", "Siguiente", "Última" labels */
+.page-link[aria-label="First"]:before {
+   font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
+  font-size: 1.5rem;
+  margin-right: 5px;
+}
+
+.page-link[aria-label="Previous"]:before {
+   font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
+  font-size: 1.5rem;
+  margin-right: 5px;
+}
+
+.page-link[aria-label="Next"]:after {
+   font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
+  font-size: 1.5rem;
+  margin-left: 5px;
+}
+
+.page-link[aria-label="Last"]:after {
+   font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
+  font-size: 1.5rem;
+  margin-left: 5px;
+}

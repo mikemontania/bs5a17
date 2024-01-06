@@ -1,25 +1,31 @@
 import { Pipe, PipeTransform } from '@angular/core';
- import {   HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Observable, map } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { BASE_URL } from '../config';
+import { Observable, of } from 'rxjs';
 
 @Pipe({
-  standalone:true,
+  standalone: true,
   name: 'imagen'
 })
 export class ImagenPipe implements PipeTransform {
 
   constructor(
-    public http: HttpClient,
+    private http: HttpClient,
     private sanitizer: DomSanitizer
-   ) {
-  }
-  transform( img: string, tipo: string): Observable<SafeUrl> {
-    let url = BASE_URL + "/uploads/"+tipo + '/' + img;
+  ) { }
 
-      return this.http.get(url, {  responseType: 'blob'})
-       .pipe(map(val => this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(val))));
-  }
+  transform(img: string, tipo: string): Observable<SafeUrl> {
+    const url = BASE_URL + "/uploads/" + tipo + '/' + img;
 
+    return this.http.get(url, { responseType: 'blob' })
+      .pipe(
+        map(val => this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(val))),
+        catchError(() => {
+           const defaultImageUrl = '../../assets/img/sin-imagen.jpg';
+          return of(this.sanitizer.bypassSecurityTrustUrl(defaultImageUrl));
+        })
+      );
+  }
 }

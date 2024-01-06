@@ -4,6 +4,9 @@
   cursor: pointer;
   transition: .3s all ease-in-out;
   height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .card:hover {
@@ -11,64 +14,54 @@
   transform: scale(1.02);
 }
 
-.card .product-name {
-  font-weight: 400;
-  font-size: 10px;
-
+.card-img {
+  position: relative;
 }
 
-.card-body {
-  padding-bottom: 0;
-}
-.card-img{
-  position: relative; /* Añadido para posicionar elementos hijos relativos a este contenedor */
-
-}
 .card-img img {
   padding-top: 10px;
   width: inherit;
-  height: 200px;
+  height: 150px;
   object-fit: contain;
   display: block;
 }
 
-
 .discount-badge {
   position: absolute;
-  top: 5px; /* Ajusta según tu preferencia */
-  right: 0px; /* Ajusta según tu preferencia */
-  background-color: #fd9a6ce5; /* Color del fondo del descuento */
-  color: #fff; /* Color del texto del descuento */
-  padding: 5px; /* Ajusta según tu preferencia */
-  border-radius: 5px; /* Ajusta según tu preferencia */
+  top: 5px;
+  left: 0px;
+  background-color: #fd9a6ce5;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
 }
 
-.name-badge {
+.description-badge {
   position: absolute;
-  top: 160px; /* Ajusta según tu preferencia */
-  align-items: center;
-  background-color: #fd9a6ce5; /* Color del fondo del descuento */
+  bottom: 0;
+  background-color: #fd9a6ce5;
   color: #fff;
-  font-size: 9px;
-  height: 40px;
-  border-radius: 3px; /* Ajusta según tu preferencia */
+  font-size: 10px;
+  margin: 3px;
+  height: 80px;
+  border-radius: 5px;
+  width: 100%; /* Agregado para ocupar todo el ancho */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra los elementos horizontalmente */
 }
+
 .precio-badge {
-  position: absolute;
-  top: 130px; /* Ajusta según tu preferencia */
-  right: 25px; /* Ajusta según tu preferencia */
-  background-color: #fd9a6ce5; /* Color del fondo del descuento */
-  color: #fff;
-  padding: 5px; /* Ajusta según tu preferencia */
-  border-radius: 10px; /* Ajusta según tu preferencia */
-}
-
-.card-body {
-  padding-bottom: 0;
+  background-color: #fff;
+  color: #fd9a6ce5;
+  padding: 2px;
+  border-radius: 10px;
+  margin-top: auto; /* Empuja el elemento hacia la parte inferior */
 }
 
 .card .price {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  background-color: #fff;
+  color: #fd9a6ce5;
+  text-align: center; /* Centra el texto horizontalmente */
+  margin-top: auto; /* Empuja el elemento hacia la parte inferior */
 }
