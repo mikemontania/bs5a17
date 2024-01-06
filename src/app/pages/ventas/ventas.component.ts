@@ -51,6 +51,7 @@ export class VentasComponent implements OnInit {
     this._productosService
       .searchProductoPage(1, 10, 0, 0, 0, this.terminoBusqueda)
       .subscribe(resp => {
+        console.log(resp)
         this.productosPage.set(resp)
         this.page.set(resp.page)
         this.totalPages.set(resp.totalPages)

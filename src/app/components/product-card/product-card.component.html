@@ -6,16 +6,16 @@
     />
     <img *ngIf="!producto.img" src="../../../assets/img/sin-imagen.jpg" />
     <div class="discount-badge">{{ descuento }}%</div>
-    <!--     <div class="precio-badge">{{ precio | number }} GS</div> -->
+    <div class="code-badge">{{ producto.codErp }}</div>
+     <!--     <div class="precio-badge">{{ precio | number }} GS</div> -->
   </div>
   <div class="description-badge  text-center p-2">
     <div class="product-name">
-      {{ producto.producto }}
-      {{ producto.presentacion }} {{ producto.variedad }}
+      {{ formattedDescription }}
      </div>
      <div class="price">
       <div class="product-name  ">
-        {{ precio | number }} GS
+        {{ producto.precio | number }} GS
       </div>
       </div>
   </div>

@@ -15,6 +15,7 @@ export interface ProductosItem {
   img:          string;
   producto:     string;
   presentacion: string;
+  precio:       number;
   variedad:     string;
   color:        string;
 }
