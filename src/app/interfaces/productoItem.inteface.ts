@@ -16,6 +16,7 @@ export interface ProductosItem {
   producto:     string;
   presentacion: string;
   precio:       number;
+  descuento:       number;
   variedad:     string;
   color:        string;
 }

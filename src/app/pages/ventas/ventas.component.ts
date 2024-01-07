@@ -48,22 +48,15 @@ export class VentasComponent implements OnInit {
     this._clienteService
       .findPredeterminado()
       .subscribe(resp => this.cliente.set(resp));
-    this._productosService
-      .searchProductoPage(1, 10, 0, 0, 0, this.terminoBusqueda)
-      .subscribe(resp => {
-        console.log(resp)
-        this.productosPage.set(resp)
-        this.page.set(resp.page)
-        this.totalPages.set(resp.totalPages)
-      });
+    this.fetchProductosPage(1); // Initial page load
   }
+
 
   ngOnInit() {}
 
+
   abrirBuscador() {
-    console.log(this.searchCliente);
     this.searchCliente = true;
-    console.log(this.searchCliente);
   }
 
   selectCliente(cliente: Cliente) {
@@ -72,29 +65,24 @@ export class VentasComponent implements OnInit {
     this.cliente.set(cliente); // Update the client signal
     this.searchCliente = false; // Close the modal
   }
+
   buscar(event: any) {
-    this.terminoBusqueda=event;
-    this._productosService
-    .searchProductoPage(1, 10, 0, 0, 0, this.terminoBusqueda)
-    .subscribe(resp => {
-      this.productosPage.set(resp)
-        this.page.set(resp.page)
-        this.totalPages.set(resp.totalPages)
-    });
-
-
+    this.terminoBusqueda = event;
+    this.fetchProductosPage(1); // Reset to first page on search
   }
 
-  onPageChanged(page:any){
-console.log(page)
+  onPageChanged(page: any) {
+    this.fetchProductosPage(page as number);
+  }
 
-this._productosService.searchProductoPage(page, 10, 0, 0, 0, this.terminoBusqueda).subscribe(resp => {
-  console.log(resp)
-  this.productosPage.set(resp)
-        this.page.set(resp.page)
-        this.totalPages.set(resp.totalPages)
-        console.log(this.page())
-        console.log(this.totalPages())
-});
+
+  fetchProductosPage(page: number) {
+    this._productosService
+      .searchProductoPage(1, 1, page, 10, 0, 0, 0, this.terminoBusqueda)
+      .subscribe(resp => {
+        this.productosPage.set(resp);
+        this.page.set(resp.page);
+        this.totalPages.set(resp.totalPages);
+      });
   }
 }

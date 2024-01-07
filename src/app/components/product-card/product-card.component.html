@@ -5,9 +5,8 @@
       [attr.src]="producto.img | imagen: 'productos' | async"
     />
     <img *ngIf="!producto.img" src="../../../assets/img/sin-imagen.jpg" />
-    <div class="discount-badge">{{ descuento }}%</div>
+    <div class="discount-badge">{{ producto.descuento | number  }}%</div>
     <div class="code-badge">{{ producto.codErp }}</div>
-     <!--     <div class="precio-badge">{{ precio | number }} GS</div> -->
   </div>
   <div class="description-badge  text-center p-2">
     <div class="product-name">
@@ -19,12 +18,5 @@
       </div>
       </div>
   </div>
- <!--  <div class="card-body pt-1">
-    <div class="d-flex align-items-center price">
-      <span class="text-dark">{{ precio }} GS</span>
-    </div>
-  </div> -->
-  <!--  <div class="product-name">
 
-  </div> -->
 </div>

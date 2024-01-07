@@ -12,9 +12,9 @@ export class ProductosService {
   http = inject(HttpClient);
   router = inject(Router);
 
-  searchProductoPage(page: number, size: number,marcaId:number,categoriaId:number,subCategoriaId:number, term: string) {
+  searchProductoPage(sucursalId: number,listaPrecioId: number,page: number, size: number,marcaId:number,categoriaId:number,subCategoriaId:number, term: string) {
     return this.http
-      .get(BASE_URL + "/productos/paginados/" + page + "/" + size + "/"+marcaId +"/"+ categoriaId+"/"+ subCategoriaId+"/"+ term)
+      .get(BASE_URL + "/productos/paginados/"+ sucursalId + "/" + listaPrecioId + "/" + page + "/" + size + "/"+marcaId +"/"+ categoriaId+"/"+ subCategoriaId+"/"+ term)
       .pipe(
         map((respo: any) => {
           return respo as ProductoPage;

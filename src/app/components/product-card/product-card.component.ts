@@ -13,8 +13,6 @@ import { CommonModule } from '@angular/common';
 export class ProductCardComponent {
 
   @Input() producto: ProductosItem = {} as ProductosItem;
-  @Input() precio: number = 0;
-  @Input() descuento: number = 0;
   get formattedDescription(): string {
     const description = `${this.producto.producto} ${this.producto.presentacion} ${this.producto.variedad}`;
 
