@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProductosItem } from '../../interfaces/productoItem.inteface';
 import { ImagenPipe } from '../../pipes/imagen.pipe';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './product-card.component.css'
 })
 export class ProductCardComponent {
-
+  @Output() productClicked = new EventEmitter<ProductosItem>();
   @Input() producto: ProductosItem = {} as ProductosItem;
   get formattedDescription(): string {
     const description = `${this.producto.producto} ${this.producto.presentacion} ${this.producto.variedad}`;
@@ -28,6 +28,7 @@ export class ProductCardComponent {
   }
 
   onCardClick() {
-    // Add your logic when the card is clicked
+    console.log(this.producto)
+    this.productClicked.emit(this.producto);
   }
 }

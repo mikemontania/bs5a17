@@ -15,8 +15,10 @@ export interface ProductosItem {
   img:          string;
   producto:     string;
   presentacion: string;
+  porcIva:       number;
   precio:       number;
   descuento:       number;
-  variedad:     string;
+  peso:       number;
+  variedad:     number;
   color:        string;
 }

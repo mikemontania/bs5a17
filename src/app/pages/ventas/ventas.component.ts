@@ -7,17 +7,17 @@ import { FormsModule } from "@angular/forms";
 import { IncrementadorComponent } from "../../components/incrementador/incrementador.component";
 import { NgClienteSearchComponent } from "../../components/ng-cliente-search/ng-cliente-search.component";
 import { Cliente } from "../../interfaces/clientes.interface";
-import { ClientesService } from "../../services/clientes.service";
-import { ProductosService } from "../../services/productos.service";
-import { ProductoPage } from "../../interfaces/productoItem.inteface";
+import { ProductoPage, ProductosItem } from "../../interfaces/productoItem.inteface";
 import { PaginatorComponent } from "../../components/paginator/paginator.component";
 import { FormaVenta } from "../../interfaces/formaventa.interface";
 import { ListaPrecio } from "../../interfaces/listaPrecio.interface";
-import { SucursalService } from "../../services/sucursal.service";
-import { FormaVentaService } from "../../services/formaVenta.service";
-import { ListaPrecioService } from "../../services/listaPrecio.service";
 import { Sucursal } from "../../interfaces/sucursal.interface";
 import { AuthService } from "../../auth/services/auth.service";
+import { Numeracion } from "../../interfaces/numeracion.interface";
+import { NumeracionService ,ListaPrecioService ,FormaVentaService,SucursalService,ProductosService,ClientesService} from "../../services/service.index";
+import { forkJoin } from "rxjs";
+import Swal from "sweetalert2";
+import { ModelCab, ModelDet } from "../../interfaces/facturas.interface";
 
 @Component({
   selector: "app-ventas",
@@ -43,12 +43,14 @@ export class VentasComponent implements OnInit {
  formaVenta = signal<FormaVenta>({ } as FormaVenta);
  listaPrecio = signal<ListaPrecio>({ } as ListaPrecio);
  sucursal = signal<Sucursal>({ } as Sucursal);
-
-  cantidad: number = 1;
-  searchCliente = false;
-  terminoBusqueda:string ='';
-//computacion
-  productos = computed( () =>    this.productosPage().productos ?? []  );
+ numeracion = signal<Numeracion>({ } as Numeracion);
+ factura = signal<ModelCab>({}as ModelCab);
+ cantidad: number = 1;
+ searchCliente = false;
+ terminoBusqueda:string ='';
+ detalles: ModelDet[] =[]  ;
+ //computacion
+ productos = computed( () =>    this.productosPage().productos ?? []  );
 
 
   _authService = inject(AuthService);
@@ -57,18 +59,37 @@ export class VentasComponent implements OnInit {
   _sucursalService = inject(SucursalService);
   _formaVentaService = inject(FormaVentaService);
   _listaPrecioService = inject(ListaPrecioService);
+  _numeracionService = inject(NumeracionService);
 
-  constructor() {
-    console.log(this._authService.currentUser() )
-    this.getSucursalById(this._authService.currentUser() ?.sucursalId!)
-    this._clienteService
-      .findPredeterminado()
-      .subscribe(resp => {
-        this.cliente.set(resp)
-        this.getFormaById(this.cliente().formaVentaId)
-        this.getListaPrecioById(this.cliente().listaPrecioId)
+   constructor() {
+    forkJoin([
+      this._sucursalService.getById(this._authService.sucursalId()!),
+      this._numeracionService.getById(this._authService.numeracionPrefId()!),
+      this._clienteService.findPredeterminado()
+    ]).subscribe(([sucursal, numeracion, cliente]) => {
+      this.sucursal.set(sucursal);
+      this.numeracion.set(numeracion);
+      this.cliente.set(cliente);
+
+      forkJoin([
+        this._formaVentaService.getById(cliente.formaVentaId),
+        this._listaPrecioService.getById(cliente.listaPrecioId)
+      ]).subscribe(([formaVenta, listaPrecio]) => {
+        this.formaVenta.set(formaVenta);
+        this.listaPrecio.set(listaPrecio);
+
+        this.factura.update((prevValue) => ({
+          ...prevValue,
+          clienteId: this.cliente().id,
+          sucursalId: this.sucursal().id,
+          numeracionId: this.numeracion().id,
+          listaPrecioId: this.listaPrecio().id,
+          formaVentaId: this.formaVenta().id,
+        }));
+        this.getProductosPage(1);
       });
-    this.fetchProductosPage(1); // Initial page load
+    });
+
   }
 
 
@@ -88,33 +109,165 @@ export class VentasComponent implements OnInit {
 
   buscar(event: any) {
     this.terminoBusqueda = event;
-    this.fetchProductosPage(1); // Reset to first page on search
+    this.getProductosPage(1); // Reset to first page on search
   }
 
   onPageChanged(page: any) {
-    this.fetchProductosPage(page as number);
+    this.getProductosPage(page as number);
   }
 
 
-  fetchProductosPage(page: number) {
+  getProductosPage(page: number) {
     this._productosService
       .searchProductoPage(1, 1, page, 10, 0, 0, 0, this.terminoBusqueda)
       .subscribe(resp => {
         this.productosPage.set(resp);
         this.page.set(resp.page);
         this.totalPages.set(resp.totalPages);
+      }, err => {
+        console.error(err);
       });
   }
 
-  async getFormaById(id:number) {
-     this._formaVentaService.getById(id).subscribe(resp =>      this.formaVenta.set(resp) )
-  }
-  async getListaPrecioById(id:number) {
-    this._listaPrecioService.getById(id).subscribe(resp =>      this.listaPrecio.set(resp) )
 
+  seleccionarProducto(item: ProductosItem) {
+    if(!item.precio){
+      Swal.fire('Atención', 'El producto no tiene precio', 'warning');
+      return;
+    }
+    try {
+      console.log(this.detalles)
+      console.log(item)
+      let indice = this.detalles.findIndex((d) => d.varianteId == item.id);
+      //si no existe inicializar
+      if (indice === -1) {
+        const detalleInit:ModelDet  = {
+          varianteId: item.id,
+          descripcion: item.producto + ' ' + item.presentacion + ' ' + item.variedad,
+          codErp: item.codErp,
+          cantidad: 0,
+          porcDescuento:0,
+          porcIva:item.porcIva,
+          importePrecio: 0 ,
+          importeIva5: 0 ,
+          importeIva10: 0 ,
+          importeIvaExenta: 0 ,
+          importeDescuento: 0,
+          importeNeto: 0,
+          importeSubtotal: 0,
+          importeTotal: 0,
+          totalKg: 0 ,
+          tipoDescuento: ''
+        };
+        this.detalles.push(detalleInit);
+        indice = this.detalles.findIndex((d) => d.varianteId == item.id);
+      }
+
+      //calcular detalles
+      this.detalles[indice].cantidad +=   this.cantidad;
+      this.detalles[indice].importePrecio =  item.precio;
+      this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * item.precio;
+      this.detalles[indice].totalKg = this.detalles[indice].cantidad * item.peso;
+
+      //calcular descuento
+       if (item.descuento && item.descuento > 0) {
+        this.detalles[indice].porcDescuento =  item.descuento;
+        this.detalles[indice].tipoDescuento =  'PRODUCTO';
+        this.detalles[indice].importeDescuento = Math.round((this.detalles[indice].importeSubtotal *  this.detalles[indice].porcDescuento) / 100);
+       } else {
+
+       }
+       //calcular total
+       this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
+
+       //calcular iva
+       switch (this.detalles[indice].porcIva) {
+        case 0:
+          {
+            this.detalles[indice].importeIva5 = 0;
+            this.detalles[indice].importeIva10 = 0;
+            this.detalles[indice].importeIvaExenta = this.detalles[indice].importeTotal;
+            this.detalles[indice].importeNeto = this.detalles[indice].importeTotal;
+          }
+          break;
+        case 5:
+          {
+            this.detalles[indice].importeIva5 = Math.round(this.detalles[indice].importeTotal / 21);
+            this.detalles[indice].importeIva10 = 0;
+            this.detalles[indice].importeIvaExenta = 0;
+            this.detalles[indice].importeNeto = this.detalles[indice].importeTotal - this.detalles[indice].importeIva5;
+          }
+          break;
+        case 10:
+          {
+              this.detalles[indice].importeIva10 = Math.round(this.detalles[indice].importeTotal / 11);
+              this.detalles[indice].importeIva5 = 0;
+              this.detalles[indice].importeIvaExenta = 0;
+              this.detalles[indice].importeNeto = this.detalles[indice].importeTotal - this.detalles[indice].importeIva10;
+          }
+          break;
+        default:
+          break;
+      }
+
+      //Actualizar cabecera
+      this.actualizarCabecera();
+this.cantidad = 1;
+    } catch (err) {
+       console.error(err);
+    }
   }
-  async getSucursalById(id:number) {
-    this._sucursalService.getById(id).subscribe(resp =>      this.sucursal.set(resp) )
+
+  actualizarCabecera() {
+    const totalSubtotal = this.detalles.reduce((total, detalle) => total + detalle.importeSubtotal, 0);
+    const totalIva5 = this.detalles.reduce((total, detalle) => total + detalle.importeIva5, 0);
+    const totalIva10 = this.detalles.reduce((total, detalle) => total + detalle.importeIva10, 0);
+    const totalIvaExenta = this.detalles.reduce((total, detalle) => total + detalle.importeIvaExenta, 0);
+    const totalDescuento = this.detalles.reduce((total, detalle) => total + detalle.importeDescuento, 0);
+    const totalNeto = totalSubtotal - totalDescuento;
+    const totalTotal = totalNeto + totalIva5 + totalIva10 + totalIvaExenta;
+
+    this.factura.update((value) => ({
+      ...value,
+      importeSubtotal: totalSubtotal,
+      importeIva5: totalIva5,
+      importeIva10: totalIva10,
+      importeIvaExenta: totalIvaExenta,
+      importeDescuento: totalDescuento,
+      importeNeto: totalNeto,
+      importeTotal: totalTotal,
+    }));
+  }
+  sumarProducto(item: ProductosItem ) {
+    const indice = this.detalles.findIndex((d) => d.varianteId == item.variedad);
+    if (indice !== -1) {
+      this.detalles[indice].cantidad += 1;
+      this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * this.detalles[indice].importePrecio;
+      this.detalles[indice].totalKg = this.detalles[indice].cantidad * item.peso;
+      this.detalles[indice].importeDescuento = Math.round((this.detalles[indice].importeSubtotal *  this.detalles[indice].porcDescuento) / 100);
+      this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
+
+      this.actualizarCabecera();
+    }
+  }
+  restarProducto(item: ProductosItem ) {
+    const indice = this.detalles.findIndex((d) => d.varianteId == item.variedad);
+    if (indice !== -1) {
+      this.detalles[indice].cantidad -= 1;
+      this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * this.detalles[indice].importePrecio;
+      this.detalles[indice].totalKg = this.detalles[indice].cantidad * item.peso;
+      this.detalles[indice].importeDescuento = Math.round((this.detalles[indice].importeSubtotal *  this.detalles[indice].porcDescuento) / 100);
+      this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
+
+      this.actualizarCabecera();
+    }
+  }
+  quitarProducto(item: ProductosItem) {
+    const indice = this.detalles.findIndex((d) => d.varianteId == item.variedad);
+    if (indice !== -1) {
+      this.detalles.splice(indice, 1);
+      this.actualizarCabecera();
+    }
   }
 
 }

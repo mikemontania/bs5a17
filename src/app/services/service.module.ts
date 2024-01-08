@@ -8,7 +8,8 @@ ProductosService,
 VentasService,
 FormaVentaService,
 ListaPrecioService,
-SucursalService
+SucursalService,
+NumeracionService
 } from './service.index';
 
 @NgModule({
@@ -22,7 +23,8 @@ SucursalService
     VentasService,
     FormaVentaService,
     ListaPrecioService,
-    SucursalService
+    SucursalService,
+    NumeracionService
   ],
   declarations: []
 })

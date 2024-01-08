@@ -19,6 +19,8 @@ export class AuthService {
   private _authStatus = signal<AuthStatus>( AuthStatus.checking );
 
   //! Valores publicos
+  public sucursalId = computed( () => this.user()?.sucursalId );
+  public numeracionPrefId = computed( () => this.user()?.numPrefId );
   public currentUser = computed( () => this.user() );
   public authStatus = computed( () => this._authStatus() );
   constructor() {
@@ -81,7 +83,12 @@ export class AuthService {
 
       return this.http.get<CheckTokenResponse>(this.baseUrl + '/auth/renew')
       .pipe(
-        map((response: any) =>  this.setAuthentication(JSON.parse(window.atob(response.token.split('.')[1])), response.token)       )       ,
+        map((response) => {
+          const decode = response.token.split('.');
+          const payload = JSON.parse(window.atob(decode[1]));
+          this.setAuthentication(payload.user, response.token);
+          return true;
+        }),
         catchError((err) => {
           this._authStatus.set( AuthStatus.notAuthenticated );
           console.log(err)

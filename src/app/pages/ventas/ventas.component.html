@@ -27,14 +27,11 @@
           </div>
           <div class="input-group mb-3 w-100 d-flex selector">
             <span
-
               class="input-group-text flex-grow-1 d-flex justify-content-between"
               id="basic-addon3"
             >
               @if(sucursal().id) {
-              <span class="client-info"
-                >{{  sucursal().descripcion }}</span
-              >
+              <span class="client-info">{{ sucursal().descripcion }}</span>
               } @else {
               <span class="client-info">cargando ...</span>
               }
@@ -42,18 +39,14 @@
                 <i class="mh-1 fa-solid fa-sort-down"></i>
               </span>
             </span>
-
           </div>
           <div class="input-group mb-3 w-100 d-flex selector">
             <span
-
               class="input-group-text flex-grow-1 d-flex justify-content-between"
               id="basic-addon3"
             >
-              @if(formaVenta().id  ) {
-              <span class="client-info"
-                >{{  formaVenta().descripcion }}</span
-              >
+              @if(formaVenta().id ) {
+              <span class="client-info">{{ formaVenta().descripcion }}</span>
               } @else {
               <span class="client-info">cargando ...</span>
               }
@@ -61,18 +54,14 @@
                 <i class="mh-1 fa-solid fa-sort-down"></i>
               </span>
             </span>
-
           </div>
           <div class="input-group mb-3 w-100 d-flex selector">
             <span
-
               class="input-group-text flex-grow-1 d-flex justify-content-between"
               id="basic-addon3"
             >
               @if(listaPrecio().id) {
-              <span class="client-info"
-                >{{ listaPrecio().descripcion }} </span
-              >
+              <span class="client-info">{{ listaPrecio().descripcion }} </span>
               } @else {
               <span class="client-info">cargando ...</span>
               }
@@ -80,56 +69,52 @@
                 <i class="mh-1 fa-solid fa-sort-down"></i>
               </span>
             </span>
-
           </div>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">producto</th>
-                <th scope="col">cantidad</th>
-                <th scope="col">precio</th>
-                <th scope="col">total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Brandon Jacob</td>
-                <td>Designer</td>
-                <td>28</td>
-                <td>2016-05-25</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Bridie Kessler</td>
-                <td>Developer</td>
-                <td>35</td>
-                <td>2014-12-05</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Ashleigh Langosh</td>
-                <td>Finance</td>
-                <td>45</td>
-                <td>2011-08-12</td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>Angus Grady</td>
-                <td>HR</td>
-                <td>34</td>
-                <td>2012-06-11</td>
-              </tr>
-              <tr>
-                <th scope="row">5</th>
-                <td>Raheem Lehner</td>
-                <td>Dynamic Division Officer</td>
-                <td>47</td>
-                <td>2011-04-19</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="input-group mb-3 w-100 d-flex selector">
+            <span
+              class="input-group-text flex-grow-1 d-flex justify-content-between"
+              id="basic-addon3"
+            >
+              @if(numeracion().id) {
+              <span class="client-info">Serie: {{ numeracion().serie }} </span>
+              } @else {
+              <span class="client-info">cargando ...</span>
+              }
+              <span class="dropdown-icon">
+                <i class="mh-1 fa-solid fa-sort-down"></i>
+              </span>
+            </span>
+          </div>
+          <div id="details">
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">producto</th>
+                  <th scope="col">cantidad</th>
+                  <th scope="col">precio</th>
+                  <th scope="col">total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (detalle of detalles; track detalle.varianteId) {
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>{{detalle.codErp}}</td>
+                    <td>{{detalle.cantidad  | number}}</td>
+                    <td>{{detalle.importePrecio | number}} Gs</td>
+                    <td>{{detalle.importeTotal | number}} Gs</td>
+                  </tr>
+                   } @empty {
+                    <tr>
+
+                    </tr>
+                  }
+
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div class="card-body">
@@ -142,15 +127,17 @@
               <i class="bi bi-cash"></i>
             </div>
             <div class="ps-3">
-              <h6>165.000 Gs</h6>
-              <span class="text-danger small pt-1 fw-bold">15%</span>
-              <span class="text-muted small pt-2 ps-1">-28.000 Gs</span>
-            </div>
-            <div class="ps-3">
-              <h6>165.000 Gs</h6>
-              <span class="text-danger small pt-1 fw-bold">15%</span>
-              <span class="text-muted small pt-2 ps-1">-28.000 Gs</span>
-            </div>
+              <h6>{{factura().importeSubtotal | number}} Gs</h6>
+              <span class="text-danger small pt-1 fw-bold">Subtotal</span>
+             </div>
+             <div class="ps-3">
+               <h6>{{factura().importeDescuento | number}} Gs</h6>
+               <span class="text-danger small pt-1 fw-bold">Descuento</span>
+              </div>
+              <div class="ps-3">
+                <h6>{{factura().importeTotal | number}} Gs</h6>
+                <span class="text-danger small pt-1 fw-bold">Total</span>
+               </div>
           </div>
         </div>
       </div>
@@ -189,9 +176,7 @@
           <div id="products">
             <div class="row product-card-container">
               @for (producto of productos(); track producto.id) {
-              <app-product-card
-                [producto]="producto"
-              ></app-product-card>
+              <app-product-card (productClicked)="seleccionarProducto($event)" [producto]="producto"></app-product-card>
               } @empty {
               <li class="list-group-item">No se han encontrado items</li>
               }
