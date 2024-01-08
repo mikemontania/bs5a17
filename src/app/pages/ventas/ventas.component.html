@@ -27,14 +27,13 @@
           </div>
           <div class="input-group mb-3 w-100 d-flex selector">
             <span
-              (click)="abrirBuscador()"
+
               class="input-group-text flex-grow-1 d-flex justify-content-between"
               id="basic-addon3"
             >
-              @if(cliente().nroDocumento != '') {
+              @if(sucursal().id) {
               <span class="client-info"
-                >{{ cliente().nroDocumento }} -
-                {{ cliente().razonSocial }}</span
+                >{{  sucursal().descripcion }}</span
               >
               } @else {
               <span class="client-info">cargando ...</span>
@@ -43,20 +42,17 @@
                 <i class="mh-1 fa-solid fa-sort-down"></i>
               </span>
             </span>
-            <span class="input-group-text" id="basic-addon3">
-              <i class="fa-solid fa-user-plus"></i>
-            </span>
+
           </div>
           <div class="input-group mb-3 w-100 d-flex selector">
             <span
-              (click)="abrirBuscador()"
+
               class="input-group-text flex-grow-1 d-flex justify-content-between"
               id="basic-addon3"
             >
-              @if(cliente().nroDocumento != '') {
+              @if(formaVenta().id  ) {
               <span class="client-info"
-                >{{ cliente().nroDocumento }} -
-                {{ cliente().razonSocial }}</span
+                >{{  formaVenta().descripcion }}</span
               >
               } @else {
               <span class="client-info">cargando ...</span>
@@ -65,20 +61,17 @@
                 <i class="mh-1 fa-solid fa-sort-down"></i>
               </span>
             </span>
-            <span class="input-group-text" id="basic-addon3">
-              <i class="fa-solid fa-user-plus"></i>
-            </span>
+
           </div>
           <div class="input-group mb-3 w-100 d-flex selector">
             <span
-              (click)="abrirBuscador()"
+
               class="input-group-text flex-grow-1 d-flex justify-content-between"
               id="basic-addon3"
             >
-              @if(cliente().nroDocumento != '') {
+              @if(listaPrecio().id) {
               <span class="client-info"
-                >{{ cliente().nroDocumento }} -
-                {{ cliente().razonSocial }}</span
+                >{{ listaPrecio().descripcion }} </span
               >
               } @else {
               <span class="client-info">cargando ...</span>
@@ -87,9 +80,7 @@
                 <i class="mh-1 fa-solid fa-sort-down"></i>
               </span>
             </span>
-            <span class="input-group-text" id="basic-addon3">
-              <i class="fa-solid fa-user-plus"></i>
-            </span>
+
           </div>
           <table class="table table-bordered">
             <thead>

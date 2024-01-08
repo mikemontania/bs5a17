@@ -56,7 +56,8 @@ export class AuthService {
     }).pipe(
       map((response) => {
         const decode = response.token.split('.');
-        this.setAuthentication(JSON.parse(window.atob(decode[1])), response.token);
+        const payload = JSON.parse(window.atob(decode[1]));
+        this.setAuthentication(payload.user, response.token);
         return true;
       }),
       catchError((err) => {

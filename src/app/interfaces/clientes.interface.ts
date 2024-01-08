@@ -3,10 +3,11 @@
 export interface Cliente {
   id:                number;
   empresaId:         number;
-  listaPrecioId:     null;
-  usuarioCreacionId: null;
+  listaPrecioId:     number;
+  formaVentaId:     number;
+  usuarioCreacionId: number;
   fechaModif:        string;
-  usuarioModif:      null;
+  usuarioModif:      number;
   fechaCreacion:     string;
   razonSocial:       string;
   nroDocumento:      string;
@@ -17,7 +18,7 @@ export interface Cliente {
   latitud:           string;
   longitud:          string;
   predeterminado:    boolean;
-  empleado:          null;
+  empleado:          number;
   propietario:       boolean;
   activo:            boolean;
 }

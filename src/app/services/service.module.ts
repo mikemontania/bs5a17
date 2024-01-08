@@ -6,6 +6,9 @@ import {
   ClientesService,
 ProductosService,
 VentasService,
+FormaVentaService,
+ListaPrecioService,
+SucursalService
 } from './service.index';
 
 @NgModule({
@@ -17,6 +20,9 @@ VentasService,
     ClientesService,
     ProductosService,
     VentasService,
+    FormaVentaService,
+    ListaPrecioService,
+    SucursalService
   ],
   declarations: []
 })

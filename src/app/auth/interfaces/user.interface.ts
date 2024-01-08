@@ -3,7 +3,7 @@
 export interface User {
    id: number,
    empresaId: number
-   sucursalesId: number,
+   sucursalId: number,
    username: string,
    usuario: string,
    img: string,
