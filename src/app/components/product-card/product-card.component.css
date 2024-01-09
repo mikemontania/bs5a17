@@ -3,7 +3,7 @@
   padding: 8px;
   cursor: pointer;
   transition: .3s all ease-in-out;
-  height: 270px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -19,9 +19,8 @@
 }
 
 .card-img img {
-  padding-top: 10px;
   width: inherit;
-  height: 150px;
+  height: 110px;
   object-fit: contain;
   display: block;
 }
@@ -40,23 +39,23 @@
   position: absolute;
   bottom: 0px;
   right: 0px;
-  color: #8f8e8e;
-  padding: 2px;
+  border-radius: 5px;
+  background-color: #fd9a6ce5;
+  color: #fff;
+  padding: 1px;
   margin: 2px;
-  font-size: 9px;
-
+  font-size: 10px;
+  font-weight: bold; /* Texto en negrita */
 }
 
 .description-badge {
-  position: absolute;
-  bottom: 0;
+
   background-color: #fd9a6ce5;
   color: #fff;
   font-size: 10px;
-  margin: 3px;
-  height: 100px;
   border-radius: 5px;
-  width: 100%; /* Agregado para ocupar todo el ancho */
+   height: 68px;
+   width: 100%; /* Agregado para ocupar todo el ancho */
   display: flex;
   flex-direction: column;
   align-items: center; /* Centra los elementos horizontalmente */

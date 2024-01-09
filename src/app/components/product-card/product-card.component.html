@@ -6,17 +6,17 @@
     />
     <img *ngIf="!producto.img" src="../../../assets/img/sin-imagen.jpg" />
     <div class="discount-badge">{{ producto.descuento | number  }}%</div>
-    <div class="code-badge">{{ producto.codErp }}</div>
+    <div class="code-badge"> {{ producto.precio | number }} GS</div>
   </div>
   <div class="description-badge  text-center p-2">
     <div class="product-name">
       {{ formattedDescription }}
      </div>
-     <div class="price">
+<!--      <div class="price">
       <div class="product-name  ">
         {{ producto.precio | number }} GS
       </div>
-      </div>
+      </div> -->
   </div>
 
 </div>

@@ -50,7 +50,7 @@ export class VentasComponent implements OnInit {
  terminoBusqueda:string ='';
  detalles: ModelDet[] =[]  ;
  //computacion
- productos = computed( () =>    this.productosPage().productos ?? []  );
+ productos = computed( () => this.productosPage().productos ?? []  );
 
 
   _authService = inject(AuthService);
@@ -70,28 +70,8 @@ export class VentasComponent implements OnInit {
       this.sucursal.set(sucursal);
       this.numeracion.set(numeracion);
       this.cliente.set(cliente);
+      this.actualizarCargador();
 
-      forkJoin([
-        this._formaVentaService.getById(cliente.formaVentaId),
-        this._listaPrecioService.getById(cliente.listaPrecioId)
-      ]).subscribe(([formaVenta, listaPrecio]) => {
-        this.formaVenta.set(formaVenta);
-        this.listaPrecio.set(listaPrecio);
-
-        this.factura.update((prevValue) => ({
-          ...prevValue,
-          clienteId: this.cliente().id,
-          sucursalId: this.sucursal().id,
-          numeracionId: this.numeracion().id,
-          listaPrecioId: this.listaPrecio().id,
-          formaVentaId: this.formaVenta().id,
-          importeDescuento:0,
-          importeTotal:0,
-          importeSubtotal:0
-
-        }));
-        this.getProductosPage(1);
-      });
     });
 
   }
@@ -100,12 +80,34 @@ export class VentasComponent implements OnInit {
   ngOnInit() {}
 
 
+  actualizarCargador() {
+    forkJoin([
+      this._formaVentaService.getById(this.cliente().formaVentaId),
+      this._listaPrecioService.getById(this.cliente().listaPrecioId)
+    ]).subscribe(([formaVenta, listaPrecio]) => {
+      this.formaVenta.set(formaVenta);
+      this.listaPrecio.set(listaPrecio);
+      this.factura.update((prevValue) => ({
+        ...prevValue,
+        clienteId: this.cliente().id,
+        sucursalId: this.sucursal().id,
+        numeracionId: this.numeracion().id,
+        listaPrecioId: this.listaPrecio().id,
+        formaVentaId: this.formaVenta().id,
+        importeDescuento:0,
+        importeTotal:0,
+        importeSubtotal:0
+      }));
+      this.getProductosPage(1);
+    });
+  }
+
+
   abrirBuscador() {
     this.searchCliente = true;
   }
 
   selectCliente(cliente: Cliente) {
-    // Process the selected client
     console.log("Selected client:", cliente);
     this.cliente.set(cliente); // Update the client signal
     this.searchCliente = false; // Close the modal
@@ -123,7 +125,7 @@ export class VentasComponent implements OnInit {
 
   getProductosPage(page: number) {
     this._productosService
-      .searchProductoPage(1, 1, page, 10, 0, 0, 0, this.terminoBusqueda)
+      .searchProductoPage(this.sucursal().id, this.listaPrecio().id, page, 15, 0, 0, 0, this.terminoBusqueda)
       .subscribe(resp => {
         this.productosPage.set(resp);
         this.page.set(resp.page);
@@ -243,7 +245,7 @@ this.cantidad = 1;
     }));
   }
   sumarProducto(item: ProductosItem ) {
-    const indice = this.detalles.findIndex((d) => d.varianteId == item.variedad);
+    const indice = this.detalles.findIndex((d) => d.varianteId == item.id);
     if (indice !== -1) {
       this.detalles[indice].cantidad += 1;
       this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * this.detalles[indice].importePrecio;
@@ -255,7 +257,7 @@ this.cantidad = 1;
     }
   }
   restarProducto(item: ProductosItem ) {
-    const indice = this.detalles.findIndex((d) => d.varianteId == item.variedad);
+    const indice = this.detalles.findIndex((d) => d.varianteId == item.id);
     if (indice !== -1) {
       this.detalles[indice].cantidad -= 1;
       this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * this.detalles[indice].importePrecio;
@@ -267,7 +269,7 @@ this.cantidad = 1;
     }
   }
   quitarProducto(item: ProductosItem) {
-    const indice = this.detalles.findIndex((d) => d.varianteId == item.variedad);
+    const indice = this.detalles.findIndex((d) => d.varianteId == item.id);
     if (indice !== -1) {
       this.detalles.splice(indice, 1);
       this.actualizarCabecera();

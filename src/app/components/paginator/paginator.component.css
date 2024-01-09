@@ -30,7 +30,7 @@
 }
 
 .active > .page-link, .page-link.active {
-  z-index: 3;
+  z-index: 1;
   color: #fff;
   background-color:  #fd9a6ce5;
   border-color: #fd8a55e5;

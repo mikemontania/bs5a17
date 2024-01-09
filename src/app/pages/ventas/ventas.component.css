@@ -1,15 +1,17 @@
 
 
 
-
+.card-body-p0 {
+  padding: 0;
+}
 
 .selector{
   cursor: pointer;
 }
-
+/* detalles */
 #details {
   width: 100%;
-  height: 300px;
+  height: 285px;
   overflow-y: auto; /* Solo mostrará la barra de desplazamiento vertical */
   overflow-x: hidden; /* Ocultará la barra de desplazamiento horizontal */
 }
@@ -26,52 +28,108 @@
   background-color: #fff; /* Color de fondo para la cabecera fija */
   z-index: 1; /* Asegura que la cabecera esté por encima del contenido */
 }
-
-#products {
-  height: 650px;
-  overflow-y: auto;  /* Solo mostrará la barra de desplazamiento vertical */
+.product-container {
+  display: grid;
+  grid-gap: 10px;
+  justify-content: center;
+  height: 580px;
+  max-height: 580px;
+  overflow-y: auto; /* Solo mostrará la barra de desplazamiento vertical */
   overflow-x: hidden; /* Ocultará la barra de desplazamiento horizontal */
 }
-/* Estilos del scrollbar */
-#products::-webkit-scrollbar {
+
+
+/* Estilos del scrollbar en WebKit */
+.product-container::-webkit-scrollbar {
   width: 10px; /* Ancho del scrollbar */
+
 }
 
-#products::-webkit-scrollbar-thumb {
-  background-color: #888; /* Color del scrollbar */
-  border-radius: 5px; /* Radio de la esquina del thumb */
+
+@media (min-width: 1801px) { /* Pantallas extra grandes (xl) */
+  .product-container {
+    grid-template-columns: repeat(7, 1fr);
+  }
 }
+@media (min-width: 1423px) and (max-width: 1800px) { /* Pantallas grandes (lg) */
+  .product-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+@media (min-width: 992px) and (max-width: 1422px) { /* Pantallas grandes (lg) */
+  .product-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) { /* Pantallas medianas (md) */
+  .product-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) { /* Pantallas pequeñas (sm) */
+  .product-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+/* product card */
 .product-card-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  height: 580px;
+  max-height: 580px;
+  overflow-y: auto; /* Solo mostrará la barra de desplazamiento vertical */
+  overflow-x: hidden; /* Ocultará la barra de desplazamiento horizontal */
+}
+.product-card-container::-webkit-scrollbar {
+  width: 10px; /* Ancho del scrollbar */
+
 }
 
 app-product-card {
-  flex: 0 0 calc(20% - 20px);  /* Inicialmente, mostrar 5 tarjetas por fila */
-  margin-bottom: 20px;
+  flex: 0 0 calc(20% - 20px); /* Inicialmente, mostrar 5 tarjetas por fila */
+
 }
 
-@media (max-width: 1200px) {
+
+/* 6 tarjetas en pantallas más pequeñas */
+@media (max-width: 1625px) {
   app-product-card {
-    flex: 0 0 calc(25% - 20px);  /* Cuando el ancho de la pantalla sea 1200px o menos, mostrar 4 tarjetas por fila */
+    flex: 0 0 calc(20% - 20px);
   }
 }
 
+
+/* 4 tarjetas en pantallas más pequeñas */
 @media (max-width: 992px) {
   app-product-card {
-    flex: 0 0 calc(33.33% - 20px);  /* Cuando el ancho de la pantalla sea 992px o menos, mostrar 3 tarjetas por fila */
+    flex: 0 0 calc(25% - 20px);
   }
 }
 
+/* 3 tarjetas en pantallas más pequeñas */
 @media (max-width: 768px) {
   app-product-card {
-    flex: 0 0 calc(50% - 20px);  /* Cuando el ancho de la pantalla sea 768px o menos, mostrar 2 tarjetas por fila */
+    flex: 0 0 calc(33.33% - 20px);
   }
 }
 
+/* 2 tarjetas en pantallas más pequeñas */
 @media (max-width: 480px) {
   app-product-card {
-    flex: 0 0 calc(100% - 20px);  /* Cuando el ancho de la pantalla sea 480px o menos, mostrar 1 tarjeta por fila */
+    flex: 0 0 calc(50% - 20px);
   }
 }
+
+/* 1 tarjeta en pantallas muy pequeñas */
+@media (max-width: 360px) {
+  app-product-card {
+    flex: 0 0 calc(100% - 20px);
+  }
+}
+
+
+
+

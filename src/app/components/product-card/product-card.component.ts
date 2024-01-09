@@ -14,9 +14,17 @@ export class ProductCardComponent {
   @Output() productClicked = new EventEmitter<ProductosItem>();
   @Input() producto: ProductosItem = {} as ProductosItem;
   get formattedDescription(): string {
-    const description = `${this.producto.producto} ${this.producto.presentacion} ${this.producto.variedad}`;
+    const capitalizeFirstLetter = (word: string) => {
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    };
 
-    if (description.length === 0) {
+    const capitalizeAllWords = (text: string) => {
+      return text.split(' ').map(capitalizeFirstLetter).join(' ');
+    };
+
+    const description = `${capitalizeAllWords(this.producto.producto)} ${capitalizeAllWords(this.producto.variedad)} ${capitalizeAllWords(this.producto.presentacion)}`;
+
+    if (description.trim().length === 0) {
       return 'Sin descripción';
     }
 
