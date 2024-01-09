@@ -1,92 +1,18 @@
 <section class="section profile">
   <div class="row">
     <div class="col-xl-8">
-      <div class="card">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6">
-              <input-debounce
-                #input
-                [delay]="500"
-                id="inputProducto"
-                height="15px"
-                type="text"
-                placeholder="Buscar"
-                required=""
-                aria-invalid="false"
-                (value)="buscar($event)"
-              >
-              </input-debounce>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-3">
-              <app-incrementador
-                [cantidad]="cantidad"
-                (change)="cantidad = $event"
-              ></app-incrementador>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-3">
-              <!-- <label class="small text-uppercase m-1" for="categorias">Categorías:</label> -->
-              <!--  <ng-select-categoria *ngIf="!deshabilitarBuscador" #searchCategoria id="ngSelectCategoria"
-                    [cargadorCategoria]="categoriaSeleccionada" name="ngSelectCategoria"
-                    (retornoObjeto)="filtrarCategoria($event)">
-                </ng-select-categoria> -->
-            </div>
-          </div>
-      <!--     <div class="product-container">
-            @for (producto of productos(); track producto.id) {
-            <app-product-card
-              (productClicked)="seleccionarProducto($event)"
-              [producto]="producto"
-            ></app-product-card>
-            } @empty {
-              <div class="w-100 empty-message-container">
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                  <h4 class="alert-heading">Atención</h4>
-                  <p>No se han encontrado productos...</p>
-                </div>
-              </div>
-            }
-          </div> -->
-         <div id="products">
-            <div class="row product-card-container">
-              @for (producto of productos(); track producto.id) {
-              <app-product-card
-                (productClicked)="seleccionarProducto($event)"
-                [producto]="producto"
-              ></app-product-card>
-              } @empty {
-                <div class="w-100  ">
-                  <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    <h4 class="alert-heading">Atención</h4>
-                    <p>No se han encontrado productos...</p>
-                  </div>
-                </div>
-              }
-            </div>
-          </div>
 
-          <!--      <div class="row">
-            @for (producto of productos(); track producto.id) {
-              <div class="col-sm-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
-                <app-product-card
-                  (productClicked)="seleccionarProducto($event)"
-                  [producto]="producto"
-                ></app-product-card>
-              </div>
-            } @empty {
-              <li class="list-group-item">No se han encontrado items</li>
-            }
-          </div>   -->
-          <div class="d-flex justify-content-center">
-            <app-paginator
-              [totalPages]="totalPages()"
-              [currentPage]="page()"
-              (pageChanged)="onPageChanged($event)"
-            >
-            </app-paginator>
-          </div>
-        </div>
-      </div>
+      @if(sucursal()?.id && listaPrecio()?.id ) {
+
+        <app-product-list
+          [sucursalId]="sucursal().id"
+          [listaPrecioId]="listaPrecio().id" (productClicked)="seleccionarProducto($event)"
+        ></app-product-list>
+
+        } @else {
+        <span class="client-info">cargando ...</span>
+        }
+
     </div>
     <div class="col-xl-4">
       <!--   selectores -->

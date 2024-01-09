@@ -1,13 +1,10 @@
 import { Component, OnInit, computed, inject, signal } from "@angular/core";
 import { SeccionClienteComponent } from "../../components/seccion-cliente/seccion-cliente.component";
-import { InputDebounceComponent } from "../../components/inputDebounce/inputDebounce.component";
-import { ProductCardComponent } from "../../components/product-card/product-card.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { IncrementadorComponent } from "../../components/incrementador/incrementador.component";
-import { NgClienteSearchComponent } from "../../components/ng-cliente-search/ng-cliente-search.component";
+ import { NgClienteSearchComponent } from "../../components/ng-cliente-search/ng-cliente-search.component";
 import { Cliente } from "../../interfaces/clientes.interface";
-import { ProductoPage, ProductosItem } from "../../interfaces/productoItem.inteface";
+import { ProductosItem } from "../../interfaces/productoItem.inteface";
 import { PaginatorComponent } from "../../components/paginator/paginator.component";
 import { FormaVenta } from "../../interfaces/formaventa.interface";
 import { ListaPrecio } from "../../interfaces/listaPrecio.interface";
@@ -18,6 +15,7 @@ import { NumeracionService ,ListaPrecioService ,FormaVentaService,SucursalServic
 import { forkJoin } from "rxjs";
 import Swal from "sweetalert2";
 import { ModelCab, ModelDet } from "../../interfaces/facturas.interface";
+import { ProductsListComponent } from "../../components/product-list/product-list.component";
 
 @Component({
   selector: "app-ventas",
@@ -26,20 +24,15 @@ import { ModelCab, ModelDet } from "../../interfaces/facturas.interface";
     CommonModule,
     FormsModule,
     SeccionClienteComponent,
-    InputDebounceComponent,
-    ProductCardComponent,
-    IncrementadorComponent,
     NgClienteSearchComponent,
+    ProductsListComponent,
     PaginatorComponent,
   ],
   templateUrl: "./ventas.component.html",
   styleUrl: "./ventas.component.css"
 })
 export class VentasComponent implements OnInit {
-  cliente = signal<Cliente>({ nroDocumento: "", razonSocial: "" } as Cliente);
-  productosPage = signal<ProductoPage>({} as ProductoPage);
-  page = signal<number>(1);
-  totalPages = signal<number>(1);
+ cliente = signal<Cliente>({ nroDocumento: "", razonSocial: "" } as Cliente);
  formaVenta = signal<FormaVenta>({ } as FormaVenta);
  listaPrecio = signal<ListaPrecio>({ } as ListaPrecio);
  sucursal = signal<Sucursal>({ } as Sucursal);
@@ -47,14 +40,10 @@ export class VentasComponent implements OnInit {
  factura = signal<ModelCab>({}as ModelCab);
  cantidad: number = 1;
  searchCliente = false;
- terminoBusqueda:string ='';
  detalles: ModelDet[] =[]  ;
- //computacion
- productos = computed( () => this.productosPage().productos ?? []  );
 
 
   _authService = inject(AuthService);
-  _productosService = inject(ProductosService);
   _clienteService = inject(ClientesService);
   _sucursalService = inject(SucursalService);
   _formaVentaService = inject(FormaVentaService);
@@ -98,7 +87,6 @@ export class VentasComponent implements OnInit {
         importeTotal:0,
         importeSubtotal:0
       }));
-      this.getProductosPage(1);
     });
   }
 
@@ -113,27 +101,6 @@ export class VentasComponent implements OnInit {
     this.searchCliente = false; // Close the modal
   }
 
-  buscar(event: any) {
-    this.terminoBusqueda = event;
-    this.getProductosPage(1); // Reset to first page on search
-  }
-
-  onPageChanged(page: any) {
-    this.getProductosPage(page as number);
-  }
-
-
-  getProductosPage(page: number) {
-    this._productosService
-      .searchProductoPage(this.sucursal().id, this.listaPrecio().id, page, 15, 0, 0, 0, this.terminoBusqueda)
-      .subscribe(resp => {
-        this.productosPage.set(resp);
-        this.page.set(resp.page);
-        this.totalPages.set(resp.totalPages);
-      }, err => {
-        console.error(err);
-      });
-  }
 
 
   seleccionarProducto(item: ProductosItem) {

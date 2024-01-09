@@ -1,0 +1,51 @@
+app-product-card {
+  flex: 0 0 calc(20% - 20px); /* Inicialmente, mostrar 5 tarjetas por fila */
+
+}
+
+.card-body-p0 {
+  padding: 0;
+}
+
+.selector{
+  cursor: pointer;
+}
+.product-container {
+  display: grid;
+  grid-gap: 10px;
+  justify-content: center;
+  height: 580px;
+  max-height: 580px; /* Limita la altura máxima a 650px */
+  overflow-y: auto; /* Activa la barra de desplazamiento vertical cuando sea necesario */
+   overflow-x: hidden; /* Ocultará la barra de desplazamiento horizontal */
+}
+.product-container::-webkit-scrollbar {
+  width: 10px; /* Ancho del scrollbar */
+}
+@media (min-width: 1801px) { /* Pantallas extra grandes (xl) */
+  .product-container {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+@media (min-width: 1423px) and (max-width: 1800px) { /* Pantallas grandes (lg) */
+  .product-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+@media (min-width: 992px) and (max-width: 1422px) { /* Pantallas grandes (lg) */
+  .product-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) { /* Pantallas medianas (md) */
+  .product-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) { /* Pantallas pequeñas (sm) */
+  .product-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
