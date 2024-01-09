@@ -17,10 +17,9 @@ export const authGuard: CanActivateFn = (route, state) => {
      router.navigateByUrl('/login');
     return false;
   }
-if (state.url != '/') {
-  // Guarda la ruta actual en el localStorage
-  localStorage.setItem('app-path', state.url)
-
-}
+ if (state.url !== '/') {
+    // Guarda la ruta actual en el localStorage
+    localStorage.setItem('app-path', state.url);
+  }
   return true;
 };

@@ -98,9 +98,10 @@
                 </tr>
               </thead>
               <tbody>
-                @for (detalle of detalles; track detalle.varianteId) {
+                   @for (detalle of detalles; track detalle.varianteId; let index = $index) {
+
                   <tr>
-                    <th scope="row">1</th>
+                    <th scope="row">{{ index + 1}}</th>
                     <td>{{detalle.codErp}}</td>
                     <td>{{detalle.cantidad  | number}}</td>
                     <td>{{detalle.importePrecio | number}} Gs</td>
@@ -111,6 +112,8 @@
 
                     </tr>
                   }
+
+
 
               </tbody>
             </table>
@@ -124,25 +127,26 @@
             <div
               class="card-icon rounded-circle d-flex align-items-center justify-content-center"
             >
-              <i class="bi bi-cash"></i>
+              <i class="bi bi-money-bill-alt"></i>
             </div>
             <div class="ps-3">
-              <h6>{{factura().importeSubtotal | number}} Gs</h6>
               <span class="text-danger small pt-1 fw-bold">Subtotal</span>
-             </div>
-             <div class="ps-3">
-               <h6>{{factura().importeDescuento | number}} Gs</h6>
-               <span class="text-danger small pt-1 fw-bold">Descuento</span>
-              </div>
-              <div class="ps-3">
-                <h6>{{factura().importeTotal | number}} Gs</h6>
-                <span class="text-danger small pt-1 fw-bold">Total</span>
-               </div>
+              <h6 class="text-right">{{factura().importeSubtotal | number}} Gs</h6>
+            </div>
+
+            <div class="ps-3">
+              <span class="text-danger small pt-1 fw-bold">Descuento</span>
+              <h6 class="text-right">{{factura().importeDescuento | number}} Gs</h6>
+            </div>
+
+            <div class="ps-3">
+              <span class="text-danger small pt-1 fw-bold">Total</span>
+              <h6 class="text-right font-weight-bold">{{factura().importeTotal | number}} Gs</h6>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
     <div class="col-xl-8">
       <div class="card">
         <div class="card-body pt-3">
@@ -162,7 +166,7 @@
               </input-debounce>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-3">
-              <app-incrementador [cantidad]="cantidad"></app-incrementador>
+              <app-incrementador [cantidad]="cantidad" (change)="cantidad=$event"></app-incrementador>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-3">
               <!-- <label class="small text-uppercase m-1" for="categorias">Categorías:</label> -->

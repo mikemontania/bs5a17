@@ -30,7 +30,7 @@ import { ModelCab, ModelDet } from "../../interfaces/facturas.interface";
     ProductCardComponent,
     IncrementadorComponent,
     NgClienteSearchComponent,
-    PaginatorComponent
+    PaginatorComponent,
   ],
   templateUrl: "./ventas.component.html",
   styleUrl: "./ventas.component.css"
@@ -85,6 +85,10 @@ export class VentasComponent implements OnInit {
           numeracionId: this.numeracion().id,
           listaPrecioId: this.listaPrecio().id,
           formaVentaId: this.formaVenta().id,
+          importeDescuento:0,
+          importeTotal:0,
+          importeSubtotal:0
+
         }));
         this.getProductosPage(1);
       });

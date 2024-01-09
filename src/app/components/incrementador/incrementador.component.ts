@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,12 +10,15 @@ import { FormsModule } from '@angular/forms';
 })
 export class IncrementadorComponent {
   @Input() cantidad: number = 1;
-
+  @Output() change = new EventEmitter<number>();
   cambiarValor(valor: number) {
     if (this.cantidad <= 0 && valor < 0) {
       this.cantidad = 0;
       return;
     }
     this.cantidad = this.cantidad + valor;
+    this.change.emit(this.cantidad);
   }
+
+
 }

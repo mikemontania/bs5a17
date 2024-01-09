@@ -49,8 +49,8 @@ export class AppComponent implements OnInit{
 
   // ngOnInit: Se ejecuta al iniciar el componente
   ngOnInit() {
-    if (this.storedPath) {
-      this.router.navigateByUrl(this.storedPath); // Redirige a la ruta almacenada si existe
+    if (this.storedPath && this.authService.authStatus() === AuthStatus.authenticated) {
+      this.router.navigateByUrl(this.storedPath); // Redirige a la ruta almacenada si existe y está autenticado
     }
   }
 }
