@@ -301,8 +301,7 @@ refresh(){
       this.detalles[indice].importePrecio = item.precio;
       this.detalles[indice].importeSubtotal =
       this.detalles[indice].cantidad * item.precio;
-      this.detalles[indice].totalKg =
-      this.detalles[indice].cantidad * item.peso;
+      this.detalles[indice].totalKg =(this.detalles[indice].cantidad * item.peso) ;
 
       //calcular descuento
       if (item.descuento && item.descuento > 0) {
@@ -336,28 +335,14 @@ refresh(){
   }
 
   actualizarCabecera() {
-    const totalSubtotal = this.detalles.reduce(
-      (total, detalle) => total + detalle.importeSubtotal,
-      0
-    );
-    const totalIva5 = this.detalles.reduce(
-      (total, detalle) => total + detalle.importeIva5,
-      0
-    );
+    const totalSubtotal = this.detalles.reduce(      (total, detalle) => total + detalle.importeSubtotal,      0    );
+    const totalIva5 = this.detalles.reduce(      (total, detalle) => total + detalle.importeIva5,      0    );
     const totalIva10 = this.detalles.reduce(
-      (total, detalle) => total + detalle.importeIva10,
-      0
-    );
-    const totalIvaExenta = this.detalles.reduce(
-      (total, detalle) => total + detalle.importeIvaExenta,
-      0
-    );
-    const totalDescuento = this.detalles.reduce(
-      (total, detalle) => total + detalle.importeDescuento,
-      0
-    );
-    const totalNeto = totalSubtotal - totalDescuento;
-    const totalTotal = totalNeto + totalIva5 + totalIva10 + totalIvaExenta;
+      (total, detalle) => total + detalle.importeIva10,      0    );    const totalIvaExenta = this.detalles.reduce(      (total, detalle) => total + detalle.importeIvaExenta,
+      0    );
+    const totalDescuento = this.detalles.reduce(      (total, detalle) => total + detalle.importeDescuento,      0    );
+    const totalNeto = totalSubtotal - totalDescuento;    const totalTotal = totalNeto + totalIva5 + totalIva10 + totalIvaExenta;
+    const totalKg = this.detalles.reduce(      (totalKg, detalle) => totalKg + detalle.totalKg,      0    );
 
     this.factura.update(value => ({
       ...value,
@@ -367,7 +352,8 @@ refresh(){
       importeIvaExenta: totalIvaExenta,
       importeDescuento: totalDescuento,
       importeNeto: totalNeto,
-      importeTotal: totalTotal
+      importeTotal: totalTotal,
+      totalKg:totalKg
     }));
   }
 
