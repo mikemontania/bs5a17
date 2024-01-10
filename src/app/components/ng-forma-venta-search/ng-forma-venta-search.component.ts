@@ -1,9 +1,8 @@
 import { CommonModule } from "@angular/common";
-import { Component,       EventEmitter, Input, OnInit, Output, ViewContainerRef, inject } from "@angular/core";
-import { debounceTime, distinctUntilChanged } from "rxjs";
+import { Component,       EventEmitter, Input, OnInit, Output,  inject } from "@angular/core";
 import { InputDebounceComponent } from "../inputDebounce/inputDebounce.component";
-import { Cliente } from '../../interfaces/clientes.interface';
-import { ClientesService } from "../../services/clientes.service";
+import { FormaVentaService } from "../../services/service.index";
+import { FormaVenta } from "../../interfaces/formaventa.interface";
 
 @Component({
   selector: "app-forma-venta-search",
@@ -14,44 +13,44 @@ import { ClientesService } from "../../services/clientes.service";
 })
 export class NgFormaVentaSearchComponent implements OnInit {
   size = "medium";
-  delay=200;
+  delay = 200;
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
-  @Output() cliente = new EventEmitter<Cliente>();
+  @Output() formaVenta = new EventEmitter<FormaVenta>();
 
-  clientes: Cliente[] = [];
-  _clientesService = inject(ClientesService);
+  formasVenta: FormaVenta[] = [];
+  formasVentaAux: FormaVenta[] = [];
+  _formasVentaService = inject(FormaVentaService);
 
   ngOnInit(): void {
-    this.clientes =[];
+    this.formasVenta = [];
 
-    this.buscar('');
+    this.buscar("");
   }
 
-
-selectCliente(cliente: Cliente) {
-  this.cliente.emit(cliente);
-
-}
-trackCliente(index: number, cliente: Cliente): number {
-  return cliente.id; // Assuming cliente has a unique ID
-}
-
+  selectFormaVenta(formaVenta: FormaVenta) {
+    this.formaVenta.emit(formaVenta);
+  }
+  trackFormaVenta(index: number, formaVenta: FormaVenta): number {
+    return formaVenta.id; // Assuming formaVenta has a unique ID
+  }
 
   close() {
     this.closeModal.emit();
   }
 
   buscar(termino: string) {
+      this._formasVentaService.findAll().subscribe(resp=> this.formasVentaAux=resp);
+    console.log("formasVenta aux", this.formasVentaAux);
 
-    this._clientesService.searchClientes(1, 10, termino)
-    .pipe(debounceTime(1500), distinctUntilChanged())
-    .subscribe((response: any) => {
-      console.log(response);
-      this.clientes = response.rows as Cliente[];
-    });
-    /*   debounceTime(300);
-    distinctUntilChanged(); */
-    console.log(termino);
+    if (termino) {
+      this.formasVentaAux = this.formasVentaAux.filter((formaVenta: FormaVenta) => {
+        return formaVenta.descripcion
+          .toLowerCase()
+          .includes(termino.toLowerCase());
+      });
+    }
+
+    this.formasVenta = this.formasVentaAux;
   }
 }

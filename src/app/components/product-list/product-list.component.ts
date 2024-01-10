@@ -22,12 +22,14 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 export class ProductsListComponent implements OnInit {
   @Input() sucursalId: number = 0;
   @Input() listaPrecioId: number = 0;
+  @Input() cantidad: number = 1;
   @Output() productClicked = new EventEmitter<ProductosItem>();
+  @Output() cantidadChange = new EventEmitter<number>();
+
    marcaId: number = 0;
    categoriaId: number = 0;
    subCategoriaId: number = 0;
     search: string = '';
-  cantidad: number = 1;
 
   productosPage = signal<ProductoPage>({} as ProductoPage);
   page = signal<number>(1);
@@ -60,7 +62,10 @@ export class ProductsListComponent implements OnInit {
   onPageChanged(newPage: number) {
     this.getProductosPage(newPage);
   }
-
+  changeCantidad(event:number){
+    this.cantidad =event;
+    this.cantidadChange.emit(event);
+  }
 
   seleccionarProducto(event:ProductosItem) {
      this.productClicked.emit(event);

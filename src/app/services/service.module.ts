@@ -9,7 +9,9 @@ VentasService,
 FormaVentaService,
 ListaPrecioService,
 SucursalService,
-NumeracionService
+NumeracionService,
+ValoracionService,
+CalculoService
 } from './service.index';
 
 @NgModule({
@@ -24,7 +26,9 @@ NumeracionService
     FormaVentaService,
     ListaPrecioService,
     SucursalService,
-    NumeracionService
+    NumeracionService,
+    ValoracionService,
+CalculoService
   ],
   declarations: []
 })

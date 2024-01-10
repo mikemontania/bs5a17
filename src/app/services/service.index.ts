@@ -1,3 +1,6 @@
+export { CalculoService } from './calculo.service';
+export { ValoracionService } from './valoraciones.service';
+
 export { NumeracionService } from './numeracion.service';
 
 export { FormaVentaService } from './formaVenta.service';

@@ -1,12 +1,14 @@
 <section class="section profile">
   <div class="row">
     <div class="col-xl-8">
-      @if(sucursal()?.id && listaPrecio()?.id ) {
+      @if(sucursal().id && listaPrecio().id && showShop ) {
 
       <app-product-list
-        [sucursalId]="sucursal().id"
-        [listaPrecioId]="listaPrecio().id"
+        (cantidadChange)="changeCantidad($event)"
         (productClicked)="seleccionarProducto($event)"
+        [sucursalId]="sucursal().id"
+        [cantidad]="cantidad"
+        [listaPrecioId]="listaPrecio().id"
       ></app-product-list>
 
       } @else {
@@ -29,7 +31,9 @@
                 {{ cliente().razonSocial }}</span
               >
               } @else {
-              <span class="client-info">cargando ...</span>
+              <span class="bg-danger text-white"
+                ><small>Atención seleccione Cliente</small></span
+              >
               }
               <span class="dropdown-icon">
                 <i class="mh-1 fa-solid fa-sort-down"></i>
@@ -46,7 +50,8 @@
           <div class="d-flex w-100">
             <!-- Agrupación de Sucursal y Serie -->
             <div class="input-group mb-3 w-50 d-flex selector">
-              <span  (click)="buscarSucursal()"
+              <span
+                (click)="buscarSucursal()"
                 class="input-group-text flex-grow-1 d-flex justify-content-between"
                 id="basic-addon3"
               >
@@ -55,7 +60,9 @@
                   >Sucursal <small>{{ sucursal().descripcion }}</small></span
                 >
                 } @else {
-                <span class="client-info"><small>cargando ...</small></span>
+                <span class="bg-danger text-white"
+                  ><small>Atención seleccione Sucursal</small></span
+                >
                 }
                 <span class="dropdown-icon">
                   <i class="mh-1 fa-solid fa-sort-down"></i>
@@ -65,6 +72,7 @@
 
             <div class="input-group mb-3 w-50 d-flex selector">
               <span
+                (click)="buscarNumeracion()"
                 class="input-group-text flex-grow-1 d-flex justify-content-between"
                 id="basic-addon3"
               >
@@ -73,7 +81,9 @@
                   >Serie: <small>{{ numeracion().serie }}</small>
                 </span>
                 } @else {
-                <span class="client-info"><small>cargando ...</small></span>
+                <span class="bg-danger text-white"
+                  ><small>Atención seleccione Numeración</small></span
+                >
                 }
                 <span class="dropdown-icon">
                   <i class="mh-1 fa-solid fa-sort-down"></i>
@@ -86,6 +96,7 @@
             <!-- Agrupación de Forma de Venta y Lista de Precio -->
             <div class="input-group mb-3 p w-50 d-flex selector">
               <span
+                (click)="buscarFormaVenta()"
                 class="input-group-text flex-grow-1 d-flex justify-content-between"
                 id="basic-addon3"
               >
@@ -95,7 +106,9 @@
                   <small>{{ formaVenta().descripcion }}</small></span
                 >
                 } @else {
-                <span class="client-info"><small>cargando ...</small></span>
+                <span class="bg-danger text-white"
+                  ><small>Atención seleccione Forma Venta</small></span
+                >
                 }
                 <span class="dropdown-icon">
                   <i class="mh-1 fa-solid fa-sort-down"></i>
@@ -105,6 +118,7 @@
 
             <div class="input-group mb-3 w-50 d-flex selector">
               <span
+                (click)="buscarListaPrecio()"
                 class="input-group-text flex-grow-1 d-flex justify-content-between"
                 id="basic-addon3"
               >
@@ -130,9 +144,7 @@
           <div id="details">
             <table class="table caption-top">
               <caption>
-                Items({{
-                  detalles?.length | number
-                }})
+                Items({{ detalles.length | number }})
               </caption>
               <thead>
                 <tr>
@@ -144,22 +156,27 @@
                 </tr>
               </thead>
               <tbody>
-                <!--                 @for (detalle of detalles; track detalle.varianteId; let index = $index) { -->
-                @for (detalle of detalles; track detalle.varianteId; let index =
-                $index) {
-                <tr>
-                  <th scope="row">{{ detalle.cantidad | number }}</th>
-                  <td>{{ detalle.codErp }}</td>
-                  <td>{{ detalle.importePrecio | number }} Gs</td>
-                  <td>{{ detalle.importeTotal | number }} Gs</td>
-                  <td>
-                    <button class="btn btn-sm btn-outline-danger text-danger">
-                      <i class="bi bi-trash3"></i>
-                    </button>
-                  </td>
-                </tr>
+                @for (detalle of detalles; track detalle.varianteId; let index = $index) {
+                  <tr  >
+                    <th scope="row">
+                      <div class="btn-group" role="group" aria-label="Basic outlined example">
+                        <button type="button" class="btn btn-outline-primary" (click)="ajusteCantidad(index,-1)" >-</button>
+                        <span  class="btn btn-outline-secondary">{{ detalle.cantidad | number }}</span>
+                        <button type="button" class="btn btn-outline-primary" (click)="ajusteCantidad(index,1)">+</button>
+                      </div>
+
+                    </th>
+                    <td>{{ detalle.codErp }}</td>
+                    <td>{{ detalle.importePrecio | number }} Gs</td>
+                    <td>{{ detalle.importeTotal | number }} Gs</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-danger text-danger" (click)="quitarProducto(index)">
+                        <i class="bi bi-trash3"></i>
+                      </button>
+                    </td>
+                  </tr>
                 } @empty {
-                <tr></tr>
+                  <tr></tr>
                 }
               </tbody>
             </table>
@@ -198,7 +215,7 @@
       <!--   botones -->
       <div class="card">
         <div class="card-body btn-group">
-          <button type="button" class="btn btn-outline-success">Pagar</button>
+          <button type="button" class="btn btn-outline-success" (click)="pagar()">Pagar</button>
           <button type="button" class="btn btn-outline-danger">Cancelar</button>
         </div>
       </div>
@@ -213,32 +230,30 @@
   (closeModal)="searchCliente = false"
 ></app-cliente-search>
 
-}
-
-@if(searchSucursal ) {
+} @if(searchSucursal ) {
 <app-sucursal-search
   [isOpen]="searchSucursal"
   (sucursal)="selectSucursal($event)"
   (closeModal)="searchSucursal = false"
 ></app-sucursal-search>
-}
-
-<!-- @if(searchNumeracion ) {
-<app-numeracion-search
-  [isOpen]="searchNumeracion"
-  (numeracion)="selectNumeracion($event)"
-  (closeModal)="searchNumeracion = false"
-></app-numeracion-search>
-} @if(searchCliente ) {
+} @if(searchListaPrecio ) {
+<app-lista-precio-search
+  [isOpen]="searchListaPrecio"
+  (listaPrecio)="selectListaPrecio($event)"
+  (closeModal)="searchListaPrecio = false"
+></app-lista-precio-search>
+} @if(searchFormaVenta ) {
 <app-forma-venta-search
   [isOpen]="searchFormaVenta"
   (formaVenta)="selectFormaVenta($event)"
   (closeModal)="searchFormaVenta = false"
 ></app-forma-venta-search>
-} @if(searchCliente ) {
-<app-lista-precio-search
-  [isOpen]="searchListaPrecio"
-  (lista-precio)="selectListaPrecio($event)"
-  (closeModal)="searchListaPrecio = false"
-></app-lista-precio-search>
-} -->
+} @if(searchNumeracion && sucursal().id ) {
+<app-numeracion-search
+  [isOpen]="searchNumeracion"
+  [sucursalId]="sucursal().id"
+  (numeracion)="selectNumeracion($event)"
+  (closeModal)="searchNumeracion = false"
+>
+</app-numeracion-search>
+}

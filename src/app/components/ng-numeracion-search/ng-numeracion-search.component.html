@@ -2,17 +2,16 @@
   <div class="modal-container"
     [ngClass]="{'small': size === 'small', 'medium': size === 'medium', 'large': size === 'large'}">
     <div class="modal-header">
-      <h5 class="modal-title">Buscador de Cliente</h5>
+      <h5 class="modal-title">Buscador de Numeracion</h5>
       <button type="button" class="btn-close" (click)="close()"> <i class="fas fa-times"></i></button>
     </div>
     <!-- Contenido del modal -->
     <div (click)="$event.stopPropagation()">
 
         <div class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
-
           <div class="w-100 mb-3">
             <input-debounce  #inputSearch [delay]=delay id="inputSearch"
-              type="text" placeholder="Ingrese el cliente buscado ..." required="" aria-invalid="false"
+              type="text" placeholder="Ingrese numeracion ..." required="" aria-invalid="false"
               (value)="buscar($event)" />
             </div>
 
@@ -21,17 +20,17 @@
 
 
 
-      <ul class="list-group">
-        @for (cliente of clientes; track cliente.id) {
-        <li class="list-group-item">
-          <span class="text-center pointer" (click)="selectCliente(cliente)">
-            {{cliente.nroDocumento}} - {{cliente.razonSocial}}
-          </span>
-        </li>
-        } @empty {
-        <li class="list-group-item">No se han encontrado items</li>
-        }
-      </ul>
+        <ul class="list-group">
+          @for (numeracion of numeracionesAux; track numeracion.id) {
+            <li class="list-group-item">
+              <span class="text-center pointer" (click)="selectNumeracion(numeracion)">
+                {{numeracion.timbrado}}-    {{numeracion.serie}}
+              </span>
+            </li>
+          } @empty {
+            <li class="list-group-item">No se han encontrado items</li>
+            }
+        </ul>
 
     </div>
 

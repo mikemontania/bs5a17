@@ -5,10 +5,8 @@ import {
   Input,
   OnInit,
   Output,
-  ViewContainerRef,
   inject
 } from "@angular/core";
-import { debounceTime, distinctUntilChanged } from "rxjs";
 import { InputDebounceComponent } from "../inputDebounce/inputDebounce.component";
 import { Sucursal } from "../../interfaces/sucursal.interface";
 import { SucursalService } from "../../services/service.index";

@@ -18,44 +18,13 @@
       <div class="col-xl-3 col-lg-3 col-md-3">
         <app-incrementador
           [cantidad]="cantidad"
-          (change)="cantidad = $event"
+          (change)="changeCantidad($event)"
         ></app-incrementador>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3">
 
       </div>
     </div>
-
- <!--   <div id="products">
-      <div class="row product-card-container">
-        @for (producto of productos(); track producto.id) {
-        <app-product-card
-          (productClicked)="seleccionarProducto($event)"
-          [producto]="producto"
-        ></app-product-card>
-        } @empty {
-          <div class="w-100  ">
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-              <h4 class="alert-heading">Atención</h4>
-              <p>No se han encontrado productos...</p>
-            </div>
-          </div>
-        }
-      </div>
-    </div> -->
-<!--     <div class="row">
-      @for (producto of productos(); track producto.id) {
-        <div class="col-sm-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
-          <app-product-card
-            (productClicked)="seleccionarProducto($event)"
-            [producto]="producto"
-          ></app-product-card>
-        </div>
-      } @empty {
-        <li class="list-group-item">No se han encontrado items</li>
-      }
-    </div> -->
-
 
     @if(productos() && productos().length > 0) {
 

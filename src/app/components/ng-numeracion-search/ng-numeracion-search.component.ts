@@ -1,9 +1,19 @@
 import { CommonModule } from "@angular/common";
-import { Component,       EventEmitter, Input, OnInit, Output, ViewContainerRef, inject } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewContainerRef,
+  inject
+} from "@angular/core";
 import { debounceTime, distinctUntilChanged } from "rxjs";
 import { InputDebounceComponent } from "../inputDebounce/inputDebounce.component";
-import { Cliente } from '../../interfaces/clientes.interface';
+import { Cliente } from "../../interfaces/clientes.interface";
 import { ClientesService } from "../../services/clientes.service";
+import { Numeracion } from "../../interfaces/numeracion.interface";
+import { NumeracionService } from "../../services/service.index";
 
 @Component({
   selector: "app-numeracion-search",
@@ -14,44 +24,47 @@ import { ClientesService } from "../../services/clientes.service";
 })
 export class NgNumeracionSearchComponent implements OnInit {
   size = "medium";
-  delay=200;
+  delay = 200;
   @Input() isOpen = false;
+  @Input() sucursalId = 0;
   @Output() closeModal = new EventEmitter<void>();
-  @Output() cliente = new EventEmitter<Cliente>();
+  @Output() numeracion = new EventEmitter<Numeracion>();
 
-  clientes: Cliente[] = [];
-  _clientesService = inject(ClientesService);
+  numeraciones: Numeracion[] = [];
+  numeracionesAux: Numeracion[] = [];
+  _numeracionesService = inject(NumeracionService);
 
   ngOnInit(): void {
-    this.clientes =[];
+    this.numeraciones = [];
 
-    this.buscar('');
+    this.buscar("");
   }
 
-
-selectCliente(cliente: Cliente) {
-  this.cliente.emit(cliente);
-
-}
-trackCliente(index: number, cliente: Cliente): number {
-  return cliente.id; // Assuming cliente has a unique ID
-}
-
+  selectNumeracion(numeracion: Numeracion) {
+    this.numeracion.emit(numeracion);
+  }
+  trackNumeracion(index: number, numeracion: Numeracion): number {
+    return numeracion.id; // Assuming numeracion has a unique ID
+  }
 
   close() {
     this.closeModal.emit();
   }
 
   buscar(termino: string) {
+    this._numeracionesService
+      .findAll(this.sucursalId)
+      .subscribe(resp => (this.numeracionesAux = resp));
+    console.log("numeraciones aux", this.numeracionesAux);
 
-    this._clientesService.searchClientes(1, 10, termino)
-    .pipe(debounceTime(1500), distinctUntilChanged())
-    .subscribe((response: any) => {
-      console.log(response);
-      this.clientes = response.rows as Cliente[];
-    });
-    /*   debounceTime(300);
-    distinctUntilChanged(); */
-    console.log(termino);
+    if (termino) {
+      this.numeracionesAux = this.numeracionesAux.filter(
+        (numeracion: Numeracion) => {
+          return numeracion.serie.toLowerCase().includes(termino.toLowerCase());
+        }
+      );
+    }
+
+    this.numeraciones = this.numeracionesAux;
   }
 }

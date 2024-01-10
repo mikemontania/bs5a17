@@ -1,10 +1,8 @@
 import { CommonModule } from "@angular/common";
-import { Component,       EventEmitter, Input, OnInit, Output, ViewContainerRef, inject } from "@angular/core";
-import { debounceTime, distinctUntilChanged } from "rxjs";
+import { Component,       EventEmitter, Input, OnInit, Output, inject } from "@angular/core";
 import { InputDebounceComponent } from "../inputDebounce/inputDebounce.component";
-import { Cliente } from '../../interfaces/clientes.interface';
-import { ClientesService } from "../../services/clientes.service";
-
+import { ListaPrecio } from "../../interfaces/listaPrecio.interface";
+import { ListaPrecioService } from "../../services/service.index";
 @Component({
   selector: "app-lista-precio-search",
   standalone: true,
@@ -14,44 +12,44 @@ import { ClientesService } from "../../services/clientes.service";
 })
 export class NgListaPrecioSearchComponent implements OnInit {
   size = "medium";
-  delay=200;
+  delay = 200;
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
-  @Output() cliente = new EventEmitter<Cliente>();
+  @Output() listaPrecio = new EventEmitter<ListaPrecio>();
 
-  clientes: Cliente[] = [];
-  _clientesService = inject(ClientesService);
+  listasPrecio: ListaPrecio[] = [];
+  listasPrecioAux: ListaPrecio[] = [];
+  _listasPrecioService = inject(ListaPrecioService);
 
   ngOnInit(): void {
-    this.clientes =[];
+    this.listasPrecio = [];
 
-    this.buscar('');
+    this.buscar("");
   }
 
-
-selectCliente(cliente: Cliente) {
-  this.cliente.emit(cliente);
-
-}
-trackCliente(index: number, cliente: Cliente): number {
-  return cliente.id; // Assuming cliente has a unique ID
-}
-
+  selectListaPrecio(listaPrecio: ListaPrecio) {
+    this.listaPrecio.emit(listaPrecio);
+  }
+  trackListaPrecio(index: number, listaPrecio: ListaPrecio): number {
+    return listaPrecio.id; // Assuming listaPrecio has a unique ID
+  }
 
   close() {
     this.closeModal.emit();
   }
 
   buscar(termino: string) {
+      this._listasPrecioService.findAll().subscribe(resp=> this.listasPrecioAux=resp);
+    console.log("listasPrecio aux", this.listasPrecioAux);
 
-    this._clientesService.searchClientes(1, 10, termino)
-    .pipe(debounceTime(1500), distinctUntilChanged())
-    .subscribe((response: any) => {
-      console.log(response);
-      this.clientes = response.rows as Cliente[];
-    });
-    /*   debounceTime(300);
-    distinctUntilChanged(); */
-    console.log(termino);
+    if (termino) {
+      this.listasPrecioAux = this.listasPrecioAux.filter((listaPrecio: ListaPrecio) => {
+        return listaPrecio.descripcion
+          .toLowerCase()
+          .includes(termino.toLowerCase());
+      });
+    }
+
+    this.listasPrecio = this.listasPrecioAux;
   }
 }

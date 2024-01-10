@@ -2,7 +2,7 @@
   <div class="modal-container"
     [ngClass]="{'small': size === 'small', 'medium': size === 'medium', 'large': size === 'large'}">
     <div class="modal-header">
-      <h5 class="modal-title">Buscador de Cliente</h5>
+      <h5 class="modal-title">Buscador de Forma venta</h5>
       <button type="button" class="btn-close" (click)="close()"> <i class="fas fa-times"></i></button>
     </div>
     <!-- Contenido del modal -->
@@ -12,7 +12,7 @@
 
           <div class="w-100 mb-3">
             <input-debounce  #inputSearch [delay]=delay id="inputSearch"
-              type="text" placeholder="Ingrese el cliente buscado ..." required="" aria-invalid="false"
+              type="text" placeholder="Ingrese forma venta ..." required="" aria-invalid="false"
               (value)="buscar($event)" />
             </div>
 
@@ -21,17 +21,17 @@
 
 
 
-      <ul class="list-group">
-        @for (cliente of clientes; track cliente.id) {
-        <li class="list-group-item">
-          <span class="text-center pointer" (click)="selectCliente(cliente)">
-            {{cliente.nroDocumento}} - {{cliente.razonSocial}}
-          </span>
-        </li>
-        } @empty {
-        <li class="list-group-item">No se han encontrado items</li>
-        }
-      </ul>
+        <ul class="list-group">
+          @for (formaVenta of formasVentaAux; track formaVenta.id) {
+            <li class="list-group-item">
+              <span class="text-center pointer" (click)="selectFormaVenta(formaVenta)">
+                {{formaVenta.descripcion}}
+              </span>
+            </li>
+          } @empty {
+            <li class="list-group-item">No se han encontrado items</li>
+            }
+        </ul>
 
     </div>
 
