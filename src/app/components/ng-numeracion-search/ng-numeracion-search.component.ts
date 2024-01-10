@@ -6,13 +6,13 @@ import { Cliente } from '../../interfaces/clientes.interface';
 import { ClientesService } from "../../services/clientes.service";
 
 @Component({
-  selector: "app-lista-precio-search",
+  selector: "app-numeracion-search",
   standalone: true,
   imports: [CommonModule, InputDebounceComponent],
-  templateUrl: "./ng-lista-precio-search.component.html",
-  styleUrl: "./ng-lista-precio-search.component.css"
+  templateUrl: "./ng-numeracion-search.component.html",
+  styleUrl: "./ng-numeracion-search.component.css"
 })
-export class NgListaPrecioSearchComponent implements OnInit {
+export class NgNumeracionSearchComponent implements OnInit {
   size = "medium";
   delay=200;
   @Input() isOpen = false;

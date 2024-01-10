@@ -18,5 +18,13 @@ export class SucursalService {
       .get(BASE_URL + "/sucursales/"+id)
       .pipe(map((resp: any) => resp));
   }
-
+  findAll() {
+    return this.http
+      .get(BASE_URL + "/sucursales/")
+      .pipe(
+        map((respo: any) => {
+          return respo;
+        })
+      );
+  }
 }

@@ -16,5 +16,13 @@ export class ListaPrecioService {
       .get(BASE_URL + "/lista-precio/"+id)
       .pipe(map((resp: any) => resp));
   }
-
+  findAll() {
+    return this.http
+      .get(BASE_URL + "/lista-precio/")
+      .pipe(
+        map((respo: any) => {
+          return respo;
+        })
+      );
+  }
 }

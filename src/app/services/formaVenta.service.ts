@@ -19,6 +19,16 @@ export class FormaVentaService {
       .pipe(map((resp: any) => resp));
   }
 
+  findAll() {
+    return this.http
+      .get(BASE_URL + "/forma-venta/")
+      .pipe(
+        map((respo: any) => {
+          return respo;
+        })
+      );
+  }
+
   findPredeterminado() {
     return this.http
       .get(BASE_URL + "/forma-venta/predeterminado")

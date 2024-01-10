@@ -1,10 +1,17 @@
 import { CommonModule } from "@angular/common";
-import { Component,       EventEmitter, Input, OnInit, Output, ViewContainerRef, inject } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewContainerRef,
+  inject
+} from "@angular/core";
 import { debounceTime, distinctUntilChanged } from "rxjs";
 import { InputDebounceComponent } from "../inputDebounce/inputDebounce.component";
-import { Cliente } from '../../interfaces/clientes.interface';
-import { ClientesService } from "../../services/clientes.service";
-
+import { Sucursal } from "../../interfaces/sucursal.interface";
+import { SucursalService } from "../../services/service.index";
 @Component({
   selector: "app-sucursal-search",
   standalone: true,
@@ -14,44 +21,44 @@ import { ClientesService } from "../../services/clientes.service";
 })
 export class NgSucursalSearchComponent implements OnInit {
   size = "medium";
-  delay=200;
+  delay = 200;
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
-  @Output() cliente = new EventEmitter<Cliente>();
+  @Output() sucursal = new EventEmitter<Sucursal>();
 
-  clientes: Cliente[] = [];
-  _clientesService = inject(ClientesService);
+  sucursales: Sucursal[] = [];
+  sucursalesAux: Sucursal[] = [];
+  _sucursalesService = inject(SucursalService);
 
   ngOnInit(): void {
-    this.clientes =[];
+    this.sucursales = [];
 
-    this.buscar('');
+    this.buscar("");
   }
 
-
-selectCliente(cliente: Cliente) {
-  this.cliente.emit(cliente);
-
-}
-trackCliente(index: number, cliente: Cliente): number {
-  return cliente.id; // Assuming cliente has a unique ID
-}
-
+  selectSucursal(sucursal: Sucursal) {
+    this.sucursal.emit(sucursal);
+  }
+  trackSucursal(index: number, sucursal: Sucursal): number {
+    return sucursal.id; // Assuming sucursal has a unique ID
+  }
 
   close() {
     this.closeModal.emit();
   }
 
   buscar(termino: string) {
+      this._sucursalesService.findAll().subscribe(resp=> this.sucursalesAux=resp);
+    console.log("sucursales aux", this.sucursalesAux);
 
-    this._clientesService.searchClientes(1, 10, termino)
-    .pipe(debounceTime(1500), distinctUntilChanged())
-    .subscribe((response: any) => {
-      console.log(response);
-      this.clientes = response.rows as Cliente[];
-    });
-    /*   debounceTime(300);
-    distinctUntilChanged(); */
-    console.log(termino);
+    if (termino) {
+      this.sucursalesAux = this.sucursalesAux.filter((sucursal: Sucursal) => {
+        return sucursal.descripcion
+          .toLowerCase()
+          .includes(termino.toLowerCase());
+      });
+    }
+
+    this.sucursales = this.sucursalesAux;
   }
 }

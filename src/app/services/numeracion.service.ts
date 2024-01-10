@@ -3,8 +3,6 @@ import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { BASE_URL } from "../config";
 import { tap, map, catchError } from "rxjs/operators";
-import Swal from "sweetalert2";
-import { Observable, throwError } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -18,6 +16,15 @@ export class NumeracionService {
       .get(BASE_URL + "/numeraciones/"+id)
       .pipe(map((resp: any) => resp));
   }
+  findAll(sucursalId?:number) {
 
+    return this.http
+      .get(BASE_URL + "/numeraciones/"+sucursalId)
+      .pipe(
+        map((respo: any) => {
+          return respo;
+        })
+      );
+  }
 
 }
