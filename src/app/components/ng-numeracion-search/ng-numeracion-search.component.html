@@ -22,8 +22,8 @@
 
         <ul class="list-group">
           @for (numeracion of numeracionesAux; track numeracion.id) {
-            <li class="list-group-item">
-              <span class="text-center pointer" (click)="selectNumeracion(numeracion)">
+            <li class="list-group-item"(click)="selectNumeracion(numeracion)">
+              <span class="text-center pointer" >
                 {{numeracion.timbrado}}-    {{numeracion.serie}}
               </span>
             </li>

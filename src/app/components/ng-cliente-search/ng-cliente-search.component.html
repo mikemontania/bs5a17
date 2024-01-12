@@ -23,8 +23,8 @@
 
       <ul class="list-group">
         @for (cliente of clientes; track cliente.id) {
-        <li class="list-group-item">
-          <span class="text-center pointer" (click)="selectCliente(cliente)">
+        <li class="list-group-item" (click)="selectCliente(cliente)">
+          <span class="text-center pointer" >
             {{cliente.nroDocumento}} - {{cliente.razonSocial}}
           </span>
         </li>

@@ -23,8 +23,8 @@
 
         <ul class="list-group">
           @for (listaPrecio of listasPrecioAux; track listaPrecio.id) {
-            <li class="list-group-item">
-              <span class="text-center pointer" (click)="selectListaPrecio(listaPrecio)">
+            <li class="list-group-item"  (click)="selectListaPrecio(listaPrecio)">
+              <span class="text-center pointer">
                 {{listaPrecio.descripcion}}
               </span>
             </li>

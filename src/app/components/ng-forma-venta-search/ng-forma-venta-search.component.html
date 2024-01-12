@@ -23,8 +23,8 @@
 
         <ul class="list-group">
           @for (formaVenta of formasVentaAux; track formaVenta.id) {
-            <li class="list-group-item">
-              <span class="text-center pointer" (click)="selectFormaVenta(formaVenta)">
+            <li class="list-group-item"  (click)="selectFormaVenta(formaVenta)">
+              <span class="text-center pointer">
                 {{formaVenta.descripcion}}
               </span>
             </li>

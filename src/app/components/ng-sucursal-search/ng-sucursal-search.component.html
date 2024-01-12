@@ -23,8 +23,8 @@
 
         <ul class="list-group">
           @for (sucursal of sucursalesAux; track sucursal.id) {
-            <li class="list-group-item">
-              <span class="text-center pointer" (click)="selectSucursal(sucursal)">
+            <li class="list-group-item" (click)="selectSucursal(sucursal)">
+              <span class="text-center pointer" >
                 {{sucursal.descripcion}}
               </span>
             </li>
