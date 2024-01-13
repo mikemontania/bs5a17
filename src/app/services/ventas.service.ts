@@ -19,8 +19,8 @@ export class VentasService {
 
   search(page: number,
     pageSize: number,
-    fechaDesde:string,
-    fechaHasta:string,
+    fechaDesde:any,
+    fechaHasta:any,
     clienteId:number,sucursalId: number,formaVentaId:number,listaPrecioId: number, nroComprobante: string) {
       console.log(nroComprobante)
     return this.http

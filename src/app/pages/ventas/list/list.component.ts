@@ -14,11 +14,12 @@ import { NgSucursalSearchComponent } from '../../../components/ng-sucursal-searc
 import { NgClienteSearchComponent } from '../../../components/ng-cliente-search/ng-cliente-search.component';
 import { NgFormaVentaSearchComponent } from '../../../components/ng-forma-venta-search/ng-forma-venta-search.component';
 import { NgListaPrecioSearchComponent } from '../../../components/ng-lista-precio-search/ng-lista-precio-search.component';
+import { FormControl, FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent, NgClienteSearchComponent, NgFormaVentaSearchComponent, NgListaPrecioSearchComponent],
+  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent, NgClienteSearchComponent, NgFormaVentaSearchComponent, NgListaPrecioSearchComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
@@ -28,13 +29,12 @@ export class ListComponent {
   page = signal<number>(1);
   totalPages = signal<number>(1);
   pageSize = signal<number>(15);
-  fechaDesdeS = signal<string>(moment(new Date()).format('YYYY-MM-DD'));
-  fechaHastaS = signal<string>(moment(new Date()).format('YYYY-MM-DD'));
-  cliente = signal<Cliente | null>(null );
-  sucursal = signal<Sucursal | null>(null );
-  listaPrecio = signal<ListaPrecio | null>( null);
-  formaVenta = signal<FormaVenta | null>( null);
-
+  cliente = signal<Cliente | null>(null);
+  sucursal = signal<Sucursal | null>(null);
+  listaPrecio = signal<ListaPrecio | null>(null);
+  formaVenta = signal<FormaVenta | null>(null);
+  fechaDesde = moment(new Date()).format("YYYY-MM-DD");
+  fechaHasta = moment(new Date()).format("YYYY-MM-DD");
 
   searchCliente = false;
   searchSucursal = false;
@@ -43,26 +43,33 @@ export class ListComponent {
 
   ventas = computed(() => this.ventasPage().ventas ?? []);
   clienteId = computed(() => this.cliente()?.id ?? 0);
-  fechaDesde = computed(() => this.fechaDesdeS() ?? moment(new Date()).format('YYYY-MM-DD'));
-  fechaHasta = computed(() => this.fechaHastaS() ?? moment(new Date()).format("YYYY-MM-DD"));
   sucursalId = computed(() => this.sucursal()?.id ?? 0);
   formaVentaId = computed(() => this.formaVenta()?.id ?? 0);
   listaPrecioId = computed(() => this.listaPrecio()?.id ?? 0);
 
   _ventasService = inject(VentasService);
 
-
   ngOnInit() {
-    this.buscar(this.searchComprobante);
+    this.buscar();
   }
-  buscar(event: any) {
+  buscar() {
+
+    this.getPage(this.page()); // Reset to first page on search
+  }
+  debounceSearch(event: any) {
     this.searchComprobante.set(event);
     this.getPage(1); // Reset to first page on search
   }
   getPage(page: number) {
+    if (!this.fechaDesde) {
+      this.fechaDesde = moment(new Date()).format("YYYY-MM-DD");
+    }
+    if (!this.fechaHasta) {
+      this.fechaHasta = moment(new Date()).format("YYYY-MM-DD");
+    }
     this.page.set(page);
     this._ventasService
-      .search(this.page(), this.pageSize(), this.fechaDesde(), this.fechaHasta(), this.clienteId(), this.sucursalId(), this.formaVentaId(), this.listaPrecioId(), this.searchComprobante())
+      .search(this.page(), this.pageSize(), this.fechaDesde, this.fechaHasta, this.clienteId(), this.sucursalId(), this.formaVentaId(), this.listaPrecioId(), this.searchComprobante())
       .subscribe({
         next: (resp) => {
           this.ventasPage.set(resp);
@@ -82,8 +89,8 @@ export class ListComponent {
   buscarCliente() { this.searchCliente = true; }
 
   buscarFormaVenta() { this.searchFormaVenta = true; }
-  buscarSucursal() {    this.searchSucursal = true  }
-  buscarListaPrecio() {    this.searchListaPrecio = true  }
+  buscarSucursal() { this.searchSucursal = true }
+  buscarListaPrecio() { this.searchListaPrecio = true }
 
   onPageChanged(newPage: number) {
     this.getPage(newPage);
