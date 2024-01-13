@@ -281,7 +281,7 @@ refresh(){
           codErp: item.codErp,
           cantidad: 0,
           porcDescuento: 0,
-          porcIva: item.porcIva,
+          porcIva: +item.porcIva,
           importePrecio: 0,
           importeIva5: 0,
           importeIva10: 0,
@@ -315,7 +315,7 @@ refresh(){
       //calcular total
        this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
 
-        const porcIva = this.detalles[indice].porcIva;
+        const porcIva = +this.detalles[indice].porcIva;
         const porcIva5 = porcIva === 5 ? Math.round(this.detalles[indice].importeTotal / 21) : 0;
         const porcIva10 = porcIva === 10 ? Math.round(this.detalles[indice].importeTotal / 11) : 0;
         const porcIvaExenta = porcIva === 0 ? this.detalles[indice].importeTotal : 0;
