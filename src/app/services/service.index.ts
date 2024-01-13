@@ -1,3 +1,5 @@
+export { ReportesService } from './reportes.service';
+
 export { CalculoService } from './calculo.service';
 export { ValoracionService } from './valoraciones.service';
 

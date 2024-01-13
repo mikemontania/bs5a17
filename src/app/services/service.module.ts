@@ -11,7 +11,8 @@ ListaPrecioService,
 SucursalService,
 NumeracionService,
 ValoracionService,
-CalculoService
+CalculoService,
+ReportesService
 } from './service.index';
 
 @NgModule({
@@ -28,8 +29,10 @@ CalculoService
     SucursalService,
     NumeracionService,
     ValoracionService,
-CalculoService
+CalculoService,
+ReportesService
   ],
   declarations: []
 })
 export class ServiceModule { }
+

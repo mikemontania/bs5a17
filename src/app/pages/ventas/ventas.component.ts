@@ -17,7 +17,8 @@ import {
   SucursalService,
   ClientesService,
   VentasService,
-  ValoracionService
+  ValoracionService,
+  ReportesService
 } from "../../services/service.index";
 import { forkJoin } from "rxjs";
 import Swal from "sweetalert2";
@@ -70,7 +71,7 @@ export class VentasComponent implements OnInit {
   _numeracionService = inject(NumeracionService);
   _ventasService = inject(VentasService);
   _valoracionService = inject(ValoracionService);
-
+  _reportService = inject(ReportesService);
 
   constructor() {
     forkJoin([
@@ -392,6 +393,7 @@ refresh(){
 
 
   pagar() {
+
     if (!this.cliente().id || !this.listaPrecio().id || !this.sucursal().id || !this.formaVenta().id || !this.numeracion().id) {
       Swal.fire("Atención", "Hay datos de cabecera incompletos", "warning");
       return;
@@ -421,12 +423,24 @@ refresh(){
     Swal.showLoading();
     // Actualización: Utiliza la sintaxis de suscripción más reciente
     this._ventasService.create( this.factura()).subscribe({
-      next: (resp) => {
-       console.log(resp)
-       Swal.close();
-       Swal.fire('Factura guardada!!!', 'factura creada con exito!!! comprobante:'+resp.nroComprobante, 'success');
-this.detalles=[];
-this.factura.set({} as ModelCab);
+      next: async (resp) => {
+        try {
+          console.log(resp)
+          this._reportService.getPdf(resp.id).subscribe((response: any) => {
+            const fileURL = URL.createObjectURL(response);
+            window.open(fileURL, '_blank');
+
+          })
+          Swal.close();
+          Swal.fire('Factura guardada!!!', 'factura creada con exito!!! comprobante:'+resp.nroComprobante, 'success');
+
+   this.detalles=[];
+   this.factura.set({} as ModelCab);
+
+        } catch (error) {
+          console.error('Error fetching PDF:', error);
+          // Handle error appropriately
+        }
       },
       error: (err) => {
         console.error(err);
