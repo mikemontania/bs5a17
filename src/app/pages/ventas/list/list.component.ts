@@ -15,11 +15,13 @@ import { NgClienteSearchComponent } from '../../../components/ng-cliente-search/
 import { NgFormaVentaSearchComponent } from '../../../components/ng-forma-venta-search/ng-forma-venta-search.component';
 import { NgListaPrecioSearchComponent } from '../../../components/ng-lista-precio-search/ng-lista-precio-search.component';
 import { FormControl, FormsModule } from '@angular/forms';
+import { TooltipDirective } from '../../../directivas/tooltip.directive';
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent, NgClienteSearchComponent, NgFormaVentaSearchComponent, NgListaPrecioSearchComponent],
+  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent, TooltipDirective,
+    NgClienteSearchComponent, NgFormaVentaSearchComponent, NgListaPrecioSearchComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })

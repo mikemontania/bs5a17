@@ -46,3 +46,14 @@
    width: calc(100% - 250px);
    left: 250px;
  }
+ .custom-tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  margin: 2PX;
+  padding: 10px;
+  border-radius: 10px;
+  z-index: 999;
+  max-width: 300px; /* Ajusta según sea necesario */
+}
+
