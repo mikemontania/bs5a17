@@ -1,0 +1,215 @@
+<div class="card">
+
+  <div class="card-body">
+    <div class="input-group mb-3 w-50 d-flex selector">
+      <input-debounce
+      #input
+      [delay]="500"
+      id="inputComprobante"
+      height="15px"
+      type="text"
+      placeholder="buscar comprobante"
+      required=""
+      aria-invalid="false"
+      (value)="buscar($event)"
+    >
+    </input-debounce>
+    </div>
+    <div class="input-group mb-3 w-50 d-flex selector">
+      <span
+        (click)="buscarCliente()"
+        class="input-group-text flex-grow-1 d-flex justify-content-between"
+        id="basic-addon3"
+      >
+        @if(cliente()?.id) {
+        <span class="client-info">
+          <small
+            >{{ cliente()?.razonSocial }}-{{ cliente()?.nroDocumento }}</small
+          ></span
+        >
+        } @else {
+        <span class="client-info"><small>Buscar Cliente ...</small></span>
+        }
+        <span class="dropdown-icon">
+          <i class="mh-1 fa-solid fa-sort-down"></i>
+        </span>
+      </span>
+    </div>
+
+    <div class="d-flex w-100">
+      <!-- Agrupación de Sucursal y Serie -->
+      <div class="input-group mb-3 w-50 d-flex selector">
+        <span
+          (click)="buscarSucursal()"
+          class="input-group-text flex-grow-1 d-flex justify-content-between"
+          id="basic-addon3"
+        >
+          @if(sucursal()?.id) {
+          <span class="client-info">
+            <small>{{ sucursal()?.descripcion }}</small></span
+          >
+          } @else {
+          <span class="client-info"><small>Buscar Sucursal ...</small></span>
+          }
+          <span class="dropdown-icon">
+            <i class="mh-1 fa-solid fa-sort-down"></i>
+          </span>
+        </span>
+      </div>
+
+
+    </div>
+
+    <div class="d-flex w-100">
+      <!-- Agrupación de Forma de Venta y Lista de Precio -->
+      <div class="input-group mb-3 p w-50 d-flex selector">
+        <span
+          (click)="buscarFormaVenta()"
+          class="input-group-text flex-grow-1 d-flex justify-content-between"
+          id="basic-addon3"
+        >
+          @if(formaVenta()?.id) {
+          <span class="client-info"
+            >Forma venta: <small>{{ formaVenta()?.descripcion }}</small></span
+          >
+          } @else {
+          <span class="client-info"><small>Buscar Forma Venta ...</small></span>
+          }
+          <span class="dropdown-icon">
+            <i class="mh-1 fa-solid fa-sort-down"></i>
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <div class="input-group mb-3 w-50 d-flex selector">
+      <span
+        (click)="buscarListaPrecio()"
+        class="input-group-text flex-grow-1 d-flex justify-content-between"
+        id="basic-addon3"
+      >
+        @if(listaPrecio()?.id) {
+        <span class="client-info"
+          >Lista Precio: <small>{{ listaPrecio()?.descripcion }}</small>
+        </span>
+        } @else {
+        <span class="client-info"
+          ><small>Buscar lista precio cargando ...</small></span
+        >
+        }
+        <span class="dropdown-icon">
+          <i class="mh-1 fa-solid fa-sort-down"></i>
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <button class="btn btn-success" (click)="buscar('')">Buscar</button>
+    @if(ventas() && ventas().length > 0) {
+    <div class="card">
+      <div class="card-body pt-4 d-flex flex-column align-items-center">
+        <div id="details" style="overflow-x: auto">
+          <table class="table caption-top table-sm">
+            <caption>
+              Items({{
+                ventas().length | number
+              }})
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">CLIENTE</th>
+                <th scope="col">SUCURSAL</th>
+                <th scope="col">LISTA</th>
+                <th scope="col">FORMAVENTA</th>
+                <th scope="col">VENDEDOR</th>
+                <th scope="col">FECHA</th>
+                <th scope="col">TIMBRADO</th>
+                <th scope="col">COMPROBANTE</th>
+                <th scope="col">SUBTOTAL</th>
+                <th scope="col">DESCUENTO</th>
+                <th scope="col">total</th>
+                <th scope="col">anulado</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (venta of ventas(); track venta.id; let index = $index) {
+              <tr>
+                <th scope="row">{{ index + 1 }}</th>
+                <td>{{ venta.id }}</td>
+                <td>
+                  {{ venta.cliente.razonSocial }}-{{
+                    venta.cliente.nroDocumento
+                  }}
+                </td>
+                <td>{{ venta.sucursal.descripcion }}</td>
+                <td>{{ venta.listaPrecio.descripcion }}</td>
+                <td>{{ venta.formaVenta.descripcion }}</td>
+                <td>{{ venta.vendedorCreacion.usuario }}</td>
+                <td>{{ venta.fechaVenta }}</td>
+                <td>{{ venta.timbrado }}</td>
+                <td>{{ venta.nroComprobante }}</td>
+                <td>{{ venta.importeSubtotal }} Gs</td>
+                <td>
+                  {{ venta.importeDescuento }} Gs /{{ venta.porcDescuento }}
+                </td>
+                <td>{{ venta.importeTotal | number }} Gs</td>
+                <td>{{ venta.anulado }}</td>
+              </tr>
+              } @empty {
+              <tr></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    } @else {
+    <div class="w-100 empty-message-container">
+      <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">Atención</h4>
+        <p>No se han ventas...</p>
+      </div>
+    </div>
+    }
+
+    <div class="d-flex justify-content-center">
+      <app-paginator
+        [totalPages]="totalPages()"
+        [currentPage]="page()"
+        (pageChanged)="onPageChanged($event)"
+      >
+      </app-paginator>
+    </div>
+  </div>
+</div>
+@if(searchCliente ) {
+<app-cliente-search
+  [isOpen]="searchCliente"
+  (cliente)="selectCliente($event)"
+  (closeModal)="searchCliente = false"
+></app-cliente-search>
+
+} @if(searchSucursal ) {
+<app-sucursal-search
+  [isOpen]="searchSucursal"
+  (sucursal)="selectSucursal($event)"
+  (closeModal)="searchSucursal = false"
+></app-sucursal-search>
+} @if(searchListaPrecio ) {
+<app-lista-precio-search
+  [isOpen]="searchListaPrecio"
+  (listaPrecio)="selectListaPrecio($event)"
+  (closeModal)="searchListaPrecio = false"
+></app-lista-precio-search>
+} @if(searchFormaVenta ) {
+<app-forma-venta-search
+  [isOpen]="searchFormaVenta"
+  (formaVenta)="selectFormaVenta($event)"
+  (closeModal)="searchFormaVenta = false"
+></app-forma-venta-search>
+}

@@ -16,5 +16,21 @@ export class VentasService {
       .post(BASE_URL + "/ventas",body)
       .pipe(map((resp: any) => resp));
   }
-  constructor() { }
+
+  search(page: number,
+    pageSize: number,
+    fechaDesde:string,
+    fechaHasta:string,
+    clienteId:number,sucursalId: number,formaVentaId:number,listaPrecioId: number, nroComprobante: string) {
+      console.log(nroComprobante)
+    return this.http
+      .get(BASE_URL + `/ventas/${page}/${pageSize}/${fechaDesde}/${fechaHasta}/${clienteId}/${sucursalId}/${formaVentaId}/${listaPrecioId}/${nroComprobante}`)
+      .pipe(
+        map((respo: any) => {
+          return respo as any;
+        })
+      );
+  }
+
+
 }

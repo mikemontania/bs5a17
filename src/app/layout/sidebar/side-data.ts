@@ -8,12 +8,23 @@ export const navbarData: INavbarData[] = [
   },
 
 
-
   {
     routeLink: 'ventas',
     icon: 'fa-solid fa-cash-register',
-    label: 'Ventas'
+    label: 'Facutacion',
+    items: [
+      {
+        routeLink: 'ventas',
+        label: 'Ventas'
+      },
+      {
+        routeLink: 'ventas/listar',
+        label: 'Listado'
+      },
+
+    ]
   },
+
   {
     routeLink: 'parametros',
     icon: 'fa-solid fa-tag',

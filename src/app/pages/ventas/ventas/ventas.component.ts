@@ -1,15 +1,15 @@
 import { Component, OnInit,  inject, signal } from "@angular/core";
-import { SeccionClienteComponent } from "../../components/seccion-cliente/seccion-cliente.component";
+import { SeccionClienteComponent } from "../../../components/seccion-cliente/seccion-cliente.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { NgClienteSearchComponent } from "../../components/ng-cliente-search/ng-cliente-search.component";
-import { Cliente } from "../../interfaces/clientes.interface";
-import { ProductosItem } from "../../interfaces/productoItem.inteface";
-import { FormaVenta } from "../../interfaces/formaventa.interface";
-import { ListaPrecio } from "../../interfaces/listaPrecio.interface";
-import { Sucursal } from "../../interfaces/sucursal.interface";
-import { AuthService } from "../../auth/services/auth.service";
-import { Numeracion } from "../../interfaces/numeracion.interface";
+import { NgClienteSearchComponent } from "../../../components/ng-cliente-search/ng-cliente-search.component";
+import { Cliente } from "../../../interfaces/clientes.interface";
+import { ProductosItem } from "../../../interfaces/productoItem.inteface";
+import { FormaVenta } from "../../../interfaces/formaventa.interface";
+import { ListaPrecio } from "../../../interfaces/listaPrecio.interface";
+import { Sucursal } from "../../../interfaces/sucursal.interface";
+import { AuthService } from "../../../auth/services/auth.service";
+import { Numeracion } from "../../../interfaces/numeracion.interface";
 import {
   NumeracionService,
   ListaPrecioService,
@@ -19,15 +19,15 @@ import {
   VentasService,
   ValoracionService,
   ReportesService
-} from "../../services/service.index";
+} from "../../../services/service.index";
 import { forkJoin } from "rxjs";
 import Swal from "sweetalert2";
-import { ModelCab, ModelDet } from "../../interfaces/facturas.interface";
-import { ProductsListComponent } from "../../components/product-list/product-list.component";
-import { NgSucursalSearchComponent } from "../../components/ng-sucursal-search/ng-sucursal-search.component";
-import { NgNumeracionSearchComponent } from "../../components/ng-numeracion-search/ng-numeracion-search.component";
-import { NgFormaVentaSearchComponent } from "../../components/ng-forma-venta-search/ng-forma-venta-search.component";
-import { NgListaPrecioSearchComponent } from "../../components/ng-lista-precio-search/ng-lista-precio-search.component";
+import { ModelCab, ModelDet } from "../../../interfaces/facturas.interface";
+import { ProductsListComponent } from "../../../components/product-list/product-list.component";
+import { NgSucursalSearchComponent } from "../../../components/ng-sucursal-search/ng-sucursal-search.component";
+import { NgNumeracionSearchComponent } from "../../../components/ng-numeracion-search/ng-numeracion-search.component";
+import { NgFormaVentaSearchComponent } from "../../../components/ng-forma-venta-search/ng-forma-venta-search.component";
+import { NgListaPrecioSearchComponent } from "../../../components/ng-lista-precio-search/ng-lista-precio-search.component";
 
 @Component({
   selector: "app-ventas",

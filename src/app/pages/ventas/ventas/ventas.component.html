@@ -56,8 +56,8 @@
                 id="basic-addon3"
               >
                 @if(sucursal().id) {
-                <span class="client-info"
-                  >  <small>{{ sucursal().descripcion }}</small></span
+                <span class="client-info">
+                  <small>{{ sucursal().descripcion }}</small></span
                 >
                 } @else {
                 <span class="bg-danger text-white"
@@ -142,9 +142,11 @@
       <div class="card">
         <div class="card-body pt-4 d-flex flex-column align-items-center">
           <div id="details">
-            <table class="table caption-top">
+            <table class="table caption-top table-sm">
               <caption>
-                Items({{ detalles.length | number }})
+                Items({{
+                  detalles.length | number
+                }})
               </caption>
               <thead>
                 <tr>
@@ -156,27 +158,48 @@
                 </tr>
               </thead>
               <tbody>
-                @for (detalle of detalles; track detalle.varianteId; let index = $index) {
-                  <tr  >
-                    <th scope="row">
-                      <div class="btn-group" role="group" aria-label="Basic outlined example">
-                        <button type="button" class="btn btn-outline-primary" (click)="ajusteCantidad(index,-1)" >-</button>
-                        <span  class="btn btn-outline-secondary">{{ detalle.cantidad | number }}</span>
-                        <button type="button" class="btn btn-outline-primary" (click)="ajusteCantidad(index,1)">+</button>
-                      </div>
-
-                    </th>
-                    <td>{{ detalle.codErp }}</td>
-                    <td>{{ detalle.importePrecio | number }} Gs</td>
-                    <td>{{ detalle.importeTotal | number }} Gs</td>
-                    <td>
-                      <button class="btn btn-sm btn-outline-danger text-danger" (click)="quitarProducto(index)">
-                        <i class="bi bi-trash3"></i>
+                @for (detalle of detalles; track detalle.varianteId; let index =
+                $index) {
+                <tr>
+                  <th scope="row">
+                    <div
+                      class="btn-group"
+                      role="group"
+                      aria-label="Basic outlined example"
+                    >
+                      <button
+                        type="button"
+                        class="btn btn-outline-primary"
+                        (click)="ajusteCantidad(index, -1)"
+                      >
+                        -
                       </button>
-                    </td>
-                  </tr>
+                      <span class="btn btn-outline-secondary">{{
+                        detalle.cantidad | number
+                      }}</span>
+                      <button
+                        type="button"
+                        class="btn btn-outline-primary"
+                        (click)="ajusteCantidad(index, 1)"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </th>
+                  <td>{{ detalle.codErp }}</td>
+                  <td>{{ detalle.importePrecio | number }} Gs</td>
+                  <td>{{ detalle.importeTotal | number }} Gs</td>
+                  <td>
+                    <button
+                      class="btn btn-sm btn-outline-danger text-danger"
+                      (click)="quitarProducto(index)"
+                    >
+                      <i class="bi bi-trash3"></i>
+                    </button>
+                  </td>
+                </tr>
                 } @empty {
-                  <tr></tr>
+                <tr></tr>
                 }
               </tbody>
             </table>
@@ -215,7 +238,13 @@
       <!--   botones -->
       <div class="card">
         <div class="card-body btn-group">
-          <button type="button" class="btn btn-outline-success" (click)="pagar()">Pagar</button>
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            (click)="pagar()"
+          >
+            Pagar
+          </button>
           <button type="button" class="btn btn-outline-danger">Cancelar</button>
         </div>
       </div>

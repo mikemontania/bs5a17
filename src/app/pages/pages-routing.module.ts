@@ -17,8 +17,8 @@ export default [
       {
         path: "ventas",
         canActivate: [authGuard],
-        loadComponent: () => import('./ventas/ventas.component').then((c) => c.VentasComponent)
-      },
+        loadChildren: () => import('./ventas/ventas-routing.module')
+       },
       {
         path: "user",
         canActivate: [authGuard],
