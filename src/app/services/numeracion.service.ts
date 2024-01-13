@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { BASE_URL } from "../config";
-import { tap, map, catchError } from "rxjs/operators";
+import {  map  } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"

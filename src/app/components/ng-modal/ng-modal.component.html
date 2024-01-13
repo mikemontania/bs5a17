@@ -1,6 +1,13 @@
 <div class="modal-background" *ngIf="isOpen" (click)="close()">
-  <div class="modal-container" [ngClass]="{'small': size === 'small', 'medium': size === 'medium', 'large': size === 'large'}">
-     <ng-content></ng-content>
+  <div
+    class="modal-container"
+    [ngClass]="{
+      small: size === 'small',
+      medium: size === 'medium',
+      large: size === 'large'
+    }"
+  >
+    <ng-content></ng-content>
     <button (click)="close()">Cerrar</button>
   </div>
 </div>

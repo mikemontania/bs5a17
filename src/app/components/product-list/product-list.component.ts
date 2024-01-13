@@ -1,4 +1,4 @@
- import { Component, EventEmitter, Input, OnInit, Output, computed, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, computed, signal } from '@angular/core';
 import { ProductoPage, ProductosItem } from '../../interfaces/productoItem.inteface';
 import { ProductosService } from '../../services/productos.service';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { PaginatorComponent } from '../paginator/paginator.component';
   selector: 'app-product-list',
   standalone: true,
   imports: [CommonModule,
-     InputDebounceComponent,
+    InputDebounceComponent,
     ProductCardComponent,
     IncrementadorComponent,
     PaginatorComponent,
@@ -26,10 +26,10 @@ export class ProductsListComponent implements OnInit {
   @Output() productClicked = new EventEmitter<ProductosItem>();
   @Output() cantidadChange = new EventEmitter<number>();
 
-   marcaId: number = 0;
-   categoriaId: number = 0;
-   subCategoriaId: number = 0;
-    search: string = '';
+  marcaId: number = 0;
+  categoriaId: number = 0;
+  subCategoriaId: number = 0;
+  search: string = '';
 
   productosPage = signal<ProductoPage>({} as ProductoPage);
   page = signal<number>(1);
@@ -37,7 +37,7 @@ export class ProductsListComponent implements OnInit {
 
   productos = computed(() => this.productosPage().productos ?? []);
 
-  constructor(private _productosService: ProductosService) {}
+  constructor(private _productosService: ProductosService) { }
 
   ngOnInit() {
     this.getProductosPage(1);
@@ -62,15 +62,15 @@ export class ProductsListComponent implements OnInit {
   onPageChanged(newPage: number) {
     this.getProductosPage(newPage);
   }
-  changeCantidad(event:number){
-    if (event>1) {
-      this.cantidad =+event;
-       this.cantidadChange.emit(this.cantidad);
+  changeCantidad(event: number) {
+    if (event > 1) {
+      this.cantidad = +event;
+      this.cantidadChange.emit(this.cantidad);
     }
   }
 
-  seleccionarProducto(event:ProductosItem) {
-     this.productClicked.emit(event);
+  seleccionarProducto(event: ProductosItem) {
+    this.productClicked.emit(event);
   }
 
 }

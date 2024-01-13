@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './dashbard.component.css'
 })
 export class DashbardComponent {
-  changeBtnTxt(){
+  changeBtnTxt() {
 
   }
 }

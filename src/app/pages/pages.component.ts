@@ -1,7 +1,6 @@
-import { Component, computed, effect, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
-import { AuthStatus } from '../auth/interfaces/auth-status.enum';
-import { AuthService } from '../auth/services/auth.service';
+import { Component,   } from '@angular/core';
+import {  RouterOutlet } from '@angular/router';
+
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../layout/footer/footer.component';
 import { SideNavToggle, SidebarComponent } from '../layout/sidebar/sidebar.component';

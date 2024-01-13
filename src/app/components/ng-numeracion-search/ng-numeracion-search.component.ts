@@ -5,13 +5,9 @@ import {
   Input,
   OnInit,
   Output,
-  ViewContainerRef,
   inject
 } from "@angular/core";
-import { debounceTime, distinctUntilChanged } from "rxjs";
 import { InputDebounceComponent } from "../inputDebounce/inputDebounce.component";
-import { Cliente } from "../../interfaces/clientes.interface";
-import { ClientesService } from "../../services/clientes.service";
 import { Numeracion } from "../../interfaces/numeracion.interface";
 import { NumeracionService } from "../../services/service.index";
 

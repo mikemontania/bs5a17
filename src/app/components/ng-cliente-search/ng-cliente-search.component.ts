@@ -28,15 +28,12 @@ export class NgClienteSearchComponent implements OnInit {
     this.buscar('');
   }
 
-
 selectCliente(cliente: Cliente) {
   this.cliente.emit(cliente);
-
 }
 trackCliente(index: number, cliente: Cliente): number {
   return cliente.id; // Assuming cliente has a unique ID
 }
-
 
   close() {
     this.closeModal.emit();

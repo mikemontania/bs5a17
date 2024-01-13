@@ -1,11 +1,10 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
- import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
-
+ import { Observable, catchError, map, of,   throwError } from 'rxjs';
 import { AuthStatus } from '../interfaces/auth-status.enum';
 import { CheckTokenResponse } from '../interfaces/check-token.response';
 import { LoginResponse } from '../interfaces/login-response.interface';
 import { User } from '../interfaces/user.interface';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient  } from '@angular/common/http';
 import { BASE_URL } from '../../config';
 
 @Injectable({

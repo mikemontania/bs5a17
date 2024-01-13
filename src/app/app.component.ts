@@ -24,16 +24,26 @@ export class AppComponent implements OnInit{
 
   // Propiedad computada para indicar si la comprobación de autenticación ha finalizado
   public finishedAuthCheck = computed<boolean>(() => {
+    console.log('finishedAuthCheck');
     console.log(this.authService.authStatus());
     return this.authService.authStatus() !== AuthStatus.checking;
   });
 
   // Efecto para reaccionar a cambios en el estado de autenticación
-  public authStatusChangedEffect = effect(() => {
+  public authStatusChangedEffect = effect(() =>
+  {
+    console.log('efecto');
+    console.log(this.authService.authStatus());
     switch (this.authService.authStatus()) {
       case AuthStatus.checking:
         return; // No se realizan acciones mientras se verifica la autenticación
       case AuthStatus.authenticated:
+        if (this.storedPath) {
+          this.router.navigateByUrl(this.storedPath);
+        } else {
+          // Redirigir a la ruta predeterminada para usuarios autenticados
+          this.router.navigateByUrl('/dashboard'); // Ejemplo
+        }
         return; // El guard se encarga de las redirecciones en este caso
       case AuthStatus.notAuthenticated:
         this.router.navigateByUrl('/login'); // Redirige al login si no está autenticado

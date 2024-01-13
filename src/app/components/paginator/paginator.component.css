@@ -23,16 +23,18 @@
   color: #fff;
 }
 
-.page-link.active { /* Corrected selector */
+.page-link.active {
+  /* Corrected selector */
   background-color: #fd9a6ce5;
   color: #fff;
   /* pointer-events: none; <-- Remove this line */
 }
 
-.active > .page-link, .page-link.active {
+.active > .page-link,
+.page-link.active {
   z-index: 1;
   color: #fff;
-  background-color:  #fd9a6ce5;
+  background-color: #fd9a6ce5;
   border-color: #fd8a55e5;
 }
 
@@ -44,25 +46,25 @@
 
 /* Customize the "Primera", "Atrás", "Siguiente", "Última" labels */
 .page-link[aria-label="First"]:before {
-   font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
+  font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
   font-size: 1.5rem;
   margin-right: 5px;
 }
 
 .page-link[aria-label="Previous"]:before {
-   font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
+  font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
   font-size: 1.5rem;
   margin-right: 5px;
 }
 
 .page-link[aria-label="Next"]:after {
-   font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
+  font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
   font-size: 1.5rem;
   margin-left: 5px;
 }
 
 .page-link[aria-label="Last"]:after {
-   font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
+  font-family: 'Glyphicons Halflings'; /* Font-family de Bootstrap */
   font-size: 1.5rem;
   margin-left: 5px;
 }
