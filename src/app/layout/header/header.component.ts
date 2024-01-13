@@ -1,11 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Output, inject } from "@angular/core";
 import { AuthService } from '../../auth/services/auth.service';
+import { ImagenPipe } from "../../pipes/imagen.pipe";
 
 @Component({
   selector: "app-header",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,ImagenPipe],
   templateUrl: "./header.component.html",
   styleUrl: "./header.component.css"
 })

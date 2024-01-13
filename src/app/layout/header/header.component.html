@@ -19,11 +19,10 @@
   <li class="nav-item nav-profile dropdown">
         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
           <div class="nav-profile-text">
-            <p class="mb-1 text-black">{{authService.currentUser()?.username}}</p>
+            <p class="mb-1 text-black">{{authService.currentUser()?.usuario}}</p>
           </div>
           <div class="nav-profile-img">
-
-            <img    src ="../../../assets/img/Angular logo mini.png" alt="image">
+              <img [attr.src]="authService.currentUser()!.img | imagen: 'usuarios' | async" />
           </div>
         </a>
         <div class="dropdown-menu dropdown-menu-end navbar-dropdown" aria-labelledby="profileDropdown">
