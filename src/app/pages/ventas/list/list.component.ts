@@ -48,7 +48,26 @@ export class ListComponent {
   listaPrecioId = computed(() => this.listaPrecio()?.id ?? 0);
 
   _ventasService = inject(VentasService);
+  constructor() {
+    const storedSearchData = localStorage.getItem('searchData');
 
+    if (storedSearchData) {
+      try {
+        const parsedData = JSON.parse(storedSearchData);
+        this.searchComprobante.set(parsedData.searchComprobante);
+        this.cliente.set(parsedData.cliente);
+        this.sucursal.set(parsedData.sucursal);
+        this.listaPrecio.set(parsedData.listaPrecio);
+        this.formaVenta.set(parsedData.formaVenta);
+        this.page.set(parsedData.page);
+        this.pageSize.set(parsedData.pageSize);
+        this.fechaDesde=parsedData.fechaDesde;
+        this.fechaHasta=parsedData.fechaHasta;
+      } catch (error) {
+        console.error('Error parsing stored search data:', error);
+      }
+    }
+  }
   ngOnInit() {
     this.buscar();
   }
@@ -68,6 +87,19 @@ export class ListComponent {
       this.fechaHasta = moment(new Date()).format("YYYY-MM-DD");
     }
     this.page.set(page);
+
+    localStorage.setItem('searchData', JSON.stringify({
+      searchComprobante: this.searchComprobante(),
+      cliente: this.cliente(),
+      sucursal: this.sucursal(),
+      listaPrecio: this.listaPrecio(),
+      formaVenta: this.formaVenta(),
+      page:this.page(),
+      pageSize:this.pageSize(),
+      fechaDesde:this.fechaDesde,
+      fechaHasta:this.fechaHasta,
+    }));
+
     this._ventasService
       .search(this.page(), this.pageSize(), this.fechaDesde, this.fechaHasta, this.clienteId(), this.sucursalId(), this.formaVentaId(), this.listaPrecioId(), this.searchComprobante())
       .subscribe({
