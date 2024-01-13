@@ -3,7 +3,7 @@
     <button class="btn btn-outline-success" type="button" (click)="cambiarValor(-1)">
       <i class="bi bi-dash"></i>
     </button>
-    <input type="number" class="form-control" name="cantidad" id="inputCantidad" [(ngModel)]="cantidad" min="1">
+    <input type="number" class="form-control" name="cantidad" id="inputCantidad" [(ngModel)]="cantidad" min="1"  (ngModelChange) = "cambioValor()" >
     <button class="btn btn-outline-success" type="button" (click)="cambiarValor(+1)">
       <i class="bi bi-plus"></i>
     </button>

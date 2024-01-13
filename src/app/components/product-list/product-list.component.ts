@@ -63,8 +63,10 @@ export class ProductsListComponent implements OnInit {
     this.getProductosPage(newPage);
   }
   changeCantidad(event:number){
-    this.cantidad =event;
-    this.cantidadChange.emit(event);
+    if (event>1) {
+      this.cantidad =+event;
+       this.cantidadChange.emit(this.cantidad);
+    }
   }
 
   seleccionarProducto(event:ProductosItem) {

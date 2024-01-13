@@ -169,7 +169,7 @@ export class VentasComponent implements OnInit {
 
 
     changeCantidad(cantidad:number){
-      this.cantidad=cantidad;
+       this.cantidad=cantidad;
     }
 
 refresh(){

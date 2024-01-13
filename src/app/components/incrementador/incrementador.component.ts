@@ -19,6 +19,8 @@ export class IncrementadorComponent {
     this.cantidad = this.cantidad + valor;
     this.change.emit(this.cantidad);
   }
-
+  cambioValor() {
+     this.change.emit(this.cantidad);
+  }
 
 }
