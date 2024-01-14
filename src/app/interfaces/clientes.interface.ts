@@ -13,6 +13,7 @@ export interface Cliente {
   nroDocumento:      string;
   direccion:         string;
   telefono:          string;
+  cel:          string;
   email:             string;
   excentoIva:        boolean;
   latitud:           string;

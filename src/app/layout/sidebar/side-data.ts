@@ -6,7 +6,11 @@ export const navbarData: INavbarData[] = [
     icon: 'fa-solid fa-house',
     label: 'Dashboard'
   },
-
+  {
+    routeLink: 'clientes',
+    icon: 'fa-solid fa-user',
+    label: 'Clientes'
+  },
 
   {
     routeLink: 'ventas',

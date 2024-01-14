@@ -3,6 +3,7 @@ import { DashbardComponent } from './dashbard/dashbard.component';
 import { PagesComponent } from './pages.component';
 import { UsersComponent } from './users/users.component';
 import { authGuard } from '../guards/auth-guard.guard';
+import { ClienteComponent } from './cliente/cliente.component';
 
 export default [
   {
@@ -19,6 +20,11 @@ export default [
         canActivate: [authGuard],
         loadChildren: () => import('./ventas/ventas-routing.module')
        },
+       {
+        path: "clientes",
+        canActivate: [authGuard],
+        component: ClienteComponent
+      },
       {
         path: "user",
         canActivate: [authGuard],
