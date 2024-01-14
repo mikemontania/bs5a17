@@ -14,10 +14,11 @@ import { NgSucursalSearchComponent } from '../../../components/ng-sucursal-searc
 import { NgClienteSearchComponent } from '../../../components/ng-cliente-search/ng-cliente-search.component';
 import { NgFormaVentaSearchComponent } from '../../../components/ng-forma-venta-search/ng-forma-venta-search.component';
 import { NgListaPrecioSearchComponent } from '../../../components/ng-lista-precio-search/ng-lista-precio-search.component';
-import { FormControl, FormsModule } from '@angular/forms';
+import {   FormsModule } from '@angular/forms';
 import { TooltipDirective } from '../../../directivas/tooltip.directive';
 import { ReportesService } from '../../../services/reportes.service';
 import Swal from 'sweetalert2';
+import {   Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -50,7 +51,7 @@ export class ListComponent {
   sucursalId = computed(() => this.sucursal()?.id ?? 0);
   formaVentaId = computed(() => this.formaVenta()?.id ?? 0);
   listaPrecioId = computed(() => this.listaPrecio()?.id ?? 0);
-
+private _router = inject(Router)
   _ventasService = inject(VentasService);
   _reportService = inject(ReportesService)
   constructor() {
@@ -158,6 +159,11 @@ export class ListComponent {
 
   }
 
+
+ verDetalles(ventaId:number){
+  this._router.navigate(['/ventas/detalles', ventaId]);
+
+   }
  getDoc(id:number){
   this._reportService.getPdf(id).subscribe((response: any) => {
     const fileURL = URL.createObjectURL(response);

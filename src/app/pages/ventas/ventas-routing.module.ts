@@ -3,8 +3,6 @@ import { authGuard } from '../../guards/auth-guard.guard';
 
 
 export default [
-
-
       {
         path: "",
         canActivate: [authGuard],
@@ -16,7 +14,7 @@ export default [
         loadComponent: () => import('./list/list.component').then((c) => c.ListComponent)
       },
       {
-        path: "detalles",
+        path: "detalles/:id",
         canActivate: [authGuard],
         loadComponent: () => import('./detalle/detalle.component').then((c) => c.DetalleComponent)
       },

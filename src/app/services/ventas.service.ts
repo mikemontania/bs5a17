@@ -11,6 +11,13 @@ export class VentasService {
   http = inject(HttpClient);
   router = inject(Router);
 
+  getById(id:number) {
+    return this.http
+      .get(BASE_URL + "/ventas/"+id)
+      .pipe(map((resp: any) => resp));
+  }
+
+
   create(body:any) {
     return this.http
       .post(BASE_URL + "/ventas",body)
