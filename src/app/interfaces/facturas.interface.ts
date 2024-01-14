@@ -10,7 +10,7 @@ export interface Venta {
   fechaVenta:         string;
   fechaInicio:        string;
   fechaFin:           string;
-  id:                 string;
+  id:                 number;
   empresaId:          number;
   sucursalId:         number;
   listaPrecioId:      number;

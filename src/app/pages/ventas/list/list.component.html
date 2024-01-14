@@ -157,7 +157,7 @@
                 <td  class="text-sm">{{ venta.importeTotal | number }} Gs</td>
                 <td  class="text-sm">{{ venta.anulado }}</td>
                 <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-danger text-danger"
+                  <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(venta.id)"
                   appTooltip="Anular ventas">
                     <i class="bi bi-cart-x"></i>
                   </button>
@@ -168,7 +168,7 @@
                   </button>
                 </td>
                 <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-success text-success" appTooltip="Ver documento">
+                  <button class="btn btn-sm btn-outline-success text-success" appTooltip="Ver documento" (click)="getDoc(venta.id)">
                     <i class="bi bi-card-list"></i>
                   </button>
                 </td>

@@ -404,16 +404,16 @@ refresh(){
       return;
     }
     console.log('asdasd')
-    const porcDescuento=((this.factura().importeDescuento)*100/this.factura().importeSubtotal)
+    const porcDescuento = ((this.factura().importeDescuento) * 100 / this.factura().importeSubtotal)
     this.factura.update(value => ({
       ...value,
       porcDescuento,
-      sucursalId:    this.sucursal().id,
+      sucursalId: this.sucursal().id,
       numeracionId: this.numeracion().id,
       listaPrecioId: this.listaPrecio().id,
       formaVentaId: this.formaVenta().id,
-      clienteId:      this.cliente().id,
-      detalles:this.detalles
+      clienteId: this.cliente().id,
+      detalles: this.detalles
     }));
     Swal.fire({
       title: 'Espere por favor...',
@@ -422,7 +422,7 @@ refresh(){
     });
     Swal.showLoading();
     // Actualización: Utiliza la sintaxis de suscripción más reciente
-    this._ventasService.create( this.factura()).subscribe({
+    this._ventasService.create(this.factura()).subscribe({
       next: async (resp) => {
         try {
           console.log(resp)
@@ -432,10 +432,10 @@ refresh(){
 
           })
           Swal.close();
-          Swal.fire('Factura guardada!!!', 'factura creada con exito!!! comprobante:'+resp.nroComprobante, 'success');
+          Swal.fire('Factura guardada!!!', 'factura creada con exito!!! comprobante:' + resp.nroComprobante, 'success');
 
-   this.detalles=[];
-   this.factura.set({} as ModelCab);
+          this.detalles = [];
+          this.factura.set({} as ModelCab);
 
         } catch (error) {
           console.error('Error fetching PDF:', error);

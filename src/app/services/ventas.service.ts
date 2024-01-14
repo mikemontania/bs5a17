@@ -33,4 +33,15 @@ export class VentasService {
   }
 
 
+  anular(id: number) {
+
+    return this.http.put(BASE_URL + `/ventas/anular/${id}`,null)
+      .pipe(
+        map((respo: any) => {
+          return respo as any;
+        })
+      );
+  }
+
+
 }

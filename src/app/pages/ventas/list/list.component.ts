@@ -16,6 +16,8 @@ import { NgFormaVentaSearchComponent } from '../../../components/ng-forma-venta-
 import { NgListaPrecioSearchComponent } from '../../../components/ng-lista-precio-search/ng-lista-precio-search.component';
 import { FormControl, FormsModule } from '@angular/forms';
 import { TooltipDirective } from '../../../directivas/tooltip.directive';
+import { ReportesService } from '../../../services/reportes.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list',
@@ -50,6 +52,7 @@ export class ListComponent {
   listaPrecioId = computed(() => this.listaPrecio()?.id ?? 0);
 
   _ventasService = inject(VentasService);
+  _reportService = inject(ReportesService)
   constructor() {
     const storedSearchData = localStorage.getItem('searchData');
 
@@ -155,6 +158,40 @@ export class ListComponent {
 
   }
 
+ getDoc(id:number){
+  this._reportService.getPdf(id).subscribe((response: any) => {
+    const fileURL = URL.createObjectURL(response);
+    window.open(fileURL, '_blank');
 
+  })
+ }
+ anular(id:number){
+   Swal.fire({
+     title: 'Está segur@ que desea anular la factura?',
+     text: `La factura serà anulada`,
+     icon: 'warning',
+     showCancelButton: true,
+     confirmButtonColor: '#3085d6',
+     cancelButtonColor: '#d33',
+     confirmButtonText: 'Si, Anular',
+     cancelButtonText: 'No, No anular ',
+     customClass: {
+       confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
+       cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
+      },
+      buttonsStyling: false,
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.value) {
+        this._ventasService.anular(id).subscribe((response: any) => {
+          this.buscar()
+          Swal.fire('Factura anulada!!!', 'factura anulada con exito!!! comprobante:'  , 'success');
+
+        })
+      }
+    });
+
+
+ }
 
 }
