@@ -200,4 +200,26 @@ private _router = inject(Router)
 
  }
 
+
+cancelar(){
+
+    try {
+
+      this.searchComprobante.set('');
+      this.cliente.set({}as Cliente);
+      this.sucursal.set({}as Sucursal);
+      this.listaPrecio.set({}as ListaPrecio);
+      this.formaVenta.set({}as FormaVenta);
+      this.page.set(1);
+      this.pageSize.set(10);
+      this.fechaDesde=moment(new Date()).format("YYYY-MM-DD");
+      this.fechaHasta=moment(new Date()).format("YYYY-MM-DD");
+    } catch (error) {
+      console.error('Error parsing stored search data:', error);
+    }
+
+}
+
+
+
 }

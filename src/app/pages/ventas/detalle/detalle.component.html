@@ -1,1 +1,209 @@
-<p>detalle works!</p>
+@if(cargado() ) {
+<div class="card">
+  <div class="card-header">
+    <button class="btn btn-sm btn-outline-success text-success" (click)="volverAtras()"><i class="bi bi-arrow-left-square-fill"></i></button>
+
+  </div>
+  <div class="card-body">
+    @if(venta() ) {
+
+    <div id="venta" class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">cliente</th>
+            <th scope="col">Vend-creac</th>
+            <th scope="col">comprobante</th>
+            <th scope="col">fecha</th>
+            <th scope="col">creado</th>
+            <th scope="col">modificado</th>
+
+            <th scope="col">sucursal</th>
+            <th scope="col">lista-precio</th>
+            <th scope="col">forma-venta</th>
+            <th scope="col">modo-entr</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ venta().id }}</td>
+            <td>
+              <div class="text-truncate">
+                <span class="d-block text-sm">{{
+                  venta().cliente.razonSocial
+                }}</span>
+                <small class="d-block text-sm">{{
+                  venta().cliente.nroDocumento
+                }}</small>
+              </div>
+            </td>
+            <td>{{ venta().vendedorCreacion.usuario }}</td>
+            <td>
+              <span class="d-block text-sm">{{ venta().nroComprobante }}</span>
+              <small class="d-block text-sm">{{ venta().timbrado }}</small>
+            </td>
+            <td>{{ venta().fechaVenta }}</td>
+            <td>{{ venta().fechaCreacion }}</td>
+            <td>{{ venta().fechaModificacion }}</td>
+            <td>{{ venta().sucursal.descripcion }}</td>
+            <td>{{ venta().listaPrecio.descripcion }}</td>
+            <td>{{ venta().formaVenta.descripcion }}</td>
+            <td>{{ venta().modoEntrega }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="totales" class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+
+            <th scope="col">subtotal</th>
+            <th scope="col">descuento</th>
+            <th scope="col">iva5</th>
+            <th scope="col">iva10</th>
+            <th scope="col">exenta</th>
+            <th scope="col">neto</th>
+            <th scope="col">total</th>
+
+            <th scope="col">TotalKg</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ venta().id }}</td>
+
+            <td>{{ venta().importeSubtotal | number }} Gs</td>
+            <td>
+              <div class="text-truncate">
+                <span class="d-block text-sm"
+                  >{{ venta().porcDescuento | number }}%</span
+                >
+                <small class="d-block text-sm">
+                  {{ venta().importeDescuento | number }} Gs</small
+                >
+              </div>
+            </td>
+            <td>{{ venta().importeIva5 | number }} Gs</td>
+            <td>{{ venta().importeIva10 | number }} Gs</td>
+            <td>{{ venta().importeIvaExenta | number }} Gs</td>
+            <td>{{ venta().importeNeto | number }} Gs</td>
+            <td>{{ venta().importeTotal | number }} Gs</td>
+
+            <td>{{ venta().totalKg }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+@if(venta().anulado){
+  <div id="anulado" class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Vend Anul.</th>
+          <th scope="col">fecha</th>
+          <th scope="col">anulado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ venta().vendedorAnulacion.usuario }}</td>
+          <td>{{ venta().fechaAnulacion }}</td>
+          <td>{{ venta().anulado }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+}
+
+    @if(detalles() && detalles().length > 0) {
+
+      <div id="details" class="table-responsive">
+        <table class="table table-striped table-bordered table-hover caption-top small-table">
+          <caption>
+            Facturas({{ detalles().length | number }})
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">IMG</th>
+              <th scope="col">id</th>
+              <th scope="col">erp</th>
+              <th scope="col">producto</th>
+              <th scope="col">presentacion</th>
+              <th scope="col">variedad</th>
+              <th scope="col">cantidad</th>
+              <th scope="col">totalKg</th>
+              <th scope="col">importePrecio</th>
+              <th scope="col">importeIva5</th>
+              <th scope="col">importeIva10</th>
+              <th scope="col">importeIvaExenta</th>
+              <th scope="col">descuento</th>
+              <th scope="col">tipo</th>
+              <th scope="col">importeSubtotal</th>
+              <th scope="col">importeTotal</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (detalle of detalles(); track detalle.id; let index = $index)
+            {
+              <tr>
+                <th scope="row">{{ index + 1 }}</th>
+                <td align="center" class="w70" align="center" style="background: white">
+                  <img *ngIf="detalle.variante.img"
+                      [attr.src]="detalle.variante.img | imagen:'productos' | async"
+                      class="img-producto60" />
+                </td>
+                <td>{{ detalle.id }}</td>
+                <td class="text-sm">{{ detalle.variante.codErp }}</td>
+                <td class="text-sm">{{ detalle.variante.producto.nombre }}</td>
+                <td class="text-sm">{{ detalle.variante.presentacion.descripcion }}</td>
+                <td class="text-sm">{{ detalle.variante.variedad.descripcion }}</td>
+                <td class="text-sm">{{ detalle.cantidad }} {{ detalle.variante.unidad.code }}</td>
+                <td class="text-sm">{{ detalle.totalKg | number }}  </td>
+
+                <td class="text-sm">{{ detalle.importePrecio | number }} Gs</td>
+                <td class="text-sm">{{ detalle.importeIva5 | number }} Gs</td>
+                <td class="text-sm">{{ detalle.importeIva10 | number }} Gs</td>
+                <td class="text-sm">{{ detalle.importeIvaExenta | number }} Gs</td>
+                <td class="text-sm">
+                  <div class="text-truncate">
+                    <span class="d-block text-sm">{{ detalle.porcDescuento | number }}%</span>
+                    <small class="d-block text-sm">{{ detalle.importeDescuento | number }} Gs</small>
+                  </div>
+                </td>
+                <td class="text-sm">{{ detalle.tipoDescuento   }}  </td>
+                <td class="text-sm">{{ detalle.importeSubtotal | number }} Gs</td>
+                <td class="text-sm">{{ detalle.importeTotal | number }} Gs</td>
+              </tr>
+            } @empty {
+              <tr></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+
+    } } @else {
+    <div class="w-100 empty-message-container">
+      <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">Atención</h4>
+        <p>No se han encontrado ventas...</p>
+      </div>
+    </div>
+    }
+  </div>
+</div>
+
+} @else {
+<div class="w-100 empty-message-container">
+  <div class="alert alert-info alert-dismissible fade show" role="alert">
+    <h4 class="alert-heading">Atención</h4>
+    <p>No se han datos</p>
+  </div>
+</div>
+}
