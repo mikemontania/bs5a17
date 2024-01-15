@@ -30,7 +30,7 @@ import { NgFormaVentaSearchComponent } from "../../../components/ng-forma-venta-
 import { NgListaPrecioSearchComponent } from "../../../components/ng-lista-precio-search/ng-lista-precio-search.component";
 import { NgClienteCreateComponent } from "../../../components/ng-cliente-create/ng-cliente-create.component";
 import { NgClienteSearchComponent } from "../../../components/ng-cliente-search/ng-cliente-search.component";
-import { NgCobranzaCreateComponent } from '../../../components/ng-cliente-search/ng-cobranza-create.component';
+import { NgCobranzaCreateComponent } from '../../../components/ng-cobranza-create/ng-cobranza-create.component';
 
 @Component({
   selector: "app-ventas",

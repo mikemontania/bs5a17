@@ -1,0 +1,91 @@
+<div class="modal-background" *ngIf="isOpen" (click)="close()">
+  <div
+    class="modal-container"
+    [ngClass]="{
+      small: size === 'small',
+      medium: size === 'medium',
+      large: size === 'large'
+    }"
+  >
+    <div class="modal-header">
+      <h5 class="modal-title">Cobranza</h5>
+      <button type="button" class="btn-close" (click)="close()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <!-- Contenido del modal -->
+    <div (click)="$event.stopPropagation()">
+      <div
+        class="scroll-container"
+        style="position: relative; max-height: 600px"
+      >
+        <div class="card-body">
+
+          <form [formGroup]="cobranzaForm" role="form" (ngSubmit)="onSubmit($event)" novalidate class="row">
+
+            <div class="col-md-3 form-group">
+              <label for="selectMedioPago">Medio Pago</label>
+              <select id="selectMedioPago" class="custom-select" formControlName="medioPagoId" (ngModelChange)="onMedioPagoChange($event)">
+                <option *ngFor="let m of medios()" [value]="m.id">{{ m.descripcion }}</option>
+              </select>
+            </div>
+
+            <div *ngIf="medioPago().tieneBanco" class="col-md-3 form-group">
+              <label for="bancoId">Banco</label>
+              <select id="bancoId" class="form-control custom-select" style="width: 100%" formControlName="bancoId">
+                <option *ngFor="let b of bancos()">{{ b.descripcion }}</option>
+              </select>
+            </div>
+
+            <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
+              <label for="fechaEmision">Fecha Emisión</label>
+              <input type="date" class="form-control" formControlName="fechaEmision" required />
+            </div>
+
+            <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
+              <label for="fechaVencimiento">Fecha Vencimiento</label>
+              <input type="date" class="form-control" formControlName="fechaVencimiento" required />
+            </div>
+
+            <div *ngIf="medioPago().esCheque || medioPago().tieneRef" class="col-md-3 form-group">
+              <label for="nroRef">Nro referencia</label>
+              <input type="text" class="form-control" formControlName="nroRef" required minlength="4" />
+            </div>
+
+            <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
+              <label for="nroCuenta">Nro cuenta</label>
+              <input type="text" class="form-control" formControlName="nroCuenta" required minlength="12" />
+            </div>
+
+            <div class="col-md-3 form-group">
+              <label for="montoAbonado">Monto</label>
+              <input type="number" min="100" class="form-control currency" formControlName="importeAbonado" required />
+            </div>
+
+            <div class="col-md-12 mt-3">
+              <button type="submit" class="btn btn-primary" [disabled]="cobranzaForm.invalid">Guardar</button>
+            </div>
+
+          </form>
+
+
+          <!--   <div class="form-group row button-group">
+                <div class="col-md-3">
+                  <button type="button" align="right" (click)="agregarCobranza()"
+                    [disabled]="CobranzaForm.invalid" class="btn btn-success text-white">
+                    Agregar
+                  </button>
+                </div>
+              </div> -->
+
+          <!-- Resto del código para la tabla de detalles y tablas de totales -->
+          <!-- ... -->
+        </div>
+        <!-- <div class="modal-footer">
+              <button (click)="guardarCobranza()" type="button" class="btn btn-themecolor text-white">Guardar</button>
+              <button (click)="cancelarModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Volver a venta</button>
+            </div> -->
+      </div>
+    </div>
+  </div>
+</div>

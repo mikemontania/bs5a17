@@ -132,13 +132,7 @@ export interface ModelDet {
   totalKg: number ;
   tipoDescuento: string ;
 }
-export interface Banco {
-  id: number;
-  empresaId: number | null;
-  descripcion: string;
-  activo: boolean;
-  Empresa?: Empresa; // Relación con la entidad Empresa
-}
+
 export interface Cobranza {
   id: number;
   empresaId: number;
@@ -189,7 +183,13 @@ export interface MedioPago {
  // UsuarioCreacion?: Usuario; // Relación con la entidad Usuario (creación)
   //UsuarioModificacion?: Usuario; // Relación con la entidad Usuario (modificación)
 }
-
+export interface Banco {
+  id: number;
+  empresaId: number | null;
+  descripcion: string;
+  activo: boolean;
+  Empresa?: Empresa; // Relación con la entidad Empresa
+}
 export interface Empresa {
   id: number;
   razonSocial: string | null;
