@@ -1,26 +1,34 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from "@angular/common";
+import { Component,       EventEmitter, Input, OnInit, Output, ViewContainerRef, inject, signal } from "@angular/core";
+import { debounceTime, distinctUntilChanged } from "rxjs";
+import { InputDebounceComponent } from "../inputDebounce/inputDebounce.component";
 import { Cliente } from '../../interfaces/clientes.interface';
-import { CommonModule } from '@angular/common';
-import { ListaPrecioService } from '../../services/listaPrecio.service';
-import { FormaVentaService } from '../../services/formaVenta.service';
-import { ClientesService } from '../../services/clientes.service';
-import { ListaPrecio } from '../../interfaces/listaPrecio.interface';
-import { FormaVenta } from '../../interfaces/formaventa.interface';
-import Swal from 'sweetalert2';
+import { ClientesService } from "../../services/clientes.service";
+import Swal from "sweetalert2";
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { FormaVenta } from "../../interfaces/formaventa.interface";
+import { ListaPrecio } from "../../interfaces/listaPrecio.interface";
+import { FormaVentaService } from "../../services/formaVenta.service";
+import { ListaPrecioService } from "../../services/listaPrecio.service";
 
 @Component({
-  selector: 'app-cliente',
+  selector: "app-cliente-create",
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
-  templateUrl: './cliente.component.html',
-  styleUrl: './cliente.component.css'
+  templateUrl: "./ng-cliente-create.component.html",
+  styleUrl: "./ng-cliente-create.component.css"
 })
-export class ClienteComponent implements OnInit {
+export class NgClienteCreateComponent implements OnInit {
+  size = "medium";
+  delay=200;
+  @Input() isOpen = false;
+  @Output() closeModal = new EventEmitter<void>();
+  @Output() cliente = new EventEmitter<Cliente>();
 
   listas = signal<ListaPrecio[]>([])
   formas = signal<FormaVenta[]>([])
   clienteForm: FormGroup;
+
   private fb = inject(FormBuilder)
   private _listaPrecioService = inject(ListaPrecioService)
   private _formaventaService = inject(FormaVentaService)
@@ -61,16 +69,14 @@ export class ClienteComponent implements OnInit {
   onSubmit(e:Event) {
     e.preventDefault()
     const clienteData: Cliente = this.clienteForm.value;
-    Swal.showLoading();
 
     this._clienteService.create(clienteData).subscribe({
-      next: (resp) => {
-        Swal.close()
-        Swal.fire("Creación exitosa!!!", "Se ha registrado el cliente " + resp.razonSocial, "success");
-
+      next: (cliente) => {
+        this.cliente.emit(cliente);
+        this.isOpen = false;
       },
       error: (error) => {
-        Swal.close()
+   console.error(error)
         Swal.fire("Error", error.message, "error");
       },
       complete: () => {
@@ -79,6 +85,7 @@ export class ClienteComponent implements OnInit {
     });
   }
 
-
-
+  close() {
+    this.closeModal.emit();
+  }
 }

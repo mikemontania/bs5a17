@@ -39,7 +39,7 @@
                 <i class="mh-1 fa-solid fa-sort-down"></i>
               </span>
             </span>
-            <span
+            <span (click)="createClienteModal()"
               class="input-group-text btn-outline-success text-success"
               id="basic-addon3"
             >
@@ -252,6 +252,20 @@
   </div>
 </section>
 <!-- selector de cliente-->
+
+
+
+
+@if(createCliente ) {
+  <app-cliente-create
+    [isOpen]="createCliente"
+    (cliente)="selectCliente($event)"
+    (closeModal)="createCliente = false"
+  ></app-cliente-create>
+
+  }
+
+
 @if(searchCliente ) {
 <app-cliente-search
   [isOpen]="searchCliente"

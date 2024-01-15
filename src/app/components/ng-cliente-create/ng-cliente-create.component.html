@@ -1,0 +1,245 @@
+<div class="modal-background" *ngIf="isOpen" (click)="close()">
+  <div class="modal-container"
+    [ngClass]="{'small': size === 'small', 'medium': size === 'medium', 'large': size === 'large'}">
+    <div class="modal-header">
+      <h5 class="modal-title">Creacion de Cliente</h5>
+      <button type="button" class="btn-close" (click)="close()"> <i class="fas fa-times"></i></button>
+    </div>
+    <!-- Contenido del modal -->
+    <div (click)="$event.stopPropagation()">
+
+      <div class="card">
+        <div class="card-body">
+          <form
+            [formGroup]="clienteForm"
+            (ngSubmit)="onSubmit($event)"
+          >
+            <div class="row mb-3">
+              <label for="razonSocial" class="col-md-4 col-lg-3 col-form-label"
+                >Razón Social</label
+              >
+              <div class="col-md-8 col-lg-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="razonSocial"
+                  formControlName="razonSocial"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="nroDocumento" class="col-md-4 col-lg-3 col-form-label"
+                >Nro Documento</label
+              >
+              <div class="col-md-8 col-lg-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nroDocumento"
+                  formControlName="nroDocumento"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="direccion" class="col-md-4 col-lg-3 col-form-label"
+                >direccion</label
+              >
+              <div class="col-md-8 col-lg-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="direccion"
+                  formControlName="direccion"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="telefono" class="col-md-4 col-lg-3 col-form-label"
+                >telefono</label
+              >
+              <div class="col-md-8 col-lg-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="telefono"
+                  formControlName="telefono"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="cel" class="col-md-4 col-lg-3 col-form-label"
+                >Celular</label
+              >
+              <div class="col-md-8 col-lg-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="cel"
+                  formControlName="cel"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="email" class="col-md-4 col-lg-3 col-form-label"
+                >Email</label
+              >
+              <div class="col-md-8 col-lg-9">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  formControlName="email"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="listaPrecioId" class="col-md-4 col-lg-3 col-form-label"
+                >Lista de Precio</label
+              >
+              <div class="col-md-8 col-lg-9">
+                <select
+                  class="form-control"
+                  id="listaPrecioId"
+                  formControlName="listaPrecioId"
+                >
+                  <option *ngFor="let lista of listas()" [value]="lista.id">
+                    {{ lista.descripcion }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="formaVentaId" class="col-md-4 col-lg-3 col-form-label"
+                >Forma Venta</label
+              >
+              <div class="col-md-8 col-lg-9">
+                <select
+                  class="form-control"
+                  id="formaVentaId"
+                  formControlName="formaVentaId"
+                >
+                  <option *ngFor="let forma of formas()" [value]="forma.id">
+                    {{ forma.descripcion }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="latitud" class="col-md-4 col-lg-3 col-form-label"
+                >latitud</label
+              >
+              <div class="col-md-8 col-lg-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="latitud"
+                  formControlName="latitud"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="longitud" class="col-md-4 col-lg-3 col-form-label"
+                >longitud</label
+              >
+              <div class="col-md-8 col-lg-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="longitud"
+                  formControlName="longitud"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="row mb-3">
+                  <label for="fullName" class="col-md-4 col-lg-3 col-form-label"
+                    >Estados</label
+                  >
+                  <div class="col-md-8 col-lg-9">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="predeterminado"
+                        formControlName="predeterminado"
+                        checked=""
+                      />
+                      <label class="form-check-label" for="predeterminado">
+                        Predeterminado
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="excentoIva"
+                        formControlName="excentoIva"
+                        checked=""
+                      />
+                      <label class="form-check-label" for="excentoIva">
+                        excentoIva
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="empleado"
+                        formControlName="empleado"
+                        checked=""
+                      />
+                      <label class="form-check-label" for="empleado">
+                        empleado
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="activo"
+                        formControlName="activo"
+                        checked
+                      />
+                      <label class="form-check-label" for="activo"> activo </label>
+                    </div>
+
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="propietario"
+                        formControlName="propietario"
+                        checked=""
+                      />
+                      <label class="form-check-label" for="propietario">
+                        propietario
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>

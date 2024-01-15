@@ -1,136 +1,151 @@
 <div class="card">
   <div class="card-body">
-    <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
-
+    <form
+      [formGroup]="clienteForm"
+      (ngSubmit)="onSubmit($event)"
+    >
       <div class="row mb-3">
-        <label for="razonSocial" class="col-md-4 col-lg-3 col-form-label">Razón Social</label>
+        <label for="razonSocial" class="col-md-4 col-lg-3 col-form-label"
+          >Razón Social</label
+        >
         <div class="col-md-8 col-lg-9">
           <input
-          type="text"
-          class="form-control"
-          id="razonSocial"
-          formControlName="razonSocial"
-        />
+            type="text"
+            class="form-control"
+            id="razonSocial"
+            formControlName="razonSocial"
+          />
         </div>
       </div>
       <div class="row mb-3">
-        <label for="nroDocumento" class="col-md-4 col-lg-3 col-form-label">Nro Documento</label>
+        <label for="nroDocumento" class="col-md-4 col-lg-3 col-form-label"
+          >Nro Documento</label
+        >
         <div class="col-md-8 col-lg-9">
           <input
-          type="text"
-          class="form-control"
-          id="nroDocumento"
-          formControlName="nroDocumento"
-        />
-        </div>
-      </div>
-
-
-      <div class="row mb-3">
-        <label for="direccion" class="col-md-4 col-lg-3 col-form-label">direccion</label>
-        <div class="col-md-8 col-lg-9">
-          <input
-          type="text"
-          class="form-control"
-          id="direccion"
-          formControlName="direccion"
-        />
-        </div>
-      </div>
-
-
-      <div class="row mb-3">
-        <label for="telefono" class="col-md-4 col-lg-3 col-form-label">telefono</label>
-        <div class="col-md-8 col-lg-9">
-          <input
-          type="text"
-          class="form-control"
-          id="telefono"
-          formControlName="telefono"
-        />
+            type="text"
+            class="form-control"
+            id="nroDocumento"
+            formControlName="nroDocumento"
+          />
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="cel" class="col-md-4 col-lg-3 col-form-label">Celular</label>
+        <label for="direccion" class="col-md-4 col-lg-3 col-form-label"
+          >direccion</label
+        >
         <div class="col-md-8 col-lg-9">
           <input
-          type="text"
-          class="form-control"
-          id="cel"
-          formControlName="cel"
-        />
+            type="text"
+            class="form-control"
+            id="direccion"
+            formControlName="direccion"
+          />
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+        <label for="telefono" class="col-md-4 col-lg-3 col-form-label"
+          >telefono</label
+        >
         <div class="col-md-8 col-lg-9">
           <input
-          type="email"
-          class="form-control"
-          id="email"
-          formControlName="email"
-        />
+            type="text"
+            class="form-control"
+            id="telefono"
+            formControlName="telefono"
+          />
         </div>
       </div>
 
+      <div class="row mb-3">
+        <label for="cel" class="col-md-4 col-lg-3 col-form-label"
+          >Celular</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="cel"
+            formControlName="cel"
+          />
+        </div>
+      </div>
 
       <div class="row mb-3">
-        <label for="listaPrecioId" class="col-md-4 col-lg-3 col-form-label">Lista de Precio</label>
+        <label for="email" class="col-md-4 col-lg-3 col-form-label"
+          >Email</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            formControlName="email"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="listaPrecioId" class="col-md-4 col-lg-3 col-form-label"
+          >Lista de Precio</label
+        >
         <div class="col-md-8 col-lg-9">
           <select
-          class="form-control"
-          id="listaPrecioId"
-          formControlName="listaPrecioId"
-        >
-          <option *ngFor="let lista of listas()" [value]="lista.id">
-            {{ lista.descripcion }}
-          </option>
-        </select>
+            class="form-control"
+            id="listaPrecioId"
+            formControlName="listaPrecioId"
+          >
+            <option *ngFor="let lista of listas()" [value]="lista.id">
+              {{ lista.descripcion }}
+            </option>
+          </select>
         </div>
       </div>
 
-
-
       <div class="row mb-3">
-        <label for="formaVentaId" class="col-md-4 col-lg-3 col-form-label">Forma Venta</label>
+        <label for="formaVentaId" class="col-md-4 col-lg-3 col-form-label"
+          >Forma Venta</label
+        >
         <div class="col-md-8 col-lg-9">
           <select
-          class="form-control"
-          id="formaVentaId"
-          formControlName="formaVentaId"
+            class="form-control"
+            id="formaVentaId"
+            formControlName="formaVentaId"
+          >
+            <option *ngFor="let forma of formas()" [value]="forma.id">
+              {{ forma.descripcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="latitud" class="col-md-4 col-lg-3 col-form-label"
+          >latitud</label
         >
-          <option *ngFor="let forma of formas()" [value]="forma.id">
-            {{ forma.descripcion }}
-          </option>
-        </select>
-        </div>
-      </div>
-
-
-
-      <div class="row mb-3">
-        <label for="latitud" class="col-md-4 col-lg-3 col-form-label">latitud</label>
         <div class="col-md-8 col-lg-9">
           <input
-          type="text"
-          class="form-control"
-          id="latitud"
-          formControlName="latitud"
-        />
+            type="text"
+            class="form-control"
+            id="latitud"
+            formControlName="latitud"
+          />
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="longitud" class="col-md-4 col-lg-3 col-form-label">longitud</label>
+        <label for="longitud" class="col-md-4 col-lg-3 col-form-label"
+          >longitud</label
+        >
         <div class="col-md-8 col-lg-9">
           <input
-          type="text"
-          class="form-control"
-          id="longitud"
-          formControlName="longitud"
-        />
+            type="text"
+            class="form-control"
+            id="longitud"
+            formControlName="longitud"
+          />
         </div>
       </div>
 

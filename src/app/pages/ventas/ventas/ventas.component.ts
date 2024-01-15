@@ -28,6 +28,7 @@ import { NgSucursalSearchComponent } from "../../../components/ng-sucursal-searc
 import { NgNumeracionSearchComponent } from "../../../components/ng-numeracion-search/ng-numeracion-search.component";
 import { NgFormaVentaSearchComponent } from "../../../components/ng-forma-venta-search/ng-forma-venta-search.component";
 import { NgListaPrecioSearchComponent } from "../../../components/ng-lista-precio-search/ng-lista-precio-search.component";
+import { NgClienteCreateComponent } from "../../../components/ng-cliente-create/ng-cliente-create.component";
 
 @Component({
   selector: "app-ventas",
@@ -41,7 +42,8 @@ import { NgListaPrecioSearchComponent } from "../../../components/ng-lista-preci
     NgNumeracionSearchComponent,
     NgFormaVentaSearchComponent,
     NgListaPrecioSearchComponent,
-    ProductsListComponent
+    ProductsListComponent,
+    NgClienteCreateComponent
   ],
   templateUrl: "./ventas.component.html",
   styleUrl: "./ventas.component.css"
@@ -61,6 +63,7 @@ export class VentasComponent implements OnInit {
   searchNumeracion = false;
   searchListaPrecio = false;
   searchFormaVenta = false;
+  createCliente = false;
   detalles: ModelDet[] = [];
 
   _authService = inject(AuthService);
@@ -109,6 +112,7 @@ export class VentasComponent implements OnInit {
     });
   }
 
+  createClienteModal() {    this.createCliente = true;  }
   buscarCliente() {    this.searchCliente = true;  }
   buscarNumeracion() {    this.searchNumeracion = true;  }
   buscarFormaVenta() {    this.searchFormaVenta = true;  }
