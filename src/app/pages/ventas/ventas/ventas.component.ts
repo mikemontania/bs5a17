@@ -1,8 +1,8 @@
-import { Component, OnInit,  inject, signal } from "@angular/core";
+import { Component, OnInit, inject, signal } from "@angular/core";
 import { SeccionClienteComponent } from "../../../components/seccion-cliente/seccion-cliente.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { NgClienteSearchComponent } from "../../../components/ng-cliente-search/ng-cliente-search.component";
+
 import { Cliente } from "../../../interfaces/clientes.interface";
 import { ProductosItem } from "../../../interfaces/productoItem.inteface";
 import { FormaVenta } from "../../../interfaces/formaventa.interface";
@@ -22,13 +22,15 @@ import {
 } from "../../../services/service.index";
 import { forkJoin } from "rxjs";
 import Swal from "sweetalert2";
-import { ModelCab, ModelDet } from "../../../interfaces/facturas.interface";
+import { Cobranza, ModelCab, ModelDet } from "../../../interfaces/facturas.interface";
 import { ProductsListComponent } from "../../../components/product-list/product-list.component";
 import { NgSucursalSearchComponent } from "../../../components/ng-sucursal-search/ng-sucursal-search.component";
 import { NgNumeracionSearchComponent } from "../../../components/ng-numeracion-search/ng-numeracion-search.component";
 import { NgFormaVentaSearchComponent } from "../../../components/ng-forma-venta-search/ng-forma-venta-search.component";
 import { NgListaPrecioSearchComponent } from "../../../components/ng-lista-precio-search/ng-lista-precio-search.component";
 import { NgClienteCreateComponent } from "../../../components/ng-cliente-create/ng-cliente-create.component";
+import { NgClienteSearchComponent } from "../../../components/ng-cliente-search/ng-cliente-search.component";
+import { NgCobranzaCreateComponent } from '../../../components/ng-cliente-search/ng-cobranza-create.component';
 
 @Component({
   selector: "app-ventas",
@@ -43,7 +45,8 @@ import { NgClienteCreateComponent } from "../../../components/ng-cliente-create/
     NgFormaVentaSearchComponent,
     NgListaPrecioSearchComponent,
     ProductsListComponent,
-    NgClienteCreateComponent
+    NgClienteCreateComponent,
+    NgCobranzaCreateComponent
   ],
   templateUrl: "./ventas.component.html",
   styleUrl: "./ventas.component.css"
@@ -64,6 +67,7 @@ export class VentasComponent implements OnInit {
   searchListaPrecio = false;
   searchFormaVenta = false;
   createCliente = false;
+  createCobranza = false;
   detalles: ModelDet[] = [];
 
   _authService = inject(AuthService);
@@ -89,7 +93,7 @@ export class VentasComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   actualizarCargador() {
     forkJoin([
@@ -111,14 +115,14 @@ export class VentasComponent implements OnInit {
       }));
     });
   }
-
-  createClienteModal() {    this.createCliente = true;  }
-  buscarCliente() {    this.searchCliente = true;  }
-  buscarNumeracion() {    this.searchNumeracion = true;  }
-  buscarFormaVenta() {    this.searchFormaVenta = true;  }
+  createCobranzaModal() { this.createCobranza = true; }
+  createClienteModal() { this.createCliente = true; }
+  buscarCliente() { this.searchCliente = true; }
+  buscarNumeracion() { this.searchNumeracion = true; }
+  buscarFormaVenta() { this.searchFormaVenta = true; }
   buscarSucursal() {
 
-    if (this.detalles?.length >0) {
+    if (this.detalles?.length > 0) {
       Swal.fire({
         title: 'Está seguro que desea cambiar de sucursal?',
         text: `Serán descartados los items agregados`,
@@ -128,10 +132,10 @@ export class VentasComponent implements OnInit {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Si, Guardar',
         cancelButtonText: 'No, volver ',
-          customClass: {
-        confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
-        cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
-      },
+        customClass: {
+          confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
+          cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
+        },
         buttonsStyling: false,
         reverseButtons: true
       }).then(async (result) => {
@@ -139,13 +143,13 @@ export class VentasComponent implements OnInit {
           this.searchSucursal = true
         }
       });
-    }else{
-      this.searchSucursal = true ;
+    } else {
+      this.searchSucursal = true;
     }
 
-       }
+  }
   buscarListaPrecio() {
-    if (this.detalles?.length >0) {
+    if (this.detalles?.length > 0) {
       Swal.fire({
         title: 'Está seguro que desea cambiar de lista de precio?',
         text: `Serán descartados los items agregados`,
@@ -155,10 +159,10 @@ export class VentasComponent implements OnInit {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Si, Guardar',
         cancelButtonText: 'No, volver ',
-          customClass: {
-        confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
-        cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
-      },
+        customClass: {
+          confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
+          cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
+        },
         buttonsStyling: false,
         reverseButtons: true
       }).then(async (result) => {
@@ -166,28 +170,34 @@ export class VentasComponent implements OnInit {
           this.searchListaPrecio = true
         }
       });
-    }else{
-      this.searchListaPrecio = true ;
+    } else {
+      this.searchListaPrecio = true;
     }
-    }
+  }
 
 
-    changeCantidad(cantidad:number){
-       this.cantidad=cantidad;
-    }
+  changeCantidad(cantidad: number) {
+    this.cantidad = cantidad;
+  }
 
-refresh(){
- this.showShop=false;
-  setInterval(() => {
-    this.showShop = true;
-  }, 100);
-}
+  refresh() {
+    this.showShop = false;
+    setInterval(() => {
+      this.showShop = true;
+    }, 100);
+  }
+
+  selectCobranza(cobranza: Cobranza) {
+    console.log("Selected cobranza:", cobranza);
+
+
+  }
 
   selectCliente(cliente: Cliente) {
     console.log("Selected client:", cliente);
     this.cliente.set(cliente); // Update the client signal
     this.searchCliente = false; // Close the modal
-   this.actualizarCargador()
+    this.actualizarCargador()
 
   }
 
@@ -197,7 +207,7 @@ refresh(){
     this.searchSucursal = false; // Close the modal
     this.numeracion.set({} as Numeracion);
     this.refresh();
-    this.detalles= [];
+    this.detalles = [];
     this.actualizarCabecera();
     //this.reCalcular();
   }
@@ -216,56 +226,56 @@ refresh(){
     this.listaPrecio.set(listaPrecio); // Update the client signal
     this.searchListaPrecio = false; // Close the modal
     this.refresh();
-    this.detalles= [];
+    this.detalles = [];
     this.actualizarCabecera();
     //this.reCalcular();
   }
 
 
-  async reCalcular(){
-  for await (const detalle of this.detalles) {
-    const valoracion:any = await this._valoracionService.obtenerVigente(detalle.varianteId, this.sucursal().id,this.listaPrecio().id);
-    if (valoracion) {
-      if(valoracion.descuento){
-       detalle.porcDescuento = valoracion.descuento.valor;
-       detalle.tipoDescuento = valoracion.descuento.tipo;
-      }
-      if(valoracion.precio) {
-        detalle.importePrecio = valoracion.precio.valor;
-       }else{
+  async reCalcular() {
+    for await (const detalle of this.detalles) {
+      const valoracion: any = await this._valoracionService.obtenerVigente(detalle.varianteId, this.sucursal().id, this.listaPrecio().id);
+      if (valoracion) {
+        if (valoracion.descuento) {
+          detalle.porcDescuento = valoracion.descuento.valor;
+          detalle.tipoDescuento = valoracion.descuento.tipo;
+        }
+        if (valoracion.precio) {
+          detalle.importePrecio = valoracion.precio.valor;
+        } else {
+          detalle.importePrecio = 0;
+        }
+        detalle.importeSubtotal = detalle.cantidad * detalle.importePrecio;
+        detalle.importeDescuento = Math.round((detalle.importeSubtotal * detalle.porcDescuento) / 100);
+        detalle.importeTotal = detalle.importeSubtotal - detalle.importeDescuento;
+        const porcIva = detalle.porcIva;
+        const porcIva5 = porcIva === 5 ? Math.round(detalle.importeTotal / 21) : 0;
+        const porcIva10 = porcIva === 10 ? Math.round(detalle.importeTotal / 11) : 0;
+        const porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
+        const porcNeto = detalle.importeTotal - (porcIva5 + porcIva10);
+        // Asignar los resultados
+
+        detalle.importeIva5 = porcIva5;
+        detalle.importeIva10 = porcIva10;
+        detalle.importeIvaExenta = porcIvaExenta;
+        detalle.importeNeto = porcNeto
+
+      } else {
         detalle.importePrecio = 0;
+        detalle.importeIva5 = 0;
+        detalle.importeIva10 = 0;
+        detalle.importeIvaExenta = 0;
+        detalle.importeDescuento = 0;
+        detalle.importeNeto = 0;
+        detalle.importeSubtotal = 0;
+        detalle.importeTotal = 0;
       }
-      detalle.importeSubtotal = detalle.cantidad * detalle.importePrecio;
-      detalle.importeDescuento = Math.round((detalle.importeSubtotal * detalle.porcDescuento) / 100);
-    detalle.importeTotal = detalle.importeSubtotal - detalle.importeDescuento;
-    const porcIva = detalle.porcIva;
-    const porcIva5 = porcIva === 5 ? Math.round(detalle.importeTotal / 21) : 0;
-    const porcIva10 = porcIva === 10 ? Math.round(detalle.importeTotal / 11) : 0;
-    const porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
-    const porcNeto = detalle.importeTotal - (porcIva5 + porcIva10);
-    // Asignar los resultados
 
-    detalle.importeIva5 = porcIva5;
-    detalle.importeIva10 = porcIva10;
-    detalle.importeIvaExenta = porcIvaExenta;
-    detalle.importeNeto = porcNeto
 
-    }else{
-      detalle.importePrecio = 0;
-      detalle.importeIva5= 0;
-      detalle.importeIva10= 0;
-      detalle.importeIvaExenta=0;
-      detalle.importeDescuento=0;
-      detalle.importeNeto=0;
-      detalle.importeSubtotal=0;
-      detalle.importeTotal=0;
     }
 
 
   }
-
-
-}
 
   seleccionarProducto(item: ProductosItem) {
     if (!item.precio) {
@@ -305,31 +315,31 @@ refresh(){
       this.detalles[indice].cantidad += this.cantidad;
       this.detalles[indice].importePrecio = item.precio;
       this.detalles[indice].importeSubtotal =
-      this.detalles[indice].cantidad * item.precio;
-      this.detalles[indice].totalKg =(this.detalles[indice].cantidad * item.peso) ;
+        this.detalles[indice].cantidad * item.precio;
+      this.detalles[indice].totalKg = (this.detalles[indice].cantidad * item.peso);
 
       //calcular descuento
       if (item.descuento && item.descuento > 0) {
         this.detalles[indice].porcDescuento = item.descuento;
         this.detalles[indice].tipoDescuento = "PRODUCTO";
-        this.detalles[indice].importeDescuento = Math.round(          this.detalles[indice].importeSubtotal *            this.detalles[indice].porcDescuento /           100
+        this.detalles[indice].importeDescuento = Math.round(this.detalles[indice].importeSubtotal * this.detalles[indice].porcDescuento / 100
         );
       } else {
       }
       //calcular total
-       this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
+      this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
 
-        const porcIva = +this.detalles[indice].porcIva;
-        const porcIva5 = porcIva === 5 ? Math.round(this.detalles[indice].importeTotal / 21) : 0;
-        const porcIva10 = porcIva === 10 ? Math.round(this.detalles[indice].importeTotal / 11) : 0;
-        const porcIvaExenta = porcIva === 0 ? this.detalles[indice].importeTotal : 0;
-        const porcNeto = this.detalles[indice].importeTotal - (porcIva5 + porcIva10);
-        // Asignar los resultados
+      const porcIva = +this.detalles[indice].porcIva;
+      const porcIva5 = porcIva === 5 ? Math.round(this.detalles[indice].importeTotal / 21) : 0;
+      const porcIva10 = porcIva === 10 ? Math.round(this.detalles[indice].importeTotal / 11) : 0;
+      const porcIvaExenta = porcIva === 0 ? this.detalles[indice].importeTotal : 0;
+      const porcNeto = this.detalles[indice].importeTotal - (porcIva5 + porcIva10);
+      // Asignar los resultados
 
-        this.detalles[indice].importeIva5 = porcIva5;
-        this.detalles[indice].importeIva10 = porcIva10;
-        this.detalles[indice].importeIvaExenta = porcIvaExenta;
-        this.detalles[indice].importeNeto = porcNeto;
+      this.detalles[indice].importeIva5 = porcIva5;
+      this.detalles[indice].importeIva10 = porcIva10;
+      this.detalles[indice].importeIvaExenta = porcIvaExenta;
+      this.detalles[indice].importeNeto = porcNeto;
 
       //Actualizar cabecera
       this.actualizarCabecera();
@@ -340,14 +350,14 @@ refresh(){
   }
 
   actualizarCabecera() {
-    const totalSubtotal = this.detalles.reduce(      (total, detalle) => total + detalle.importeSubtotal,      0    );
-    const totalIva5 = this.detalles.reduce(      (total, detalle) => total + detalle.importeIva5,      0    );
+    const totalSubtotal = this.detalles.reduce((total, detalle) => total + detalle.importeSubtotal, 0);
+    const totalIva5 = this.detalles.reduce((total, detalle) => total + detalle.importeIva5, 0);
     const totalIva10 = this.detalles.reduce(
-      (total, detalle) => total + detalle.importeIva10,      0    );    const totalIvaExenta = this.detalles.reduce(      (total, detalle) => total + detalle.importeIvaExenta,
-      0    );
-    const totalDescuento = this.detalles.reduce(      (total, detalle) => total + detalle.importeDescuento,      0    );
-    const totalNeto = totalSubtotal - totalDescuento;    const totalTotal = totalNeto + totalIva5 + totalIva10 + totalIvaExenta;
-    const totalKg = this.detalles.reduce(      (totalKg, detalle) => totalKg + detalle.totalKg,      0    );
+      (total, detalle) => total + detalle.importeIva10, 0); const totalIvaExenta = this.detalles.reduce((total, detalle) => total + detalle.importeIvaExenta,
+        0);
+    const totalDescuento = this.detalles.reduce((total, detalle) => total + detalle.importeDescuento, 0);
+    const totalNeto = totalSubtotal - totalDescuento; const totalTotal = totalNeto + totalIva5 + totalIva10 + totalIvaExenta;
+    const totalKg = this.detalles.reduce((totalKg, detalle) => totalKg + detalle.totalKg, 0);
 
     this.factura.update(value => ({
       ...value,
@@ -358,20 +368,20 @@ refresh(){
       importeDescuento: totalDescuento,
       importeNeto: totalNeto,
       importeTotal: totalTotal,
-      totalKg:totalKg
+      totalKg: totalKg
     }));
   }
 
-  ajusteCantidad(indice: number, valor:number) {
-    if (valor == -1 && this.detalles[indice].cantidad ==1)
-     return;
+  ajusteCantidad(indice: number, valor: number) {
+    if (valor == -1 && this.detalles[indice].cantidad == 1)
+      return;
     if (indice !== -1) {
-      const peso = (this.detalles[indice].totalKg/this.detalles[indice].cantidad)
+      const peso = (this.detalles[indice].totalKg / this.detalles[indice].cantidad)
       this.detalles[indice].cantidad = this.detalles[indice].cantidad + valor;
       this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * this.detalles[indice].importePrecio;
       this.detalles[indice].totalKg = this.detalles[indice].cantidad * peso;
-      this.detalles[indice].importeDescuento = Math.round( this.detalles[indice].importeSubtotal *this.detalles[indice].porcDescuento / 100);
-      this.detalles[indice].importeTotal =        this.detalles[indice].importeSubtotal -        this.detalles[indice].importeDescuento;
+      this.detalles[indice].importeDescuento = Math.round(this.detalles[indice].importeSubtotal * this.detalles[indice].porcDescuento / 100);
+      this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
 
       const porcIva = this.detalles[indice].porcIva;
       const porcIva5 = porcIva === 5 ? Math.round(this.detalles[indice].importeTotal / 21) : 0;

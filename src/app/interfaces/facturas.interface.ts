@@ -132,3 +132,73 @@ export interface ModelDet {
   totalKg: number ;
   tipoDescuento: string ;
 }
+export interface Banco {
+  id: number;
+  empresaId: number | null;
+  descripcion: string;
+  activo: boolean;
+  Empresa?: Empresa; // Relación con la entidad Empresa
+}
+export interface Cobranza {
+  id: number;
+  empresaId: number;
+  sucursalId: number;
+  usuarioCreacionId: number;
+  fechaCobranza: string;
+  importeAbonado: number;
+  importeCobrado: number;
+  saldo: number;
+  anulado: boolean;
+  usuarioAnulacionId: number | null;
+  fechaAnulacion: string | null;
+  tipo: string | null;
+  Empresa?: Empresa; // Relación con la entidad Empresa
+  //Usuario?: Usuario; // Relación con la entidad Usuario
+  Sucursal?: Sucursal; // Relación con la entidad Sucursal
+}
+export interface CobranzaDetalle {
+  id: number;
+  fechaEmision: string | null;
+  fechaVencimiento: string | null;
+  importeAbonado: number;
+  importeCobrado: number;
+  nroCuenta: string | null;
+  nroRef: string | null;
+  saldo: number;
+  bancoId: number | null;
+  cobranzaId: number;
+  medioPagoId: number;
+  Banco?: Banco; // Relación con la entidad Banco
+  Cobranza?: Cobranza; // Relación con la entidad Cobranza
+  MedioPago?: MedioPago; // Relación con la entidad MedioPago
+}
+export interface MedioPago {
+  id: number;
+  empresaId: number;
+  descripcion: string | null;
+  esCheque: boolean;
+  tieneBanco: boolean;
+  tieneRef: boolean;
+  tieneTipo: boolean;
+  esObsequio: boolean | null;
+  usuarioCreacionId: number | null;
+  usuarioModificacionId: number | null;
+  fechaCreacion: string;
+  fechaModificacion: string;
+  Empresa?: Empresa; // Relación con la entidad Empresa
+ // UsuarioCreacion?: Usuario; // Relación con la entidad Usuario (creación)
+  //UsuarioModificacion?: Usuario; // Relación con la entidad Usuario (modificación)
+}
+
+export interface Empresa {
+  id: number;
+  razonSocial: string | null;
+  actividad1: string | null;
+  actividad2: string | null;
+  actividad3: string | null;
+  ruc: string | null;
+  telefono: string | null;
+  email: string | null;
+  img: string | null;
+  web: string | null;
+}

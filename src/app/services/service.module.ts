@@ -4,15 +4,17 @@ import { CommonModule } from '@angular/common';
 
 import {
   ClientesService,
-ProductosService,
-VentasService,
-FormaVentaService,
-ListaPrecioService,
-SucursalService,
-NumeracionService,
-ValoracionService,
-CalculoService,
-ReportesService
+  ProductosService,
+  VentasService,
+  FormaVentaService,
+  ListaPrecioService,
+  SucursalService,
+  NumeracionService,
+  ValoracionService,
+  CalculoService,
+  ReportesService,
+  MedioPagoService, BancoService,
+  CobranzaService
 } from './service.index';
 
 @NgModule({
@@ -29,8 +31,10 @@ ReportesService
     SucursalService,
     NumeracionService,
     ValoracionService,
-CalculoService,
-ReportesService
+    CalculoService,
+    ReportesService,
+    MedioPagoService, BancoService,
+    CobranzaService
   ],
   declarations: []
 })

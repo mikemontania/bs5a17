@@ -1,3 +1,8 @@
+export { CobranzaService } from './cobranza.service';
+
+export { BancoService } from './banco.service';
+export { MedioPagoService } from './medioPago.service';
+
 export { ReportesService } from './reportes.service';
 
 export { CalculoService } from './calculo.service';

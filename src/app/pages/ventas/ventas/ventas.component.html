@@ -241,7 +241,7 @@
           <button
             type="button"
             class="btn btn-outline-success"
-            (click)="pagar()"
+            (click)="createCobranzaModal()"
           >
             Pagar
           </button>
@@ -254,6 +254,15 @@
 <!-- selector de cliente-->
 
 
+
+@if(createCobranza ) {
+  <app-cobranza-create
+    [isOpen]="createCobranza"
+    (cobranza)="selectCobranza($event)"
+    (closeModal)="createCobranza = false"
+  ></app-cobranza-create>
+
+  }
 
 
 @if(createCliente ) {
