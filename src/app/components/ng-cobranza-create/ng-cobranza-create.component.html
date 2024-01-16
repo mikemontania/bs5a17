@@ -25,7 +25,7 @@
 
             <div class="col-md-3 form-group">
               <label for="selectMedioPago">Medio Pago</label>
-              <select id="selectMedioPago" class="custom-select" formControlName="medioPagoId" >
+              <select id="selectMedioPago" class="custom-select" formControlName="medioPagoId" (ngModelChange)="onMedioPagoChange($event)">
                 <option *ngFor="let m of medios()" [value]="m.id">{{ m.descripcion }}</option>
               </select>
               <div *ngIf="cobranzaForm.get('medioPagoId')?.hasError('required') && cobranzaForm.get('medioPagoId')?.touched" class="error-message">

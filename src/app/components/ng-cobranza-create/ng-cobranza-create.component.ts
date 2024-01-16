@@ -5,13 +5,13 @@ import { Banco, Cobranza, MedioPago } from '../../interfaces/facturas.interface'
 import { CobranzaService } from "../../services/cobranza.service";
 import { BancoService } from '../../services/banco.service';
 import { MedioPagoService } from "../../services/medioPago.service";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Observable, of } from "rxjs";
 
 @Component({
   selector: "app-cobranza-create",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputDebounceComponent],
+  imports: [CommonModule,FormsModule      , ReactiveFormsModule, InputDebounceComponent],
   templateUrl: "./ng-cobranza-create.component.html",
   styleUrl: "./ng-cobranza-create.component.css"
 })
@@ -37,23 +37,30 @@ export class NgCobranzaCreateComponent implements OnInit {
 
   constructor() {
     // Initialize the property in the constructor
-    this.cobranzaForm = this.fb.group({});
-    this.cobranzaForm = this.fb.group({
-      fechaEmision: [null],
-      fechaVencimiento: [null],
-      importeAbonado: [null, Validators.required],
-      importeCobrado: [0, Validators.required],
-      nroCuenta: [null],
-      nroRef: [null],
-      saldo: [0, Validators.required],
-      bancoId: [null],
-      medioPagoId: [null, Validators.required],
-      montoAbonado: [0] // Valor por defecto de montoAbonado
-    });
+
+    this.cobranzaForm =  this.initForm();
 
 
 
   }
+
+
+
+initForm(){
+  return this.fb.group({
+    fechaEmision: [null],
+    fechaVencimiento: [null],
+    importeAbonado: [null, Validators.required],
+    importeCobrado: [0, Validators.required],
+    nroCuenta: [null],
+    nroRef: [null],
+    saldo: [0, Validators.required],
+    bancoId: [null],
+    medioPagoId: [null, Validators.required],
+    montoAbonado: [0] // Valor por defecto de montoAbonado
+  });
+}
+
   ngOnInit(): void {
     this.getBancos();
     this.getMediosPago();
@@ -96,13 +103,17 @@ export class NgCobranzaCreateComponent implements OnInit {
 
 
   onSubmit(e: Event) {
-    e.preventDefault()
-    const data: any = this.cobranzaForm.value;
-    console.log(data)
-    this.cobranzaForm = this.fb.group({});
+    e.preventDefault();
 
+    const data = this.cobranzaForm.value;
+    console.log(data);
+
+    // Procesar los datos del formulario (enviar a servidor, guardar, etc.)
+
+    // Si deseas limpiar el formulario después del envío:
+    this.cobranzaForm =  this.initForm();
+    this.medioPago.set({} as MedioPago)
   }
-
   selectCobranza(cobranza: Cobranza) {
     this.cobranza.emit(cobranza);
   }
@@ -113,8 +124,6 @@ export class NgCobranzaCreateComponent implements OnInit {
 
     // Limpia las validaciones existentes antes de aplicar las nuevas
     this.clearValidators();
-    this.cobranzaForm = this.fb.group({});
-
     const medioPagoEncontrado = this.medios().find(m => m.id === id);
     if (medioPagoEncontrado) {
       this.medioPago.set(medioPagoEncontrado);
