@@ -25,41 +25,62 @@
 
             <div class="col-md-3 form-group">
               <label for="selectMedioPago">Medio Pago</label>
-              <select id="selectMedioPago" class="custom-select" formControlName="medioPagoId" (ngModelChange)="onMedioPagoChange($event)">
+              <select id="selectMedioPago" class="custom-select" formControlName="medioPagoId" >
                 <option *ngFor="let m of medios()" [value]="m.id">{{ m.descripcion }}</option>
               </select>
+              <div *ngIf="cobranzaForm.get('medioPagoId')?.hasError('required') && cobranzaForm.get('medioPagoId')?.touched" class="error-message">
+                Medio de pago es obligatorio.
+              </div>
             </div>
 
             <div *ngIf="medioPago().tieneBanco" class="col-md-3 form-group">
               <label for="bancoId">Banco</label>
               <select id="bancoId" class="form-control custom-select" style="width: 100%" formControlName="bancoId">
-                <option *ngFor="let b of bancos()">{{ b.descripcion }}</option>
+                <option *ngFor="let b of bancos()" [value]="b.id">{{ b.descripcion }}</option>
               </select>
+              <div *ngIf="cobranzaForm.get('bancoId')?.hasError('required') && cobranzaForm.get('bancoId')?.touched" class="error-message">
+                Banco es obligatorio.
+              </div>
             </div>
 
             <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
               <label for="fechaEmision">Fecha Emisión</label>
               <input type="date" class="form-control" formControlName="fechaEmision" required />
+              <div *ngIf="cobranzaForm.get('fechaEmision')?.hasError('required') && cobranzaForm.get('fechaEmision')?.touched" class="error-message">
+                Fecha de emisión es obligatoria.
+              </div>
             </div>
 
             <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
               <label for="fechaVencimiento">Fecha Vencimiento</label>
               <input type="date" class="form-control" formControlName="fechaVencimiento" required />
+              <div *ngIf="cobranzaForm.get('fechaVencimiento')?.hasError('required') && cobranzaForm.get('fechaVencimiento')?.touched" class="error-message">
+                Fecha de vencimiento es obligatoria.
+              </div>
             </div>
 
             <div *ngIf="medioPago().esCheque || medioPago().tieneRef" class="col-md-3 form-group">
               <label for="nroRef">Nro referencia</label>
               <input type="text" class="form-control" formControlName="nroRef" required minlength="4" />
+              <div *ngIf="cobranzaForm.get('nroRef')?.hasError('required') && cobranzaForm.get('nroRef')?.touched" class="error-message">
+                Número de referencia es obligatorio.
+              </div>
             </div>
 
             <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
               <label for="nroCuenta">Nro cuenta</label>
               <input type="text" class="form-control" formControlName="nroCuenta" required minlength="12" />
+              <div *ngIf="cobranzaForm.get('nroCuenta')?.hasError('required') && cobranzaForm.get('nroCuenta')?.touched" class="error-message">
+                Número de cuenta es obligatorio.
+              </div>
             </div>
 
             <div class="col-md-3 form-group">
               <label for="montoAbonado">Monto</label>
               <input type="number" min="100" class="form-control currency" formControlName="importeAbonado" required />
+              <div *ngIf="cobranzaForm.get('importeAbonado')?.hasError('required') && cobranzaForm.get('importeAbonado')?.touched" class="error-message">
+                Importe abonado es obligatorio.
+              </div>
             </div>
 
             <div class="col-md-12 mt-3">

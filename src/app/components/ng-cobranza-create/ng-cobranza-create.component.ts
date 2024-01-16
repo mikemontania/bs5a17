@@ -23,12 +23,11 @@ export class NgCobranzaCreateComponent implements OnInit {
   @Output() cobranza = new EventEmitter<Cobranza>();
   // Observables
 
-
+  medioPago = signal<MedioPago>({} as MedioPago);
 
   bancos = signal<Banco[]>([]);
   medios = signal<MedioPago[]>([]);
 
-  medioPago = signal<MedioPago>({} as MedioPago);
   cobranzaForm: FormGroup;
 
   private fb = inject(FormBuilder)
@@ -39,32 +38,68 @@ export class NgCobranzaCreateComponent implements OnInit {
   constructor() {
     // Initialize the property in the constructor
     this.cobranzaForm = this.fb.group({});
-  }
-  ngOnInit(): void {
-    this.getBancos();
-    this.getMediosPago();
     this.cobranzaForm = this.fb.group({
       fechaEmision: [null],
       fechaVencimiento: [null],
       importeAbonado: [null, Validators.required],
-      importeCobrado: [null, Validators.required],
+      importeCobrado: [0, Validators.required],
       nroCuenta: [null],
       nroRef: [null],
-      saldo: [null, Validators.required],
+      saldo: [0, Validators.required],
       bancoId: [null],
-      cobranzaId: [null, Validators.required],
       medioPagoId: [null, Validators.required],
-      montoAbonado:[0]
+      montoAbonado: [0] // Valor por defecto de montoAbonado
     });
 
-  }
 
+
+  }
+  ngOnInit(): void {
+    this.getBancos();
+    this.getMediosPago();
+
+
+  }
+  private clearValidators() {
+    ['bancoId', 'fechaEmision', 'fechaVencimiento', 'nroRef', 'nroCuenta'].forEach(controlName => {
+      const control = this.cobranzaForm?.get(controlName); // Añade '?' para manejar posibles valores nulos
+      if (control) {
+        control.clearValidators();
+        control.updateValueAndValidity();
+      }
+    });
+  }
+  private applyValidators() {
+    const medioPago = this.medioPago();
+
+    if (medioPago.tieneBanco) {
+      this.cobranzaForm.get('bancoId')?.setValidators(Validators.required);
+    }
+
+    if (medioPago.esCheque) {
+      this.cobranzaForm.get('fechaEmision')?.setValidators(Validators.required);
+      this.cobranzaForm.get('fechaVencimiento')?.setValidators(Validators.required);
+    }
+
+    if (medioPago.esCheque || medioPago.tieneRef) {
+      this.cobranzaForm.get('nroRef')?.setValidators([Validators.required, Validators.minLength(4)]);
+    }
+
+    if (medioPago.esCheque) {
+      this.cobranzaForm.get('nroCuenta')?.setValidators([Validators.required, Validators.minLength(12)]);
+    }
+
+    ['bancoId', 'fechaEmision', 'fechaVencimiento', 'nroRef', 'nroCuenta'].forEach(controlName => {
+      this.cobranzaForm.get(controlName)?.updateValueAndValidity();
+    });
+  }
 
 
   onSubmit(e: Event) {
     e.preventDefault()
     const data: any = this.cobranzaForm.value;
     console.log(data)
+    this.cobranzaForm = this.fb.group({});
 
   }
 
@@ -73,9 +108,19 @@ export class NgCobranzaCreateComponent implements OnInit {
   }
 
   onMedioPagoChange(id: number) {
+    // Actualiza las validaciones de acuerdo al tipo de medio de pago seleccionado
+    // ...
+
+    // Limpia las validaciones existentes antes de aplicar las nuevas
+    this.clearValidators();
+    this.cobranzaForm = this.fb.group({});
+
     const medioPagoEncontrado = this.medios().find(m => m.id === id);
     if (medioPagoEncontrado) {
       this.medioPago.set(medioPagoEncontrado);
+
+      // Aplica las nuevas validaciones
+      this.applyValidators();
     }
   }
 
