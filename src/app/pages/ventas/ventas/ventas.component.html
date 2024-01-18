@@ -258,6 +258,7 @@
 @if(createCobranza ) {
   <app-cobranza-create
     [isOpen]="createCobranza"
+    [importeTotal]="factura().importeTotal"
     (cobranza)="selectCobranza($event)"
     (closeModal)="createCobranza = false"
   ></app-cobranza-create>

@@ -16,6 +16,13 @@ export class MedioPagoService {
       .get(BASE_URL + "/medio-pago/"+id)
       .pipe(map((resp: any) => resp));
   }
+
+
+  findPredeterminado() {
+    return this.http
+      .get(BASE_URL + "/medio-pago/predeterminado")
+      .pipe(map((resp: any) => resp));
+  }
   findAll() {
     return this.http
       .get(BASE_URL + "/medio-pago/")

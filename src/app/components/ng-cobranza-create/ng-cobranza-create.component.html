@@ -20,76 +20,214 @@
         style="position: relative; max-height: 600px"
       >
         <div class="card-body">
-
-          <form [formGroup]="cobranzaForm" role="form" (ngSubmit)="onSubmit($event)" novalidate class="row">
-
+          <form
+            [formGroup]="cobranzaForm"
+            role="form"
+            (ngSubmit)="onSubmit($event)"
+            novalidate
+            class="row"
+          >
             <div class="col-md-3 form-group">
               <label for="selectMedioPago">Medio Pago</label>
-              <select id="selectMedioPago" class="custom-select" formControlName="medioPagoId" (ngModelChange)="onMedioPagoChange($event)">
-                <option *ngFor="let m of medios()" [value]="m.id">{{ m.descripcion }}</option>
+              <select
+                id="selectMedioPago"
+                class="custom-select"
+                formControlName="medioPagoId"
+                (ngModelChange)="onMedioPagoChange($event)"
+              >
+                <option disabled value="">--Seleccione medio de pago--</option>
+                <option *ngFor="let m of medios()" [value]="m.id">
+                  {{ m.descripcion }}
+                </option>
               </select>
-              <div *ngIf="cobranzaForm.get('medioPagoId')?.hasError('required') && cobranzaForm.get('medioPagoId')?.touched" class="error-message">
+              <div
+                *ngIf="
+                  cobranzaForm.get('medioPagoId')?.hasError('required') &&
+                  cobranzaForm.get('medioPagoId')?.touched
+                "
+                class="error-message"
+              >
                 Medio de pago es obligatorio.
               </div>
             </div>
 
             <div *ngIf="medioPago().tieneBanco" class="col-md-3 form-group">
               <label for="bancoId">Banco</label>
-              <select id="bancoId" class="form-control custom-select" style="width: 100%" formControlName="bancoId">
-                <option *ngFor="let b of bancos()" [value]="b.id">{{ b.descripcion }}</option>
+              <select
+                id="bancoId"
+                class="form-control custom-select"
+                style="width: 100%"
+                formControlName="bancoId"
+              >
+                <option *ngFor="let b of bancos()" [value]="b.id">
+                  {{ b.descripcion }}
+                </option>
               </select>
-              <div *ngIf="cobranzaForm.get('bancoId')?.hasError('required') && cobranzaForm.get('bancoId')?.touched" class="error-message">
+              <div
+                *ngIf="
+                  cobranzaForm.get('bancoId')?.hasError('required') &&
+                  cobranzaForm.get('bancoId')?.touched
+                "
+                class="error-message"
+              >
                 Banco es obligatorio.
               </div>
             </div>
 
             <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
               <label for="fechaEmision">Fecha Emisión</label>
-              <input type="date" class="form-control" formControlName="fechaEmision" required />
-              <div *ngIf="cobranzaForm.get('fechaEmision')?.hasError('required') && cobranzaForm.get('fechaEmision')?.touched" class="error-message">
+              <input
+                type="date"
+                class="form-control"
+                formControlName="fechaEmision"
+                required
+              />
+              <div
+                *ngIf="
+                  cobranzaForm.get('fechaEmision')?.hasError('required') &&
+                  cobranzaForm.get('fechaEmision')?.touched
+                "
+                class="error-message"
+              >
                 Fecha de emisión es obligatoria.
               </div>
             </div>
 
             <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
               <label for="fechaVencimiento">Fecha Vencimiento</label>
-              <input type="date" class="form-control" formControlName="fechaVencimiento" required />
-              <div *ngIf="cobranzaForm.get('fechaVencimiento')?.hasError('required') && cobranzaForm.get('fechaVencimiento')?.touched" class="error-message">
+              <input
+                type="date"
+                class="form-control"
+                formControlName="fechaVencimiento"
+                required
+              />
+              <div
+                *ngIf="
+                  cobranzaForm.get('fechaVencimiento')?.hasError('required') &&
+                  cobranzaForm.get('fechaVencimiento')?.touched
+                "
+                class="error-message"
+              >
                 Fecha de vencimiento es obligatoria.
               </div>
             </div>
 
-            <div *ngIf="medioPago().esCheque || medioPago().tieneRef" class="col-md-3 form-group">
+            <div
+              *ngIf="medioPago().esCheque || medioPago().tieneRef"
+              class="col-md-3 form-group"
+            >
               <label for="nroRef">Nro referencia</label>
-              <input type="text" class="form-control" formControlName="nroRef" required minlength="4" />
-              <div *ngIf="cobranzaForm.get('nroRef')?.hasError('required') && cobranzaForm.get('nroRef')?.touched" class="error-message">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="nroRef"
+                required
+                minlength="4"
+              />
+              <div
+                *ngIf="
+                  cobranzaForm.get('nroRef')?.hasError('required') &&
+                  cobranzaForm.get('nroRef')?.touched
+                "
+                class="error-message"
+              >
                 Número de referencia es obligatorio.
               </div>
             </div>
 
             <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
               <label for="nroCuenta">Nro cuenta</label>
-              <input type="text" class="form-control" formControlName="nroCuenta" required minlength="12" />
-              <div *ngIf="cobranzaForm.get('nroCuenta')?.hasError('required') && cobranzaForm.get('nroCuenta')?.touched" class="error-message">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="nroCuenta"
+                required
+                minlength="12"
+              />
+              <div
+                *ngIf="
+                  cobranzaForm.get('nroCuenta')?.hasError('required') &&
+                  cobranzaForm.get('nroCuenta')?.touched
+                "
+                class="error-message"
+              >
                 Número de cuenta es obligatorio.
               </div>
             </div>
 
             <div class="col-md-3 form-group">
               <label for="montoAbonado">Monto</label>
-              <input type="number" min="100" class="form-control currency" formControlName="importeAbonado" required />
-              <div *ngIf="cobranzaForm.get('importeAbonado')?.hasError('required') && cobranzaForm.get('importeAbonado')?.touched" class="error-message">
+              <input
+                type="number"
+                min="100"
+                class="form-control currency"
+                formControlName="importeAbonado"
+                required
+              />
+              <div
+                *ngIf="
+                  cobranzaForm.get('importeAbonado')?.hasError('required') &&
+                  cobranzaForm.get('importeAbonado')?.touched
+                "
+                class="error-message"
+              >
                 Importe abonado es obligatorio.
               </div>
             </div>
 
             <div class="col-md-12 mt-3">
-              <button type="submit" class="btn btn-primary" [disabled]="cobranzaForm.invalid">Guardar</button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="cobranzaForm.invalid"
+              >
+                Guardar
+              </button>
             </div>
-
           </form>
 
+          <table class="table caption-top table-sm">
+            <caption>
+              MediosPago({{
+                detalles.length | number
+              }})
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">MedioPago</th>
+                <th scope="col">Importe</th>
+                <th scope="col">Del</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (detalle of detalles(); track detalle.medioPagoId; let index
+              = $index) {
+              <tr>
+                <th scope="row"></th>
+                <th scope="row">{{ index + 1 }}</th>
+                <td>{{ detalle.medioPagoId }}</td>
+                <td>{{ detalle.importeAbonado | number }} Gs</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger"
+                    (click)="quitar(index)"
+                  >
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </td>
+              </tr>
 
+              }
+            </tbody>
+          </table>
+          <ul class="list-group">
+            <li class="list-group-item"><small>Total a pagar {{ importeTotal | number}}</small></li>
+            <li class="list-group-item"><small>Total Abonado {{ importeAbonado()| number }}</small></li>
+            <li class="list-group-item"><small>Diferencia {{ diferecia() | number}}</small></li>
+            <li class="list-group-item"><small>Vuelto {{ vuelto() | number}}</small></li>
+          </ul>
           <!--   <div class="form-group row button-group">
                 <div class="col-md-3">
                   <button type="button" align="right" (click)="agregarCobranza()"
