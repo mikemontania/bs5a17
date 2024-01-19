@@ -150,6 +150,13 @@ selectCobranza(cobranza: Cobranza) {
   this.cobranza.emit(cobranza);
 }
 
+
+obtenerDescrip(id: number) {
+const medioPag =  this.medios().find(medio => medio.id === id)
+
+return medioPag?.descripcion;
+}
+
 onMedioPagoChange(id: number) {
   // Limpia las validaciones existentes antes de aplicar las nuevas
   this.clearValidators();
@@ -168,6 +175,11 @@ quitar(index: number) {
 }
 close() {
   this.closeModal.emit();
+}
+
+
+guardar(){
+
 }
 
 }

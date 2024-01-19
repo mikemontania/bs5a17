@@ -67,7 +67,7 @@
 /* detalles */
 #details {
   width: 100%;
-  height: 285px;
+  height: 150px;
   overflow-y: auto; /* Solo mostrará la barra de desplazamiento vertical */
   overflow-x: hidden; /* Ocultará la barra de desplazamiento horizontal */
 }

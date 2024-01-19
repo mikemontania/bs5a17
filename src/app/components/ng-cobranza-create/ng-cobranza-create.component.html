@@ -1,12 +1,9 @@
 <div class="modal-background" *ngIf="isOpen" (click)="close()">
-  <div
-    class="modal-container"
-    [ngClass]="{
+  <div class="modal-container" [ngClass]="{
       small: size === 'small',
       medium: size === 'medium',
       large: size === 'large'
-    }"
-  >
+    }">
     <div class="modal-header">
       <h5 class="modal-title">Cobranza</h5>
       <button type="button" class="btn-close" (click)="close()">
@@ -15,235 +12,156 @@
     </div>
     <!-- Contenido del modal -->
     <div (click)="$event.stopPropagation()">
-      <div
-        class="scroll-container"
-        style="position: relative; max-height: 600px"
-      >
+      <div class="scroll-container" style="position: relative; max-height: 600px">
         <div class="card-body">
-          <form
-            [formGroup]="cobranzaForm"
-            role="form"
-            (ngSubmit)="onSubmit($event)"
-            novalidate
-            class="row"
-          >
-            <div class="col-md-3 form-group">
-              <label for="selectMedioPago">Medio Pago</label>
-              <select
-                id="selectMedioPago"
-                class="custom-select"
-                formControlName="medioPagoId"
-                (ngModelChange)="onMedioPagoChange($event)"
-              >
+          <form [formGroup]="cobranzaForm" role="form" (ngSubmit)="onSubmit($event)" novalidate class="row g-3">
+            <div class="col-md-4">
+              <label for="selectMedioPago" class="form-label">Medio Pago</label>
+              <select id="selectMedioPago" class="form-control form-control-sm" formControlName="medioPagoId"
+                (ngModelChange)="onMedioPagoChange($event)">
                 <option disabled value="">--Seleccione medio de pago--</option>
                 <option *ngFor="let m of medios()" [value]="m.id">
                   {{ m.descripcion }}
                 </option>
               </select>
-              <div
-                *ngIf="
+              <div *ngIf="
                   cobranzaForm.get('medioPagoId')?.hasError('required') &&
                   cobranzaForm.get('medioPagoId')?.touched
-                "
-                class="error-message"
-              >
+                " class="text-danger">
                 Medio de pago es obligatorio.
               </div>
             </div>
 
-            <div *ngIf="medioPago().tieneBanco" class="col-md-3 form-group">
-              <label for="bancoId">Banco</label>
-              <select
-                id="bancoId"
-                class="form-control custom-select"
-                style="width: 100%"
-                formControlName="bancoId"
-              >
+            <div class="col-md-4">
+              <label for="montoAbonado" class="form-label">Monto</label>
+              <input type="number" min="100" class="form-control  form-control-sm currency" formControlName="importeAbonado" required />
+              <div *ngIf="
+                  cobranzaForm.get('importeAbonado')?.hasError('required') &&
+                  cobranzaForm.get('importeAbonado')?.touched
+                " class="text-danger">
+                Monto es obligatorio.
+              </div>
+            </div>
+
+            <div *ngIf="medioPago().tieneBanco" class="col-md-4">
+              <label for="bancoId" class="form-label">Banco</label>
+              <select id="bancoId" class="form-control form-control-sm" style="width: 100%" formControlName="bancoId">
                 <option *ngFor="let b of bancos()" [value]="b.id">
                   {{ b.descripcion }}
                 </option>
               </select>
-              <div
-                *ngIf="
+              <div *ngIf="
                   cobranzaForm.get('bancoId')?.hasError('required') &&
                   cobranzaForm.get('bancoId')?.touched
-                "
-                class="error-message"
-              >
+                " class="text-danger">
                 Banco es obligatorio.
               </div>
             </div>
 
-            <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
-              <label for="fechaEmision">Fecha Emisión</label>
-              <input
-                type="date"
-                class="form-control"
-                formControlName="fechaEmision"
-                required
-              />
-              <div
-                *ngIf="
+            <div *ngIf="medioPago().esCheque" class="col-md-4">
+              <label for="fechaEmision" class="form-label">Fecha Emisión</label>
+              <input type="date" class="form-control form-control-sm" formControlName="fechaEmision" required />
+              <div *ngIf="
                   cobranzaForm.get('fechaEmision')?.hasError('required') &&
                   cobranzaForm.get('fechaEmision')?.touched
-                "
-                class="error-message"
-              >
+                " class="text-danger">
                 Fecha de emisión es obligatoria.
               </div>
             </div>
 
-            <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
-              <label for="fechaVencimiento">Fecha Vencimiento</label>
-              <input
-                type="date"
-                class="form-control"
-                formControlName="fechaVencimiento"
-                required
-              />
-              <div
-                *ngIf="
+            <div *ngIf="medioPago().esCheque" class="col-md-4">
+              <label for="fechaVencimiento" class="form-label">Fecha Vencimiento</label>
+              <input type="date" class="form-control form-control-sm" formControlName="fechaVencimiento" required />
+              <div *ngIf="
                   cobranzaForm.get('fechaVencimiento')?.hasError('required') &&
                   cobranzaForm.get('fechaVencimiento')?.touched
-                "
-                class="error-message"
-              >
+                " class="text-danger">
                 Fecha de vencimiento es obligatoria.
               </div>
             </div>
 
-            <div
-              *ngIf="medioPago().esCheque || medioPago().tieneRef"
-              class="col-md-3 form-group"
-            >
-              <label for="nroRef">Nro referencia</label>
-              <input
-                type="text"
-                class="form-control"
-                formControlName="nroRef"
-                required
-                minlength="4"
-              />
-              <div
-                *ngIf="
+            <div *ngIf="medioPago().esCheque || medioPago().tieneRef" class="col-md-4">
+              <label for="nroRef" class="form-label">Nro referencia</label>
+              <input type="text" class="form-control form-control-sm" formControlName="nroRef" required minlength="4" />
+              <div *ngIf="
                   cobranzaForm.get('nroRef')?.hasError('required') &&
                   cobranzaForm.get('nroRef')?.touched
-                "
-                class="error-message"
-              >
+                " class="text-danger">
                 Número de referencia es obligatorio.
               </div>
             </div>
 
-            <div *ngIf="medioPago().esCheque" class="col-md-3 form-group">
-              <label for="nroCuenta">Nro cuenta</label>
-              <input
-                type="text"
-                class="form-control"
-                formControlName="nroCuenta"
-                required
-                minlength="12"
-              />
-              <div
-                *ngIf="
+            <div *ngIf="medioPago().esCheque" class="col-md-4">
+              <label for="nroCuenta" class="form-label">Nro cuenta</label>
+              <input type="text" class="form-control form-control-sm" formControlName="nroCuenta" required minlength="12" />
+              <div *ngIf="
                   cobranzaForm.get('nroCuenta')?.hasError('required') &&
                   cobranzaForm.get('nroCuenta')?.touched
-                "
-                class="error-message"
-              >
+                " class="text-danger">
                 Número de cuenta es obligatorio.
               </div>
             </div>
 
-            <div class="col-md-3 form-group">
-              <label for="montoAbonado">Monto</label>
-              <input
-                type="number"
-                min="100"
-                class="form-control currency"
-                formControlName="importeAbonado"
-                required
-              />
-              <div
-                *ngIf="
-                  cobranzaForm.get('importeAbonado')?.hasError('required') &&
-                  cobranzaForm.get('importeAbonado')?.touched
-                "
-                class="error-message"
-              >
-                Importe abonado es obligatorio.
-              </div>
-            </div>
-
-            <div class="col-md-12 mt-3">
-              <button
-                type="submit"
-                class="btn btn-primary"
-                [disabled]="cobranzaForm.invalid"
-              >
-                Guardar
+            <div class="col-md-4 d-flex align-items-end ">
+              <button type="submit" class=" btn btn-sm btn-outline-success" [disabled]="cobranzaForm.invalid">
+               Agregar <i class="bi bi-plus-circle"></i>
               </button>
+
             </div>
           </form>
+          <div id="details" class="mt-3">
+            <table class="table table-sm table-bordered border-success">
 
-          <table class="table caption-top table-sm">
-            <caption>
-              MediosPago({{
-                detalles.length | number
-              }})
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">MedioPago</th>
-                <th scope="col">Importe</th>
-                <th scope="col">Del</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (detalle of detalles(); track detalle.medioPagoId; let index
-              = $index) {
-              <tr>
-                <th scope="row"></th>
-                <th scope="row">{{ index + 1 }}</th>
-                <td>{{ detalle.medioPagoId }}</td>
-                <td>{{ detalle.importeAbonado | number }} Gs</td>
-                <td>
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger"
-                    (click)="quitar(index)"
-                  >
-                    <i class="bi bi-trash3"></i>
-                  </button>
-                </td>
-              </tr>
-
-              }
-            </tbody>
-          </table>
-          <ul class="list-group">
-            <li class="list-group-item"><small>Total a pagar {{ importeTotal | number}}</small></li>
-            <li class="list-group-item"><small>Total Abonado {{ importeAbonado()| number }}</small></li>
-            <li class="list-group-item"><small>Diferencia {{ diferecia() | number}}</small></li>
-            <li class="list-group-item"><small>Vuelto {{ vuelto() | number}}</small></li>
-          </ul>
-          <!--   <div class="form-group row button-group">
-                <div class="col-md-3">
-                  <button type="button" align="right" (click)="agregarCobranza()"
-                    [disabled]="CobranzaForm.invalid" class="btn btn-success text-white">
-                    Agregar
-                  </button>
-                </div>
-              </div> -->
-
-          <!-- Resto del código para la tabla de detalles y tablas de totales -->
-          <!-- ... -->
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">MedioPago</th>
+                        <th scope="col">Importe</th>
+                        <th scope="col">Del</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (detalle of detalles(); track detalle.medioPagoId; let index = $index) {
+                        <tr>
+                            <th scope="row">{{ index + 1 }}</th>
+                            <td>{{ obtenerDescrip(detalle.medioPagoId) }}</td>
+                            <td>{{ detalle.importeAbonado | number }} Gs</td>
+                            <td>
+                                <button type="button" class="btn btn-outline-danger" (click)="quitar(index)">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-        <!-- <div class="modal-footer">
-              <button (click)="guardarCobranza()" type="button" class="btn btn-themecolor text-white">Guardar</button>
-              <button (click)="cancelarModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Volver a venta</button>
-            </div> -->
+
+          <div class="container mb-2 mt-2">
+            <div class="row">
+              <div class="col">  <small>Total a pagar: {{ importeTotal | number }} Gs</small></div>
+              <div class="col"> <small>Total Abonado: {{ importeAbonado() | number }} Gs</small></div>
+              <div class="col">@if (diferecia() >= 0){
+
+                <span  class="alert alert-warning" (click)=" cobranzaForm.patchValue({ importeAbonado: diferecia() })
+                  ">
+                  <small  > Faltante: {{ diferecia() | number }}Gs </small>   <i class="bi bi-plus-circle"> </i></span>
+              }@else {
+              <small> Vuelto: {{ diferecia() | number }} Gs</small>
+              }</div>
+             </div>
+
+        </div>
+        <div class="modal-footer">
+          <div class="card-body btn-group">
+            <button (click)="guardar()" type="button" class="btn btn-outline-success">
+              Registrar Cobranza <i class="bi bi-wallet2"></i>
+            </button>
+            <button (click)="close()" type="button" class="btn btn-secondary" data-dismiss="modal">
+              Cerrar <i class="bi bi-x-circle"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
