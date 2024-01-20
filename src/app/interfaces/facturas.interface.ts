@@ -146,6 +146,7 @@ export interface Cobranza {
   usuarioAnulacionId: number | null;
   fechaAnulacion: string | null;
   tipo: string | null;
+  detalle:CobranzaDetalle[];
   Empresa?: Empresa; // Relación con la entidad Empresa
   //Usuario?: Usuario; // Relación con la entidad Usuario
   Sucursal?: Sucursal; // Relación con la entidad Sucursal

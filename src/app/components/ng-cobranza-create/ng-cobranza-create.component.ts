@@ -7,6 +7,7 @@ import { BancoService } from '../../services/banco.service';
 import { MedioPagoService } from "../../services/medioPago.service";
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Observable, forkJoin, of } from "rxjs";
+import moment from "moment";
 
 @Component({
   selector: "app-cobranza-create",
@@ -19,6 +20,9 @@ export class NgCobranzaCreateComponent implements OnInit {
   size = "large";
   delay = 200;
   @Input() importeTotal = 0;
+  @Input() userId = 0;
+  @Input() sucursalId = 0;
+  @Input() tipo = '';
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
   @Output() cobranza = new EventEmitter<Cobranza>();
@@ -178,8 +182,26 @@ close() {
 }
 
 
-guardar(){
+enviar(){
 
+const cobranza ={
+  id: 0,
+  empresaId: 0,
+  sucursalId: this.sucursalId,
+  usuarioCreacionId: this.userId,
+  fechaCobranza: moment(new Date()).format("YYYY-MM-DD"),
+  importeAbonado: this.importeAbonado(),
+  importeCobrado: this.importeTotal,
+  saldo: this.diferecia(),
+  anulado: false,
+  usuarioAnulacionId: null,
+  fechaAnulacion:   null,
+  tipo: this.tipo,
+  detalle: this.detalles(),
+
+}
+
+this.cobranza
 }
 
 }
