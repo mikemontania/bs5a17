@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from "@angular/core";
+import { Component, OnInit, computed, inject, signal } from "@angular/core";
 import { SeccionClienteComponent } from "../../../components/seccion-cliente/seccion-cliente.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -58,8 +58,10 @@ export class VentasComponent implements OnInit {
   sucursal = signal<Sucursal>({} as Sucursal);
   numeracion = signal<Numeracion>({} as Numeracion);
   factura = signal<ModelCab>({} as ModelCab);
+  cobranza = signal<Cobranza>({} as Cobranza);
   showShop = true;
 
+  public userId = computed(() => this._authService.currentUser()?.id ?? 0);
   cantidad: number = 1;
   searchCliente = false;
   searchSucursal = false;
@@ -186,11 +188,19 @@ export class VentasComponent implements OnInit {
       this.showShop = true;
     }, 100);
   }
+  registrar() {
+    if (this.formaVenta().predeterminado) {
+      this.createCobranzaModal();
+    } else {
+      this.pagar()
+    }
+  }
 
-  selectCobranza(cobranza: Cobranza) {
+  guardarCobranza(cobranza: Cobranza) {
     console.log("Selected cobranza:", cobranza);
-
-
+    this.cobranza.set(cobranza)
+    this.createCobranza = false;
+    this.pagar()
   }
 
   selectCliente(cliente: Cliente) {
@@ -427,6 +437,7 @@ export class VentasComponent implements OnInit {
       listaPrecioId: this.listaPrecio().id,
       formaVentaId: this.formaVenta().id,
       clienteId: this.cliente().id,
+      cobranza: this.cobranza(),
       detalles: this.detalles
     }));
     Swal.fire({
@@ -458,7 +469,7 @@ export class VentasComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        //Swal.fire("Error", err.msg, "error");
+         Swal.fire("Error", err.msg, "error");
       },
     });
   }

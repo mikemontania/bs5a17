@@ -241,9 +241,9 @@
           <button
             type="button"
             class="btn btn-outline-success"
-            (click)="createCobranzaModal()"
+            (click)="registrar()"
           >
-            Pagar
+            Registrar
           </button>
           <button type="button" class="btn btn-outline-danger">Cancelar</button>
         </div>
@@ -258,8 +258,11 @@
 @if(createCobranza ) {
   <app-cobranza-create
     [isOpen]="createCobranza"
+    [sucursalId]="sucursal().id"
+    [tipo]="'VENTA'"
+    [userId]="userId()"
     [importeTotal]="factura().importeTotal"
-    (cobranza)="selectCobranza($event)"
+    (cobranza)="guardarCobranza($event)"
     (closeModal)="createCobranza = false"
   ></app-cobranza-create>
 

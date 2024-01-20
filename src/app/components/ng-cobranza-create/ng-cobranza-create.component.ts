@@ -129,79 +129,80 @@ export class NgCobranzaCreateComponent implements OnInit {
       importeCobrado = this.importeTotal;
       saldo = Math.round(importeCobrado - data.importeAbonado);
     }
-  const detall: CobranzaDetalle = {
-    id: 0,
-    bancoId: data.bancoId,
-    fechaEmision: data.fechaEmision,
-    fechaVencimiento: data.fechaVencimiento,
-    importeAbonado: data.importeAbonado,
-    importeCobrado: importeCobrado,
-    medioPagoId: data.medioPagoId,
-    nroCuenta: data.nroCuenta,
-    nroRef: data.nroRef,
-    saldo:saldo,
-    cobranzaId: 0
+    const detall: CobranzaDetalle = {
+      id: 0,
+      bancoId: data.bancoId,
+      fechaEmision: data.fechaEmision,
+      fechaVencimiento: data.fechaVencimiento,
+      importeAbonado: data.importeAbonado,
+      importeCobrado: importeCobrado,
+      medioPagoId: data.medioPagoId,
+      nroCuenta: data.nroCuenta,
+      nroRef: data.nroRef,
+      saldo: saldo,
+      cobranzaId: 0
+    }
+
+    this.detalles.set([...this.detalles(), detall])
+    // Procesar los datos del formulario (enviar a servidor, guardar, etc.)
+
+    // Si deseas limpiar el formulario después del envío:
+    this.cobranzaForm = this.initForm();
+    this.medioPago.set({} as MedioPago)
+  }
+  selectCobranza(cobranza: Cobranza) {
+    this.cobranza.emit(cobranza);
   }
 
-this.detalles.set([...this.detalles(), detall])
-// Procesar los datos del formulario (enviar a servidor, guardar, etc.)
 
-// Si deseas limpiar el formulario después del envío:
-this.cobranzaForm = this.initForm();
-this.medioPago.set({} as MedioPago)
+  obtenerDescrip(id: number) {
+    const medioPag = this.medios().find(medio => medio.id === id)
+
+    return medioPag?.descripcion;
   }
-selectCobranza(cobranza: Cobranza) {
-  this.cobranza.emit(cobranza);
-}
 
+  onMedioPagoChange(id: number) {
+    // Limpia las validaciones existentes antes de aplicar las nuevas
+    this.clearValidators();
+    const medioPagoEncontrado = this.medios().find(m => m.id === id);
+    if (medioPagoEncontrado) {
+      this.medioPago.set(medioPagoEncontrado);
 
-obtenerDescrip(id: number) {
-const medioPag =  this.medios().find(medio => medio.id === id)
-
-return medioPag?.descripcion;
-}
-
-onMedioPagoChange(id: number) {
-  // Limpia las validaciones existentes antes de aplicar las nuevas
-  this.clearValidators();
-  const medioPagoEncontrado = this.medios().find(m => m.id === id);
-  if (medioPagoEncontrado) {
-    this.medioPago.set(medioPagoEncontrado);
-
-    // Aplica las nuevas validaciones
-    this.applyValidators();
+      // Aplica las nuevas validaciones
+      this.applyValidators();
+    }
   }
-}
-quitar(index: number) {
-  if (index !== -1) {
-    this.detalles().splice(index, 1);
+  quitar(index: number) {
+    if (index !== -1) {
+      this.detalles().splice(index, 1);
+    }
   }
-}
-close() {
-  this.closeModal.emit();
-}
+  close() {
+    this.closeModal.emit();
+  }
 
 
-enviar(){
+  enviar() {
+ if (this.diferecia() > 0) {
+  return;
+ }
+    const cobranza = {
+      id: 0,
+      empresaId: 0,
+      sucursalId: this.sucursalId,
+      usuarioCreacionId: this.userId,
+      fechaCobranza: moment(new Date()).format("YYYY-MM-DD"),
+      importeAbonado: this.importeAbonado(),
+      importeCobrado: this.importeTotal,
+      saldo: this.diferecia(),
+      anulado: false,
+      usuarioAnulacionId: null,
+      fechaAnulacion: null,
+      tipo: this.tipo,
+      detalle: this.detalles(),
 
-const cobranza ={
-  id: 0,
-  empresaId: 0,
-  sucursalId: this.sucursalId,
-  usuarioCreacionId: this.userId,
-  fechaCobranza: moment(new Date()).format("YYYY-MM-DD"),
-  importeAbonado: this.importeAbonado(),
-  importeCobrado: this.importeTotal,
-  saldo: this.diferecia(),
-  anulado: false,
-  usuarioAnulacionId: null,
-  fechaAnulacion:   null,
-  tipo: this.tipo,
-  detalle: this.detalles(),
-
-}
-
-this.cobranza
-}
+    }
+    this.cobranza.emit(cobranza);
+  }
 
 }

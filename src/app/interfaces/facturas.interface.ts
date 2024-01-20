@@ -111,6 +111,7 @@ export interface ModelCab {
   importeSubtotal: number;
   importeTotal: number;
   clienteId: number;
+  cobranza?:Cobranza;
  detalles: ModelDet[];
 }
 

@@ -141,7 +141,7 @@
             <div class="row">
               <div class="col">  <small>Total a pagar: {{ importeTotal | number }} Gs</small></div>
               <div class="col"> <small>Total Abonado: {{ importeAbonado() | number }} Gs</small></div>
-              <div class="col">@if (diferecia() >= 0){
+              <div class="col">@if (diferecia() > 0){
 
                 <span  class="alert alert-warning" (click)=" cobranzaForm.patchValue({ importeAbonado: diferecia() })
                   ">
