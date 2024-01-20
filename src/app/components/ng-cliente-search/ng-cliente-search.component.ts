@@ -41,11 +41,11 @@ trackCliente(index: number, cliente: Cliente): number {
 
   buscar(termino: string) {
 
-    this._clientesService.searchClientes(1, 10, termino)
+    this._clientesService.search(1, 10, termino)
     .pipe(debounceTime(1500), distinctUntilChanged())
     .subscribe((response: any) => {
       console.log(response);
-      this.clientes = response.rows as Cliente[];
+      this.clientes = response.clientes as Cliente[];
     });
     /*   debounceTime(300);
     distinctUntilChanged(); */

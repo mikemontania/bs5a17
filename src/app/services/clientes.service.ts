@@ -13,7 +13,7 @@ export class ClientesService {
   http = inject(HttpClient);
   router = inject(Router);
 
-  searchClientes(page: number, size: number, term: string) {
+  search(page: number, size: number, term: string) {
     return this.http
       .get(BASE_URL + "/clientes/paginados/" + page + "/" + size + "/" + term)
       .pipe(

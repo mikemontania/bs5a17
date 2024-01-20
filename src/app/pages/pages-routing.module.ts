@@ -4,6 +4,7 @@ import { PagesComponent } from './pages.component';
 import { UsersComponent } from './users/users.component';
 import { authGuard } from '../guards/auth-guard.guard';
 import { ClienteComponent } from './cliente/cliente.component';
+import { ClientesComponent } from './cliente/clientes/clientes.component';
 
 export default [
   {
@@ -23,7 +24,7 @@ export default [
        {
         path: "clientes",
         canActivate: [authGuard],
-        component: ClienteComponent
+        component: ClientesComponent
       },
       {
         path: "user",
