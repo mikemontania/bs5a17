@@ -5,6 +5,7 @@ import { BASE_URL } from "../config";
 import {  map, catchError } from "rxjs/operators";
 import Swal from "sweetalert2";
 import { Observable, throwError } from "rxjs";
+import { Cliente } from "../interfaces/clientes.interface";
 
 @Injectable({
   providedIn: "root"
@@ -12,6 +13,13 @@ import { Observable, throwError } from "rxjs";
 export class ClientesService {
   http = inject(HttpClient);
   router = inject(Router);
+
+  getById(id:number) {
+    return this.http
+      .get(BASE_URL + "/clientes/"+id)
+      .pipe(map((resp: any) => resp));
+  }
+
 
   search(page: number, size: number, term: string) {
     return this.http
@@ -41,6 +49,22 @@ export class ClientesService {
   create(cliente: any): Observable<any> {
     console.log(cliente);
     return this.http.post(BASE_URL + '/clientes', cliente)
+      .pipe(
+        map((response: any) => response ),
+        catchError(e => {
+
+          console.error('ERROR', e.error);
+          Swal.fire(e.error.header, e.error.message, 'error');
+         return throwError(() => e.error.message);
+        })
+      );
+  }
+
+
+
+  update(cliente: Cliente): Observable<any> {
+    console.log(cliente);
+    return this.http.put(BASE_URL + '/clientes/'+cliente.id, cliente)
       .pipe(
         map((response: any) => response ),
         catchError(e => {

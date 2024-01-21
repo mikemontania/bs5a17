@@ -1,4 +1,13 @@
 <div class="card">
+    <div class="card-header">
+      @if(id()){
+        Acualizar Cliente
+      }@else {
+        Crear Cliente
+      }
+    </div>
+
+
   <div class="card-body">
     <form
       [formGroup]="clienteForm"
@@ -222,7 +231,11 @@
         </div>
       </div>
       <div class="text-center">
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <div class=" btn-group">
+          <button  class="btn btn-outline-success" type="submit" class="btn btn-outline-success">@if(id()){ Acualizar <i class="bi bi-file-earmark-plus"></i>} @else { Crear <i class="bi bi-file-earmark-plus"></i>}      </button>
+          <button type="button" (click)="ngOnInit()" class="btn btn-outline-danger">Cancelar <i class="bi bi-x-lg"></i></button>
+        </div>
+
       </div>
     </form>
   </div>

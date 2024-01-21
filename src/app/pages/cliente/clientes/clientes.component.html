@@ -1,4 +1,6 @@
 <div class="card">
+  <div class="card-header"> Clientes <button type="button" class="btn btn-sm btn-outline-success" (click)="agregar()"> <i class="bi bi-plus"></i></button></div>
+
   <div class="card-body">
 
     <!-- Comprobante Numero Input -->
@@ -11,8 +13,8 @@
     <!-- Search and Cancel Buttons -->
     <div class="card mb-3 w-50 d-flex selector">
       <div class="btn-group">
-        <button type="button" class="btn btn-outline-success" (click)="buscar()">Buscar</button>
-        <button type="button" class="btn btn-outline-danger" (click)="cancelar()">Cancelar</button>
+        <button type="button" class="btn btn-outline-success" (click)="buscar()">Buscar <i class="bi bi-search"></i></button>
+        <button type="button" class="btn btn-outline-danger" (click)="cancelar()">Cancelar <i class="bi bi-x-lg"></i></button>
       </div>
     </div>
 
@@ -48,14 +50,14 @@
                 <td>{{ cliente.id }}</td>
                 <td  class="text-sm">{{ cliente.razonSocial }}</td>
                 <td  class="text-sm">{{ cliente.nroDocumento }}</td>
-                <td  class="text-sm">{{ cliente.formaVentaId }}</td>
-                <td  class="text-sm">{{ cliente.listaPrecioId }}</td>
+                <td  class="text-sm">{{ cliente.formaVenta?.descripcion }}</td>
+                <td  class="text-sm">{{ cliente.listaPrecio?.descripcion }}</td>
                 <td  class="text-sm">{{ (cliente.excentoIva)?'SI':'NO' }}</td>
                 <td  class="text-sm">{{ (cliente.propietario)?'SI':'NO' }}</td>
                 <td  class="text-sm">{{ (cliente.predeterminado)?'SI':'NO' }}</td>
                 <td  class="text-sm">{{ (cliente.activo)?'SI':'NO' }}</td>
                 <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-info text-info" appTooltip="Ver editar cliente"  >
+                  <button class="btn btn-sm btn-outline-info text-info" appTooltip="Ver editar cliente"  (click)="verCliente(cliente.id)" >
                     <i class="bi bi-pencil"></i>
                                     </button>
                 </td>

@@ -83,16 +83,19 @@ export class ClientesComponent {
 
   }
 
+
   onPageChanged(newPage: number) {
     this.getPage(newPage);
   }
 
 
-  verDetalles(clienteId: number) {
-    this._router.navigate(['/clientes/detalles', clienteId]);
+  verCliente(clienteId: number) {
+    this._router.navigate(['/clientes', 'cliente', clienteId]);
 
   }
-
+  agregar() {
+    this._router.navigate(['/clientes/cliente' ]);
+  }
   cancelar() {
 
     try {

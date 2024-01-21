@@ -3,7 +3,7 @@ import { DashbardComponent } from './dashbard/dashbard.component';
 import { PagesComponent } from './pages.component';
 import { UsersComponent } from './users/users.component';
 import { authGuard } from '../guards/auth-guard.guard';
-import { ClienteComponent } from './cliente/cliente.component';
+import { ClienteComponent } from './cliente/cliente/cliente.component';
 import { ClientesComponent } from './cliente/clientes/clientes.component';
 
 export default [
@@ -25,6 +25,16 @@ export default [
         path: "clientes",
         canActivate: [authGuard],
         component: ClientesComponent
+      },
+      {
+        path: "clientes/cliente/:id",
+        canActivate: [authGuard],
+        component: ClienteComponent
+      },
+      {
+        path: "clientes/cliente",
+        canActivate: [authGuard],
+        component: ClienteComponent
       },
       {
         path: "user",
