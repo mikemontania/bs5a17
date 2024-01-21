@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { map } from 'rxjs';
 import { BASE_URL } from '../config';
 import { ProductoPage } from '../interfaces/productoItem.inteface';
+import { PageProductosSimple } from '../interfaces/productos.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,16 @@ export class ProductosService {
       .pipe(
         map((respo: any) => {
           return respo as ProductoPage;
+        })
+      );
+  }
+
+  searchSimple( page: number, size: number,  term: string) {
+    return this.http
+      .get(BASE_URL + "/productos/paginados/simple/"+ page + "/" + size + "/"+ term)
+      .pipe(
+        map((respo: any) => {
+          return respo as PageProductosSimple;
         })
       );
   }

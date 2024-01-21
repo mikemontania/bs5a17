@@ -5,6 +5,7 @@ import { UsersComponent } from './users/users.component';
 import { authGuard } from '../guards/auth-guard.guard';
 import { ClienteComponent } from './cliente/cliente/cliente.component';
 import { ClientesComponent } from './cliente/clientes/clientes.component';
+import { ProductosComponent } from './productos/productos.component';
 
 export default [
   {
@@ -21,6 +22,11 @@ export default [
         canActivate: [authGuard],
         loadChildren: () => import('./ventas/ventas-routing.module')
        },
+       {
+        path: "productos",
+        canActivate: [authGuard],
+        component: ProductosComponent
+      },
        {
         path: "clientes",
         canActivate: [authGuard],
