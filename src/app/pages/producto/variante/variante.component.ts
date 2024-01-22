@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { Presentacion, Producto, Unidad, Variante, Variedad } from '../../../interfaces/facturas.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -7,18 +7,25 @@ import { forkJoin } from 'rxjs';
 import Swal from 'sweetalert2';
 import { ProductosService } from '../../../services/productos.service';
 import { ImagenPipe } from '../../../pipes/imagen.pipe';
+import { NgModalComponent } from '../../../components/ng-modal/ng-modal.component';
 
 
 @Component({
   selector: 'app-variante',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule,ImagenPipe],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule,ImagenPipe,NgModalComponent],
   templateUrl: './variante.component.html',
   styleUrl: './variante.component.css'
 })
 export class VarianteComponent implements OnInit {
-  /* imagenSubir: File ; */
-  imagenTemp: any;
+  @ViewChild('fileInput') fileInput?: ElementRef;
+
+  imagenSubir?: File;
+  imagenTemp?: any;
+  sinImagen: string = './assets/images/sin-imagen.jpg';
+  size = "medium";
+  delay=200;
+  isOpen = false;
   id = signal<number>(0)
   variantes = signal<Variante[]>([])
   variedades = signal<Variedad[]>([])
@@ -104,7 +111,12 @@ actualizar(variante:Variante){
     }// Use 'complete' instead of 'finally'
   });
 }
-
+open() {
+  this.isOpen = true;
+}
+close() {
+  this.isOpen = false;
+}
   crear(varianteData:Variante){
     this._productoService.createVariante(varianteData).subscribe({
       next: (resp) => {
@@ -127,31 +139,31 @@ actualizar(variante:Variante){
   }
 
   cambiarImagen(cod:number) {
-  /*   this._productoService.uploadImage(this.imagenSubir, cod).subscribe((producto: Producto) => {
-    this.producto = producto;
-      this.imagenTemp = null;
-      $('#uploadedfile').val(null);
-    }); */
+    this._productoService.uploadImage(this.imagenSubir, cod).subscribe((producto: Producto) => {
+
+      this.imagenTemp = '';
+      if (this.fileInput) {
+        this.fileInput.nativeElement.value = null;
+      }
+    });
   }
 
-  seleccionImage(archivo: File) {
-    // si  no existe no hacer nada
-    if (!archivo) {
-    /*   this.imagenSubir = null; */
-      return;
+  seleccionImage(event: any) {
+    const archivo = event?.target?.files?.[0];
+
+    if (archivo) {
+      // Realiza las operaciones necesarias con el archivo aquí
+      let reader = new FileReader();
+      reader.readAsDataURL(archivo);
+      reader.onloadend = () => {
+        this.imagenTemp = reader.result;
+      };
     }
-    if (archivo.type.indexOf('image') < 0) {
-   /*    swal.fire('Sólo imágenes', 'El archivo seleccionado no es una imagen', 'error');
-      this.imagenSubir = null; */
-      return;
+
+    // Asegúrate de que fileInput no sea undefined antes de asignarle un valor nulo
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = null;
     }
-    //this.imagenSubir = archivo;
-    let reader = new FileReader();
-    let urlImagenTemp = reader.readAsDataURL(archivo);
-    reader.onloadend = () => {
-      console.log(reader.result);
-      this.imagenTemp = reader.result;
-    };
   }
 
 }
