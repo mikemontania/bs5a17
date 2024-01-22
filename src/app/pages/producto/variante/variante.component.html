@@ -1,0 +1,194 @@
+<div class="card">
+  <div class="card-header">Variantes</div>
+
+  <div class="card-body">
+    <div id="details" style="overflow-x: auto">
+      <table class="table table-sm small-table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">IMG</th>
+            <th scope="col">CODBARRA</th>
+            <th scope="col">CODERP</th>
+            <th scope="col">%IVA</th>
+            <th scope="col">PRODUCTO</th>
+            <th scope="col">PRESENTACION</th>
+            <th scope="col">VARIEADAD</th>
+            <th scope="col">UNIDAD</th>
+            <th scope="col">ACTIVO</th>
+            <th scope="col">ACCION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr [formGroup]="varianteForm" (ngSubmit)="onSubmit($event)">
+            <td>#</td>
+            <td
+              align="center"
+              class="w70"
+              align="center"
+              style="background: white"
+            >
+              <!--               <input id="uploadedfile" class="form-control form-control-sm" (change)="seleccionImage($event.target.files[0])" type="file"  >
+ -->
+              <input id="uploadedfile" class="form-control form-control-sm" type="file" />
+            </td>
+            <td class="text-sm">
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                id="codBarra"
+                formControlName="codBarra"
+              />
+            </td>
+            <td class="text-sm">
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                id="codErp"
+                formControlName="codErp"
+              />
+            </td>
+            <td class="text-sm">
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                id="porcIva"
+                formControlName="porcIva"
+              />
+            </td>
+            <td class="text-sm">
+              <select
+                class="form-control form-control-sm"
+                id="productoId"
+                formControlName="productoId"
+              >
+                <option
+                  *ngFor="let producto of productos()"
+                  [value]="producto.id"
+                >
+                  {{ producto.nombre }}
+                </option>
+              </select>
+            </td>
+
+            <td class="text-sm">
+              <select
+                class="form-control form-control-sm"
+                id="presentacionId"
+                formControlName="presentacionId"
+              >
+                <option
+                  *ngFor="let presentacion of presentaciones()"
+                  [value]="presentacion.id"
+                >
+                  {{ presentacion.descripcion }}
+                </option>
+              </select>
+            </td>
+            <td class="text-sm">
+              <select
+                class="form-control form-control-sm"
+                id="variedadId"
+                formControlName="variedadId"
+              >
+                <option
+                  *ngFor="let variedad of variedades()"
+                  [value]="variedad.id"
+                >
+                  {{ variedad.descripcion }}
+                </option>
+              </select>
+            </td>
+            <td class="text-sm">
+              <select
+                class="form-control form-control-sm"
+                id="unidadId"
+                formControlName="unidadId"
+              >
+                <option *ngFor="let unidad of unidades()" [value]="unidad.id">
+                 {{ unidad.descripcion }}
+                </option>
+              </select>
+            </td>
+            <td class="text-sm">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="activo"
+                formControlName="activo"
+                checked
+              />
+            </td>
+            <td class="text-sm">
+              <button type="submit">Crear Variante</button>
+            </td>
+          </tr>
+
+          @for (variante of variantes(); track variante.id; let index = $index)
+          {
+          <tr>
+            <td>{{ variante.id }}</td>
+            <td
+              align="center"
+              class="w70"
+              align="center"
+              style="background: white"
+            >
+              <img
+                *ngIf="variante.img"
+                [attr.src]="variante.img | imagen: 'productos' | async"
+                class="img-producto60"
+              />
+            </td>
+            <td><input type="text" class="form-control form-control-sm" [(ngModel)]="variante.codBarra" /></td>
+            <td><input type="text" class="form-control form-control-sm" [(ngModel)]="variante.codErp" /></td>
+            <td><input type="text" class="form-control form-control-sm"  [(ngModel)]="variante.porcIva" /></td>
+            <td>
+              <select [(ngModel)]="variante.productoId"  class="sm">
+                <option
+                  *ngFor="let producto of productos()"
+                  [value]="producto.id"
+                >
+                  {{ producto.nombre }}
+                </option>
+              </select>
+            </td>
+
+            <td>
+              <select [(ngModel)]="variante.presentacionId"  class="sm">
+                <option
+                  *ngFor="let presentacion of presentaciones()"
+                  [value]="presentacion.id"
+                >
+                  {{ presentacion.descripcion }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <select [(ngModel)]="variante.variedadId"  class="sm">
+                <option
+                  *ngFor="let variedad of variedades()"
+                  [value]="variedad.id"
+                >
+                  {{ variedad.descripcion }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <select [(ngModel)]="variante.unidadId"  class="sm">
+                <option *ngFor="let unidad of unidades()" [value]="unidad.id">
+                 {{ unidad.descripcion }}
+                </option>
+              </select>
+            </td>
+            <td><input type="checkbox" [(ngModel)]="variante.activo" /></td>
+            <td><button (click)="actualizar(variante)">Guardar</button></td>
+          </tr>
+          } @empty {
+          <tr></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -37,7 +37,8 @@
                 <th scope="col">CATEGORIA</th>
                 <th scope="col">SUBCATEGORIA</th>
                 <th scope="col">ACTIVO</th>
-                <th scope="col">Edit</th>
+                <th scope="col">EDITAR</th>
+                <th scope="col">VARIANTES</th>
               </tr>
             </thead>
             <tbody>
@@ -53,6 +54,11 @@
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-info text-info" appTooltip="Ver editar producto"  (click)="verProducto(producto.id)" >
                     <i class="bi bi-pencil"></i>
+                                    </button>
+                </td>
+                <td  class="text-sm">
+                  <button class="btn btn-sm btn-outline-info text-info" appTooltip="Ver editar variantes"  (click)="verVariantes(producto.id)" >
+                    <i class="bi bi-stack"></i>
                                     </button>
                 </td>
               </tr>

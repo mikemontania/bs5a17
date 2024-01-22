@@ -84,7 +84,9 @@ export interface Variante {
   unidad:         Unidad;
 }
 export interface Unidad {
+  id:             number;
   code: string;
+  descripcion: string;
 }
 
 export interface Presentacion {
@@ -94,7 +96,9 @@ export interface Presentacion {
 }
 
 export interface Producto {
+  id:             number;
   nombre: string;
+  descripcion: string;
 }
 
 export interface ModelCab {

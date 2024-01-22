@@ -2,11 +2,11 @@ import { CommonModule } from "@angular/common";
 import { Component, signal, computed, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
-import { InputDebounceComponent } from "../../components/inputDebounce/inputDebounce.component";
-import { PaginatorComponent } from "../../components/paginator/paginator.component";
-import { TooltipDirective } from "../../directivas/tooltip.directive";
-import { ProductosService } from "../../services/productos.service";
-import { PageProductosSimple } from "../../interfaces/productos.interface";
+import { InputDebounceComponent } from "../../../components/inputDebounce/inputDebounce.component";
+import { PaginatorComponent } from "../../../components/paginator/paginator.component";
+import { TooltipDirective } from "../../../directivas/tooltip.directive";
+import { ProductosService } from "../../../services/productos.service";
+import { PageProductosSimple } from "../../../interfaces/productos.interface";
 
 
 @Component({
@@ -83,7 +83,10 @@ export class ProductosComponent {
     this.getPage(newPage);
   }
 
+  verVariantes(productoId: number) {
+    this._router.navigate(['/productos', 'variantes', productoId]);
 
+  }
   verProducto(productoId: number) {
     this._router.navigate(['/productos', 'producto', productoId]);
 

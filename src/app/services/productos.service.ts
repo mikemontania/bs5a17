@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { map } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { BASE_URL } from '../config';
 import { ProductoPage } from '../interfaces/productoItem.inteface';
-import { PageProductosSimple } from '../interfaces/productos.interface';
+import { PageProductosSimple, Producto } from '../interfaces/productos.interface';
+import Swal from 'sweetalert2';
+import { Variante } from '../interfaces/facturas.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,21 @@ import { PageProductosSimple } from '../interfaces/productos.interface';
 export class ProductosService {
   http = inject(HttpClient);
   router = inject(Router);
+  getById(id:number) {
+    return this.http
+      .get(BASE_URL + "/productos/"+id)
+      .pipe(map((resp: any) => resp));
+  }
+
+  findAll() {
+    return this.http
+      .get(BASE_URL + "/productos/")
+      .pipe(
+        map((respo: any) => {
+          return respo;
+        })
+      );
+  }
 
   searchProductoPage(sucursalId: number,listaPrecioId: number,page: number, size: number,marcaId:number,categoriaId:number,subCategoriaId:number, term: string) {
     return this.http
@@ -31,5 +48,156 @@ export class ProductosService {
           return respo as PageProductosSimple;
         })
       );
+
   }
+
+
+  create(producto: any): Observable<any> {
+    console.log(producto);
+    return this.http.post(BASE_URL + '/productos', producto)
+      .pipe(
+        map((response: any) => response ),
+        catchError(e => {
+
+          console.error('ERROR', e.error);
+          Swal.fire(e.error.header, e.error.message, 'error');
+         return throwError(() => e.error.message);
+        })
+      );
+  }
+
+
+
+  update(producto: Producto): Observable<any> {
+    console.log(producto);
+    return this.http.put(BASE_URL + '/productos/'+producto.id, producto)
+      .pipe(
+        map((response: any) => response ),
+        catchError(e => {
+
+          console.error('ERROR', e.error);
+          Swal.fire(e.error.header, e.error.message, 'error');
+         return throwError(() => e.error.message);
+        })
+      );
+  }
+
+
+/************************Marca ***********************************/
+findAllMarcas() {
+  return this.http
+    .get(BASE_URL + "/marcas/")
+    .pipe(
+      map((respo: any) => {
+        return respo;
+      })
+    );
+}
+/************************Categorias***********************************/
+findAllCategorias() {
+  return this.http
+    .get(BASE_URL + "/categorias/")
+    .pipe(
+      map((respo: any) => {
+        return respo;
+      })
+    );
+}
+/************************subCategorias***********************************/
+findAllSubCategorias() {
+  return this.http
+    .get(BASE_URL + "/subcategorias/")
+    .pipe(
+      map((respo: any) => {
+        return respo;
+      })
+    );
+}
+
+/************************Variantes ***********************************/
+findVariantesByProductoId(id:number) {
+  return this.http
+    .get(BASE_URL + "/variantes/producto/"+id)
+    .pipe(
+      map((respo: any) => {
+        return respo;
+      })
+    );
+}
+uploadImage(imagen:any, varianteId:any): Observable<any> {
+
+  let formData: FormData = new FormData();
+  formData.append('id', varianteId);
+  formData.append('image', imagen);
+  let url = BASE_URL + 'productos/upload-image';
+  return this.http.post(url, formData).pipe(
+   map((response: any) => {
+      console.log(response)
+      return response;
+    })
+  )
+
+}
+createVariante(variante: Variante): Observable<any> {
+  console.log(variante);
+  return this.http.post(BASE_URL + '/variantes', variante)
+    .pipe(
+      map((response: any) => response ),
+      catchError(e => {
+
+        console.error('ERROR', e.error);
+        Swal.fire(e.error.header, e.error.message, 'error');
+       return throwError(() => e.error.message);
+      })
+    );
+}
+
+
+
+updateVariante(variante: Variante): Observable<any> {
+  console.log(variante);
+  return this.http.put(BASE_URL + '/variantes/'+variante.id, variante)
+    .pipe(
+      map((response: any) => response ),
+      catchError(e => {
+
+        console.error('ERROR', e.error);
+        Swal.fire(e.error.header, e.error.message, 'error');
+       return throwError(() => e.error.message);
+      })
+    );
+}
+
+/************************Variedad ***********************************/
+findAllVariedades() {
+  return this.http
+    .get(BASE_URL + "/variedades/")
+    .pipe(
+      map((respo: any) => {
+        return respo;
+      })
+    );
+}
+/************************presentaciones***********************************/
+findAllPresentaciones() {
+  return this.http
+    .get(BASE_URL + "/presentaciones/")
+    .pipe(
+      map((respo: any) => {
+        return respo;
+      })
+    );
+}
+/************************subCategorias***********************************/
+findAllUnidades() {
+  return this.http
+    .get(BASE_URL + "/unidades/")
+    .pipe(
+      map((respo: any) => {
+        return respo;
+      })
+    );
+}
+
+
 }

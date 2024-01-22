@@ -5,7 +5,9 @@ import { UsersComponent } from './users/users.component';
 import { authGuard } from '../guards/auth-guard.guard';
 import { ClienteComponent } from './cliente/cliente/cliente.component';
 import { ClientesComponent } from './cliente/clientes/clientes.component';
-import { ProductosComponent } from './productos/productos.component';
+import { ProductoComponent } from './producto/producto/producto.component';
+import { ProductosComponent } from './producto/productos/productos.component';
+import { VarianteComponent } from './producto/variante/variante.component';
 
 export default [
   {
@@ -26,6 +28,21 @@ export default [
         path: "productos",
         canActivate: [authGuard],
         component: ProductosComponent
+      },
+      {
+        path: "productos/variantes/:id",
+        canActivate: [authGuard],
+        component: VarianteComponent
+      },
+      {
+        path: "productos/producto/:id",
+        canActivate: [authGuard],
+        component: ProductoComponent
+      },
+      {
+        path: "productos/producto",
+        canActivate: [authGuard],
+        component: ProductoComponent
       },
        {
         path: "clientes",

@@ -57,3 +57,108 @@
   max-width: 300px; /* Ajusta según sea necesario */
 }
 
+/* Estilo base para el select en pantallas grandes */
+select.lg {
+  padding: 8px; /* Ajusta el espaciado interno */
+  font-size: 14px; /* Tamaño de fuente */
+  border: 1px solid #ccc; /* Borde del select */
+  border-radius: 4px; /* Borde redondeado */
+  background-color: #fff; /* Color de fondo */
+  color: #333; /* Color del texto */
+  overflow-y: auto; /* Permite el desplazamiento vertical */
+  scrollbar-width: thin; /* Estilo del scrollbar en Firefox */
+  scrollbar-color: #ccc #fff; /* Estilo del scrollbar en Firefox */
+}
+
+/* Estilo cuando el select está enfocado en pantallas grandes */
+select.lg:focus {
+  border-color: #007bff; /* Cambia el color del borde al enfocar */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Sombra al enfocar */
+}
+
+/* Estilo para las opciones dentro del select en pantallas grandes */
+select.lg option {
+  padding: 8px; /* Ajusta el espaciado interno de las opciones */
+}
+
+/* Estilo para el botón dentro del select (flecha desplegable) en pantallas grandes */
+select.lg::-ms-expand {
+  display: none; /* Oculta la flecha en Internet Explorer */
+}
+
+/* Estilo para la flecha desplegable en navegadores modernos en pantallas grandes */
+select.lg::after {
+  content: '\25BC'; /* Código de la flecha abajo */
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Ajusta la posición de la flecha */
+  transform: translateY(-50%);
+  pointer-events: none; /* Evita que la flecha sea clickeable */
+}
+
+/* Estilo del scrollbar en Webkit (Chrome, Safari) */
+select.lg::-webkit-scrollbar {
+  width: 8px;
+}
+
+select.lg::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* Color del scrollbar */
+  border-radius: 4px; /* Borde redondeado del scrollbar */
+}
+
+select.lg::-webkit-scrollbar-track {
+  background-color: #fff; /* Color de fondo del scrollbar */
+}
+
+/* Estilo base para el select en pantallas pequeñas */
+select.sm {
+  padding: 4px; /* Ajusta el espaciado interno */
+  font-size: 13px; /* Tamaño de fuente */
+  border: 1px solid #ccc; /* Borde del select */
+  border-radius: 4px; /* Borde redondeado */
+  background-color: #fff; /* Color de fondo */
+  color: #333; /* Color del texto */
+  overflow-y: auto; /* Permite el desplazamiento vertical */
+  scrollbar-width: thin; /* Estilo del scrollbar en Firefox */
+  scrollbar-color: #ccc #fff; /* Estilo del scrollbar en Firefox */
+}
+
+/* Estilo cuando el select está enfocado en pantallas pequeñas */
+select.sm:focus {
+  border-color: #007bff; /* Cambia el color del borde al enfocar */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Sombra al enfocar */
+}
+
+/* Estilo para las opciones dentro del select en pantallas pequeñas */
+select.sm option {
+  padding: 4px; /* Ajusta el espaciado interno de las opciones */
+}
+
+/* Estilo para el botón dentro del select (flecha desplegable) en pantallas pequeñas */
+select.sm::-ms-expand {
+  display: none; /* Oculta la flecha en Internet Explorer */
+}
+
+/* Estilo para la flecha desplegable en navegadores modernos en pantallas pequeñas */
+select.sm::after {
+  content: '\25BC'; /* Código de la flecha abajo */
+  position: absolute;
+  top: 50%;
+  right: 5px; /* Ajusta la posición de la flecha */
+  transform: translateY(-50%);
+  pointer-events: none; /* Evita que la flecha sea clickeable */
+}
+
+/* Estilo del scrollbar en Webkit (Chrome, Safari) */
+select.sm::-webkit-scrollbar {
+  width: 6px;
+}
+
+select.sm::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* Color del scrollbar */
+  border-radius: 4px; /* Borde redondeado del scrollbar */
+}
+
+select.sm::-webkit-scrollbar-track {
+  background-color: #fff; /* Color de fondo del scrollbar */
+}
