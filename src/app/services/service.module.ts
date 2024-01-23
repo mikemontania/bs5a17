@@ -14,7 +14,7 @@ import {
   CalculoService,
   ReportesService,
   MedioPagoService, BancoService,
-  CobranzaService
+  CobranzaService,FileUploadService
 } from './service.index';
 
 @NgModule({
@@ -34,7 +34,7 @@ import {
     CalculoService,
     ReportesService,
     MedioPagoService, BancoService,
-    CobranzaService
+    CobranzaService,FileUploadService
   ],
   declarations: []
 })

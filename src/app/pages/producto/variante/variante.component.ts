@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { ProductosService } from '../../../services/productos.service';
 import { ImagenPipe } from '../../../pipes/imagen.pipe';
 import { NgModalComponent } from '../../../components/ng-modal/ng-modal.component';
+import { FileUploadService } from '../../../services/service.index';
 
 
 @Component({
@@ -18,10 +19,9 @@ import { NgModalComponent } from '../../../components/ng-modal/ng-modal.componen
   styleUrl: './variante.component.css'
 })
 export class VarianteComponent implements OnInit {
-  @ViewChild('fileInput') fileInput?: ElementRef;
+  public imagenSubir?: File;
+  public imgTemp: any = null;
 
-  imagenSubir?: File;
-  imagenTemp?: any;
   sinImagen: string = './assets/images/sin-imagen.jpg';
   size = "medium";
   delay=200;
@@ -33,9 +33,12 @@ export class VarianteComponent implements OnInit {
   unidades = signal<Unidad[]>([])
   productos = signal<Producto[]>([])
   varianteForm: FormGroup ;
+
   private fb = inject(FormBuilder)
   private _productoService = inject(ProductosService)
   private activatedRoute= inject(ActivatedRoute);
+  private _fileUploadService = inject(FileUploadService);
+
   constructor() {
     // Initialize the property in the constructor
     this.varianteForm = this.initForm()
@@ -96,11 +99,11 @@ actualizar(variante:Variante){
 
   this._productoService.updateVariante(variante).subscribe({
     next: (resp) => {
+      if (this.imagenSubir) {
+        this.subirImagen(variante.id);
+       }
       Swal.close()
       Swal.fire("Actualización exitosa!!!", "Se ha actualizado al variante: " + resp.nombre, "success");
-     /*  if (this.imagenSubir) {
-       this.cambiarImagen(this.variante.id);
-      } */
     },
     error: (error) => {
       Swal.close()
@@ -120,13 +123,10 @@ close() {
   crear(varianteData:Variante){
     this._productoService.createVariante(varianteData).subscribe({
       next: (resp) => {
+        this.subirImagen(resp.id)
         Swal.close()
         Swal.fire("Creación exitosa!!!", "Se ha registrado el variante " + resp.nombre, "success");
-        /* this._productoService.uploadImage(this.imagenSubir, producto.codProducto).subscribe((pro: Producto) => {
-           this.producto = pro;
-          this.imagenTemp = null;
-           $('#uploadedfile').val(null);
-        }); */
+
       },
       error: (error) => {
         Swal.close()
@@ -138,32 +138,36 @@ close() {
     });
   }
 
-  cambiarImagen(cod:number) {
-    this._productoService.uploadImage(this.imagenSubir, cod).subscribe((producto: Producto) => {
 
-      this.imagenTemp = '';
-      if (this.fileInput) {
-        this.fileInput.nativeElement.value = null;
-      }
-    });
+
+  cambiarImagen( event: any ) {
+    this.imagenSubir = event.target.files[0] ;
+
+    if ( !event.target.files[0]  ) {
+      return this.imgTemp = null;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL( event.target.files[0]  );
+
+    reader.onloadend = () => {
+      this.imgTemp = reader.result;
+    }
+
   }
 
-  seleccionImage(event: any) {
-    const archivo = event?.target?.files?.[0];
+  subirImagen(id:number ) {
 
-    if (archivo) {
-      // Realiza las operaciones necesarias con el archivo aquí
-      let reader = new FileReader();
-      reader.readAsDataURL(archivo);
-      reader.onloadend = () => {
-        this.imagenTemp = reader.result;
-      };
-    }
+    this._fileUploadService
+      .actualizarFoto( this.imagenSubir!, 'productos', id )
+      .then( img => {
+      //  this.usuario.img = img;
+        Swal.fire('Guardado', 'Imagen de usuario actualizada', 'success');
+      }).catch( err => {
+        console.log(err);
+        Swal.fire('Error', 'No se pudo subir la imagen', 'error');
+      })
 
-    // Asegúrate de que fileInput no sea undefined antes de asignarle un valor nulo
-    if (this.fileInput) {
-      this.fileInput.nativeElement.value = null;
-    }
   }
 
 }

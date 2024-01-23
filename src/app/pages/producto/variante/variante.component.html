@@ -150,18 +150,31 @@
 
   <form [formGroup]="varianteForm" (ngSubmit)="onSubmit($event)">
     <div class="form-row">
-      <div class="form-group col-md-2">
-        <div class="col-lg-2 border-dark">
-          <div class="card">
-            <div class="card border-dark mb-3" style="max-width: 18rem;">
+      <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Avatar</h4>
+            <h6 class="card-subtitle">Imagen del usuario</h6>
 
-              <img *ngIf="imagenTemp" [src]="imagenTemp" style="width:242px;height:200px;">
-              <div class="caption">
-                <input id="uploadedfile" (change)="seleccionImage($event)" type="file" #fileInput>
-              </div>
+            <div class="text-center">
+              <!--   <img *ngIf="!imgTemp" [src]="usuario.imagenUrl" class="img-avatar"> -->
+                <img *ngIf="imgTemp" [src]="imgTemp" class="img-avatar"/>
             </div>
-          </div>
+
+            <input type="file" (change)="cambiarImagen($event)">
+
+            <br>
+            <br>
+
+           <!--  <button type="button"
+                    class="btn btn-success btn-block waves-effect waves-light m-r-10"
+                    [disabled]="!imagenSubir"
+                    (click)="subirImagen()">
+                <i class="fa fa-save"></i>
+                Cambiar imagen
+            </button> -->
+
         </div>
+
       </div>
       <div class="form-group col-md-2">
         <label for="codBarra">Código de Barras</label>
