@@ -25,7 +25,6 @@ export class VarianteComponent implements OnInit {
   sinImagen: string = './assets/images/sin-imagen.jpg';
   size = "medium";
   delay=200;
-  isOpen = false;
   id = signal<number>(0)
   variantes = signal<Variante[]>([])
   variedades = signal<Variedad[]>([])
@@ -79,7 +78,7 @@ initForm(){
   return this.fb.group({
     codBarra: [null, Validators.required],
     codErp: [null, Validators.required],
-    porcIva: [null, Validators.required],
+    porcIva: [10, Validators.required],
     productoId: [null, Validators.required],
     unidadId: [null, Validators.required],
     presentacionId: [null, Validators.required],
@@ -114,12 +113,7 @@ console.log(variante)
     }// Use 'complete' instead of 'finally'
   });
 }
-open() {
-  this.isOpen = true;
-}
-close() {
-  this.isOpen = false;
-}
+
   crear(varianteData:Variante){
     this._productoService.createVariante(varianteData).subscribe({
       next: (resp) => {

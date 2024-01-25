@@ -6,24 +6,17 @@
     </button>
   </div>
 
-  <div class="card-body" div (click)="$event.stopPropagation()">
-    <button
-      type="button"
-      class="btn btn-sm btn-outline-success"
-      (click)="open()"
-    >
-      <i class="bi bi-file-earmark-plus-fill"></i>
-    </button>
+  <div class="card-body"  >
+
     <div id="details" style="overflow-x: auto">
       <table class="table table-responsive-sm table-sm mt-2" id="tableProducts">
         <thead>
           <tr>
+            <th>Id</th>
             <th>Imagen</th>
             <th></th>
-            <th>Id</th>
             <th>Código</th>
             <th>Código barra</th>
-            <th>Producto</th>
             <th>Presentación</th>
             <th>Variedad</th>
             <th>UM</th>
@@ -33,9 +26,105 @@
         </thead>
 
         <tbody id="variantes">
+          <tr [formGroup]="varianteForm" (ngSubmit)="onSubmit($event)">
+            <td class="field">
+              xxx
+            </td>
+            <td
+            align="center"
+            class="w70"
+            align="center"
+            style="background: white"
+          >
+            <img  *ngIf="imgTemp" [src]="imgTemp" class="img-avatar" />
+
+            </td>
+            <td class="field">
+
+              <input
+              class="form-control"
+              (change)="cambiarImagen($event)"
+              type="file"
+              id="formFile"
+            />
+            </td>
+
+            <td class="field">
+              <input
+                type="text"
+                class="form-control form-control-sm validation"
+                formControlName="codBarra"
+              />
+            </td>
+            <td class="field">
+              <input
+                type="text"
+                class="form-control form-control-sm validation"
+                formControlName="codErp"
+              />
+            </td>
+
+
+            <td class="field">
+              <select class="custom-select custom-select-sm" formControlName="presentacionId">
+                <option
+                  *ngFor="let presentacion of presentaciones()"
+                  [value]="presentacion.id"
+                >
+                  {{ presentacion.descripcion }}
+                </option>
+              </select>
+            </td>
+
+            <td class="field">
+              <select class="custom-select custom-select-sm" formControlName="variedadId">
+                <option
+                  *ngFor="let variedad of variedades()"
+                  [value]="variedad.id"
+                >
+                  {{ variedad.descripcion }}
+                </option>
+              </select>
+            </td>
+
+            <td class="field">
+              <select class="custom-select custom-select-sm" formControlName="unidadId">
+                <option *ngFor="let unidad of unidades()" [value]="unidad.id">
+                  {{ unidad.descripcion }}
+                </option>
+              </select>
+            </td>
+            <td class="field">
+
+              <input
+              class="form-control form-control-sm validation"
+              formControlName="porcIva"
+              type="number"
+              id="porcIva"
+            />
+            </td>
+            <td class="field">
+              <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                formControlName="activo"
+                checked
+              />
+              </div>
+            </td>
+
+            <td class="field">
+              <button type="submit"  class="btn btn-sm btn-outline-success">
+                <i class="bi bi-file-earmark-plus"></i>
+              </button>
+            </td>
+
+          </tr>
           @for (variante of variantes(); track variante.id; let index = $index)
           {
           <tr class=" ">
+            <td class="field">{{ variante.id }}</td>
             <td
               align="center"
               class="w70"
@@ -49,9 +138,13 @@
               />
             </td>
             <td class="field">
-              <input class="form-control" (change)="actualizarImagen($event, variante.id)" type="file" id="formFile" />
+              <input
+                class="form-control"
+                (change)="actualizarImagen($event, variante.id)"
+                type="file"
+                id="formFile"
+              />
             </td>
-            <td class="field">{{ variante.id }}</td>
             <td class="field">
               <input
                 class="form-control form-control-sm validation"
@@ -137,7 +230,7 @@
                 class="btn btn-sm btn-outline-success"
                 (click)="actualizar(variante)"
               >
-                Actualizar
+              <i class="bi bi-floppy"></i>
               </button>
             </td>
           </tr>
@@ -149,88 +242,3 @@
     </div>
   </div>
 </div>
-<app-ng-modal [isOpen]="isOpen" (closeModal)="isOpen = false">
-  <form [formGroup]="varianteForm" (ngSubmit)="onSubmit($event)">
-    <div class="form-row">
-      <div class="card">
-        <div class="card-body">
-          <h6 class="card-subtitle">Imagen </h6>
-
-          <div class="text-center">
-            <!--   <img *ngIf="!imgTemp" [src]="usuario.imagenUrl" class="img-avatar"> -->
-            <img *ngIf="imgTemp" [src]="imgTemp" class="img-avatar" />
-          </div>
-
-          <input type="file" (change)="cambiarImagen($event)" />
-
-          <br />
-          <br />
-
-
-        </div>
-      </div>
-      <div class="form-group col-md-2">
-        <label for="codBarra">Código de Barras</label>
-        <input type="text" class="form-control" formControlName="codBarra" />
-      </div>
-      <div class="form-group col-md-2">
-        <label for="codErp">Código ERP</label>
-        <input type="text" class="form-control" formControlName="codErp" />
-      </div>
-      <div class="form-group col-md-2">
-        <label for="porcIva">Porcentaje IVA</label>
-        <input type="text" class="form-control" formControlName="porcIva" />
-      </div>
-      <div class="form-group col-md-2">
-        <label for="productoId">Producto</label>
-        <select class="form-control" formControlName="productoId">
-          <option *ngFor="let producto of productos()" [value]="producto.id">
-            {{ producto.nombre }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group col-md-2">
-        <label for="presentacionId">Presentación</label>
-        <select class="form-control" formControlName="presentacionId">
-          <option
-            *ngFor="let presentacion of presentaciones()"
-            [value]="presentacion.id"
-          >
-            {{ presentacion.descripcion }}
-          </option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-md-2">
-        <label for="variedadId">Variedad</label>
-        <select class="form-control" formControlName="variedadId">
-          <option *ngFor="let variedad of variedades()" [value]="variedad.id">
-            {{ variedad.descripcion }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group col-md-2">
-        <label for="unidadId">Unidad</label>
-        <select class="form-control" formControlName="unidadId">
-          <option *ngFor="let unidad of unidades()" [value]="unidad.id">
-            {{ unidad.descripcion }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group col-md-2">
-        <label for="activo">Activo</label>
-        <input
-          class="form-check-input"
-          type="checkbox"
-          formControlName="activo"
-          checked
-        />
-      </div>
-      <div class="form-group col-md-2">
-        <button type="submit" class="btn btn-primary">Crear Variante</button>
-      </div>
-    </div>
-  </form>
-</app-ng-modal>
