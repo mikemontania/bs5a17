@@ -47,9 +47,9 @@
                 <th scope="row">{{ index + 1 }}</th>
                 <td>{{ producto.id }}</td>
                 <td  class="text-sm">{{ producto.nombre }}</td>
-                <td  class="text-sm">{{ producto.marca?.descripcion }}</td>
-                <td  class="text-sm">{{ producto.categoria?.descripcion }}</td>
-                <td  class="text-sm">{{ producto.subCategoria?.descripcion }}</td>
+                <td  class="text-sm">{{ producto.marca.descripcion }}</td>
+                <td  class="text-sm">{{ producto.categoria.descripcion }}</td>
+                <td  class="text-sm">{{ producto.subCategoria.descripcion }}</td>
                 <td  class="text-sm">{{ (producto.activo)?'SI':'NO' }}</td>
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-info text-info" appTooltip="Ver editar producto"  (click)="verProducto(producto.id)" >

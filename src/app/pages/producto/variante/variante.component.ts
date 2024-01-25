@@ -96,14 +96,14 @@ onSubmit(e: Event) {
   this.crear(varianteData);
 }
 actualizar(variante:Variante){
-
+console.log(variante)
   this._productoService.updateVariante(variante).subscribe({
     next: (resp) => {
       if (this.imagenSubir) {
         this.subirImagen(variante.id);
        }
       Swal.close()
-      Swal.fire("Actualización exitosa!!!", "Se ha actualizado al variante: " + resp.nombre, "success");
+      Swal.fire("Actualización exitosa!!!", "Se ha actualizado la variante"  , "success");
     },
     error: (error) => {
       Swal.close()
@@ -125,7 +125,7 @@ close() {
       next: (resp) => {
         this.subirImagen(resp.id)
         Swal.close()
-        Swal.fire("Creación exitosa!!!", "Se ha registrado el variante " + resp.nombre, "success");
+        Swal.fire("Creación exitosa!!!", "Se ha registrado la variante "  , "success");
 
       },
       error: (error) => {
@@ -138,7 +138,22 @@ close() {
     });
   }
 
+  actualizarImagen(event: any, id: number) {
+    this.imagenSubir = event.target.files[0];
 
+    if (!this.imagenSubir) {
+      this.imgTemp = null;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.imagenSubir);
+
+    reader.onloadend = () => {
+      this.imgTemp = reader.result;
+      this.subirImagen(id);
+    };
+  }
 
   cambiarImagen( event: any ) {
     this.imagenSubir = event.target.files[0] ;
@@ -152,21 +167,20 @@ close() {
 
     reader.onloadend = () => {
       this.imgTemp = reader.result;
-    }
 
+    }
+return 'ok'
   }
+
 
   subirImagen(id:number ) {
 
     this._fileUploadService
-      .actualizarFoto( this.imagenSubir!, 'productos', id )
-      .then( img => {
-      //  this.usuario.img = img;
-        Swal.fire('Guardado', 'Imagen de usuario actualizada', 'success');
-      }).catch( err => {
-        console.log(err);
-        Swal.fire('Error', 'No se pudo subir la imagen', 'error');
-      })
+      .actualizarFoto( this.imagenSubir!, 'productos', id ).subscribe(
+        resp=>{resp
+          console.log(resp)
+        Swal.fire('Guardado', 'Imagen  actualizada', 'success');}
+      )
 
   }
 
