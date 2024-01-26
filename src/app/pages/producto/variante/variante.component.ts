@@ -13,7 +13,7 @@ import { FileUploadService } from '../../../services/service.index';
 @Component({
   selector: 'app-variante',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule,ImagenPipe,NgModalComponent],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, ImagenPipe, NgModalComponent],
   templateUrl: './variante.component.html',
   styleUrl: './variante.component.css'
 })
@@ -23,18 +23,18 @@ export class VarianteComponent implements OnInit {
 
   sinImagen: string = '../../../../assets/no-img.jpg';
   size = "medium";
-  delay=200;
+  delay = 200;
   id = signal<number>(0)
   variantes = signal<Variante[]>([])
   variedades = signal<Variedad[]>([])
   presentaciones = signal<Presentacion[]>([])
   unidades = signal<Unidad[]>([])
   productos = signal<Producto[]>([])
-  varianteForm: FormGroup ;
+  varianteForm: FormGroup;
 
   private fb = inject(FormBuilder)
   private _productoService = inject(ProductosService)
-  private activatedRoute= inject(ActivatedRoute);
+  private activatedRoute = inject(ActivatedRoute);
   private _fileUploadService = inject(FileUploadService);
 
   constructor() {
@@ -46,7 +46,7 @@ export class VarianteComponent implements OnInit {
       this._productoService.findAllPresentaciones(),
       this._productoService.findAllUnidades(),
       this._productoService.findAll(),
-    ]).subscribe(([variedades, presentaciones,unidades, productos]) => {
+    ]).subscribe(([variedades, presentaciones, unidades, productos]) => {
       this.variedades.set(variedades);
       this.presentaciones.set(presentaciones);
       this.unidades.set(unidades);
@@ -58,9 +58,9 @@ export class VarianteComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id')
       console.log(id)
-      if ( id) {
+      if (id) {
         this.id.set(+id ?? 0); // Maneja la posibilidad de valor nulo
-        this._productoService.findVariantesByProductoId( this.id()).subscribe({
+        this._productoService.findVariantesByProductoId(this.id()).subscribe({
           next: (variantes) => {
             this.variantes.set(variantes)
           },
@@ -73,63 +73,64 @@ export class VarianteComponent implements OnInit {
     });
 
   }
-initForm(){
-  return this.fb.group({
-    codBarra: [null, Validators.required],
-    codErp: [null, Validators.required],
-    porcIva: [10, Validators.required],
-    productoId: [null, Validators.required],
-    unidadId: [null, Validators.required],
-    presentacionId: [null, Validators.required],
-    variedadId: [null, Validators.required],
-    activo: [true]
-  });
-}
+  initForm() {
+    return this.fb.group({
+      codBarra: [null, Validators.required],
+      codErp: [null, Validators.required],
+      porcIva: [10, Validators.required],
+      productoId: [null, Validators.required],
+      unidadId: [null, Validators.required],
+      presentacionId: [null, Validators.required],
+      variedadId: [null, Validators.required],
+      activo: [true]
+    });
+  }
 
 
-actualizar(variante: Variante, index: number) {
-  this._productoService.updateVariante(variante).subscribe({
-    next: async (resp) => {
-      const img = await this.subirImagen(variante.id, index);
-      //this.variantes[index].set({...resp,img})
-      Swal.close();
-      Swal.fire("Actualización exitosa!!!", "Se ha actualizado la variante", "success").then(() => {
-        this.varianteForm.reset();  // Restablecer el formulario
-        this.imgTemps[index] = null;  // Limpiar la imagen temporal
-        this.imagenesSubir[index] = null;  // Limpiar la imagen para subir
-      });
-    },
-    error: (error) => {
-      Swal.close();
-      Swal.fire("Error", error.message, "error");
-    },
+  actualizar(variante: Variante, index: number) {
+    this._productoService.updateVariante(variante).subscribe({
+      next: async (resp) => {
+        const img = await this.subirImagen(variante.id, index);
+        //this.variantes[index].set({...resp,img})
+        this.variantes.update(values => values[index] = { ...resp, img })
+        Swal.close();
+        Swal.fire("Actualización exitosa!!!", "Se ha actualizado la variante", "success").then(() => {
+          this.varianteForm.reset();  // Restablecer el formulario
+          this.imgTemps[index] = null;  // Limpiar la imagen temporal
+          this.imagenesSubir[index] = null;  // Limpiar la imagen para subir
+        });
+      },
+      error: (error) => {
+        Swal.close();
+        Swal.fire("Error", error.message, "error");
+      },
 
-  });
-}
+    });
+  }
 
-crear(e: Event) {
-  e.preventDefault();
+  crear(e: Event) {
+    e.preventDefault();
 
-  const varianteData = {...this.varianteForm.value,productoId:this.id()};
-  this._productoService.createVariante(varianteData).subscribe({
-    next: async (resp) => {
-     const img = await  this.subirImagen(resp.id, 99999);
-      Swal.close();
-      Swal.fire("Creación exitosa!!!", "Se ha registrado la variante", "success").then(() => {
-        this.variantes.set([...this.variantes(), {...resp,img}])
-        this.varianteForm.reset();  // Restablecer el formulario
-        this.imgTemps[99999] = null;  // Limpiar la imagen temporal
-        this.imagenesSubir[99999] = null;  // Limpiar la imagen para subir
-        this.varianteForm = this.fb.group({});
-      });
-    },
-    error: (error) => {
-      Swal.close();
-      Swal.fire("Error", error.message, "error");
-    },
+    const varianteData = { ...this.varianteForm.value, productoId: this.id() };
+    this._productoService.createVariante(varianteData).subscribe({
+      next: async (resp: any) => {
+        const img = await this.subirImagen(resp.id, 99999);
+        Swal.close();
+        Swal.fire("Creación exitosa!!!", "Se ha registrado la variante", "success").then(() => {
+          this.variantes().push( { ...resp, img })
+          this.varianteForm.reset();  // Restablecer el formulario
+          this.imgTemps[99999] = null;  // Limpiar la imagen temporal
+          this.imagenesSubir[99999] = null;  // Limpiar la imagen para subir
+          this.varianteForm = this.fb.group({});
+        });
+      },
+      error: (error) => {
+        Swal.close();
+        Swal.fire("Error", error.message, "error");
+      },
 
-  });
-}
+    });
+  }
 
 
   actualizarImagen(event: any, id: number, index: number) {
@@ -178,6 +179,10 @@ crear(e: Event) {
         .actualizarFoto(this.imagenesSubir[index]!, 'productos', id)
         .subscribe(
           img => {
+            const fileInput = document.getElementById('fileInput_' + index) as HTMLInputElement;
+            if (fileInput) {
+              fileInput.value = ''; // Limpiar el campo de entrada de archivos
+            }
             console.log(img);
             Swal.fire('Guardado', 'Imagen actualizada', 'success');
             return img;

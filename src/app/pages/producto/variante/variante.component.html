@@ -32,7 +32,8 @@
               <img *ngIf="!imgTemps[99999]" [src]="sinImagen" class="img-producto60" />
             </td>
             <td class="field">
-              <input class="form-control form-control-sm validation" type="file" (change)="actualizarImagen($event, 99999, 99999)" />
+              <input class="form-control form-control-sm validation" [id]="'fileInput_' + 99999"type="file" (change)="actualizarImagen($event, 99999, 99999)" />
+
             </td>
 
             <td class="field">
@@ -90,7 +91,7 @@
                 <img *ngIf="imgTemps[index]" [src]="imgTemps[index]" class="img-producto60" />
             </td>
             <td class="field">
-              <input class="form-control form-control-sm validation" type="file" (change)="actualizarImagen($event, variante.id, index)" />
+              <input class="form-control form-control-sm validation" type="file"[id]="'fileInput_' + index" (change)="actualizarImagen($event, variante.id, index)" />
             </td>
             <td class="field">
               <input class="form-control form-control-sm validation" [(ngModel)]="variante.codErp" type="number"
