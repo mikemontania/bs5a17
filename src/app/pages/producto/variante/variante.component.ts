@@ -10,7 +10,6 @@ import { ImagenPipe } from '../../../pipes/imagen.pipe';
 import { NgModalComponent } from '../../../components/ng-modal/ng-modal.component';
 import { FileUploadService } from '../../../services/service.index';
 
-
 @Component({
   selector: 'app-variante',
   standalone: true,
@@ -19,10 +18,10 @@ import { FileUploadService } from '../../../services/service.index';
   styleUrl: './variante.component.css'
 })
 export class VarianteComponent implements OnInit {
-  public imagenSubir?: File;
-  public imgTemp: any = null;
+  public imagenesSubir: (File | null)[] = [];
+  public imgTemps: any[] = [];
 
-  sinImagen: string = './assets/images/sin-imagen.jpg';
+  sinImagen: string = '../../../../assets/no-img.jpg';
   size = "medium";
   delay=200;
   id = signal<number>(0)
@@ -88,94 +87,103 @@ initForm(){
 }
 
 
-onSubmit(e: Event) {
-  e.preventDefault(); // Prevenir el comportamiento de submit por defecto
-
-  const varianteData = this.varianteForm.value;
-  this.crear(varianteData);
-}
-actualizar(variante:Variante){
-console.log(variante)
+actualizar(variante: Variante, index: number) {
   this._productoService.updateVariante(variante).subscribe({
-    next: (resp) => {
-      if (this.imagenSubir) {
-        this.subirImagen(variante.id);
-       }
-      Swal.close()
-      Swal.fire("Actualización exitosa!!!", "Se ha actualizado la variante"  , "success");
+    next: async (resp) => {
+      const img = await this.subirImagen(variante.id, index);
+      //this.variantes[index].set({...resp,img})
+      Swal.close();
+      Swal.fire("Actualización exitosa!!!", "Se ha actualizado la variante", "success").then(() => {
+        this.varianteForm.reset();  // Restablecer el formulario
+        this.imgTemps[index] = null;  // Limpiar la imagen temporal
+        this.imagenesSubir[index] = null;  // Limpiar la imagen para subir
+      });
     },
     error: (error) => {
-      Swal.close()
+      Swal.close();
       Swal.fire("Error", error.message, "error");
     },
-    complete: () => {
-      this.varianteForm = this.fb.group({});
-    }// Use 'complete' instead of 'finally'
+
   });
 }
 
-  crear(varianteData:Variante){
-    this._productoService.createVariante(varianteData).subscribe({
-      next: (resp) => {
-        this.subirImagen(resp.id)
-        Swal.close()
-        Swal.fire("Creación exitosa!!!", "Se ha registrado la variante "  , "success");
+crear(e: Event) {
+  e.preventDefault();
 
-      },
-      error: (error) => {
-        Swal.close()
-        Swal.fire("Error", error.message, "error");
-      },
-      complete: () => {
+  const varianteData = {...this.varianteForm.value,productoId:this.id()};
+  this._productoService.createVariante(varianteData).subscribe({
+    next: async (resp) => {
+     const img = await  this.subirImagen(resp.id, 99999);
+      Swal.close();
+      Swal.fire("Creación exitosa!!!", "Se ha registrado la variante", "success").then(() => {
+        this.variantes.set([...this.variantes(), {...resp,img}])
+        this.varianteForm.reset();  // Restablecer el formulario
+        this.imgTemps[99999] = null;  // Limpiar la imagen temporal
+        this.imagenesSubir[99999] = null;  // Limpiar la imagen para subir
         this.varianteForm = this.fb.group({});
-      }// Use 'complete' instead of 'finally'
-    });
-  }
+      });
+    },
+    error: (error) => {
+      Swal.close();
+      Swal.fire("Error", error.message, "error");
+    },
 
-  actualizarImagen(event: any, id: number) {
-    this.imagenSubir = event.target.files[0];
+  });
+}
 
-    if (!this.imagenSubir) {
-      this.imgTemp = null;
+
+  actualizarImagen(event: any, id: number, index: number) {
+
+    this.imagenesSubir[index] = event.target.files[0];
+
+    if (!this.imagenesSubir[index]) {
+      this.imgTemps[index] = null;
       return;
     }
 
     const reader = new FileReader();
-    reader.readAsDataURL(this.imagenSubir);
+    reader.readAsDataURL(this.imagenesSubir[index]!);
 
     reader.onloadend = () => {
-      this.imgTemp = reader.result;
-      this.subirImagen(id);
+      this.imgTemps[index] = reader.result;
     };
   }
 
-  cambiarImagen( event: any ) {
-    this.imagenSubir = event.target.files[0] ;
 
-    if ( !event.target.files[0]  ) {
-      return this.imgTemp = null;
+
+
+
+  cambiarImagen(event: any, index: number) {
+    this.imagenesSubir[index] = event.target.files[0];
+
+    if (!this.imagenesSubir[index]) {
+      this.imgTemps[index] = null;
+      return;
     }
 
     const reader = new FileReader();
-    reader.readAsDataURL( event.target.files[0]  );
+    reader.readAsDataURL(this.imagenesSubir[index]!);
 
     reader.onloadend = () => {
-      this.imgTemp = reader.result;
-
+      this.imgTemps[index] = reader.result;
     }
-return 'ok'
+
+    return 'ok';
   }
 
 
-  subirImagen(id:number ) {
-
-    this._fileUploadService
-      .actualizarFoto( this.imagenSubir!, 'productos', id ).subscribe(
-        resp=>{resp
-          console.log(resp)
-        Swal.fire('Guardado', 'Imagen  actualizada', 'success');}
-      )
-
+  subirImagen(id: number, index: number) {
+    if (this.imagenesSubir[index]) {
+      this._fileUploadService
+        .actualizarFoto(this.imagenesSubir[index]!, 'productos', id)
+        .subscribe(
+          img => {
+            console.log(img);
+            Swal.fire('Guardado', 'Imagen actualizada', 'success');
+            return img;
+          }
+        );
+    }
   }
 
 }
