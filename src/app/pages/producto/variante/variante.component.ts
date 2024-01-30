@@ -25,7 +25,7 @@ export class VarianteComponent implements OnInit {
   size = "medium";
   delay = 200;
   id = signal<number>(0)
-  variantes = signal<Variante[]>([])
+  variantes  :Variante[] =[];
   variedades = signal<Variedad[]>([])
   presentaciones = signal<Presentacion[]>([])
   unidades = signal<Unidad[]>([])
@@ -62,7 +62,7 @@ export class VarianteComponent implements OnInit {
         this.id.set(+id ?? 0); // Maneja la posibilidad de valor nulo
         this._productoService.findVariantesByProductoId(this.id()).subscribe({
           next: (variantes) => {
-            this.variantes.set(variantes)
+            this.variantes = variantes;
           },
           error: message => {
             console.error(message);
@@ -93,7 +93,7 @@ export class VarianteComponent implements OnInit {
       next: async (resp) => {
         const img = await this.subirImagen(variante.id, index);
         //this.variantes[index].set({...resp,img})
-        this.variantes.update(values => values[index] = { ...resp, img })
+        this.variantes[index] = { ...resp, img };
 
         Swal.close();
         Swal.fire("Actualización exitosa!!!", "Se ha actualizado la variante", "success").then(() => {
@@ -118,11 +118,11 @@ export class VarianteComponent implements OnInit {
       next: async (resp: any) => {
         const img = await this.subirImagen(resp.id, 99999)
         console.log(img)
-        this.variantes().push({ ...resp, img })
+        this.variantes.push({ ...resp, img })
         Swal.close();
         Swal.fire("Creación exitosa!!!", "Se ha registrado la variante", "success").then(() => {
           console.log(img)
-          console.log(this.variantes())
+          console.log(this.variantes)
           this.varianteForm.reset();  // Restablecer el formulario
           this.imgTemps[99999] = null;  // Limpiar la imagen temporal
           this.imagenesSubir[99999] = null;  // Limpiar la imagen para subir
