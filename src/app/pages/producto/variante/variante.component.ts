@@ -88,11 +88,13 @@ export class VarianteComponent implements OnInit {
 
 
   actualizar(variante: Variante, index: number) {
+    console.log(variante)
     this._productoService.updateVariante(variante).subscribe({
       next: async (resp) => {
         const img = await this.subirImagen(variante.id, index);
         //this.variantes[index].set({...resp,img})
         this.variantes.update(values => values[index] = { ...resp, img })
+
         Swal.close();
         Swal.fire("Actualización exitosa!!!", "Se ha actualizado la variante", "success").then(() => {
           this.varianteForm.reset();  // Restablecer el formulario
@@ -114,14 +116,17 @@ export class VarianteComponent implements OnInit {
     const varianteData = { ...this.varianteForm.value, productoId: this.id() };
     this._productoService.createVariante(varianteData).subscribe({
       next: async (resp: any) => {
-        const img = await this.subirImagen(resp.id, 99999);
+        const img = await this.subirImagen(resp.id, 99999)
+        console.log(img)
+        this.variantes().push({ ...resp, img })
         Swal.close();
         Swal.fire("Creación exitosa!!!", "Se ha registrado la variante", "success").then(() => {
-          this.variantes().push( { ...resp, img })
+          console.log(img)
+          console.log(this.variantes())
           this.varianteForm.reset();  // Restablecer el formulario
           this.imgTemps[99999] = null;  // Limpiar la imagen temporal
           this.imagenesSubir[99999] = null;  // Limpiar la imagen para subir
-          this.varianteForm = this.fb.group({});
+          this.initForm()
         });
       },
       error: (error) => {
@@ -173,22 +178,25 @@ export class VarianteComponent implements OnInit {
   }
 
 
-  subirImagen(id: number, index: number) {
-    if (this.imagenesSubir[index]) {
-      this._fileUploadService
-        .actualizarFoto(this.imagenesSubir[index]!, 'productos', id)
-        .subscribe(
+  subirImagen(id: number, index: number): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (this.imagenesSubir[index]) {
+        this._fileUploadService.actualizarFoto(this.imagenesSubir[index]!, 'productos', id).subscribe(
           img => {
             const fileInput = document.getElementById('fileInput_' + index) as HTMLInputElement;
             if (fileInput) {
               fileInput.value = ''; // Limpiar el campo de entrada de archivos
             }
             console.log(img);
-            Swal.fire('Guardado', 'Imagen actualizada', 'success');
-            return img;
-          }
+            // Swal.fire('Guardado', 'Imagen actualizada', 'success');
+            resolve(img);
+          },
+          error => reject(error)
         );
-    }
+      } else {
+        resolve('No hay imagen para subir');
+      }
+    });
   }
 
 }

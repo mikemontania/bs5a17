@@ -13,7 +13,7 @@
           <tr>
             <th>Id</th>
             <th>Imagen</th>
-            <th></th>
+          <!--   <th></th> -->
             <th>Código</th>
             <th>Código barra</th>
             <th>Presentación</th>
@@ -82,7 +82,7 @@
               </button>
             </td>
           </tr>
-          @for (variante of variantes(); track variante.id; let index = $index)
+          @for (variante of variantes();let index = $index; track variante.id; )
           {
           <tr class=" ">
             <td class="field">{{ variante.id }}</td>
