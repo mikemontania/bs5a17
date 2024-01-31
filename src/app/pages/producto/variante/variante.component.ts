@@ -9,6 +9,7 @@ import { ProductosService } from '../../../services/productos.service';
 import { ImagenPipe } from '../../../pipes/imagen.pipe';
 import { NgModalComponent } from '../../../components/ng-modal/ng-modal.component';
 import { FileUploadService } from '../../../services/service.index';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-variante',
@@ -36,7 +37,7 @@ export class VarianteComponent implements OnInit {
   private _productoService = inject(ProductosService)
   private activatedRoute = inject(ActivatedRoute);
   private _fileUploadService = inject(FileUploadService);
-
+  private location= inject(Location)
   constructor() {
     // Initialize the property in the constructor
     this.varianteForm = this.initForm()
@@ -198,5 +199,7 @@ export class VarianteComponent implements OnInit {
       }
     });
   }
-
+atras(){
+  this.location.back();
+}
 }
