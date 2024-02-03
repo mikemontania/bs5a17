@@ -13,6 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": [
+              "@swimlane/ngx-charts"
+            ],
             "outputPath": "dist/app",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -23,6 +26,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
+
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -33,7 +37,7 @@
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "node_modules/@fortawesome/fontawesome-free/js/all.js"
-          ]
+            ]
           },
           "configurations": {
             "production": {

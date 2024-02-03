@@ -24,15 +24,61 @@ export class ReportesService {
    );
   }
 
-  getReportCobranza(fechaDesde: string, fechaHasta:string,sucursalId:number,medioPagoId:number) {
+  getReportCobranza(fechaDesde: string, fechaHasta: string, sucursalId: number, medioPagoId: number) {
     const url = BASE_URL + `/reportes/reportecobranza/${fechaDesde}/${fechaHasta}/${sucursalId}/${medioPagoId}`;
     return this.http
-     .get(url)
-     .pipe(
-      map((response: any) =>  response)
-     );
-    }
+      .get(url)
+      .pipe(
+        map((response: any) => response)
+      );
+  }
+
+  getReporteVentasPorSucursal(fechaDesde: string, fechaHasta: string, sucursalId: number, medioPagoId: number) {
+    const url = BASE_URL + `/reportes/ventasPorSucursal/${fechaDesde}/${fechaHasta}/${sucursalId}/${medioPagoId}`;
+    return this.http
+      .get(url)
+      .pipe(
+        map((response: any) => response)
+      );
+  }
+
+  getTopVariantes(fechaDesde: string, fechaHasta: string, sucursalId: number, medioPagoId: number) {
+    const url = BASE_URL + `/reportes/topVariantes/${fechaDesde}/${fechaHasta}/${sucursalId}/${medioPagoId}`;
+    return this.http
+      .get(url)
+      .pipe(
+        map((response: any) => response)
+      );
+  }
 
 
+  getTopClientes(fechaDesde: string, fechaHasta: string, sucursalId: number, medioPagoId: number) {
+    const url = BASE_URL + `/reportes/topClientes/${fechaDesde}/${fechaHasta}/${sucursalId}/${medioPagoId}`;
+    return this.http
+      .get(url)
+      .pipe(
+        map((response: any) => response)
+      );
+  }
+
+
+  getInformeMediosDePago(fechaDesde: string, fechaHasta: string, sucursalId: number, medioPagoId: number) {
+    const url = BASE_URL + `/reportes/topMediosDePago/${fechaDesde}/${fechaHasta}/${sucursalId}/${medioPagoId}`;
+    return this.http
+      .get(url)
+      .pipe(
+        map((response: any) => response)
+      );
+  }
+
+
+  getVendedoresPorTotal(fechaDesde: string, fechaHasta: string, sucursalId: number, medioPagoId: number) {
+    const url = BASE_URL + `/reportes/vendedoresPorTotal/${fechaDesde}/${fechaHasta}/${sucursalId}/${medioPagoId}`;
+    return this.http
+      .get(url)
+      .pipe(
+        map((response: any) => response)
+      );
+                }
 
 }
