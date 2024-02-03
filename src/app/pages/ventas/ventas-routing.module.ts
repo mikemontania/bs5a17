@@ -9,6 +9,11 @@ export default [
         loadComponent: () => import('./ventas/ventas.component').then((c) => c.VentasComponent)
       },
       {
+        path: "reporteCobranza",
+        canActivate: [authGuard],
+        loadComponent: () => import('./reporteCobranza/reporteCobranza.component').then((c) => c.ReporteCobranzaComponent)
+      },
+      {
         path: "listar",
         canActivate: [authGuard],
         loadComponent: () => import('./list/list.component').then((c) => c.ListComponent)

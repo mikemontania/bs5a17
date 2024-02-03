@@ -1,0 +1,40 @@
+<div class="modal-background" *ngIf="isOpen" (click)="close()">
+  <div class="modal-container"
+    [ngClass]="{'small': size === 'small', 'medium': size === 'medium', 'large': size === 'large'}">
+    <div class="modal-header">
+      <h5 class="modal-title">Buscador de Medio Pago</h5>
+      <button type="button" class="btn-close" (click)="close()"> <i class="fas fa-times"></i></button>
+    </div>
+    <!-- Contenido del modal -->
+    <div (click)="$event.stopPropagation()">
+
+        <div class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
+
+          <div class="w-100 mb-3">
+            <input-debounce  #inputSearch [delay]=delay id="inputSearch"
+              type="text" placeholder="Ingrese Medio Pago ..." required="" aria-invalid="false"
+              (value)="buscar($event)" />
+            </div>
+
+
+        </div>
+
+
+
+        <ul class="list-group">
+          @for (medioPago of medioPagosAux; track medioPago.id) {
+            <li class="list-group-item" (click)="selectMedioPago(medioPago)">
+              <span class="text-center pointer" >
+                {{medioPago.descripcion}}
+              </span>
+            </li>
+          } @empty {
+            <li class="list-group-item">No se han encontrado items</li>
+            }
+        </ul>
+
+    </div>
+
+
+  </div>
+</div>

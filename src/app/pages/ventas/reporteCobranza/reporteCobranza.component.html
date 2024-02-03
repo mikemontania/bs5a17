@@ -1,0 +1,182 @@
+<div class="card ">
+  <div class="card-body row">
+    <div class="col-6">
+
+
+      <!-- Date Inputs -->
+      <div class="input-group mb-3 w-100 d-flex selector">
+
+        <div class="input-group d-flex">
+
+          <span class="input-group-text">DESDE/HASTA</span>
+          <input type="date" class="form-control" id="fechaDesde" [(ngModel)]="fechaDesde" />
+          <input type="date" class="form-control" id="fechaHasta" [(ngModel)]="fechaHasta" />
+        </div>
+      </div>
+
+
+      <!-- MedioPago Input -->
+      <div class="input-group mb-3 w-100 d-flex selector">
+        <span (click)="buscarMedioPago()" class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
+          @if(medioPago()?.id) {
+            <span class="client-info">
+              <small>{{ medioPago()?.descripcion }}</small>
+            </span>
+          } @else {
+            <span class="client-info"><small>Buscar MedioPago ...</small></span>
+          }
+          <span class="dropdown-icon">
+            <i class="mh-1 fa-solid fa-sort-down"></i>
+          </span>
+        </span>
+      </div>
+
+      <!-- Sucursal Input -->
+      <div class="input-group mb-3 w-100 d-flex selector">
+        <span (click)="buscarSucursal()" class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
+          @if(sucursal()?.id) {
+            <span class="client-info">
+              <small>{{ sucursal()?.descripcion }}</small>
+            </span>
+          } @else {
+            <span class="client-info"><small>Buscar Sucursal ...</small></span>
+          }
+          <span class="dropdown-icon">
+            <i class="mh-1 fa-solid fa-sort-down"></i>
+          </span>
+        </span>
+      </div>
+
+      <!-- Search and Cancel Buttons -->
+      <div class="card mb-3 w-100 d-flex selector">
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-success" (click)="buscar()">Buscar</button>
+          <button type="button" class="btn btn-outline-danger" (click)="cancelar()">Cancelar</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-6">
+      @if(agrupados() && agrupados().length > 0) {
+
+          <div class="card-body pt-4 d-flex flex-column align-items-center">
+            <div id="details" style="overflow-x: auto">
+              <table class="table  table-sm small-table">
+
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">MEDIOPAGO</th>
+                    <th scope="col">CANTIDAD</th>
+                    <th scope="col">IMPORTE </th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (a of agrupados(); track a.medioPago; let index = $index) {
+                  <tr>
+                    <th scope="row">{{ index + 1 }}</th>
+                    <td>{{ a.medioPago }}</td>
+                    <td  class="text-sm">{{ a.cantidadCobranza  | number}}</td>
+                    <td  class="text-sm">{{ a.importeTotal | number}} Gs.</td>
+                  </tr>
+                } @empty {
+                  <tr></tr>
+                }
+                <tr>
+                  <th scope="row"> </th>
+                  <td>Total</td>
+                  <td  class="text-sm">{{ cantidadMedios()  | number}}</td>
+                  <td  class="text-sm">{{ importeTotal() | number}} Gs.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        } @else {
+        <div class="w-100 empty-message-container">
+          <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <h4 class="alert-heading">Atención</h4>
+            <p>No se han encontrado medios de pago...</p>
+          </div>
+        </div>
+        }
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    @if(detalles() && detalles().length > 0) {
+
+      <div class=" pt-4 d-flex flex-column align-items-center">
+        <div id="details" style="overflow-x: auto">
+          <table class="table caption-top table-sm small-table">
+            <caption>
+              cobranzas({{
+                detalles().length | number
+              }})
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">FECHA</th>
+                <th scope="col">COMPROBANTE</th>
+                <th scope="col">SUCURSAL</th>
+                <th scope="col">CLIENTE</th>
+                <th scope="col">IMPORTE VENTA</th>
+                <th scope="col">IMPORTE MEDIO PAGO</th>
+                <th scope="col">REF</th>
+                <th scope="col">MEDIOPAGO</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (detalle of detalles(); track detalle.id; let index = $index) {
+              <tr>
+                <th scope="row">{{ index + 1 }}</th>
+                <td>{{ detalle.id }}</td>
+                <td  class="text-sm">{{ detalle.fechaVenta | date:'dd/MM/yyyy'}}</td>
+                <td  class="text-sm">{{ detalle.nroComprobante }}</td>
+                <td  class="text-sm">{{ detalle.sucursal.descripcion }}</td>
+                <td  class="text-sm">{{ detalle.cliente.razonSocial }}-{{ detalle.cliente.nroDocumento }}</td>
+                <td  class="text-sm">{{ detalle.importeTotal | number}}</td>
+                <td  class="text-sm">{{ detalle.importeCobrado | number}}</td>
+                <td  class="text-sm">{{ detalle.nroRef }}</td>
+                <td  class="text-sm">{{ detalle.medioPago }}</td>
+
+              </tr>
+              } @empty {
+              <tr></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    } @else {
+    <div class="w-100 empty-message-container">
+      <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">Atención</h4>
+        <p>No se han encontrado cobranzas...</p>
+      </div>
+    </div>
+    }
+  </div>
+</div>
+@if(searchMedioPago ) {
+<app-medioPago-search
+  [isOpen]="searchMedioPago"
+  (medioPago)="selectMedioPago($event)"
+  (closeModal)="searchMedioPago = false"
+></app-medioPago-search>
+
+} @if(searchSucursal ) {
+<app-sucursal-search
+  [isOpen]="searchSucursal"
+  (sucursal)="selectSucursal($event)"
+  (closeModal)="searchSucursal = false"
+></app-sucursal-search>
+}

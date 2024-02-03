@@ -22,9 +22,17 @@ export class ReportesService {
 
     })
    );
+  }
+
+  getReportCobranza(fechaDesde: string, fechaHasta:string,sucursalId:number,medioPagoId:number) {
+    const url = BASE_URL + `/reportes/reportecobranza/${fechaDesde}/${fechaHasta}/${sucursalId}/${medioPagoId}`;
+    return this.http
+     .get(url)
+     .pipe(
+      map((response: any) =>  response)
+     );
+    }
 
 
-
- }
 
 }

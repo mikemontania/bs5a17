@@ -175,12 +175,12 @@ export interface CobranzaDetalle {
 export interface MedioPago {
   id: number;
   empresaId: number;
-  descripcion: string | null;
+  descripcion: string  ;
   esCheque: boolean;
   tieneBanco: boolean;
   tieneRef: boolean;
   tieneTipo: boolean;
-  esObsequio: boolean | null;
+  esObsequio: boolean  ;
   usuarioCreacionId: number | null;
   usuarioModificacionId: number | null;
   fechaCreacion: string;
