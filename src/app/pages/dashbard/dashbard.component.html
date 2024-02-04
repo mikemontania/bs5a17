@@ -1,52 +1,144 @@
 <div class="container-fluid mt-4">
   <div class="card">
     <div class="card-body">
-      <h5 class="card-title">Filtros</h5>
-      <form>
-        <div class="form-group">
-          <label for="fechaDesde">Fecha Desde:</label>
-          <input type="date" class="form-control" [(ngModel)]="fechaDesde" id="fechaDesde" name="fechaDesde">
-        </div>
+      <div class="card-body">
+        <div class="card-body">
+          <form class="row" role="form" novalidate class="row g-3">
+            <div class="col-md-3">
+              <label for="fechaDesde" class="form-label">Fecha Desde</label>
+              <input
+                type="date"
+                class="form-control form-control-sm"
+                [(ngModel)]="fechaDesde"
+                id="fechaDesde"
+                name="fechaDesde"
+              />
+            </div>
 
-        <div class="form-group">
-          <label for="fechaHasta">Fecha Hasta:</label>
-          <input type="date" class="form-control" [(ngModel)]="fechaHasta" id="fechaHasta" name="fechaHasta">
-        </div>
+            <div class="col-md-3">
+              <label for="fechaHasta" class="form-label">Fecha Hasta</label>
+              <input
+                type="date"
+                class="form-control form-control-sm"
+                [(ngModel)]="fechaHasta"
+                id="fechaHasta"
+                name="fechaHasta"
+              />
+            </div>
+            <div class="col-md-3">
+              <label for="fechaHasta" class="form-label">Sucursal</label>
+              <select
+                class="form-control form-control-sm"
+                [(ngModel)]="sucursalSeleccionada"
+                name="sucursalSeleccionada"
+                id="sucursal"
+              >
+                <option
+                  *ngFor="let sucursal of sucursales"
+                  [value]="sucursal.id"
+                >
+                  {{ sucursal.descripcion }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <button type="button" class="mt-4 btn   btn-outline-success" (click)="getReport()"  >
+                Buscar <i class="bi bi-search"></i>
+               </button>
 
-        <div class="form-group">
-          <label for="sucursal">Sucursal:</label>
-          <select class="form-control" [(ngModel)]="sucursalSeleccionada"name="sucursalSeleccionada" id="sucursal">
-            <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">{{ sucursal.nombre }}</option>
-          </select>
+            </div>
+          </form>
         </div>
-
-        <button type="button" class="btn btn-primary" (click)="generarReportes()">Generar Reportes</button>
-      </form>
+      </div>
     </div>
   </div>
   <div class="row">
-
-
-    <div class="col-md-8">
-      <!-- Tarjetas para mostrar los gráficos (aquí debes integrar tus gráficos) -->
+    <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Reporte de Ventas por Sucursal</h5>
+          @if(cargadoMediosPago){
           <div class="chart-container">
-            <ngx-charts-pie-chart [legendTitle]="legendTitle" [scheme]="dashTema" [results]="results" [gradient]="gradient" [legend]="showLegend" [labels]="showLabels" [doughnut]="isDoughnut" (select)="onSelect($event)" style="fill: grey;">
-            </ngx-charts-pie-chart>
-        </div>
+            <ngx-pie-chart
+              [dashTema]="dashTema"
+              legendTitle="Reporte de Medio pago"
+              [results]="chatResulsMediosPago"(select)="onSeleccionMedioPago($event)"
+            >
+            </ngx-pie-chart>
+          </div>
+          }
         </div>
       </div>
-
-      <div class="card mt-3">
+    </div>
+    <div class="col-md-6">
+      <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Top Variantes</h5>
-          <!-- Aquí irá tu gráfico de top variantes -->
+          @if(cargadoVendedores){
+          <div class="chart-container">
+            <ngx-charts-barra-vertical
+              [dashTema]="dashTema"
+              legendTitle="Reporte de Vendedores"
+              [results]="chatResulsVendedores"(select)="onSeleccionVendedor($event)"
+            ></ngx-charts-barra-vertical>
+
+          </div>
+          }
         </div>
       </div>
 
-      <!-- Agrega más tarjetas para otros reportes según sea necesario -->
+
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          @if(cargadoSucursales){
+          <div class="chart-container">
+            <ngx-pie-chart
+              [dashTema]="dashTema"
+              legendTitle="Reporte de Sucursales"
+              [results]="chatResulsSucursales"(select)="onSeleccionSucursal($event)"
+            ></ngx-pie-chart>
+
+
+          </div>
+          }
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          @if(cargadoClientes){
+          <div class="chart-container">
+            <ngx-charts-barra-vertical
+              [dashTema]="dashTema"
+              legendTitle="Top de Clientes"
+              [results]="chatResulsClientes"(select)="onSeleccionCliente($event)"
+            ></ngx-charts-barra-vertical>
+
+          </div>
+          }
+        </div>
+      </div>
+
+
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          @if(cargadoVariantes){
+          <div class="chart-container">
+            <ngx-charts-barra-vertical
+              [dashTema]="dashTema"
+              legendTitle="Top de Producto"
+              [results]="chatResulsVariantes"(select)="onSeleccionVariante($event)"
+            ></ngx-charts-barra-vertical>
+          </div>
+          }
+        </div>
+      </div>
+
+
     </div>
   </div>
 </div>

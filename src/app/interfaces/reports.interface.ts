@@ -27,3 +27,43 @@ export interface Detalle {
   medioPago:      string;
 }
 
+
+export interface ReporteSucursal {
+  sucursalid:     number;
+  sucursalnombre: string;
+  totalventas:    string;
+  totalimporte:   string;
+}
+
+export interface ReporteVariante {
+  id:           string;
+  coderp:       string;
+  producto:     string;
+  variedad:     string;
+  presentacion: string;
+  vendidos:     string;
+  peso:         string;
+  totalimporte: string;
+}
+
+export interface ReporteCliente {
+  doc:           string;
+  razonsocial:   string;
+  totalimporte:  string;
+  totalfacturas: string;
+}
+
+export interface ReporteMedioPago {
+  id:                  string;
+  mediopago:           string;
+  totalimportecobrado: string;
+  cantidad:            string;
+}
+
+export interface ReporteVendedor {
+  id:       number;
+  vendedor: string;
+  cantidad: string;
+  peso:     string;
+  total:    string;
+}
