@@ -37,7 +37,13 @@ export const navbarData: INavbarData[] = [
       },
 
     ]
+
+  }, {
+    routeLink: 'valoraciones',
+    icon: 'bi bi-tags',
+    label: 'Valoraciones'
   },
+
 
   {
     routeLink: 'parametros',

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { BASE_URL } from '../config';
 import { ProductoPage } from '../interfaces/productoItem.inteface';
 import { PageProductosSimple, Producto } from '../interfaces/productos.interface';
@@ -115,12 +115,32 @@ findAllSubCategorias() {
 }
 
 /************************Variantes ***********************************/
+
+
+findAllDesc( page: number, size: number,  term: string) {
+  return this.http
+    .get(BASE_URL + "/variantes/findAllDesc/"+ page + "/" + size + "/"+ term)
+    .pipe(
+      map((respo: any) => {
+        return respo as PageProductosSimple;
+      }),
+      catchError(e => {
+        console.error('ERROR', e.error); ;
+       return of({});
+      })
+    );
+}
+
 findVariantesByProductoId(id:number) {
   return this.http
     .get(BASE_URL + "/variantes/producto/"+id)
     .pipe(
       map((respo: any) => {
         return respo;
+      }),
+      catchError(e => {
+        console.error('ERROR', e.error); ;
+       return of([]);
       })
     );
 }
@@ -134,6 +154,10 @@ uploadImage(imagen:any, varianteId:any): Observable<any> {
    map((response: any) => {
       console.log(response)
       return response;
+    }),
+    catchError(e => {
+      console.error('ERROR', e.error); ;
+     return of(null);
     })
   )
 
@@ -175,6 +199,10 @@ findAllVariedades() {
     .pipe(
       map((respo: any) => {
         return respo;
+      }),
+      catchError(e => {
+        console.error('ERROR', e.error); ;
+       return of([]);
       })
     );
 }
@@ -185,6 +213,10 @@ findAllPresentaciones() {
     .pipe(
       map((respo: any) => {
         return respo;
+      }),
+      catchError(e => {
+        console.error('ERROR', e.error); ;
+       return of([]);
       })
     );
 }
@@ -195,6 +227,10 @@ findAllUnidades() {
     .pipe(
       map((respo: any) => {
         return respo;
+      }),
+      catchError(e => {
+        console.error('ERROR', e.error); ;
+       return of([]);
       })
     );
 }

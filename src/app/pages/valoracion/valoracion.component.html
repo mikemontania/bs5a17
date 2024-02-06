@@ -1,0 +1,254 @@
+<div class="card">
+  <div class="card-header">Valoraciones</div>
+
+  <div class="card-body">
+    <div class="input-group mb-3 w-50 d-flex selector">
+      <div class="input-group d-flex">
+        <span class="input-group-text">DESDE/HASTA</span>
+        <input
+          type="date"
+          class="form-control"
+          id="fechaDesde"
+          [(ngModel)]="fechaDesde"
+        />
+        <input
+          type="date"
+          class="form-control"
+          id="fechaHasta"
+          [(ngModel)]="fechaHasta"
+        />
+      </div>
+    </div>
+    <div class="input-group mb-3 w-50 d-flex selector">
+      <div class="input-group d-flex">
+        <span class="input-group-text">Tipo Registro</span>
+        <select
+          (change)="cambioRegistro()"
+          class="form-control form-control-sm"
+          [(ngModel)]="registro"
+          name="registro"
+          id="registro"
+        >
+          <option value="">--Sin Selección--</option>
+          <option value="PRECIO">Precio</option>
+          <option value="DESCUENTO">Descuento</option>
+          <option value="PUNTO">Punto</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group mb-3 w-50 d-flex selector">
+      <div class="input-group d-flex">
+        <span class="input-group-text">Tipo </span>
+        <select
+          class="form-control form-control-sm"
+          [(ngModel)]="tipo"
+          name="tipo"
+          id="tipo"
+        >
+          <option *ngFor="let tipo of tipos" [value]="tipo.id">
+            {{ tipo.descripcion }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Search and Cancel Buttons -->
+    <div class="card mb-3 w-50 d-flex selector">
+      <div class="btn-group">
+        <button
+          type="button"
+          class="btn btn-outline-success"
+          (click)="buscar()"
+        >
+          Buscar <i class="bi bi-search"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          (click)="cancelar()"
+        >
+          Cancelar <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <article class="table-header">
+      <button class="btn btn-danger" (click)="removeSelectedRows()">
+        Eliminar Filas
+      </button>
+      <button class="btn btn-success" (click)="addRow()">Agregar Fila</button>
+    </article>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            <input
+              type="checkbox"
+              (change)="selectAll($event)"
+              [checked]="isAllSelected()"
+              [indeterminate]="!isAllSelected() && isAnySelected()"
+            />
+          </th>
+          <th>Id</th>
+          <th>Activo</th>
+          <th>Can Desde</th>
+          <th>Can Hasta</th>
+          <th>F. Desde</th>
+          <th>F. Hasta</th>
+          <th>Valor</th>
+          <th>Lista P.</th>
+          <th>Sucursal</th>
+          <th>Registro</th>
+          <th>Tipo</th>
+          <th>Variante</th>
+          <th>Cliente</th>
+
+          <th>btn</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let valoracion of valoraciones">
+          <td><input type="checkbox" [(ngModel)]="valoracion.isSelected" /></td>
+
+          <td *ngIf="valoracion.id">{{ valoracion.id }}</td>
+          <td *ngIf="!valoracion.id">#</td>
+
+
+
+
+          <td *ngIf="!valoracion.isEdit"> {{(valoracion.activo)?'SI':'NO'}}</td>
+          <td *ngIf="valoracion.isEdit">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="valoracion.activo"  />
+          </td>
+
+          <td *ngIf="!valoracion.isEdit">{{ valoracion.cantDesde | number }}</td>
+          <td *ngIf="valoracion.isEdit">
+            <input [(ngModel)]="valoracion.cantDesde" class="form-control" />
+          </td>
+
+          <td *ngIf="!valoracion.isEdit">{{ valoracion.cantHasta | number }}</td>
+          <td *ngIf="valoracion.isEdit">
+            <input [(ngModel)]="valoracion.cantHasta" class="form-control" />
+          </td>
+
+          <td *ngIf="!valoracion.isEdit">{{ valoracion.fechaDesde | date:'dd/MM/yyyy' }}</td>
+          <td *ngIf="valoracion.isEdit"><input type="date"  [(ngModel)]="valoracion.fechaDesde" class="form-control">
+          </td>
+
+          <td *ngIf="!valoracion.isEdit"> {{ valoracion.fechaHasta  | date:'dd/MM/yyyy' }}  </td>
+          <td *ngIf="valoracion.isEdit">   <input type="date"   [(ngModel)]="valoracion.fechaHasta" class="form-control"  />
+          </td>
+
+          <td *ngIf="!valoracion.isEdit">{{ valoracion.valor | number }}</td>
+          <td *ngIf="valoracion.isEdit">
+            <input [(ngModel)]="valoracion.valor" class="form-control" />
+          </td>
+
+
+          <td>
+            <select
+            class="form-control form-control-sm"
+            [(ngModel)]="valoracion.listaPrecioId"
+            name="listaPrecioId"
+            id="listaPrecioId"
+          >
+            <option
+              *ngFor="let lista of listasPrecio"
+              [value]="lista.id"
+            >
+              {{ lista.descripcion }}
+            </option>
+          </select>
+          </td>
+
+          <td>
+            <select
+            class="form-control form-control-sm"
+            [(ngModel)]="valoracion.sucursalId"
+            name="sucursalSeleccionada"
+            id="sucursal"
+          >
+          <option value="">Todos</option>
+            <option
+              *ngFor="let sucursal of sucursales"
+              [value]="sucursal.id"
+            >
+              {{ sucursal.descripcion }}
+            </option>
+          </select>
+          </td>
+
+
+
+          <td>
+            <select
+
+              class="form-control form-control-sm"
+              [(ngModel)]="valoracion.registro"
+              name="registro"
+              id="registro"
+            >
+              <option value="">--Sin Selección--</option>
+              <option value="PRECIO">Precio</option>
+              <option value="DESCUENTO">Descuento</option>
+              <option value="PUNTO">Punto</option>
+            </select>
+          </td>
+
+          <td>
+            <select
+              class="form-control form-control-sm"
+              [(ngModel)]="valoracion.tipo"
+              name="tipo"
+              id="tipo"
+            >
+            <option value="">--Sin Selección--</option>
+            <option value="PRODUCTO">Producto</option>
+            <option value="ESCALA">Escala</option>
+            <option value="CLIENTE">Cliente</option>
+            <option value="IMPORTE">Importe</option>
+            </select>
+          </td>
+          <td>
+            <ng-select-variante #searchClientes id="ngbdtypeaheadClientes"
+            [cargador]="valoracion.varianteId" style="width: 100%" name="cliente"
+            (retornoObjeto)="valoracion.varianteId = ($event)"></ng-select-variante>
+           </td>
+           <td>
+            <ng-select-variante #searchClientes id="ngbdtypeaheadClientes"
+            [cargador]="valoracion.varianteId" style="width: 100%" name="cliente"
+            (retornoObjeto)="valoracion.varianteId = ($event)"></ng-select-variante>
+           </td>
+
+          <td *ngIf="!valoracion.isEdit">
+            <div class="btn-group">
+              <button
+                class="btn btn-primary"
+                (click)="valoracion.isEdit = !valoracion.isEdit"
+              >
+                Editar
+              </button>
+              <button class="btn btn-danger" (click)="removeRow(valoracion.id)">
+                Eliminar
+              </button>
+            </div>
+          </td>
+          <td *ngIf="valoracion.isEdit">
+            <button
+              class="btn btn-success"
+              (click)="valoracion.isEdit = !valoracion.isEdit"
+            >
+              Listo
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

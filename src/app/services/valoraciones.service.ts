@@ -2,7 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { BASE_URL } from "../config";
-import {   map } from "rxjs/operators";
+import {   catchError, map } from "rxjs/operators";
+import { of } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -17,10 +18,29 @@ export class ValoracionService {
       .pipe(
         map((respo: any) => {
           return respo;
+        })  ,
+        catchError(e => {
+          console.error('ERROR', e.error); ;
+         return of([]);
         })
       );
   }
+  obtenerValoraciones(fechaDesde: string, fechaHasta: string, registro: string,tipo:string) {
+    const parametroReg = (registro == '')?'xxxxxx':registro;
+    const parametroTip = (tipo == '')?'xxxxxx':tipo;
 
+    return this.http
+      .get(BASE_URL + "/valoraciones/findall/" + fechaDesde + "/" + fechaHasta + "/" + parametroReg+ "/" + parametroTip)
+      .pipe(
+        map((respo: any) => {
+          return respo;
+        }),
+        catchError(e => {
+          console.error('ERROR', e.error); ;
+         return of([]);
+        })
+      );
+  }
 
 
 

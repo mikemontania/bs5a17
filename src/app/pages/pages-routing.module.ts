@@ -8,6 +8,7 @@ import { ClientesComponent } from './cliente/clientes/clientes.component';
 import { ProductoComponent } from './producto/producto/producto.component';
 import { ProductosComponent } from './producto/productos/productos.component';
 import { VarianteComponent } from './producto/variante/variante.component';
+import { ValoracionComponent } from './valoracion/valoracion.component';
 
 export default [
   {
@@ -63,6 +64,12 @@ export default [
         path: "user",
         canActivate: [authGuard],
         component: UsersComponent
+      },
+
+      {
+        path: "valoraciones",
+        canActivate: [authGuard],
+        component: ValoracionComponent
       },
       { path: "**", redirectTo: "dashboard" }
     ]
