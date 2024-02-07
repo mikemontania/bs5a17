@@ -129,12 +129,12 @@
 
           <td *ngIf="!valoracion.isEdit">{{ valoracion.cantDesde | number }}</td>
           <td *ngIf="valoracion.isEdit">
-            <input [(ngModel)]="valoracion.cantDesde" class="form-control" />
+            <input [(ngModel)]="valoracion.cantDesde" class="form-control"type="number" />
           </td>
 
           <td *ngIf="!valoracion.isEdit">{{ valoracion.cantHasta | number }}</td>
           <td *ngIf="valoracion.isEdit">
-            <input [(ngModel)]="valoracion.cantHasta" class="form-control" />
+            <input [(ngModel)]="valoracion.cantHasta" class="form-control" type="number" />
           </td>
 
           <td *ngIf="!valoracion.isEdit">{{ valoracion.fechaDesde | date:'dd/MM/yyyy' }}</td>
@@ -147,11 +147,12 @@
 
           <td *ngIf="!valoracion.isEdit">{{ valoracion.valor | number }}</td>
           <td *ngIf="valoracion.isEdit">
-            <input [(ngModel)]="valoracion.valor" class="form-control" />
+            <input [(ngModel)]="valoracion.valor" class="form-control" type="number" />
           </td>
 
 
-          <td>
+          <td *ngIf="!valoracion.isEdit">{{ valoracion?.listaPrecio?.descripcion }}</td>
+          <td *ngIf="valoracion.isEdit">
             <select
             class="form-control form-control-sm"
             [(ngModel)]="valoracion.listaPrecioId"
@@ -167,14 +168,15 @@
           </select>
           </td>
 
-          <td>
+          <td *ngIf="!valoracion.isEdit">{{ valoracion?.sucursal?.descripcion }}</td>
+          <td *ngIf="valoracion.isEdit">
             <select
             class="form-control form-control-sm"
             [(ngModel)]="valoracion.sucursalId"
             name="sucursalSeleccionada"
             id="sucursal"
           >
-          <option value="">Todos</option>
+
             <option
               *ngFor="let sucursal of sucursales"
               [value]="sucursal.id"
@@ -186,7 +188,8 @@
 
 
 
-          <td>
+          <td *ngIf="!valoracion.isEdit">{{ valoracion?.registro  }}</td>
+          <td *ngIf="valoracion.isEdit">
             <select
 
               class="form-control form-control-sm"
@@ -201,7 +204,8 @@
             </select>
           </td>
 
-          <td>
+          <td *ngIf="!valoracion.isEdit">{{ valoracion?.tipo  }}</td>
+          <td *ngIf="valoracion.isEdit">
             <select
               class="form-control form-control-sm"
               [(ngModel)]="valoracion.tipo"
@@ -215,12 +219,14 @@
             <option value="IMPORTE">Importe</option>
             </select>
           </td>
-          <td>
+          <td *ngIf="!valoracion.isEdit">{{ valoracion?.variante?.codErp  }}</td>
+          <td *ngIf="valoracion.isEdit">
             <ng-select-variante #searchClientes id="ngbdtypeaheadClientes"
             [cargador]="valoracion.varianteId" style="width: 100%" name="cliente"
             (retornoObjeto)="valoracion.varianteId = ($event)"></ng-select-variante>
            </td>
-           <td>
+           <td *ngIf="!valoracion.isEdit">{{ valoracion?.variante?.codErp  }}</td>
+          <td *ngIf="valoracion.isEdit">
             <ng-select-variante #searchClientes id="ngbdtypeaheadClientes"
             [cargador]="valoracion.varianteId" style="width: 100%" name="cliente"
             (retornoObjeto)="valoracion.varianteId = ($event)"></ng-select-variante>
