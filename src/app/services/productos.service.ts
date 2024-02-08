@@ -115,6 +115,19 @@ findAllSubCategorias() {
 }
 
 /************************Variantes ***********************************/
+findAllDescripcion(  ) {
+  return this.http
+    .get(BASE_URL + "/variantes/descripcion/" )
+    .pipe(
+      map((respo: any) => {
+        return respo ;
+      }),
+      catchError(e => {
+        console.error('ERROR', e.error); ;
+       return of({});
+      })
+    );
+}
 
 
 findAllDesc( page: number, size: number,  term: string) {

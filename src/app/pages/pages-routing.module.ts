@@ -67,7 +67,7 @@ export default [
       },
 
       {
-        path: "valoraciones",
+        path: "valoraciones/:registro/:tipo",
         canActivate: [authGuard],
         component: ValoracionComponent
       },

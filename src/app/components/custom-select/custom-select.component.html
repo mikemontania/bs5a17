@@ -1,0 +1,31 @@
+<div class="select-custom" [ngClass]="{ 'sm': size === 'sm' }">
+     <span (click)="toggleDropdown()" class="selected-option" [class.active]="searchMode" class="input-group-text flex-grow-1 d-flex justify-content-between btn-outline-success text-success">
+    <span class="client-info ng-star-inserted">
+      {{ selectedOptionText }}
+    </span>
+    <span class="dropdown-icon">
+      <i class="bi bi-caret-down"></i>
+    </span>
+  </span>
+  <div class="search-container"  *ngIf="searchMode">
+    <input
+      #selectInput
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Search..."
+      class="form-control"
+      (click)="enableSearch()"
+      (mouseenter)="clearSelection()"
+    />
+  </div>
+  <div class="dropdown-list">
+    <ul *ngIf="showDropdown" (mouseenter)="clearSelection()" (mouseleave)="clearSelection()">
+      <li *ngFor="let option of filterOptions(); let i = index"
+          (click)="onOptionSelected(option)"
+          [class.selected]="i === selectedIndex"
+          [class.hover-disabled]="!searchMode && i === selectedIndex">
+        {{ option[textField] }}
+      </li>
+    </ul>
+  </div>
+</div>

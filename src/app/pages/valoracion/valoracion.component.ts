@@ -1,7 +1,7 @@
 
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Component, signal, computed, inject } from '@angular/core';
+import { Component,    inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ValoracionService } from '../../services/valoraciones.service';
 import moment from 'moment';
@@ -11,98 +11,76 @@ import { ProductosService } from '../../services/productos.service';
 import { ClientesService } from '../../services/clientes.service';
 import { forkJoin } from 'rxjs';
 import { NgVariante } from '../../components/ng-select-variante/ng-select-variante.component';
-@Component({
+import { CustomSelectComponent } from '../../components/custom-select/custom-select.component';
+ @Component({
   selector: 'app-valoracion',
   standalone: true,
-  imports: [CommonModule, FormsModule,NgVariante ],
+  imports: [CommonModule, FormsModule, NgVariante,CustomSelectComponent ],
   templateUrl: './valoracion.component.html',
   styleUrl: './valoracion.component.css'
 })
-export class ValoracionComponent {
+export class ValoracionComponent implements OnInit {
   registro: string = '';
-  fechaDesde = moment(new Date()).format("YYYY-MM-DD");
-  fechaHasta = moment(new Date()).format("YYYY-MM-DD");
   tipo: string = '';
+  fechaDesde = moment(new Date()).format("YYYY-MM-DD");
   tipos: any[] = [];
-  tiposArray: any[] = [{ id: '', descripcion: '-----SIN SELECCION------' },{ id: 'PRODUCTO', descripcion: 'Producto' }, { id: 'ESCALA', descripcion: 'Escala' }, { id: 'CLIENTE', descripcion: 'Cliente' }];
   valoraciones: any[] = [];
   sucursales: any[] = [];
   listasPrecio: any[] = [];
   variantes: any[] = [];
-
-
+sucursalId:number =0;
+listaPrecioId:number =1;
   private _router = inject(Router)
   _valoracionService = inject(ValoracionService);
   _sucursalService = inject(SucursalService);
   _varianteService = inject(ProductosService);
   _listaPrecioService = inject(ListaPrecioService);
   _clientesService = inject(ClientesService);
-  constructor() {
-    this.initList();
-    const storedSearchData = localStorage.getItem('searchValoracionData');
+  private activatedRoute = inject(ActivatedRoute);
 
-    if (storedSearchData) {
-      try {
-        const parsedData = JSON.parse(storedSearchData);
-        this.fechaDesde = parsedData.fechaDesde;
-        this.fechaHasta = parsedData.fechaHasta;
-        this.registro = parsedData.registro;
-        this.tipo = parsedData.tipo;
-      } catch (error) {
-        console.error('Error parsing stored search data:', error);
-      }
-    }
-  }
+
+
   ngOnInit() {
-    this.buscar();
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.registro = params.get('registro')!
+      this.tipo = params.get('tipo')!
+      console.log(this.tipo)
+      this.buscar();
+      this.initList();
+    })
   }
 
 
-  initList(){
+  initList() {
     forkJoin([
       this._listaPrecioService.findAll(),
       this._sucursalService.findAll(),
-      //this._varianteService.findAllDesc(),
+      this._varianteService.findAllDescripcion(),
 
-    ]).subscribe(([listas, sucursales ]) => {
-      this.listasPrecio =listas;
-      this.sucursales =sucursales;
-    //  this.variantes =variantes;
+    ]).subscribe(([listas, sucursales,variantes]) => {
+      this.listasPrecio = listas;
+      this.sucursales = sucursales;
+      this.sucursales.push({id:0,descripcion:'Todas'})
+        this.variantes =variantes.resultados;
     });
 
   }
-  cambioRegistro() {
-    console.log(this.registro)
-    switch (this.registro) {
+seleccionaVariante(valoracion:any, event:any){
+  valoracion.variante.id = event?.id;
+  valoracion.variante.producto.nombre = event?.concat;
+  valoracion.variante.presentacion.descripcion = '';
+  valoracion.variante.variedad.descripcion = '';
+  valoracion.variante.codErp = '';
+  valoracion.varianteId = event?.id
+}
 
-      case 'PRECIO':
-        {
-          this.tipos = [{ id: '', descripcion: '-----SIN SELECCION------' },{ id: 'PRODUCTO', descripcion: 'Producto' }]
-          this.tipo = ''
-        }
-        break;
-      case 'DESCUENTO':
-        {
-          this.tipos = [{ id: '', descripcion: '-----SIN SELECCION------' },{ id: 'PRODUCTO', descripcion: 'Producto' }, { id: 'ESCALA', descripcion: 'Escala' }, { id: 'CLIENTE', descripcion: 'Cliente' }]
-          this.tipo = ''
-        }
-        break;
-      case 'PUNTO':
-        {
-          this.tipos = [{ id: '', descripcion: '-----SIN SELECCION------' },{ id: 'PRODUCTO', descripcion: 'Producto' }, { id: 'ESCALA', descripcion: 'Escala' },]
-          this.tipo = ''
-        }
-        break;
-      default: {
-        this.tipos = []
-        this.tipo = ''
-      }
-        break;
-    }
+  obtenerSucursal(id:number){
+    return this.sucursales.find(suc => suc.id == id)?.descripcion;
   }
   cargarValoraciones(valoraciones: any[]) {
     this.valoraciones = valoraciones.map(valoracion => ({
       ...valoracion,
+      sucursalId: (valoracion.sucursalId === null)? 0:valoracion.sucursalId,
       isSelected: false,  // Por defecto, no seleccionado
       isEdit: false       // Por defecto, no en modo de edición
     }));
@@ -110,13 +88,12 @@ export class ValoracionComponent {
   buscar() {
     localStorage.setItem('searchValoracionData', JSON.stringify({
       fechaDesde: this.fechaDesde,
-      fechaHasta: this.fechaHasta,
       registro: this.registro,
       tipo: this.tipo,
     }));
 
     this._valoracionService
-      .obtenerValoraciones(this.fechaDesde, this.fechaHasta, this.registro, this.tipo)
+      .obtenerValoraciones(this.fechaDesde, this.registro, this.tipo, this.sucursalId, this.listaPrecioId)
       .subscribe({
         next: (resp) => {
           console.log(resp)
@@ -150,7 +127,10 @@ export class ValoracionComponent {
 
 
   }
-
+listo(valoracion:any){
+  console.log(valoracion)
+   valoracion.isEdit = !valoracion.isEdit
+}
   isAllSelected() {
     return this.valoraciones.every((valoracion) => valoracion.isSelected);
   }
@@ -169,7 +149,6 @@ export class ValoracionComponent {
   cancelar() {
     this.registro = '';
     this.fechaDesde = moment(new Date()).format("YYYY-MM-DD");
-    this.fechaHasta = moment(new Date()).format("YYYY-MM-DD");
     this.tipo = '';
 
   }

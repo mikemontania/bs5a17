@@ -34,7 +34,7 @@ export class NgVariante implements OnInit {
 }
 
 cargar() {
-  this._varianteServices.findAllDesc(1,10,'').subscribe((resp:any) => {
+  this._varianteServices.findAllDesc(1,5000,'').subscribe((resp:any) => {
     this.variantes = resp.variantes ;
     });
 }

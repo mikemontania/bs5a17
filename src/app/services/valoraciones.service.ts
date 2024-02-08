@@ -25,12 +25,12 @@ export class ValoracionService {
         })
       );
   }
-  obtenerValoraciones(fechaDesde: string, fechaHasta: string, registro: string,tipo:string) {
+  obtenerValoraciones(fechaDesde: string,   registro: string,tipo:string, sucursalId:number,listaPrecioId:number) {
     const parametroReg = (registro == '')?'xxxxxx':registro;
     const parametroTip = (tipo == '')?'xxxxxx':tipo;
 
     return this.http
-      .get(BASE_URL + "/valoraciones/findall/" + fechaDesde + "/" + fechaHasta + "/" + parametroReg+ "/" + parametroTip)
+      .get(BASE_URL + "/valoraciones/findall/" + fechaDesde + "/" +   parametroReg+ "/" + parametroTip+ "/" + sucursalId + "/" +listaPrecioId)
       .pipe(
         map((respo: any) => {
           return respo;

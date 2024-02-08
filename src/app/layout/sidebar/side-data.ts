@@ -46,6 +46,26 @@ export const navbarData: INavbarData[] = [
 
 
   {
+    routeLink: 'valoraciones',
+    icon: 'bi bi-tags',
+    label: 'Valoraciones',
+    items: [
+      {
+        routeLink: `valoraciones/PRECIO/IMPORTE`,
+        label: 'Precios'
+      },
+      {
+        routeLink: `valoraciones/DESCUENTO/PRODUCTO`,
+        label: 'Descuento'
+      },
+      {
+        routeLink: `valoraciones/PUNTO/IMPORTE`,
+        label: 'Puntos'
+      }
+    ]
+  },
+
+   {
     routeLink: 'parametros',
     icon: 'fa-solid fa-tag',
     label: 'Parametros',

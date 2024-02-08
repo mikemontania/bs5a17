@@ -4,32 +4,14 @@
   <div class="card-body">
     <div class="input-group mb-3 w-50 d-flex selector">
       <div class="input-group d-flex">
-        <span class="input-group-text">DESDE/HASTA</span>
-        <input
-          type="date"
-          class="form-control"
-          id="fechaDesde"
-          [(ngModel)]="fechaDesde"
-        />
-        <input
-          type="date"
-          class="form-control"
-          id="fechaHasta"
-          [(ngModel)]="fechaHasta"
-        />
-      </div>
-    </div>
-    <div class="input-group mb-3 w-50 d-flex selector">
-      <div class="input-group d-flex">
         <span class="input-group-text">Tipo Registro</span>
         <select
-          (change)="cambioRegistro()"
+          disabled="true"
           class="form-control form-control-sm"
           [(ngModel)]="registro"
           name="registro"
           id="registro"
         >
-          <option value="">--Sin Selección--</option>
           <option value="PRECIO">Precio</option>
           <option value="DESCUENTO">Descuento</option>
           <option value="PUNTO">Punto</option>
@@ -41,15 +23,62 @@
       <div class="input-group d-flex">
         <span class="input-group-text">Tipo </span>
         <select
+          disabled="true"
           class="form-control form-control-sm"
           [(ngModel)]="tipo"
           name="tipo"
           id="tipo"
         >
-          <option *ngFor="let tipo of tipos" [value]="tipo.id">
-            {{ tipo.descripcion }}
+          <option value="IMPORTE">Importe</option>
+          <option value="PORCENTAJE">Porcentaje</option>
+          <option value="ESCALA">Escala</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group mb-3 w-50 d-flex selector">
+      <div class="input-group d-flex">
+        <span class="input-group-text">Sucursal/es </span>
+        <select
+          class="form-control form-control-sm"
+          [(ngModel)]="sucursalId"
+          name="sucursalSeleccionada"
+          id="sucursal"
+        >
+          <option value="0">Todas</option>
+          <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
+            {{ sucursal.descripcion }}
           </option>
         </select>
+      </div>
+    </div>
+
+    <div class="input-group mb-3 w-50 d-flex selector">
+      <div class="input-group d-flex">
+        <span class="input-group-text">Lista Precio </span>
+        <select
+          class="form-control form-control-sm"
+          [(ngModel)]="listaPrecioId"
+          name="listaPrecioId"
+          id="listaPrecioId"
+        >
+          <option value="">Todas</option>
+          >
+          <option *ngFor="let lista of listasPrecio" [value]="lista.id">
+            {{ lista.descripcion }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="input-group mb-3 w-50 d-flex selector">
+      <div class="input-group d-flex">
+        <span class="input-group-text">Valido el</span>
+        <input
+          type="date"
+          class="form-control"
+          id="fechaDesde"
+          [(ngModel)]="fechaDesde"
+        />
       </div>
     </div>
 
@@ -84,7 +113,7 @@
       <button class="btn btn-success" (click)="addRow()">Agregar Fila</button>
     </article>
 
-    <table class="table">
+    <table class="table" *ngIf="valoraciones && valoraciones.length">
       <thead>
         <tr>
           <th>
@@ -97,18 +126,15 @@
           </th>
           <th>Id</th>
           <th>Activo</th>
-          <th>Can Desde</th>
-          <th>Can Hasta</th>
+          <th *ngIf="tipo == 'ESCALA'">Can Desde</th>
+          <th *ngIf="tipo == 'ESCALA'">Can Hasta</th>
           <th>F. Desde</th>
           <th>F. Hasta</th>
           <th>Valor</th>
           <th>Lista P.</th>
           <th>Sucursal</th>
-          <th>Registro</th>
-          <th>Tipo</th>
           <th>Variante</th>
-          <th>Cliente</th>
-
+          <th *ngIf="tipo == 'CLIENTE'">Cliente</th>
           <th>btn</th>
         </tr>
       </thead>
@@ -119,118 +145,132 @@
           <td *ngIf="valoracion.id">{{ valoracion.id }}</td>
           <td *ngIf="!valoracion.id">#</td>
 
-
-
-
-          <td *ngIf="!valoracion.isEdit"> {{(valoracion.activo)?'SI':'NO'}}</td>
+          <td *ngIf="!valoracion.isEdit">
+            {{ valoracion.activo ? 'SI' : 'NO' }}
+          </td>
           <td *ngIf="valoracion.isEdit">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="valoracion.activo"  />
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [(ngModel)]="valoracion.activo"
+            />
           </td>
 
-          <td *ngIf="!valoracion.isEdit">{{ valoracion.cantDesde | number }}</td>
+          <td *ngIf="!valoracion.isEdit && tipo == 'ESCALA'">
+            {{ valoracion.cantDesde | number }}
+          </td>
+          <td *ngIf="valoracion.isEdit && tipo == 'ESCALA'">
+            <input
+              [(ngModel)]="valoracion.cantDesde"
+              class="form-control"
+              type="number"
+            />
+          </td>
+
+          <td *ngIf="!valoracion.isEdit && tipo == 'ESCALA'">
+            {{ valoracion.cantHasta | number }}
+          </td>
+          <td *ngIf="valoracion.isEdit && tipo == 'ESCALA'">
+            <input
+              [(ngModel)]="valoracion.cantHasta"
+              class="form-control"
+              type="number"
+            />
+          </td>
+
+          <td *ngIf="!valoracion.isEdit">
+            {{ valoracion.fechaDesde | date: 'dd/MM/yyyy' }}
+          </td>
           <td *ngIf="valoracion.isEdit">
-            <input [(ngModel)]="valoracion.cantDesde" class="form-control"type="number" />
+            <input
+              type="date"
+              [(ngModel)]="valoracion.fechaDesde"
+              class="form-control"
+            />
           </td>
 
-          <td *ngIf="!valoracion.isEdit">{{ valoracion.cantHasta | number }}</td>
+          <td *ngIf="!valoracion.isEdit">
+            {{ valoracion.fechaHasta | date: 'dd/MM/yyyy' }}
+          </td>
           <td *ngIf="valoracion.isEdit">
-            <input [(ngModel)]="valoracion.cantHasta" class="form-control" type="number" />
-          </td>
-
-          <td *ngIf="!valoracion.isEdit">{{ valoracion.fechaDesde | date:'dd/MM/yyyy' }}</td>
-          <td *ngIf="valoracion.isEdit"><input type="date"  [(ngModel)]="valoracion.fechaDesde" class="form-control">
-          </td>
-
-          <td *ngIf="!valoracion.isEdit"> {{ valoracion.fechaHasta  | date:'dd/MM/yyyy' }}  </td>
-          <td *ngIf="valoracion.isEdit">   <input type="date"   [(ngModel)]="valoracion.fechaHasta" class="form-control"  />
+            <input
+              type="date"
+              [(ngModel)]="valoracion.fechaHasta"
+              class="form-control"
+            />
           </td>
 
           <td *ngIf="!valoracion.isEdit">{{ valoracion.valor | number }}</td>
           <td *ngIf="valoracion.isEdit">
-            <input [(ngModel)]="valoracion.valor" class="form-control" type="number" />
+            <input
+              [(ngModel)]="valoracion.valor"
+              class="form-control"
+              type="number"
+            />
           </td>
 
-
-          <td *ngIf="!valoracion.isEdit">{{ valoracion?.listaPrecio?.descripcion }}</td>
-          <td *ngIf="valoracion.isEdit">
-            <select
-            class="form-control form-control-sm"
-            [(ngModel)]="valoracion.listaPrecioId"
-            name="listaPrecioId"
-            id="listaPrecioId"
-          >
-            <option
-              *ngFor="let lista of listasPrecio"
-              [value]="lista.id"
-            >
-              {{ lista.descripcion }}
-            </option>
-          </select>
+          <td *ngIf="!valoracion.isEdit">
+            {{ valoracion?.listaPrecio?.descripcion }}
           </td>
-
-          <td *ngIf="!valoracion.isEdit">{{ valoracion?.sucursal?.descripcion }}</td>
           <td *ngIf="valoracion.isEdit">
             <select
-            class="form-control form-control-sm"
-            [(ngModel)]="valoracion.sucursalId"
-            name="sucursalSeleccionada"
-            id="sucursal"
-          >
-
-            <option
-              *ngFor="let sucursal of sucursales"
-              [value]="sucursal.id"
+              class="form-control"
+              [(ngModel)]="valoracion.listaPrecioId"
+              name="listaPrecioId"
+              id="listaPrecioId"
             >
-              {{ sucursal.descripcion }}
-            </option>
-          </select>
-          </td>
-
-
-
-          <td *ngIf="!valoracion.isEdit">{{ valoracion?.registro  }}</td>
-          <td *ngIf="valoracion.isEdit">
-            <select
-
-              class="form-control form-control-sm"
-              [(ngModel)]="valoracion.registro"
-              name="registro"
-              id="registro"
-            >
-              <option value="">--Sin Selección--</option>
-              <option value="PRECIO">Precio</option>
-              <option value="DESCUENTO">Descuento</option>
-              <option value="PUNTO">Punto</option>
+              <option *ngFor="let lista of listasPrecio" [value]="lista.id">
+                {{ lista.descripcion }}
+              </option>
             </select>
           </td>
 
-          <td *ngIf="!valoracion.isEdit">{{ valoracion?.tipo  }}</td>
+          <td *ngIf="!valoracion.isEdit">
+            {{
+              valoracion?.sucursal
+                ? valoracion.sucursal.descripcion
+                : obtenerSucursal(valoracion?.sucursalId)
+            }}
+          </td>
           <td *ngIf="valoracion.isEdit">
             <select
-              class="form-control form-control-sm"
-              [(ngModel)]="valoracion.tipo"
-              name="tipo"
-              id="tipo"
+              class="form-control"
+              [(ngModel)]="valoracion.sucursalId"
+              name="sucursalSeleccionada"
+              id="sucursal"
             >
-            <option value="">--Sin Selección--</option>
-            <option value="PRODUCTO">Producto</option>
-            <option value="ESCALA">Escala</option>
-            <option value="CLIENTE">Cliente</option>
-            <option value="IMPORTE">Importe</option>
+              <option value="0">Todas</option>
+              <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
+                {{ sucursal.descripcion }}
+              </option>
             </select>
           </td>
-          <td *ngIf="!valoracion.isEdit">{{ valoracion?.variante?.codErp  }}</td>
+
+          <td *ngIf="!valoracion.isEdit">
+            <small>
+              {{ valoracion?.variante?.codErp }}
+              {{ valoracion?.variante?.producto.nombre }}
+              {{ valoracion?.variante?.variedad.descripcion }}
+              {{ valoracion?.variante?.presentacion.descripcion }}
+            </small>
+          </td>
           <td *ngIf="valoracion.isEdit">
-            <ng-select-variante #searchClientes id="ngbdtypeaheadClientes"
-            [cargador]="valoracion.varianteId" style="width: 100%" name="cliente"
-            (retornoObjeto)="valoracion.varianteId = ($event)"></ng-select-variante>
-           </td>
-           <td *ngIf="!valoracion.isEdit">{{ valoracion?.variante?.codErp  }}</td>
-          <td *ngIf="valoracion.isEdit">
-            <ng-select-variante #searchClientes id="ngbdtypeaheadClientes"
-            [cargador]="valoracion.varianteId" style="width: 100%" name="cliente"
-            (retornoObjeto)="valoracion.varianteId = ($event)"></ng-select-variante>
-           </td>
+            <app-custom-select
+              [size]="'sm'"
+              [options]="variantes"
+              [textField]="'concat'"
+              [valueField]="'id'"
+              [selectedValue]="valoracion.varianteId"
+              (selectedOption)="seleccionaVariante(valoracion, $event)"
+            ></app-custom-select>
+          </td>
+          <td *ngIf="!valoracion.isEdit && tipo == 'CLIENTE'">
+            {{
+              valoracion?.cliente?.nroDocumento -
+                valoracion?.cliente?.razonSocial
+            }}
+          </td>
+          <td *ngIf="valoracion.isEdit && tipo == 'CLIENTE'"></td>
 
           <td *ngIf="!valoracion.isEdit">
             <div class="btn-group">
@@ -246,10 +286,7 @@
             </div>
           </td>
           <td *ngIf="valoracion.isEdit">
-            <button
-              class="btn btn-success"
-              (click)="valoracion.isEdit = !valoracion.isEdit"
-            >
+            <button class="btn btn-success" (click)="listo(valoracion)">
               Listo
             </button>
           </td>
