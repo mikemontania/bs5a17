@@ -106,26 +106,32 @@
 
 <div class="card">
   <div class="card-body">
-    <article class="table-header">
-      <button class="btn btn-danger" (click)="removeSelectedRows()">
-        Eliminar Filas
-      </button>
-      <button class="btn btn-success" (click)="addRow()">Agregar Fila</button>
+    <article class="table-header mb-3">
+      <div class="btn-group">
+        <button class="btn btn-outline-danger" (click)="removeSelectedRows()">
+          Eliminar Selección <i class="bi bi-trash"></i>
+        </button>
+        <button class="btn btn-outline-success" (click)="addRow()">
+          Agregar Fila <i class="bi bi-file-earmark-plus"></i>
+        </button>
+        <button class="btn btn-outline-info" (click)="cloneSelectedRows()">
+          Clonar Filas <i class="bi bi-copy"></i><i class="bi bi-list-check"></i>
+        </button>
+      </div>
     </article>
 
-    <table class="table" *ngIf="valoraciones && valoraciones.length">
+    <table class="table table-bordered" *ngIf="valoraciones && valoraciones.length">
       <thead>
         <tr>
           <th>
             <input
               type="checkbox"
+              [(ngModel)]="selectAllCheckbox"
               (change)="selectAll($event)"
-              [checked]="isAllSelected()"
-              [indeterminate]="!isAllSelected() && isAnySelected()"
             />
           </th>
           <th>Id</th>
-          <th>Activo</th>
+          <th  class="verde">Activo</th>
           <th *ngIf="tipo == 'ESCALA'">Can Desde</th>
           <th *ngIf="tipo == 'ESCALA'">Can Hasta</th>
           <th>F. Desde</th>
@@ -135,11 +141,12 @@
           <th>Sucursal</th>
           <th>Variante</th>
           <th *ngIf="tipo == 'CLIENTE'">Cliente</th>
-          <th>btn</th>
+          <th>Acción</th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let valoracion of valoraciones">
+      <tbody   >
+        <tr *ngFor="let valoracion of valoraciones; let i = index"   class="verde">
+
           <td><input type="checkbox" [(ngModel)]="valoracion.isSelected" /></td>
 
           <td *ngIf="valoracion.id">{{ valoracion.id }}</td>
@@ -272,23 +279,27 @@
           </td>
           <td *ngIf="valoracion.isEdit && tipo == 'CLIENTE'"></td>
 
-          <td *ngIf="!valoracion.isEdit">
+          <td>
             <div class="btn-group">
               <button
-                class="btn btn-primary"
-                (click)="valoracion.isEdit = !valoracion.isEdit"
-              >
-                Editar
+                *ngIf="valoracion.isEdit"
+                class="btn btn-outline-success"
+                (click)="listo(valoracion)"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Guardar"  >
+                 <i class="bi bi-floppy2-fill"></i>
               </button>
-              <button class="btn btn-danger" (click)="removeRow(valoracion.id)">
-                Eliminar
+              <button
+                *ngIf="!valoracion.isEdit"
+                class="btn btn-outline-info"
+                (click)="valoracion.isEdit = !valoracion.isEdit"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"  >
+              <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-outline-danger" (click)="removeRow(i)"
+              data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" >
+                  <i class="bi bi-trash"></i>
               </button>
             </div>
-          </td>
-          <td *ngIf="valoracion.isEdit">
-            <button class="btn btn-success" (click)="listo(valoracion)">
-              Listo
-            </button>
           </td>
         </tr>
       </tbody>

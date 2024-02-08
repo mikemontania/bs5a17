@@ -3,7 +3,7 @@ import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { BASE_URL } from "../config";
 import {   catchError, map } from "rxjs/operators";
-import { of } from "rxjs";
+import { Observable, of, throwError } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -42,6 +42,48 @@ export class ValoracionService {
       );
   }
 
+
+  create(valoracion: any): Observable<any> {
+    console.log(valoracion);
+    return this.http.post(BASE_URL + '/valoraciones', valoracion)
+      .pipe(
+        map((response: any) => response ),
+        catchError(e => {
+
+          console.error('ERROR', e.error);
+
+         return throwError(() => e.error.message);
+        })
+      );
+  }
+
+
+
+  update(valoracion: any): Observable<any> {
+    console.log(valoracion);
+    return this.http.put(BASE_URL + '/valoraciones/'+valoracion.id, valoracion)
+      .pipe(
+        map((response: any) => response ),
+        catchError(e => {
+
+          console.error('ERROR', e.error);
+         return throwError(() => e.error.message);
+        })
+      );
+  }
+
+
+  deleteById(valoracion: any): Observable<any> {
+    console.log(valoracion);
+    return this.http.delete(BASE_URL + '/valoraciones/'+valoracion.id)
+      .pipe(
+        map((response: any) => response ),
+        catchError(e => {
+          console.error('ERROR', e.error);
+         return throwError(() => e.error.message);
+        })
+      );
+  }
 
 
 }
