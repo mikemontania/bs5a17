@@ -111,16 +111,20 @@
         <button class="btn btn-outline-danger" (click)="removeSelectedRows()">
           Eliminar Selección <i class="bi bi-trash"></i>
         </button>
-        <button class="btn btn-outline-success" (click)="addRow()">
+        <button class="btn btn-outline-info" (click)="addRow()">
           Agregar Fila <i class="bi bi-file-earmark-plus"></i>
         </button>
         <button class="btn btn-outline-info" (click)="cloneSelectedRows()">
-          Clonar Filas <i class="bi bi-copy"></i><i class="bi bi-list-check"></i>
+          Clonar Filas <i class="bi bi-copy"></i
+          ><i class="bi bi-list-check"></i>
         </button>
       </div>
     </article>
 
-    <table class="table table-bordered" *ngIf="valoraciones && valoraciones.length">
+    <table
+      class="table table-bordered"
+      *ngIf="valoraciones && valoraciones.length"
+    >
       <thead>
         <tr>
           <th>
@@ -131,7 +135,7 @@
             />
           </th>
           <th>Id</th>
-          <th  class="verde">Activo</th>
+          <th >Activo</th>
           <th *ngIf="tipo == 'ESCALA'">Can Desde</th>
           <th *ngIf="tipo == 'ESCALA'">Can Hasta</th>
           <th>F. Desde</th>
@@ -144,18 +148,30 @@
           <th>Acción</th>
         </tr>
       </thead>
-      <tbody   >
-        <tr *ngFor="let valoracion of valoraciones; let i = index"   class="verde">
+      <tbody>
+        <tr
+          *ngFor="let valoracion of valoraciones; let i = index"
+          [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+        >
+          <td [ngClass]="{ rowEditModeColor: valoracion.isEdit }">
+            <input type="checkbox" [(ngModel)]="valoracion.isSelected" />
+          </td>
 
-          <td><input type="checkbox" [(ngModel)]="valoracion.isSelected" /></td>
-
-          <td *ngIf="valoracion.id">{{ valoracion.id }}</td>
+          <td [ngClass]="{ rowEditModeColor: valoracion.isEdit }" *ngIf="valoracion.id">
+            {{ valoracion.id }}
+          </td>
           <td *ngIf="!valoracion.id">#</td>
 
-          <td *ngIf="!valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="!valoracion.isEdit"
+          >
             {{ valoracion.activo ? 'SI' : 'NO' }}
           </td>
-          <td *ngIf="valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="valoracion.isEdit"
+          >
             <input
               class="form-check-input"
               type="checkbox"
@@ -163,10 +179,16 @@
             />
           </td>
 
-          <td *ngIf="!valoracion.isEdit && tipo == 'ESCALA'">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="!valoracion.isEdit && tipo == 'ESCALA'"
+          >
             {{ valoracion.cantDesde | number }}
           </td>
-          <td *ngIf="valoracion.isEdit && tipo == 'ESCALA'">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="valoracion.isEdit && tipo == 'ESCALA'"
+          >
             <input
               [(ngModel)]="valoracion.cantDesde"
               class="form-control"
@@ -174,10 +196,16 @@
             />
           </td>
 
-          <td *ngIf="!valoracion.isEdit && tipo == 'ESCALA'">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="!valoracion.isEdit && tipo == 'ESCALA'"
+          >
             {{ valoracion.cantHasta | number }}
           </td>
-          <td *ngIf="valoracion.isEdit && tipo == 'ESCALA'">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="valoracion.isEdit && tipo == 'ESCALA'"
+          >
             <input
               [(ngModel)]="valoracion.cantHasta"
               class="form-control"
@@ -185,10 +213,16 @@
             />
           </td>
 
-          <td *ngIf="!valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="!valoracion.isEdit"
+          >
             {{ valoracion.fechaDesde | date: 'dd/MM/yyyy' }}
           </td>
-          <td *ngIf="valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="valoracion.isEdit"
+          >
             <input
               type="date"
               [(ngModel)]="valoracion.fechaDesde"
@@ -196,7 +230,10 @@
             />
           </td>
 
-          <td *ngIf="!valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="!valoracion.isEdit"
+          >
             {{ valoracion.fechaHasta | date: 'dd/MM/yyyy' }}
           </td>
           <td *ngIf="valoracion.isEdit">
@@ -207,8 +244,16 @@
             />
           </td>
 
-          <td *ngIf="!valoracion.isEdit">{{ valoracion.valor | number }}</td>
-          <td *ngIf="valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="!valoracion.isEdit"
+          >
+            {{ valoracion.valor | number }}
+          </td>
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="valoracion.isEdit"
+          >
             <input
               [(ngModel)]="valoracion.valor"
               class="form-control"
@@ -216,10 +261,16 @@
             />
           </td>
 
-          <td *ngIf="!valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="!valoracion.isEdit"
+          >
             {{ valoracion?.listaPrecio?.descripcion }}
           </td>
-          <td *ngIf="valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="valoracion.isEdit"
+          >
             <select
               class="form-control"
               [(ngModel)]="valoracion.listaPrecioId"
@@ -232,14 +283,20 @@
             </select>
           </td>
 
-          <td *ngIf="!valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="!valoracion.isEdit"
+          >
             {{
               valoracion?.sucursal
                 ? valoracion.sucursal.descripcion
                 : obtenerSucursal(valoracion?.sucursalId)
             }}
           </td>
-          <td *ngIf="valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="valoracion.isEdit"
+          >
             <select
               class="form-control"
               [(ngModel)]="valoracion.sucursalId"
@@ -253,7 +310,10 @@
             </select>
           </td>
 
-          <td *ngIf="!valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="!valoracion.isEdit"
+          >
             <small>
               {{ valoracion?.variante?.codErp }}
               {{ valoracion?.variante?.producto.nombre }}
@@ -261,7 +321,10 @@
               {{ valoracion?.variante?.presentacion.descripcion }}
             </small>
           </td>
-          <td *ngIf="valoracion.isEdit">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="valoracion.isEdit"
+          >
             <app-custom-select
               [size]="'sm'"
               [options]="variantes"
@@ -271,33 +334,50 @@
               (selectedOption)="seleccionaVariante(valoracion, $event)"
             ></app-custom-select>
           </td>
-          <td *ngIf="!valoracion.isEdit && tipo == 'CLIENTE'">
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="!valoracion.isEdit && tipo == 'CLIENTE'"
+          >
             {{
               valoracion?.cliente?.nroDocumento -
                 valoracion?.cliente?.razonSocial
             }}
           </td>
-          <td *ngIf="valoracion.isEdit && tipo == 'CLIENTE'"></td>
+          <td
+            [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
+            *ngIf="valoracion.isEdit && tipo == 'CLIENTE'"
+          ></td>
 
-          <td>
+          <td [ngClass]="{ rowEditModeColor: valoracion.isEdit }">
             <div class="btn-group">
               <button
                 *ngIf="valoracion.isEdit"
                 class="btn btn-outline-success"
                 (click)="listo(valoracion)"
-                data-bs-toggle="tooltip" data-bs-placement="top" title="Guardar"  >
-                 <i class="bi bi-floppy2-fill"></i>
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Guardar"
+              >
+                <i class="bi bi-floppy2-fill"></i>
               </button>
               <button
                 *ngIf="!valoracion.isEdit"
                 class="btn btn-outline-info"
                 (click)="valoracion.isEdit = !valoracion.isEdit"
-                data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"  >
-              <i class="bi bi-pencil"></i>
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Editar"
+              >
+                <i class="bi bi-pencil"></i>
               </button>
-              <button class="btn btn-outline-danger" (click)="removeRow(i)"
-              data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" >
-                  <i class="bi bi-trash"></i>
+              <button
+                class="btn btn-outline-danger"
+                (click)="removeRow(i)"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Eliminar"
+              >
+                <i class="bi bi-trash"></i>
               </button>
             </div>
           </td>

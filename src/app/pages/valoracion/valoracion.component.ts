@@ -112,9 +112,16 @@ export class ValoracionComponent implements OnInit {
 
   addRow() {
     const newRow = {
-      id: Date.now().toString(),
-      fechaDesde: '',
-      fechaHasta: '',
+      id: null,
+      cantDesde:1,
+      cantHasta:999999999,
+      valor:1,
+      fechaDesde: this.fechaDesde,
+      fechaHasta:  this.fechaDesde,
+      registro:this.registro,
+      tipo:this.tipo,
+      sucursalId:this.sucursalId,
+      listaPrecioId:this.listaPrecioId,
       isSelected: false, // Asegúrate de inicializar isSelected
       isEdit: true,
     };

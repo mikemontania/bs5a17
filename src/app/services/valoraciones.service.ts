@@ -73,9 +73,9 @@ export class ValoracionService {
   }
 
 
-  deleteById(valoracion: any): Observable<any> {
-    console.log(valoracion);
-    return this.http.delete(BASE_URL + '/valoraciones/'+valoracion.id)
+  deleteById(id: number): Observable<any> {
+    console.log(id);
+    return this.http.delete(BASE_URL + '/valoraciones/'+id)
       .pipe(
         map((response: any) => response ),
         catchError(e => {
