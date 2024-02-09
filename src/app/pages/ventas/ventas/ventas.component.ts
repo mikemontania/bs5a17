@@ -31,6 +31,7 @@ import { NgListaPrecioSearchComponent } from "../../../components/ng-lista-preci
 import { NgClienteCreateComponent } from "../../../components/ng-cliente-create/ng-cliente-create.component";
 import { NgClienteSearchComponent } from "../../../components/ng-cliente-search/ng-cliente-search.component";
 import { NgCobranzaCreateComponent } from '../../../components/ng-cobranza-create/ng-cobranza-create.component';
+import { Valoracion } from "../../../interfaces/valoracion.interface";
 
 @Component({
   selector: "app-ventas",
@@ -62,6 +63,7 @@ export class VentasComponent implements OnInit {
   showShop = true;
 
   public userId = computed(() => this._authService.currentUser()?.id ?? 0);
+  importeEscala: number = 1;
   cantidad: number = 1;
   searchCliente = false;
   searchSucursal = false;
@@ -71,6 +73,7 @@ export class VentasComponent implements OnInit {
   createCliente = false;
   createCobranza = false;
   detalles: ModelDet[] = [];
+  descuentosEscala: Valoracion[] = [];
 
   _authService = inject(AuthService);
   _clienteService = inject(ClientesService);
@@ -111,10 +114,8 @@ export class VentasComponent implements OnInit {
         numeracionId: this.numeracion().id,
         listaPrecioId: this.listaPrecio().id,
         formaVentaId: this.formaVenta().id,
-        importeDescuento: 0,
-        importeTotal: 0,
-        importeSubtotal: 0
       }));
+      this.obtenerDescuentoEscala()
     });
   }
   createCobranzaModal() { this.createCobranza = true; }
@@ -150,6 +151,7 @@ export class VentasComponent implements OnInit {
     }
 
   }
+
   buscarListaPrecio() {
     if (this.detalles?.length > 0) {
       Swal.fire({
@@ -177,7 +179,12 @@ export class VentasComponent implements OnInit {
     }
   }
 
-
+  obtenerDescuentoEscala() {
+    this._valoracionService.obtenerDescuentoImporte(this.listaPrecio().id, this.sucursal().id).subscribe(resp => {
+      console.log('Escala', resp)
+      this.descuentosEscala = resp;
+    });
+  }
   changeCantidad(cantidad: number) {
     this.cantidad = cantidad;
   }
@@ -238,6 +245,7 @@ export class VentasComponent implements OnInit {
     this.refresh();
     this.detalles = [];
     this.actualizarCabecera();
+
     //this.reCalcular();
   }
 
@@ -335,6 +343,7 @@ export class VentasComponent implements OnInit {
         this.detalles[indice].importeDescuento = Math.round(this.detalles[indice].importeSubtotal * this.detalles[indice].porcDescuento / 100
         );
       } else {
+
       }
       //calcular total
       this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
@@ -469,8 +478,14 @@ export class VentasComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-         Swal.fire("Error", err.msg, "error");
+        Swal.fire("Error", err.msg, "error");
       },
     });
+  }
+
+
+  cancelar(){
+    this.detalles = [];
+    this.actualizarCabecera()
   }
 }

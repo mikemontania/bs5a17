@@ -11,7 +11,19 @@ import { Observable, of, throwError } from "rxjs";
 export class ValoracionService {
   http = inject(HttpClient);
   router = inject(Router);
-
+  obtenerDescuentoImporte(  listaPrecioId: number,sucursalId: number) {
+    return this.http
+      .get(BASE_URL + "/valoraciones/descuentoescala/" + listaPrecioId + "/" + sucursalId )
+      .pipe(
+        map((respo: any) => {
+          return respo;
+        })  ,
+        catchError(e => {
+          console.error('ERROR', e.error); ;
+         return of([]);
+        })
+      );
+  }
  obtenerVigente(id: number, sucursalId: number, listaPrecioId: number) {
     return this.http
       .get(BASE_URL + "/valoraciones/vigente/" + id + "/" + sucursalId + "/" + listaPrecioId)
