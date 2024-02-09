@@ -69,6 +69,7 @@ export interface Variedad {
 export interface Variante {
   id:             number;
   codBarra:       string;
+  concat:string;
   codErp:         string;
   porcIva:        string;
   empresaId:      number;

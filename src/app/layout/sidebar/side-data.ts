@@ -6,17 +6,7 @@ export const navbarData: INavbarData[] = [
     icon: 'fa-solid fa-house',
     label: 'Dashboard'
   },
-  {
-    routeLink: 'productos',
-    icon: 'bi bi-bag-check',
-    label: 'Productos'
-  },
 
-  {
-    routeLink: 'clientes',
-    icon: 'fa-solid fa-user',
-    label: 'Clientes'
-  },
 
   {
     routeLink: 'ventas',
@@ -38,13 +28,7 @@ export const navbarData: INavbarData[] = [
 
     ]
 
-  }, {
-    routeLink: 'valoraciones',
-    icon: 'bi bi-tags',
-    label: 'Valoraciones'
   },
-
-
   {
     routeLink: 'valoraciones',
     icon: 'bi bi-tags',
@@ -56,16 +40,30 @@ export const navbarData: INavbarData[] = [
       },
       {
         routeLink: `valoraciones/DESCUENTO/PRODUCTO`,
-        label: 'Descuento'
+        label: 'Descuento/Prd'
       },
       {
-        routeLink: `valoraciones/PUNTO/IMPORTE`,
+        routeLink: `valoraciones/DESCUENTO/IMPORTE`,
+        label: 'Descuento/Gs'
+      },
+      {
+        routeLink: `valoraciones/PUNTO/PRODUCTO`,
         label: 'Puntos'
       }
     ]
   },
+  {
+    routeLink: 'productos',
+    icon: 'bi bi-bag-check',
+    label: 'Productos'
+  },
 
-   {
+  {
+    routeLink: 'clientes',
+    icon: 'fa-solid fa-user',
+    label: 'Clientes'
+  },
+  /*  {
     routeLink: 'parametros',
     icon: 'fa-solid fa-tag',
     label: 'Parametros',
@@ -94,5 +92,5 @@ export const navbarData: INavbarData[] = [
     icon: 'fa-solid fa-gear',
     label: 'Settings',
 
-  },
+  }, */
 ];
