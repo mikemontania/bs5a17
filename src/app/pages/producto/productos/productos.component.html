@@ -52,12 +52,19 @@
                 <td  class="text-sm">{{ producto.subCategoria.descripcion }}</td>
                 <td  class="text-sm">{{ (producto.activo)?'SI':'NO' }}</td>
                 <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-info text-info" appTooltip="Ver editar producto"  (click)="verProducto(producto.id)" >
+                  <button class="btn btn-sm btn-outline-info text-info"
+
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ver editar producto" (click)="verProducto(producto.id)" >
                     <i class="bi bi-pencil"></i>
                                     </button>
                 </td>
                 <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-info text-info" appTooltip="Ver editar variantes"  (click)="verVariantes(producto.id)" >
+                  <button class="btn btn-sm btn-outline-info text-info"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ver editar variantes"    (click)="verVariantes(producto.id)" >
                     <i class="bi bi-stack"></i>
                                     </button>
                 </td>

@@ -15,7 +15,6 @@ import { NgClienteSearchComponent } from '../../../components/ng-cliente-search/
 import { NgFormaVentaSearchComponent } from '../../../components/ng-forma-venta-search/ng-forma-venta-search.component';
 import { NgListaPrecioSearchComponent } from '../../../components/ng-lista-precio-search/ng-lista-precio-search.component';
 import {   FormsModule } from '@angular/forms';
-import { TooltipDirective } from '../../../directivas/tooltip.directive';
 import { ReportesService } from '../../../services/reportes.service';
 import Swal from 'sweetalert2';
 import {   Router } from '@angular/router';
@@ -23,7 +22,7 @@ import {   Router } from '@angular/router';
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent, TooltipDirective,
+  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent,
     NgClienteSearchComponent, NgFormaVentaSearchComponent, NgListaPrecioSearchComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'

@@ -57,7 +57,11 @@
                 <td  class="text-sm">{{ (cliente.predeterminado)?'SI':'NO' }}</td>
                 <td  class="text-sm">{{ (cliente.activo)?'SI':'NO' }}</td>
                 <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-info text-info" appTooltip="Ver editar cliente"  (click)="verCliente(cliente.id)" >
+                  <button class="btn btn-sm btn-outline-info text-info"
+
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ver editar cliente"  (click)="verCliente(cliente.id)" >
                     <i class="bi bi-pencil"></i>
                                     </button>
                 </td>

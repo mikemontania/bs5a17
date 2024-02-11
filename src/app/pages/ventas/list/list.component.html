@@ -98,8 +98,8 @@
 <div class="card">
   <div class="card-body">
     @if(ventas() && ventas().length > 0) {
-    <div class="card">
-      <div class="card-body pt-4 d-flex flex-column align-items-center">
+
+      <div class=" pt-4 d-flex flex-column align-items-center">
         <div id="details" style="overflow-x: auto">
           <table class="table caption-top table-sm small-table">
             <caption>
@@ -158,17 +158,26 @@
                 <td  class="text-sm">{{ venta.anulado }}</td>
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(venta.id)"
-                  appTooltip="Anular ventas">
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Anular ventas"   >
                     <i class="bi bi-cart-x"></i>
                   </button>
                 </td>
                 <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-info text-info" appTooltip="Ver detalles de ventas" (click)="verDetalles(venta.id)">
+                  <button class="btn btn-sm btn-outline-info text-info"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ver detalles de ventas"
+                  (click)="verDetalles(venta.id)">
                     <i class="bi bi-card-list"></i>
                   </button>
                 </td>
                 <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-success text-success" appTooltip="Ver documento" (click)="getDoc(venta.id)">
+                  <button class="btn btn-sm btn-outline-success text-success"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ver documento"  (click)="getDoc(venta.id)">
                     <i class="bi bi-card-list"></i>
                   </button>
                 </td>
@@ -180,7 +189,7 @@
           </table>
         </div>
       </div>
-    </div>
+
     } @else {
     <div class="w-100 empty-message-container">
       <div class="alert alert-info alert-dismissible fade show" role="alert">

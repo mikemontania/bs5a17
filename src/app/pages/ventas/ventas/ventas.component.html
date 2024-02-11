@@ -142,12 +142,8 @@
       <div class="card">
         <div class="card-body pt-4 d-flex flex-column align-items-center">
           <div id="details">
-            <table class="table caption-top table-sm">
-              <caption>
-                Items({{
-                  detalles.length | number
-                }})
-              </caption>
+            <table class="table table-sm">
+
               <thead>
                 <tr>
                   <th scope="col">Cant.</th>
@@ -230,6 +226,14 @@
               <span class="text-danger small pt-1 fw-bold">Total</span>
               <h6 class="text-right font-weight-bold">
                 {{ factura().importeTotal | number }} Gs
+              </h6>
+            </div>
+
+
+            <div class="ps-3">
+              <span class="text-danger small pt-1 fw-bold">Articulos</span>
+              <h6 class="text-right font-weight-bold">
+                {{ (detalles?.length ) | number }}
               </h6>
             </div>
           </div>

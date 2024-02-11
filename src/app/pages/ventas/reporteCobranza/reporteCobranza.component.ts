@@ -14,9 +14,7 @@ import { NgMedioPagoSearchComponent } from '../../../components/ng-medioPago-sea
 import { NgFormaVentaSearchComponent } from '../../../components/ng-forma-venta-search/ng-forma-venta-search.component';
 import { NgListaPrecioSearchComponent } from '../../../components/ng-lista-precio-search/ng-lista-precio-search.component';
 import { FormsModule } from '@angular/forms';
-import { TooltipDirective } from '../../../directivas/tooltip.directive';
 import { ReportesService } from '../../../services/reportes.service';
-import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { MedioPago } from '../../../interfaces/facturas.interface';
 import { ReportCobranza } from '../../../interfaces/reports.interface';
@@ -24,7 +22,7 @@ import { ReportCobranza } from '../../../interfaces/reports.interface';
 @Component({
   selector: 'app-reporteCobranza',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent, TooltipDirective,
+  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent,
     NgMedioPagoSearchComponent, NgFormaVentaSearchComponent, NgListaPrecioSearchComponent],
   templateUrl: './reporteCobranza.component.html',
   styleUrl: './reporteCobranza.component.css'

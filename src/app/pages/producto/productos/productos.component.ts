@@ -4,7 +4,6 @@ import { FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { InputDebounceComponent } from "../../../components/inputDebounce/inputDebounce.component";
 import { PaginatorComponent } from "../../../components/paginator/paginator.component";
-import { TooltipDirective } from "../../../directivas/tooltip.directive";
 import { ProductosService } from "../../../services/productos.service";
 import { PageProductosSimple } from "../../../interfaces/productos.interface";
 
@@ -12,7 +11,7 @@ import { PageProductosSimple } from "../../../interfaces/productos.interface";
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, TooltipDirective,],
+  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent,  ],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css'
 })

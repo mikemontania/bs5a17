@@ -182,7 +182,7 @@ export class VentasComponent implements OnInit {
   obtenerDescuentoEscala() {
     this._valoracionService.obtenerDescuentoImporte(this.listaPrecio().id, this.sucursal().id).subscribe(resp => {
       console.log('Escala', resp)
-      this.descuentosEscala = resp;
+      this.descuentosEscala = resp?.descuentos;
     });
   }
   changeCantidad(cantidad: number) {
@@ -340,10 +340,31 @@ export class VentasComponent implements OnInit {
       if (item.descuento && item.descuento > 0) {
         this.detalles[indice].porcDescuento = item.descuento;
         this.detalles[indice].tipoDescuento = "PRODUCTO";
-        this.detalles[indice].importeDescuento = Math.round(this.detalles[indice].importeSubtotal * this.detalles[indice].porcDescuento / 100
-        );
+        this.detalles[indice].importeDescuento = Math.round(this.detalles[indice].importeSubtotal * this.detalles[indice].porcDescuento / 100);
       } else {
+        this.detalles[indice].porcDescuento = 0;
+        this.detalles[indice].tipoDescuento = "NINGUNO";
+        this.detalles[indice].importeDescuento = 0;
+      }
 
+      //VERIFICAR DESCUENTO IMPORTE
+      if (this.descuentosEscala && this.descuentosEscala.length > 0) {
+        //primero sumar los subtotales de los detalles que califican para descuento importe
+        const importeDescontable = this.detalles.reduce((subTotal, detalle) => (detalle.tipoDescuento != 'PRODUCTO')? subTotal + detalle.importeSubtotal:subTotal +0, 0);
+        console.log('importeDescontable =>',importeDescontable)
+        //obtener porcentaje descuento
+        const descuentoImporte =  this.descuentosEscala.find(descuento => descuento.cantDesde <=importeDescontable && descuento.cantHasta >= importeDescontable)
+        console.log('descuento Escala =>',descuentoImporte )
+        if (descuentoImporte) {
+          //Recorrer detalles que corresponde ajustar con el descuento escala
+          this.detalles.forEach(detall => {
+            if (detall.tipoDescuento != 'PRODUCTO') {
+              detall.porcDescuento = +descuentoImporte.valor;
+              detall.tipoDescuento = "IMPORTE";
+              detall.importeDescuento = Math.round(detall.importeSubtotal * detall.porcDescuento / 100);
+            }
+          });
+        }
       }
       //calcular total
       this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
@@ -368,6 +389,7 @@ export class VentasComponent implements OnInit {
     }
   }
 
+
   actualizarCabecera() {
     const totalSubtotal = this.detalles.reduce((total, detalle) => total + detalle.importeSubtotal, 0);
     const totalIva5 = this.detalles.reduce((total, detalle) => total + detalle.importeIva5, 0);
@@ -375,7 +397,8 @@ export class VentasComponent implements OnInit {
       (total, detalle) => total + detalle.importeIva10, 0); const totalIvaExenta = this.detalles.reduce((total, detalle) => total + detalle.importeIvaExenta,
         0);
     const totalDescuento = this.detalles.reduce((total, detalle) => total + detalle.importeDescuento, 0);
-    const totalNeto = totalSubtotal - totalDescuento; const totalTotal = totalNeto + totalIva5 + totalIva10 + totalIvaExenta;
+    const totalNeto = this.detalles.reduce((total, detalle) => total + detalle.importeNeto, 0);
+    const totalTotal = this.detalles.reduce((total, detalle) => total + detalle.importeTotal, 0);
     const totalKg = this.detalles.reduce((totalKg, detalle) => totalKg + detalle.totalKg, 0);
 
     this.factura.update(value => ({
@@ -484,7 +507,7 @@ export class VentasComponent implements OnInit {
   }
 
 
-  cancelar(){
+  cancelar() {
     this.detalles = [];
     this.actualizarCabecera()
   }

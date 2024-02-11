@@ -5,15 +5,13 @@ import { Component, signal, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputDebounceComponent } from '../../../components/inputDebounce/inputDebounce.component';
 import { PaginatorComponent } from '../../../components/paginator/paginator.component';
-import { TooltipDirective } from '../../../directivas/tooltip.directive';
-import { Cliente } from '../../../interfaces/clientes.interface';
 import { ClientesPage } from '../../../interfaces/pages.interfaces';
 import { ClientesService } from '../../../services/clientes.service';
 
 @Component({
   selector: 'app-clientes',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, TooltipDirective,],
+  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent,],
   templateUrl: './clientes.component.html',
   styleUrl: './clientes.component.css'
 })
