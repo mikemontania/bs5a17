@@ -35,7 +35,7 @@ export class SidebarComponent {
   @Input() collapsed: boolean = true;
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
    screenWidth = 0;
-   navData = navbarData;
+   navData:INavbarData[] = [];
    multiple: boolean = false;
 
    @HostListener('window:resize', ['$event'])
@@ -47,10 +47,14 @@ export class SidebarComponent {
      }
    }
 
-   constructor(public router: Router, public authService: AuthService) {}
+   constructor(public router: Router, public authService: AuthService) {
+    this.navData = this.filterNavbarData(navbarData);
+   }
 
    ngOnInit(): void {
        this.screenWidth = window.innerWidth;
+
+
    }
 
    toggleCollapse(): void {
@@ -71,6 +75,15 @@ export class SidebarComponent {
    getActiveClass(data: INavbarData): string {
      return this.router.url.includes(data.routeLink) ? 'active' : '';
    }
+
+   filterNavbarData(navData: INavbarData[]): INavbarData[] {
+    return navData
+      .filter(item => this.verificaRol(item.rol))
+      .map(item => {
+        if (item.items) item.items = this.filterNavbarData(item.items);
+        return item;
+      });
+  }
 
    verificaRol(roles:string[]){
     return roles.some(rol => rol == this.authService.currentUser()?.rol);

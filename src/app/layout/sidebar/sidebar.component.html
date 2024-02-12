@@ -2,7 +2,7 @@
   <div class="scrollwrap scrollwrap_delayed">
       <ul class="sidenav-nav">
         <ng-container *ngFor="let data of navData">
-          <ng-container *ngIf="verificaRol(data.rol)">
+
           <li class="sidenav-nav-item"  >
               <a class="sidenav-nav-link" (click)="handleClick(data)" *ngIf="data.items && data.items.length > 0"
                   [ngClass]="getActiveClass(data)">
@@ -28,7 +28,7 @@
               </div>
           </li>
           </ng-container>
-        </ng-container>
+
       </ul>
   </div>
 </aside>

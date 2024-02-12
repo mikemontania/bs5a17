@@ -153,7 +153,7 @@ export class VentasComponent implements OnInit {
   }
 
   buscarListaPrecio() {
-    if (this.detalles?.length > 0) {
+ /*    if (this.detalles?.length > 0) {
       Swal.fire({
         title: 'Está seguro que desea cambiar de lista de precio?',
         text: `Serán descartados los items agregados`,
@@ -174,9 +174,9 @@ export class VentasComponent implements OnInit {
           this.searchListaPrecio = true
         }
       });
-    } else {
+    } else { */
       this.searchListaPrecio = true;
-    }
+   /*  } */
   }
 
   obtenerDescuentoEscala() {

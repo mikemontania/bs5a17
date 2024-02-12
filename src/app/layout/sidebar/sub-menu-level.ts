@@ -4,7 +4,6 @@ import { Router, RouterModule } from '@angular/router';
 import { fadeInOut, INavbarData } from './helper';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   standalone: true,
@@ -20,7 +19,7 @@ import { AuthService } from '../../auth/services/auth.service';
       class="sublevel-nav"
     >
     <ng-container *ngFor="let item of data.items">
-    <ng-container *ngIf="verificaRol(item.rol)">
+
       <li   class="sublevel-nav-item">
           <a class="sublevel-nav-link"
           (click)="handleClick(item)"
@@ -54,7 +53,7 @@ import { AuthService } from '../../auth/services/auth.service';
           </div>
       </li>
 </ng-container>
-          </ng-container>
+
     </ul>
   `,
   styleUrls: ['./sidebar.component.css'],
@@ -88,7 +87,7 @@ export class SublevelMenuComponent implements OnInit {
   @Input() expanded: boolean | undefined;
   @Input() multiple: boolean = false;
 
-  constructor(public router: Router, public authService: AuthService) { }
+  constructor(public router: Router ) { }
 
 
   ngOnInit(): void {
@@ -105,12 +104,6 @@ export class SublevelMenuComponent implements OnInit {
       }
     }
     item.expanded = !item.expanded;
-  }
-  verificaRol(roles: string[]) {
-    console.log(roles)
-    const permiso = roles.some(rol => rol == this.authService.currentUser()?.rol);
-    console.log(permiso)
-    return permiso
   }
 
   getActiveClass(item: INavbarData): string {
