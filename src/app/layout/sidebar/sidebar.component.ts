@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { INavbarData, fadeInOut } from './helper';
 import { navbarData } from './side-data';
 import { SublevelMenuComponent } from './sub-menu-level';
+import { AuthService } from '../../auth/services/auth.service';
 export interface SideNavToggle {
   screenWidth: number;
   collapsed: boolean;
@@ -46,7 +47,7 @@ export class SidebarComponent {
      }
    }
 
-   constructor(public router: Router) {}
+   constructor(public router: Router, public authService: AuthService) {}
 
    ngOnInit(): void {
        this.screenWidth = window.innerWidth;
@@ -69,6 +70,10 @@ export class SidebarComponent {
 
    getActiveClass(data: INavbarData): string {
      return this.router.url.includes(data.routeLink) ? 'active' : '';
+   }
+
+   verificaRol(roles:string[]){
+    return roles.some(rol => rol == this.authService.currentUser()?.rol);
    }
 
 

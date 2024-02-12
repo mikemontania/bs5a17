@@ -180,10 +180,14 @@ export class VentasComponent implements OnInit {
   }
 
   obtenerDescuentoEscala() {
-    this._valoracionService.obtenerDescuentoImporte(this.listaPrecio().id, this.sucursal().id).subscribe(resp => {
-      console.log('Escala', resp)
-      this.descuentosEscala = resp?.descuentos;
-    });
+    try {
+      this._valoracionService.obtenerDescuentoImporte(this.listaPrecio().id, this.sucursal().id).subscribe(resp => {
+        console.log('Escala', resp)
+        this.descuentosEscala = resp?.descuentos;
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
   changeCantidad(cantidad: number) {
     this.cantidad = cantidad;
@@ -226,7 +230,7 @@ export class VentasComponent implements OnInit {
     this.refresh();
     this.detalles = [];
     this.actualizarCabecera();
-    //this.reCalcular();
+    this.reCalcular();
   }
   selectNumeracion(numeracion: Numeracion) {
     console.log("Selected Numeracion:", numeracion);
@@ -245,14 +249,16 @@ export class VentasComponent implements OnInit {
     this.refresh();
     this.detalles = [];
     this.actualizarCabecera();
-
-    //this.reCalcular();
+ this.reCalcular();
   }
 
 
   async reCalcular() {
-    for await (const detalle of this.detalles) {
-      const valoracion: any = await this._valoracionService.obtenerVigente(detalle.varianteId, this.sucursal().id, this.listaPrecio().id);
+
+   await this.obtenerDescuentoEscala()
+   await Promise.all(this.detalles.map(async detalle => {
+    try {
+      const valoracion: any =   this._valoracionService.obtenerVigente(detalle.varianteId, this.sucursal().id, this.listaPrecio().id);
       if (valoracion) {
         if (valoracion.descuento) {
           detalle.porcDescuento = valoracion.descuento.valor;
@@ -263,38 +269,38 @@ export class VentasComponent implements OnInit {
         } else {
           detalle.importePrecio = 0;
         }
-        detalle.importeSubtotal = detalle.cantidad * detalle.importePrecio;
-        detalle.importeDescuento = Math.round((detalle.importeSubtotal * detalle.porcDescuento) / 100);
-        detalle.importeTotal = detalle.importeSubtotal - detalle.importeDescuento;
-        const porcIva = detalle.porcIva;
-        const porcIva5 = porcIva === 5 ? Math.round(detalle.importeTotal / 21) : 0;
-        const porcIva10 = porcIva === 10 ? Math.round(detalle.importeTotal / 11) : 0;
-        const porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
-        const porcNeto = detalle.importeTotal - (porcIva5 + porcIva10);
-        // Asignar los resultados
-
-        detalle.importeIva5 = porcIva5;
-        detalle.importeIva10 = porcIva10;
-        detalle.importeIvaExenta = porcIvaExenta;
-        detalle.importeNeto = porcNeto
-
-      } else {
-        detalle.importePrecio = 0;
-        detalle.importeIva5 = 0;
-        detalle.importeIva10 = 0;
-        detalle.importeIvaExenta = 0;
-        detalle.importeDescuento = 0;
-        detalle.importeNeto = 0;
-        detalle.importeSubtotal = 0;
-        detalle.importeTotal = 0;
       }
-
-
+      this.reAjustarDetalles();
+      this.actualizarCabecera();
+    } catch (error) {
+      // Manejar el error de obtenerDescuentoEscala aquí
+      console.error(`Error al obtener descuento de escala: ${error }`);
     }
+    }));
 
 
   }
-
+  // Función para inicializar un detalle
+  inicializarDetalle(item: ProductosItem): ModelDet {
+    return {
+      varianteId: item.id,
+      descripcion: item.producto + " " + item.presentacion + " " + item.variedad,
+      codErp: item.codErp,
+      cantidad: 0,
+      porcDescuento: 0,
+      porcIva: +item.porcIva,
+      importePrecio: 0,
+      importeIva5: 0,
+      importeIva10: 0,
+      importeIvaExenta: 0,
+      importeDescuento: 0,
+      importeNeto: 0,
+      importeSubtotal: 0,
+      importeTotal: 0,
+      totalKg: 0,
+      tipoDescuento: ""
+    };
+  }
   seleccionarProducto(item: ProductosItem) {
     if (!item.precio) {
       Swal.fire("Atención", "El producto no tiene precio", "warning");
@@ -306,82 +312,27 @@ export class VentasComponent implements OnInit {
       let indice = this.detalles.findIndex(d => d.varianteId == item.id);
       //si no existe inicializar
       if (indice === -1) {
-        const detalleInit: ModelDet = {
-          varianteId: item.id,
-          descripcion:
-            item.producto + " " + item.presentacion + " " + item.variedad,
-          codErp: item.codErp,
-          cantidad: 0,
-          porcDescuento: 0,
-          porcIva: +item.porcIva,
-          importePrecio: 0,
-          importeIva5: 0,
-          importeIva10: 0,
-          importeIvaExenta: 0,
-          importeDescuento: 0,
-          importeNeto: 0,
-          importeSubtotal: 0,
-          importeTotal: 0,
-          totalKg: 0,
-          tipoDescuento: ""
-        };
-        this.detalles.push(detalleInit);
+        this.detalles.push(this.inicializarDetalle(item));
         indice = this.detalles.findIndex(d => d.varianteId == item.id);
       }
-
-      //calcular detalles
       this.detalles[indice].cantidad += this.cantidad;
       this.detalles[indice].importePrecio = item.precio;
-      this.detalles[indice].importeSubtotal =
-        this.detalles[indice].cantidad * item.precio;
-      this.detalles[indice].totalKg = (this.detalles[indice].cantidad * item.peso);
+      this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * item.precio;
+      this.detalles[indice].totalKg = this.detalles[indice].cantidad * item.peso;
 
-      //calcular descuento
+      // Calcular descuento
       if (item.descuento && item.descuento > 0) {
         this.detalles[indice].porcDescuento = item.descuento;
         this.detalles[indice].tipoDescuento = "PRODUCTO";
-        this.detalles[indice].importeDescuento = Math.round(this.detalles[indice].importeSubtotal * this.detalles[indice].porcDescuento / 100);
+        this.detalles[indice].importeDescuento = Math.round(
+          this.detalles[indice].importeSubtotal * this.detalles[indice].porcDescuento / 100
+        );
       } else {
         this.detalles[indice].porcDescuento = 0;
         this.detalles[indice].tipoDescuento = "NINGUNO";
         this.detalles[indice].importeDescuento = 0;
       }
-
-      //VERIFICAR DESCUENTO IMPORTE
-      if (this.descuentosEscala && this.descuentosEscala.length > 0) {
-        //primero sumar los subtotales de los detalles que califican para descuento importe
-        const importeDescontable = this.detalles.reduce((subTotal, detalle) => (detalle.tipoDescuento != 'PRODUCTO')? subTotal + detalle.importeSubtotal:subTotal +0, 0);
-        console.log('importeDescontable =>',importeDescontable)
-        //obtener porcentaje descuento
-        const descuentoImporte =  this.descuentosEscala.find(descuento => descuento.cantDesde <=importeDescontable && descuento.cantHasta >= importeDescontable)
-        console.log('descuento Escala =>',descuentoImporte )
-        if (descuentoImporte) {
-          //Recorrer detalles que corresponde ajustar con el descuento escala
-          this.detalles.forEach(detall => {
-            if (detall.tipoDescuento != 'PRODUCTO') {
-              detall.porcDescuento = +descuentoImporte.valor;
-              detall.tipoDescuento = "IMPORTE";
-              detall.importeDescuento = Math.round(detall.importeSubtotal * detall.porcDescuento / 100);
-            }
-          });
-        }
-      }
-      //calcular total
-      this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
-
-      const porcIva = +this.detalles[indice].porcIva;
-      const porcIva5 = porcIva === 5 ? Math.round(this.detalles[indice].importeTotal / 21) : 0;
-      const porcIva10 = porcIva === 10 ? Math.round(this.detalles[indice].importeTotal / 11) : 0;
-      const porcIvaExenta = porcIva === 0 ? this.detalles[indice].importeTotal : 0;
-      const porcNeto = this.detalles[indice].importeTotal - (porcIva5 + porcIva10);
-      // Asignar los resultados
-
-      this.detalles[indice].importeIva5 = porcIva5;
-      this.detalles[indice].importeIva10 = porcIva10;
-      this.detalles[indice].importeIvaExenta = porcIvaExenta;
-      this.detalles[indice].importeNeto = porcNeto;
-
-      //Actualizar cabecera
+      this.reAjustarDetalles();
       this.actualizarCabecera();
       this.cantidad = 1;
     } catch (err) {
@@ -389,7 +340,41 @@ export class VentasComponent implements OnInit {
     }
   }
 
+  // Función para ajustar los detalle porque podria haber ono descuento escala
+  reAjustarDetalles() {
+    if (this.descuentosEscala && this.descuentosEscala.length > 0) {
+      const importeDescontable = this.detalles.reduce((subTotal, detalle) => (detalle.tipoDescuento !== 'PRODUCTO') ? subTotal + detalle.importeSubtotal : subTotal + 0, 0);
 
+      const descuentoImporte = this.descuentosEscala.find(descuento =>
+        descuento.cantDesde <= importeDescontable && descuento.cantHasta >= importeDescontable
+      );
+
+      if (descuentoImporte) {
+        this.detalles.forEach(detalle => {
+          if (detalle.tipoDescuento !== 'PRODUCTO') {
+            detalle.porcDescuento = +descuentoImporte.valor;
+            detalle.tipoDescuento = "IMPORTE";
+            detalle.importeDescuento = Math.round(detalle.importeSubtotal * detalle.porcDescuento / 100);
+          }
+
+          //calcular total
+          detalle.importeTotal = detalle.importeSubtotal - detalle.importeDescuento;
+
+          const porcIva = +detalle.porcIva;
+          const porcIva5 = porcIva === 5 ? Math.round(detalle.importeTotal / 21) : 0;
+          const porcIva10 = porcIva === 10 ? Math.round(detalle.importeTotal / 11) : 0;
+          const porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
+          const porcNeto = detalle.importeTotal - (porcIva5 + porcIva10);
+          // Asignar los resultados
+
+          detalle.importeIva5 = porcIva5;
+          detalle.importeIva10 = porcIva10;
+          detalle.importeIvaExenta = porcIvaExenta;
+          detalle.importeNeto = porcNeto;
+        });
+      }
+    }
+  }
   actualizarCabecera() {
     const totalSubtotal = this.detalles.reduce((total, detalle) => total + detalle.importeSubtotal, 0);
     const totalIva5 = this.detalles.reduce((total, detalle) => total + detalle.importeIva5, 0);
@@ -421,21 +406,9 @@ export class VentasComponent implements OnInit {
       const peso = (this.detalles[indice].totalKg / this.detalles[indice].cantidad)
       this.detalles[indice].cantidad = this.detalles[indice].cantidad + valor;
       this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * this.detalles[indice].importePrecio;
-      this.detalles[indice].totalKg = this.detalles[indice].cantidad * peso;
-      this.detalles[indice].importeDescuento = Math.round(this.detalles[indice].importeSubtotal * this.detalles[indice].porcDescuento / 100);
-      this.detalles[indice].importeTotal = this.detalles[indice].importeSubtotal - this.detalles[indice].importeDescuento;
-
-      const porcIva = this.detalles[indice].porcIva;
-      const porcIva5 = porcIva === 5 ? Math.round(this.detalles[indice].importeTotal / 21) : 0;
-      const porcIva10 = porcIva === 10 ? Math.round(this.detalles[indice].importeTotal / 11) : 0;
-      const porcIvaExenta = porcIva === 0 ? this.detalles[indice].importeTotal : 0;
-      const porcNeto = this.detalles[indice].importeTotal - (porcIva5 + porcIva10);
-      // Asignar los resultados
-
-      this.detalles[indice].importeIva5 = porcIva5;
-      this.detalles[indice].importeIva10 = porcIva10;
-      this.detalles[indice].importeIvaExenta = porcIvaExenta;
-      this.detalles[indice].importeNeto = porcNeto
+      this.detalles[indice].totalKg = this.detalles[indice].cantidad * peso;this.detalles[indice]
+      this.reAjustarDetalles();
+      this.actualizarCabecera();
       this.actualizarCabecera();
     }
   }

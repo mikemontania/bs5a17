@@ -1,13 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
-
-import { VentasService } from '../../../services/ventas.service';
 import { CommonModule } from '@angular/common';
 import { InputDebounceComponent } from '../../../components/inputDebounce/inputDebounce.component';
 import { PaginatorComponent } from '../../../components/paginator/paginator.component';
-import { VentasPage } from '../../../interfaces/pages.interfaces';
-import { FormaVenta } from '../../../interfaces/formaventa.interface';
 import { Sucursal } from '../../../interfaces/sucursal.interface';
-import { ListaPrecio } from '../../../interfaces/listaPrecio.interface';
 import moment from 'moment';
 import { NgSucursalSearchComponent } from '../../../components/ng-sucursal-search/ng-sucursal-search.component';
 import { NgMedioPagoSearchComponent } from '../../../components/ng-medioPago-search/ng-medioPago-search.component';
@@ -18,6 +13,7 @@ import { ReportesService } from '../../../services/reportes.service';
 import { Router } from '@angular/router';
 import { MedioPago } from '../../../interfaces/facturas.interface';
 import { ReportCobranza } from '../../../interfaces/reports.interface';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-reporteCobranza',
@@ -44,10 +40,10 @@ export class ReporteCobranzaComponent {
   cantidadMedios = computed(() => this.agrupados().reduce((cantidad, detalle) => cantidad + detalle.cantidadCobranza, 0) ?? 0);
   importeTotal = computed(() => this.agrupados().reduce((total, detalle) => total + detalle.importeTotal, 0) ?? 0);
   medioPagoId = computed(() => this.medioPago()?.id ?? 0);
-  sucursalId = computed(() => this.sucursal()?.id ?? 0);
+  sucursalId = computed(() => this.sucursal()?.id ?? this._authService.currentUser()!.sucursalId);
   private _router = inject(Router)
   _reporteService = inject(ReportesService);
-  _reportService = inject(ReportesService)
+  _authService = inject(AuthService);
   constructor() {
     const storedSearchDatacobranza = localStorage.getItem('searchData');
 
@@ -133,7 +129,7 @@ export class ReporteCobranzaComponent {
 
   }
   getDoc(id: number) {
-    this._reportService.getPdf(id).subscribe((response: any) => {
+    this._reporteService.getPdf(id).subscribe((response: any) => {
       const fileURL = URL.createObjectURL(response);
       window.open(fileURL, '_blank');
 

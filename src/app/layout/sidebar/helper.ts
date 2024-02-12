@@ -7,6 +7,7 @@ export interface INavbarData {
   icon?: string;
   label: string;
   expanded?: boolean;
+  rol:string[];
   items?: INavbarData[];
 }
 

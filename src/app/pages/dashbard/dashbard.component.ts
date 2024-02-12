@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import {  FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 import moment from 'moment';
 import { SucursalService } from '../../services/sucursal.service';
@@ -11,6 +11,7 @@ import { ReporteCliente, ReporteMedioPago, ReporteSucursal, ReporteVariante, Rep
 import { NgxBarraVerticalComponent } from '../../components/ngx-charts-barra-vertical/ngx-charts-barra-vertical.component';
 import { NGXPieComponent } from '../../components/ngx-charts-pie/ngx-charts-pie.component';
 import { NGXPieAdvancedComponent } from '../../components/ngx-pie-chart-advanced/ngx-pie-chart-advanced.component';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-dashbard',
@@ -37,6 +38,7 @@ export class DashbardComponent {
   cargadoClientes: boolean = false
   cargadoMediosPago: boolean = false;
   cargadoVendedores: boolean = false;
+  role:string ='';
 
   sucursalSeleccionada: number = 1; // Valor predeterminado
   sucursales: Sucursal[] = [];
@@ -52,7 +54,7 @@ export class DashbardComponent {
   public temas: string[] = ['vivid', 'natural', 'cool', 'fire', 'solar',
     'air', 'aqua', 'flame', 'ocean', 'forest', 'horizon',
     'neons', 'picnic', 'night', 'nightLights']
-
+  _authService = inject(AuthService);
   _sucursalesService = inject(SucursalService);
   _reportService = inject(ReportesService);
 
@@ -63,6 +65,8 @@ export class DashbardComponent {
     this.cargadoMediosPago = false;
     this.cargadoVendedores = false;
     this._sucursalesService.findAll().subscribe(resp => this.sucursales = resp);
+    this.sucursalSeleccionada = this._authService.currentUser()!.sucursalId;
+    this.role = this._authService.currentUser()!.rol;
     this.getReport()
   }
 
@@ -120,10 +124,10 @@ export class DashbardComponent {
 
 
   }
-  onSeleccionMedioPago(event:any){console.log(event)}
-  onSeleccionSucursal(event:any){console.log(event)}
-  onSeleccionVendedor(event:any){console.log(event)}
-  onSeleccionVariante(event:any){console.log(event)}
-  onSeleccionCliente(event:any){console.log(event)}
+  onSeleccionMedioPago(event: any) { console.log(event) }
+  onSeleccionSucursal(event: any) { console.log(event) }
+  onSeleccionVendedor(event: any) { console.log(event) }
+  onSeleccionVariante(event: any) { console.log(event) }
+  onSeleccionCliente(event: any) { console.log(event) }
 
 }

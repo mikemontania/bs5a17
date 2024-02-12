@@ -4,10 +4,11 @@ import { Router, RouterModule } from '@angular/router';
 import { fadeInOut, INavbarData } from './helper';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
-  standalone:true,
-  imports:[CommonModule,FormsModule, RouterModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   selector: 'app-sublevel-menu',
   template: `
     <ul *ngIf="collapsed && data.items && data.items.length > 0"
@@ -18,7 +19,9 @@ import { FormsModule } from '@angular/forms';
           params: {transitionParams: '400ms cubic-bezier(0.86, 0, 0.07, 1)', height: '0'}}"
       class="sublevel-nav"
     >
-      <li *ngFor="let item of data.items" class="sublevel-nav-item">
+    <ng-container *ngFor="let item of data.items">
+    <ng-container *ngIf="verificaRol(item.rol)">
+      <li   class="sublevel-nav-item">
           <a class="sublevel-nav-link"
           (click)="handleClick(item)"
             *ngIf="item.items && item.items.length > 0"
@@ -50,6 +53,8 @@ import { FormsModule } from '@angular/forms';
             ></app-sublevel-menu>
           </div>
       </li>
+</ng-container>
+          </ng-container>
     </ul>
   `,
   styleUrls: ['./sidebar.component.css'],
@@ -63,8 +68,8 @@ import { FormsModule } from '@angular/forms';
       state('visible', style({
         height: '*'
       })),
-      transition('visible <=> hidden', [style({overflow: 'hidden'}),
-        animate('{{transitionParams}}')]),
+      transition('visible <=> hidden', [style({ overflow: 'hidden' }),
+      animate('{{transitionParams}}')]),
       transition('void => *', animate(0))
     ])
   ]
@@ -74,6 +79,7 @@ export class SublevelMenuComponent implements OnInit {
   @Input() data: INavbarData = {
     routeLink: '',
     icon: '',
+    rol: [],
     label: '',
     items: []
   }
@@ -82,7 +88,8 @@ export class SublevelMenuComponent implements OnInit {
   @Input() expanded: boolean | undefined;
   @Input() multiple: boolean = false;
 
-  constructor(public router: Router) {}
+  constructor(public router: Router, public authService: AuthService) { }
+
 
   ngOnInit(): void {
   }
@@ -90,14 +97,20 @@ export class SublevelMenuComponent implements OnInit {
   handleClick(item: any): void {
     if (!this.multiple) {
       if (this.data.items && this.data.items.length > 0) {
-        for(let modelItem of this.data.items) {
-          if (item !==modelItem && modelItem.expanded) {
+        for (let modelItem of this.data.items) {
+          if (item !== modelItem && modelItem.expanded) {
             modelItem.expanded = false;
           }
         }
       }
     }
     item.expanded = !item.expanded;
+  }
+  verificaRol(roles: string[]) {
+    console.log(roles)
+    const permiso = roles.some(rol => rol == this.authService.currentUser()?.rol);
+    console.log(permiso)
+    return permiso
   }
 
   getActiveClass(item: INavbarData): string {

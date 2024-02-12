@@ -14,10 +14,11 @@ import { NgSucursalSearchComponent } from '../../../components/ng-sucursal-searc
 import { NgClienteSearchComponent } from '../../../components/ng-cliente-search/ng-cliente-search.component';
 import { NgFormaVentaSearchComponent } from '../../../components/ng-forma-venta-search/ng-forma-venta-search.component';
 import { NgListaPrecioSearchComponent } from '../../../components/ng-lista-precio-search/ng-lista-precio-search.component';
-import {   FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ReportesService } from '../../../services/reportes.service';
 import Swal from 'sweetalert2';
-import {   Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-list',
@@ -47,12 +48,13 @@ export class ListComponent {
 
   ventas = computed(() => this.ventasPage().ventas ?? []);
   clienteId = computed(() => this.cliente()?.id ?? 0);
-  sucursalId = computed(() => this.sucursal()?.id ?? 0);
+  sucursalId = computed(() => this.sucursal()?.id ?? this._authService.currentUser()!.sucursalId);
   formaVentaId = computed(() => this.formaVenta()?.id ?? 0);
   listaPrecioId = computed(() => this.listaPrecio()?.id ?? 0);
-private _router = inject(Router)
+  private _router = inject(Router)
   _ventasService = inject(VentasService);
   _reportService = inject(ReportesService)
+  _authService = inject(AuthService)
   constructor() {
     const storedSearchData = localStorage.getItem('searchData');
 
@@ -66,8 +68,8 @@ private _router = inject(Router)
         this.formaVenta.set(parsedData.formaVenta);
         this.page.set(parsedData.page);
         this.pageSize.set(parsedData.pageSize);
-        this.fechaDesde=parsedData.fechaDesde;
-        this.fechaHasta=parsedData.fechaHasta;
+        this.fechaDesde = parsedData.fechaDesde;
+        this.fechaHasta = parsedData.fechaHasta;
       } catch (error) {
         console.error('Error parsing stored search data:', error);
       }
@@ -99,10 +101,10 @@ private _router = inject(Router)
       sucursal: this.sucursal(),
       listaPrecio: this.listaPrecio(),
       formaVenta: this.formaVenta(),
-      page:this.page(),
-      pageSize:this.pageSize(),
-      fechaDesde:this.fechaDesde,
-      fechaHasta:this.fechaHasta,
+      page: this.page(),
+      pageSize: this.pageSize(),
+      fechaDesde: this.fechaDesde,
+      fechaHasta: this.fechaHasta,
     }));
 
     this._ventasService
@@ -159,30 +161,30 @@ private _router = inject(Router)
   }
 
 
- verDetalles(ventaId:number){
-  this._router.navigate(['/ventas/detalles', ventaId]);
+  verDetalles(ventaId: number) {
+    this._router.navigate(['/ventas/detalles', ventaId]);
 
-   }
- getDoc(id:number){
-  this._reportService.getPdf(id).subscribe((response: any) => {
-    const fileURL = URL.createObjectURL(response);
-    window.open(fileURL, '_blank');
+  }
+  getDoc(id: number) {
+    this._reportService.getPdf(id).subscribe((response: any) => {
+      const fileURL = URL.createObjectURL(response);
+      window.open(fileURL, '_blank');
 
-  })
- }
- anular(id:number){
-   Swal.fire({
-     title: 'Está segur@ que desea anular la factura?',
-     text: `La factura serà anulada`,
-     icon: 'warning',
-     showCancelButton: true,
-     confirmButtonColor: '#3085d6',
-     cancelButtonColor: '#d33',
-     confirmButtonText: 'Si, Anular',
-     cancelButtonText: 'No, No anular ',
-     customClass: {
-       confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
-       cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
+    })
+  }
+  anular(id: number) {
+    Swal.fire({
+      title: 'Está segur@ que desea anular la factura?',
+      text: `La factura serà anulada`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, Anular',
+      cancelButtonText: 'No, No anular ',
+      customClass: {
+        confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
+        cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
       },
       buttonsStyling: false,
       reverseButtons: true
@@ -190,34 +192,34 @@ private _router = inject(Router)
       if (result.value) {
         this._ventasService.anular(id).subscribe((response: any) => {
           this.buscar()
-          Swal.fire('Factura anulada!!!', 'factura anulada con exito!!! comprobante:'  , 'success');
+          Swal.fire('Factura anulada!!!', 'factura anulada con exito!!! comprobante:', 'success');
 
         })
       }
     });
 
 
- }
+  }
 
 
-cancelar(){
+  cancelar() {
 
     try {
 
       this.searchComprobante.set('');
-      this.cliente.set({}as Cliente);
-      this.sucursal.set({}as Sucursal);
-      this.listaPrecio.set({}as ListaPrecio);
-      this.formaVenta.set({}as FormaVenta);
+      this.cliente.set({} as Cliente);
+      this.sucursal.set({} as Sucursal);
+      this.listaPrecio.set({} as ListaPrecio);
+      this.formaVenta.set({} as FormaVenta);
       this.page.set(1);
       this.pageSize.set(10);
-      this.fechaDesde=moment(new Date()).format("YYYY-MM-DD");
-      this.fechaHasta=moment(new Date()).format("YYYY-MM-DD");
+      this.fechaDesde = moment(new Date()).format("YYYY-MM-DD");
+      this.fechaHasta = moment(new Date()).format("YYYY-MM-DD");
     } catch (error) {
       console.error('Error parsing stored search data:', error);
     }
 
-}
+  }
 
 
 
