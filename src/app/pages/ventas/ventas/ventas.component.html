@@ -290,26 +290,37 @@
   (closeModal)="searchCliente = false"
 ></app-cliente-search>
 
-} @if(searchSucursal  && _authService.currentUser()?.rol != 'cajero') {
+}
+
+
+@if(searchSucursal  && _authService.currentUser()?.rol != 'cajero') {
 <app-sucursal-search
   [isOpen]="searchSucursal"
   (sucursal)="selectSucursal($event)"
   (closeModal)="searchSucursal = false"
 ></app-sucursal-search>
-} @if(searchListaPrecio ) {
+}
+
+@if(searchListaPrecio ) {
 <app-lista-precio-search
   [isOpen]="searchListaPrecio"
   (listaPrecio)="selectListaPrecio($event)"
   (closeModal)="searchListaPrecio = false"
 ></app-lista-precio-search>
-} @if(searchFormaVenta ) {
+}
+
+@if(searchFormaVenta ) {
 <app-forma-venta-search
   [isOpen]="searchFormaVenta"
   (formaVenta)="selectFormaVenta($event)"
   (closeModal)="searchFormaVenta = false"
 ></app-forma-venta-search>
-} @if(searchNumeracion && sucursal().id ) {
-<app-numeracion-search && _authService.currentUser()?.rol != 'cajero'
+}
+
+
+
+@if(searchNumeracion && sucursal().id && _authService.currentUser()?.rol != 'cajero' ) {
+<app-numeracion-search
   [isOpen]="searchNumeracion"
   [sucursalId]="sucursal().id"
   (numeracion)="selectNumeracion($event)"

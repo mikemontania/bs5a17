@@ -20,7 +20,7 @@ import {
   ValoracionService,
   ReportesService
 } from "../../../services/service.index";
-import { forkJoin } from "rxjs";
+import { forkJoin, lastValueFrom } from "rxjs";
 import Swal from "sweetalert2";
 import { Cobranza, ModelCab, ModelDet } from "../../../interfaces/facturas.interface";
 import { ProductsListComponent } from "../../../components/product-list/product-list.component";
@@ -125,65 +125,18 @@ export class VentasComponent implements OnInit {
   buscarFormaVenta() { this.searchFormaVenta = true; }
   buscarSucursal() {
 
-    if (this.detalles?.length > 0) {
-      Swal.fire({
-        title: 'Está seguro que desea cambiar de sucursal?',
-        text: `Serán descartados los items agregados`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Guardar',
-        cancelButtonText: 'No, volver ',
-        customClass: {
-          confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
-          cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
-        },
-        buttonsStyling: false,
-        reverseButtons: true
-      }).then(async (result) => {
-        if (result.value) {
-          this.searchSucursal = true
-        }
-      });
-    } else {
       this.searchSucursal = true;
-    }
-
   }
 
   buscarListaPrecio() {
- /*    if (this.detalles?.length > 0) {
-      Swal.fire({
-        title: 'Está seguro que desea cambiar de lista de precio?',
-        text: `Serán descartados los items agregados`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Guardar',
-        cancelButtonText: 'No, volver ',
-        customClass: {
-          confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
-          cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
-        },
-        buttonsStyling: false,
-        reverseButtons: true
-      }).then(async (result) => {
-        if (result.value) {
-          this.searchListaPrecio = true
-        }
-      });
-    } else { */
-      this.searchListaPrecio = true;
-   /*  } */
+
+    this.searchListaPrecio = true;
   }
 
   obtenerDescuentoEscala() {
     try {
       this._valoracionService.obtenerDescuentoImporte(this.listaPrecio().id, this.sucursal().id).subscribe(resp => {
-        console.log('Escala', resp)
-        this.descuentosEscala = resp?.descuentos;
+        this.descuentosEscala = (resp?.descuentos) ? resp?.descuentos : [];
       });
     } catch (error) {
       console.error(error);
@@ -227,9 +180,6 @@ export class VentasComponent implements OnInit {
     this.sucursal.set(sucursal); // Update the client signal
     this.searchSucursal = false; // Close the modal
     this.numeracion.set({} as Numeracion);
-    this.refresh();
-    this.detalles = [];
-    this.actualizarCabecera();
     this.reCalcular();
   }
   selectNumeracion(numeracion: Numeracion) {
@@ -246,40 +196,60 @@ export class VentasComponent implements OnInit {
     console.log("Selected listaPrecio:", listaPrecio);
     this.listaPrecio.set(listaPrecio); // Update the client signal
     this.searchListaPrecio = false; // Close the modal
-    this.refresh();
-    this.detalles = [];
-    this.actualizarCabecera();
- this.reCalcular();
+    /*   this.refresh();
+      this.detalles = [];
+      this.actualizarCabecera(); */
+    this.reCalcular();
   }
 
 
   async reCalcular() {
-
-   await this.obtenerDescuentoEscala()
-   await Promise.all(this.detalles.map(async detalle => {
     try {
-      const valoracion: any =   this._valoracionService.obtenerVigente(detalle.varianteId, this.sucursal().id, this.listaPrecio().id);
-      if (valoracion) {
-        if (valoracion.descuento) {
-          detalle.porcDescuento = valoracion.descuento.valor;
-          detalle.tipoDescuento = valoracion.descuento.tipo;
+      console.log('reCalcular');
+
+      Swal.fire({
+        title: 'Espere por favor...',
+        allowOutsideClick: false,
+        icon: 'info',
+      });
+      Swal.showLoading();
+      const respuesta: any = await lastValueFrom(this._valoracionService.obtenerDescuentoImporte(this.listaPrecio().id, this.sucursal().id));
+      this.descuentosEscala = (respuesta?.descuentos) ? respuesta?.descuentos : [];
+
+      const promises = this.detalles.map(async detalle => {
+        try {
+          console.log({ variedadID: detalle.varianteId, sucursalID: this.sucursal().id, listaPrecio: this.listaPrecio().id });
+          const valoracion: any = await lastValueFrom(this._valoracionService.obtenerVigente(detalle.varianteId, this.sucursal().id, this.listaPrecio().id));
+          console.log(valoracion)
+          if (valoracion) {
+            if (valoracion.descuento) {
+              detalle.porcDescuento = valoracion.descuento.valor;
+              detalle.tipoDescuento = valoracion.descuento.tipo;
+            }
+            if (valoracion.precio) {
+              detalle.importePrecio = valoracion.precio.valor;
+            } else {
+              detalle.importePrecio = 0;
+            }
+            detalle.importeSubtotal = detalle.cantidad * detalle.importePrecio;
+            this.reAjustarDetalles();
+            this.actualizarCabecera();
+          }
+        } catch (error) {
+          // Manejar el error de obtenerDescuentoEscala aquí
+          console.error(`Error al obtener descuento de escala: ${error}`);
         }
-        if (valoracion.precio) {
-          detalle.importePrecio = valoracion.precio.valor;
-        } else {
-          detalle.importePrecio = 0;
-        }
-      }
-      this.reAjustarDetalles();
-      this.actualizarCabecera();
+      });
+
+      await Promise.all(promises);
+
+      Swal.close();
     } catch (error) {
-      // Manejar el error de obtenerDescuentoEscala aquí
-      console.error(`Error al obtener descuento de escala: ${error }`);
+      console.error(`Error al obtener descuento de escala: ${error}`);
     }
-    }));
-
-
   }
+
+
   // Función para inicializar un detalle
   inicializarDetalle(item: ProductosItem): ModelDet {
     return {
@@ -342,38 +312,41 @@ export class VentasComponent implements OnInit {
 
   // Función para ajustar los detalle porque podria haber ono descuento escala
   reAjustarDetalles() {
-    if (this.descuentosEscala && this.descuentosEscala.length > 0) {
-      const importeDescontable = this.detalles.reduce((subTotal, detalle) => (detalle.tipoDescuento !== 'PRODUCTO') ? subTotal + detalle.importeSubtotal : subTotal + 0, 0);
-
-      const descuentoImporte = this.descuentosEscala.find(descuento =>
-        descuento.cantDesde <= importeDescontable && descuento.cantHasta >= importeDescontable
-      );
-
-      if (descuentoImporte) {
-        this.detalles.forEach(detalle => {
-          if (detalle.tipoDescuento !== 'PRODUCTO') {
-            detalle.porcDescuento = +descuentoImporte.valor;
-            detalle.tipoDescuento = "IMPORTE";
-            detalle.importeDescuento = Math.round(detalle.importeSubtotal * detalle.porcDescuento / 100);
-          }
-
-          //calcular total
-          detalle.importeTotal = detalle.importeSubtotal - detalle.importeDescuento;
-
-          const porcIva = +detalle.porcIva;
-          const porcIva5 = porcIva === 5 ? Math.round(detalle.importeTotal / 21) : 0;
-          const porcIva10 = porcIva === 10 ? Math.round(detalle.importeTotal / 11) : 0;
-          const porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
-          const porcNeto = detalle.importeTotal - (porcIva5 + porcIva10);
-          // Asignar los resultados
-
-          detalle.importeIva5 = porcIva5;
-          detalle.importeIva10 = porcIva10;
-          detalle.importeIvaExenta = porcIvaExenta;
-          detalle.importeNeto = porcNeto;
-        });
+    const importeDescontable = this.detalles.reduce((subTotal, detalle) => (detalle.tipoDescuento !== 'PRODUCTO') ? subTotal + detalle.importeSubtotal : subTotal + 0, 0);
+    const descuentoImporte = this.descuentosEscala.find(descuento =>
+      descuento.cantDesde <= importeDescontable && descuento.cantHasta >= importeDescontable
+    );
+    console.log(descuentoImporte)
+    this.detalles.forEach(detalle => {
+      if (detalle.tipoDescuento !== 'PRODUCTO') {
+        if (descuentoImporte) {
+          detalle.porcDescuento = +descuentoImporte.valor;
+          detalle.tipoDescuento = "IMPORTE";
+          detalle.importeDescuento = Math.round(detalle.importeSubtotal * detalle.porcDescuento / 100);
+        } else {
+          detalle.porcDescuento = 0;
+          detalle.tipoDescuento = "NINGUNO";
+          detalle.importeDescuento = 0;
+        }
       }
-    }
+
+      //calcular total
+      detalle.importeTotal = detalle.importeSubtotal - detalle.importeDescuento;
+
+      const porcIva = +detalle.porcIva;
+      const porcIva5 = porcIva === 5 ? Math.round(detalle.importeTotal / 21) : 0;
+      const porcIva10 = porcIva === 10 ? Math.round(detalle.importeTotal / 11) : 0;
+      const porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
+      const porcNeto = detalle.importeTotal - (porcIva5 + porcIva10);
+      // Asignar los resultados
+
+      detalle.importeIva5 = porcIva5;
+      detalle.importeIva10 = porcIva10;
+      detalle.importeIvaExenta = porcIvaExenta;
+      detalle.importeNeto = porcNeto;
+    });
+
+
   }
   actualizarCabecera() {
     const totalSubtotal = this.detalles.reduce((total, detalle) => total + detalle.importeSubtotal, 0);
@@ -406,7 +379,7 @@ export class VentasComponent implements OnInit {
       const peso = (this.detalles[indice].totalKg / this.detalles[indice].cantidad)
       this.detalles[indice].cantidad = this.detalles[indice].cantidad + valor;
       this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * this.detalles[indice].importePrecio;
-      this.detalles[indice].totalKg = this.detalles[indice].cantidad * peso;this.detalles[indice]
+      this.detalles[indice].totalKg = this.detalles[indice].cantidad * peso; this.detalles[indice]
       this.reAjustarDetalles();
       this.actualizarCabecera();
       this.actualizarCabecera();
