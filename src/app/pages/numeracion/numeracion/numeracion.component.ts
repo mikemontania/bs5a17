@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } 
 import { CommonModule } from '@angular/common';
 import { ListaPrecio } from '../../../interfaces/listaPrecio.interface';
 import Swal from 'sweetalert2';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { NumeracionService, SucursalService } from '../../../services/service.index';
 import { Numeracion } from '../../../interfaces/numeracion.interface';
@@ -23,6 +23,8 @@ export class NumeracionComponent implements OnInit {
   private _sucursalService = inject(SucursalService)
   private _numeracionService = inject(NumeracionService)
   private activatedRoute= inject(ActivatedRoute);
+  private router = inject(Router);
+
   constructor() {
     // Initialize the property in the constructor
     this.numeracionForm = this.initForm()
@@ -66,10 +68,10 @@ export class NumeracionComponent implements OnInit {
       numeroInicio: [null, Validators.required],
       numeroFin: [null, Validators.required],
       serie: [null, Validators.required],
-      timbrado: [null, Validators.required],
-      tipoComprobante: [null, Validators.required],
+      timbrado: ['', Validators.required],
+      tipoComprobante: ['FACTURA', Validators.required],
       ultimoNumero: [null, Validators.required],
-      tipoImpresion: [null, Validators.required],
+      tipoImpresion: ['FACTURA', Validators.required],
       activo: [false]  // Puedes ajustar el valor predeterminado según tus necesidades
     });
   }
@@ -85,8 +87,8 @@ export class NumeracionComponent implements OnInit {
       this._numeracionService.update(numeracion).subscribe({
         next: (resp) => {
           Swal.close()
-          Swal.fire("Actualización exitosa!!!", "Se ha actualizado al numeracion: " + resp.razonSocial, "success");
-
+          Swal.fire("Actualización exitosa!!!", "Se ha actualizado al numeracion: " + resp.serie, "success");
+          this.router.navigateByUrl('/numeraciones');
         },
         error: (error) => {
           Swal.close()
@@ -100,9 +102,11 @@ export class NumeracionComponent implements OnInit {
 
       this._numeracionService.create(numeracionData).subscribe({
         next: (resp) => {
-          Swal.close()
-          Swal.fire("Creación exitosa!!!", "Se ha registrado el numeracion " + resp.razonSocial, "success");
 
+          this.numeracionForm = this.initForm()
+          Swal.close()
+          Swal.fire("Creación exitosa!!!", "Se ha registrado el numeracion " + resp.serie, "success");
+          this.router.navigateByUrl('/numeraciones');
         },
         error: (error) => {
           Swal.close()
