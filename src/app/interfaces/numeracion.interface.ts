@@ -1,16 +1,18 @@
+import { Sucursal } from "./sucursal.interface";
 
 export interface Numeracion {
+  inicioTimbrado:  string;
+  finTimbrado:     string;
   id:              number;
   empresaId:       number;
   sucursalId:      number;
-  inicioTimbrado:  string;
-  finTimbrado:     string;
   numeroInicio:    number;
   numeroFin:       number;
   serie:           string;
   timbrado:        string;
-  tipoTomprobante: string;
+  tipoComprobante: string;
   ultimoNumero:    number;
   tipoImpresion:   string;
   activo:          boolean;
+  sucursal:        Sucursal;
 }

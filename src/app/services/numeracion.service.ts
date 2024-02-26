@@ -2,7 +2,10 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { BASE_URL } from "../config";
-import {  map  } from "rxjs/operators";
+import {  catchError, map  } from "rxjs/operators";
+import { Observable, throwError } from "rxjs";
+import Swal from "sweetalert2";
+import { Numeracion } from "../interfaces/numeracion.interface";
 
 @Injectable({
   providedIn: "root"
@@ -26,5 +29,47 @@ export class NumeracionService {
         })
       );
   }
+  paginado(page: number, size: number ) {
+    return this.http
+      .get(BASE_URL + "/numeraciones/paginados/" + page + "/" + size )
+      .pipe(
+        map((respo: any) => {
+          return respo;
+        })
+      );
+  }
+
+
+
+  create(numeracion: Numeracion): Observable<any> {
+    console.log(numeracion);
+    return this.http.post(BASE_URL + '/numeraciones', numeracion)
+      .pipe(
+        map((response: any) => response ),
+        catchError(e => {
+
+          console.error('ERROR', e.error);
+          Swal.fire(e.error.header, e.error.message, 'error');
+         return throwError(() => e.error.message);
+        })
+      );
+  }
+
+
+
+  update(numeracion: Numeracion): Observable<any> {
+    console.log(numeracion);
+    return this.http.put(BASE_URL + '/numeraciones/'+numeracion.id, numeracion)
+      .pipe(
+        map((response: any) => response ),
+        catchError(e => {
+
+          console.error('ERROR', e.error);
+          Swal.fire(e.error.header, e.error.message, 'error');
+         return throwError(() => e.error.message);
+        })
+      );
+  }
+
 
 }

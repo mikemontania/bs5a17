@@ -9,6 +9,8 @@ import { ProductoComponent } from './producto/producto/producto.component';
 import { ProductosComponent } from './producto/productos/productos.component';
 import { VarianteComponent } from './producto/variante/variante.component';
 import { ValoracionComponent } from './valoracion/valoracion.component';
+import { NumeracionComponent } from './numeracion/numeracion/numeracion.component';
+import { NumeracionesComponent } from './numeracion/numeraciones/numeraciones.component';
 
 export default [
   {
@@ -59,6 +61,21 @@ export default [
         path: "clientes/cliente",
         canActivate: [authGuard],
         component: ClienteComponent
+      },
+      {
+        path: "numeraciones",
+        canActivate: [authGuard],
+        component: NumeracionesComponent
+      },
+      {
+        path: "numeraciones/numeracion/:id",
+        canActivate: [authGuard],
+        component: NumeracionComponent
+      },
+      {
+        path: "numeraciones/numeracion",
+        canActivate: [authGuard],
+        component: NumeracionComponent
       },
       {
         path: "user",

@@ -1,0 +1,93 @@
+<div class="card">
+  <div class="card-header"> Numeraciones <button type="button" class="btn btn-sm btn-outline-success" (click)="agregar()"> <i class="bi bi-plus"></i></button></div>
+
+  <div class="card-body">
+
+
+    <!-- Search and Cancel Buttons -->
+    <div class="card mb-3 w-50 d-flex selector">
+      <div class="btn-group">
+        <button type="button" class="btn btn-outline-success" (click)="buscar()">Buscar <i class="bi bi-search"></i></button>
+        <button type="button" class="btn btn-outline-danger" (click)="cancelar()">Cancelar <i class="bi bi-x-lg"></i></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    @if(numeraciones() && numeraciones().length > 0) {
+    <div class="card">
+      <div class="card-body pt-4 d-flex flex-column align-items-center">
+        <div id="details" style="overflow-x: auto">
+          <table class="table  table-sm small-table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">SUCURSAL</th>
+                <th scope="col">SERIE</th>
+                <th scope="col">TIMBRADO</th>
+                <th scope="col">F.INICIO</th>
+                <th scope="col">F.FIN</th>
+                <th scope="col">Nº INICIO</th>
+                <th scope="col">Nº FIN</th>
+                <th scope="col">Nº ULTIMO</th>
+                <th scope="col">ACT</th>
+                <th scope="col">Edit</th>
+              </tr>
+
+
+            </thead>
+            <tbody>
+              @for (numeracion of numeraciones(); track numeracion.id; let index = $index) {
+              <tr>
+                <th scope="row">{{ index + 1 }}</th>
+                <td  class="text-sm">{{ numeracion.id }}</td>
+                <td  class="text-sm">{{ numeracion.sucursal.descripcion }}</td>
+                <td  class="text-sm">{{ numeracion.serie }}</td>
+                <td  class="text-sm">{{ numeracion.timbrado }}</td>
+                <td  class="text-sm">{{ numeracion.inicioTimbrado | date:'dd/MM/yyyy'}}</td>
+                <td  class="text-sm">{{ numeracion.finTimbrado | date:'dd/MM/yyyy' }}</td>
+                <td  class="text-sm">{{ numeracion.numeroInicio }}</td>
+                <td  class="text-sm">{{ numeracion.numeroFin }}</td>
+                <td  class="text-sm">{{ numeracion.ultimoNumero }}</td>
+                <td  class="text-sm">{{ (numeracion.activo)?'SI':'NO' }}</td>
+                <td  class="text-sm">
+                  <button class="btn btn-sm btn-outline-info text-info"
+
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ver editar numeracion"  (click)="verNumeracion(numeracion.id)" >
+                    <i class="bi bi-pencil"></i>
+                                    </button>
+                </td>
+              </tr>
+              } @empty {
+              <tr></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    } @else {
+    <div class="w-100 empty-message-container">
+      <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">Atención</h4>
+        <p>No se han encontrado numeraciones...</p>
+      </div>
+    </div>
+    }
+
+    <div class="d-flex justify-content-center">
+      <app-paginator
+        [totalPages]="totalPages()"
+        [currentPage]="page()"
+        (pageChanged)="onPageChanged($event)"
+      >
+      </app-paginator>
+    </div>
+  </div>
+</div>

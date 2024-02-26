@@ -1,0 +1,226 @@
+<div class="card">
+    <div class="card-header">
+      @if(id()){
+        Actualizar Numeracion
+      }@else {
+        Crear Numeracion
+      }
+    </div>
+
+
+  <div class="card-body">
+    <form
+      [formGroup]="numeracionForm"
+      (ngSubmit)="onSubmit($event)"
+    >
+      <div class="row mb-3">
+        <label for="razonSocial" class="col-md-4 col-lg-3 col-form-label"
+          >Razón Social</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="razonSocial"
+            formControlName="razonSocial"
+          />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="nroDocumento" class="col-md-4 col-lg-3 col-form-label"
+          >Nro Documento</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="nroDocumento"
+            formControlName="nroDocumento"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="direccion" class="col-md-4 col-lg-3 col-form-label"
+          >direccion</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="direccion"
+            formControlName="direccion"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="telefono" class="col-md-4 col-lg-3 col-form-label"
+          >telefono</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="telefono"
+            formControlName="telefono"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="cel" class="col-md-4 col-lg-3 col-form-label"
+          >Celular</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="cel"
+            formControlName="cel"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="email" class="col-md-4 col-lg-3 col-form-label"
+          >Email</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            formControlName="email"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="sucursalId" class="col-md-4 col-lg-3 col-form-label"
+          >Sucursal</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <select
+            class="form-control"
+            id="sucursalId"
+            formControlName="sucursalId"
+          >
+            <option *ngFor="let s of sucursales()" [value]="s.id">
+              {{ s.descripcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="row mb-3">
+        <label for="latitud" class="col-md-4 col-lg-3 col-form-label"
+          >latitud</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="latitud"
+            formControlName="latitud"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="longitud" class="col-md-4 col-lg-3 col-form-label"
+          >longitud</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="longitud"
+            formControlName="longitud"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-6">
+          <div class="row mb-3">
+            <label for="fullName" class="col-md-4 col-lg-3 col-form-label"
+              >Estados</label
+            >
+            <div class="col-md-8 col-lg-9">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="predeterminado"
+                  formControlName="predeterminado"
+                  checked=""
+                />
+                <label class="form-check-label" for="predeterminado">
+                  Predeterminado
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="excentoIva"
+                  formControlName="excentoIva"
+                  checked=""
+                />
+                <label class="form-check-label" for="excentoIva">
+                  excentoIva
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="empleado"
+                  formControlName="empleado"
+                  checked=""
+                />
+                <label class="form-check-label" for="empleado">
+                  empleado
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="activo"
+                  formControlName="activo"
+                  checked
+                />
+                <label class="form-check-label" for="activo"> activo </label>
+              </div>
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="propietario"
+                  formControlName="propietario"
+                  checked=""
+                />
+                <label class="form-check-label" for="propietario">
+                  propietario
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <div class=" btn-group">
+          <button  class="btn btn-outline-success" type="submit" class="btn btn-outline-success">@if(id()){ Actualizar <i class="bi bi-file-earmark-plus"></i>} @else { Crear <i class="bi bi-file-earmark-plus"></i>}      </button>
+          <button type="button" (click)="ngOnInit()" class="btn btn-outline-danger">Cancelar <i class="bi bi-x-lg"></i></button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

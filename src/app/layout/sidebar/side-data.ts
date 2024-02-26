@@ -78,6 +78,13 @@ export const navbarData: INavbarData[] = [
     rol:['cajero','admin'],
     label: 'Clientes'
   },
+
+  {
+    routeLink: 'numeraciones',
+    icon: 'fa-solid fa-arrow-down-1-9',
+    rol:[ 'admin'],
+    label: 'Numeraciones'
+  },
   /*  {
     routeLink: 'parametros',
     icon: 'fa-solid fa-tag',
