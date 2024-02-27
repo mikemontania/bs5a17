@@ -85,6 +85,14 @@ export const navbarData: INavbarData[] = [
     rol:[ 'admin'],
     label: 'Numeraciones'
   },
+
+  {
+    routeLink: 'usuarios',
+    icon: 'fa-solid fa-user',
+    rol:['cajero','admin'],
+    label: 'usuarios'
+  },
+
   /*  {
     routeLink: 'parametros',
     icon: 'fa-solid fa-tag',

@@ -11,6 +11,8 @@ import { VarianteComponent } from './producto/variante/variante.component';
 import { ValoracionComponent } from './valoracion/valoracion.component';
 import { NumeracionComponent } from './numeracion/numeracion/numeracion.component';
 import { NumeracionesComponent } from './numeracion/numeraciones/numeraciones.component';
+import { UsuariosComponent } from './usuario/usuarios/usuarios.component';
+import { UsuarioComponent } from './usuario/usuario/usuario.component';
 
 export default [
   {
@@ -78,9 +80,19 @@ export default [
         component: NumeracionComponent
       },
       {
-        path: "user",
+        path: "usuarios",
         canActivate: [authGuard],
-        component: UsersComponent
+        component: UsuariosComponent
+      },
+      {
+        path: "usuarios/usuario/:id",
+        canActivate: [authGuard],
+        component: UsuarioComponent
+      },
+      {
+        path: "usuarios/usuario",
+        canActivate: [authGuard],
+        component: UsuarioComponent
       },
 
       {

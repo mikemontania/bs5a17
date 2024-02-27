@@ -1,6 +1,7 @@
 import { Cliente } from './clientes.interface';
 import { Venta } from './facturas.interface';
 import { Numeracion } from './numeracion.interface';
+import { Usuario } from './usuario.interface';
 
 
 export interface VentasPage {
@@ -27,6 +28,16 @@ export interface ClientesPage {
   pageSize:   number;
   clientes:     Cliente[];
 }
+
+
+export interface UsuariosPage {
+  total:      number;
+  totalPages: number;
+  page:       number;
+  pageSize:   number;
+  usuarios:     Usuario[];
+}
+
 
 export interface VendedorCreacion {
   usuario: string;

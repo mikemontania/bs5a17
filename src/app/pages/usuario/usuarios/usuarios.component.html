@@ -1,0 +1,96 @@
+<div class="card">
+  <div class="card-header"> Usuarios <button type="button" class="btn btn-sm btn-outline-success" (click)="agregar()"> <i class="bi bi-plus"></i></button></div>
+
+  <div class="card-body">
+
+    <!-- Comprobante Numero Input -->
+    <div class="input-group mb-3 w-50 d-flex selector">
+      <div class="w-100 mb-3">
+        <input-debounce #inputSearch [delay]="300" id="inputSearch" type="text" placeholder="Buscar usuario ..." required="" aria-invalid="false" (value)="debounceSearch($event)" />
+      </div>
+    </div>
+
+    <!-- Search and Cancel Buttons -->
+    <div class="card mb-3 w-50 d-flex selector">
+      <div class="btn-group">
+        <button type="button" class="btn btn-outline-success" (click)="buscar()">Buscar <i class="bi bi-search"></i></button>
+        <button type="button" class="btn btn-outline-danger" (click)="cancelar()">Cancelar <i class="bi bi-x-lg"></i></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    @if(usuarios() && usuarios().length > 0) {
+    <div class="card">
+      <div class="card-body pt-4 d-flex flex-column align-items-center">
+        <div id="details" style="overflow-x: auto">
+          <table class="table  table-sm small-table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">USUARIO</th>
+                <th scope="col">USERNAME</th>
+                <th scope="col">SUCURSAL</th>
+                <th scope="col">ROL</th>
+                <th scope="col">TIMBR</th>
+                <th scope="col">SERIE</th>
+                <th scope="col">BLOQ</th>
+                <th scope="col">ACT</th>
+                <th scope="col">Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (usuario of usuarios(); track usuario.id; let index = $index) {
+              <tr>
+                <th scope="row">{{ index + 1 }}</th>
+                <td>{{ usuario.id }}</td>
+                <td  class="text-sm">{{ usuario.usuario }}</td>
+                <td  class="text-sm">{{ usuario.username }}</td>
+                <td  class="text-sm">{{ usuario.sucursal?.descripcion }}</td>
+                <td  class="text-sm">{{ usuario.rol }}</td>
+                <td  class="text-sm">{{ usuario.numeracion?.timbrado }}</td>
+                <td  class="text-sm">{{ usuario.numeracion?.serie }}</td>
+                <td  class="text-sm">{{ (usuario.bloqueado)?'SI':'NO' }}</td>
+                <td  class="text-sm">{{ (usuario.activo)?'SI':'NO' }}</td>
+
+                <td  class="text-sm">
+                  <button class="btn btn-sm btn-outline-info text-info"
+
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ver editar usuario"  (click)="verUsuario(usuario.id)" >
+                    <i class="bi bi-pencil"></i>
+                                    </button>
+                </td>
+              </tr>
+              } @empty {
+              <tr></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    } @else {
+    <div class="w-100 empty-message-container">
+      <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">Atención</h4>
+        <p>No se han encontrado usuarios...</p>
+      </div>
+    </div>
+    }
+
+    <div class="d-flex justify-content-center">
+      <app-paginator
+        [totalPages]="totalPages()"
+        [currentPage]="page()"
+        (pageChanged)="onPageChanged($event)"
+      >
+      </app-paginator>
+    </div>
+  </div>
+</div>

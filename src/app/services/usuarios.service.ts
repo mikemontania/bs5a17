@@ -1,40 +1,29 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
-import { BASE_URL } from "../config";
-import {  catchError, map  } from "rxjs/operators";
-import { Observable, throwError } from "rxjs";
+import { map, Observable, catchError, throwError } from "rxjs";
 import Swal from "sweetalert2";
-import { Numeracion } from "../interfaces/numeracion.interface";
+import { BASE_URL } from "../config";
+import { Usuario } from "../interfaces/usuario.interface";
+
 
 @Injectable({
   providedIn: "root"
 })
-export class NumeracionService {
+export class UsuariosService {
   http = inject(HttpClient);
   router = inject(Router);
 
   getById(id:number) {
     return this.http
-      .get(BASE_URL + "/numeraciones/"+id)
+      .get(BASE_URL + "/usuarios/"+id)
       .pipe(map((resp: any) => resp));
   }
 
 
-
-  findAll(sucursalId:number) {
-
+  search(page: number, size: number, term: string) {
     return this.http
-      .get(BASE_URL + "/numeraciones/list/"+sucursalId)
-      .pipe(
-        map((respo: any) => {
-          return respo;
-        })
-      );
-  }
-  paginado(page: number, size: number ) {
-    return this.http
-      .get(BASE_URL + "/numeraciones/paginados/" + page + "/" + size )
+      .get(BASE_URL + "/usuarios/paginados/" + page + "/" + size + "/" + term)
       .pipe(
         map((respo: any) => {
           return respo;
@@ -44,9 +33,9 @@ export class NumeracionService {
 
 
 
-  create(numeracion: Numeracion): Observable<any> {
-    console.log(numeracion);
-    return this.http.post(BASE_URL + '/numeraciones', numeracion)
+  create(usuario: Usuario): Observable<any> {
+    console.log(usuario);
+    return this.http.post(BASE_URL + '/usuarios', usuario)
       .pipe(
         map((response: any) => response ),
         catchError(e => {
@@ -60,9 +49,9 @@ export class NumeracionService {
 
 
 
-  update(numeracion: Numeracion): Observable<any> {
-    console.log(numeracion);
-    return this.http.put(BASE_URL + '/numeraciones/'+numeracion.id, numeracion)
+  update(usuario: Usuario): Observable<any> {
+    console.log(usuario);
+    return this.http.put(BASE_URL + '/usuarios/'+usuario.id, usuario)
       .pipe(
         map((response: any) => response ),
         catchError(e => {
