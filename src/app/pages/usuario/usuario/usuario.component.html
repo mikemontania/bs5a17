@@ -16,12 +16,12 @@
 
     <div class="row mb-3">
       <label for="username" class="col-md-4 col-lg-3 col-form-label"
-        >USername</label
+        >Username</label
       >
       <div class="col-md-8 col-lg-9">
         <input
           type="username"
-          class="form-control"
+          class="form-control form-control-sm"
           id="username"
           formControlName="username"
         />
@@ -36,7 +36,7 @@
         <div class="col-md-8 col-lg-9">
           <input
             type="text"
-            class="form-control"
+            class="form-control form-control-sm"
             id="usuario"
             formControlName="usuario"
           />
@@ -47,7 +47,7 @@
           >Sucursal</label
         >
         <div class="col-md-8 col-lg-9">
-          <select class="custom-select custom-select-sm" formControlName="sucursalId">
+          <select class="custom-select custom-select-sm" formControlName="sucursalId" (ngModelChange)="sucursalChange($event)">
             <option *ngFor="let sucursal of sucursales()" [value]="sucursal.id">
               {{ sucursal.descripcion }}
             </option>
@@ -62,7 +62,7 @@
         <div class="col-md-8 col-lg-9">
           <select class="custom-select custom-select-sm" formControlName="numPrefId">
             <option *ngFor="let numeracion of numeraciones()" [value]="numeracion.id">
-              {{ numeracion.timbrado }} {{ numeracion.serie }}-{{ numeracion.numeroFin }}
+              {{ numeracion.timbrado }} {{ numeracion.serie }}-00000000
             </option>
           </select>
       </div>
@@ -115,18 +115,7 @@
                 <label class="form-check-label" for="activo"> activo </label>
               </div>
 
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="propietario"
-                  formControlName="propietario"
-                  checked=""
-                />
-                <label class="form-check-label" for="propietario">
-                  propietario
-                </label>
-              </div>
+
             </div>
           </div>
         </div>

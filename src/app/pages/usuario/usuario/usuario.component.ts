@@ -7,13 +7,14 @@ import { UsuariosService } from '../../../services/usuarios.service';
 import { ListaPrecio } from '../../../interfaces/listaPrecio.interface';
 import { FormaVenta } from '../../../interfaces/formaventa.interface';
 import Swal from 'sweetalert2';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { Usuario } from '../../../interfaces/usuario.interface';
 import { SucursalService } from '../../../services/sucursal.service';
 import { NumeracionService } from '../../../services/numeracion.service';
 import { Sucursal } from '../../../interfaces/sucursal.interface';
 import { Numeracion } from '../../../interfaces/numeracion.interface';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-usuario',
@@ -28,8 +29,10 @@ export class UsuarioComponent implements OnInit {
   numeraciones = signal<Numeracion[]>([])
   usuarioForm: FormGroup ;
   private fb = inject(FormBuilder)
+  private _authService = inject(AuthService)
   private _sucursalService = inject(SucursalService)
   private _numeracionService = inject(NumeracionService)
+  private router = inject(Router);
   private _usuarioService = inject(UsuariosService)
   private activatedRoute= inject(ActivatedRoute);
   constructor() {
@@ -38,14 +41,29 @@ export class UsuarioComponent implements OnInit {
 
     forkJoin([
       this._sucursalService.findAll(),
+      this._numeracionService.findAll(0),
 
-
-    ]).subscribe(([sucursales]) => {
+    ]).subscribe(([sucursales, numeraciones]) => {
       this.sucursales.set(sucursales);
-
+      this.numeraciones.set(numeraciones);
     });
 
   }
+
+sucursalChange(sucursalId:number){
+  this.numeraciones.set([])
+  console.log(this.usuarioForm.value);
+
+  this._numeracionService.findAll(sucursalId).subscribe( (resp:any) =>{
+    this.usuarioForm.controls['numPrefId'].patchValue(null);
+    console.log(this.usuarioForm.value);
+
+    this.numeraciones.set(resp)
+
+  })
+
+}
+
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id')
@@ -96,7 +114,7 @@ initForm(){
         next: (resp) => {
           Swal.close()
           Swal.fire("Actualización exitosa!!!", "Se ha actualizado al usuario: " + resp.razonSocial, "success");
-
+          this.router.navigateByUrl('/usuarios');
         },
         error: (error) => {
           Swal.close()
@@ -112,7 +130,7 @@ initForm(){
         next: (resp) => {
           Swal.close()
           Swal.fire("Creación exitosa!!!", "Se ha registrado el usuario " + resp.razonSocial, "success");
-
+          this.router.navigateByUrl('/usuarios');
         },
         error: (error) => {
           Swal.close()
