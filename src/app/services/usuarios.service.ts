@@ -41,8 +41,8 @@ export class UsuariosService {
         catchError(e => {
 
           console.error('ERROR', e.error);
-          Swal.fire(e.error.header, e.error.message, 'error');
-         return throwError(() => e.error.message);
+          Swal.fire(e.error.header, e.error.error, 'error');
+         return throwError(() => e.error.error);
         })
       );
   }
@@ -57,8 +57,8 @@ export class UsuariosService {
         catchError(e => {
 
           console.error('ERROR', e.error);
-          Swal.fire(e.error.header, e.error.message, 'error');
-         return throwError(() => e.error.message);
+          Swal.fire(e.error.header, e.error.error, 'error');
+         return throwError(() => e.error.error);
         })
       );
   }

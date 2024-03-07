@@ -64,8 +64,8 @@ export class AuthService {
       catchError((err) => {
         // Handle different types of errors appropriately
         console.error(err)
-        if (err.error && err.error.message) {
-          return throwError(() => err.error.message);
+        if (err.error && err.error.error) {
+          return throwError(() => err.error.error);
         } else {
           return throwError(() => 'An unknown error occurred during login.');
         }

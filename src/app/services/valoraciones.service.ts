@@ -64,7 +64,7 @@ export class ValoracionService {
 
           console.error('ERROR', e.error);
 
-         return throwError(() => e.error.message);
+         return throwError(() => e.error.error);
         })
       );
   }
@@ -79,7 +79,7 @@ export class ValoracionService {
         catchError(e => {
 
           console.error('ERROR', e.error);
-         return throwError(() => e.error.message);
+         return throwError(() => e.error.error);
         })
       );
   }
@@ -92,7 +92,7 @@ export class ValoracionService {
         map((response: any) => response ),
         catchError(e => {
           console.error('ERROR', e.error);
-         return throwError(() => e.error.message);
+         return throwError(() => e.error.error);
         })
       );
   }
