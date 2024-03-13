@@ -1,33 +1,28 @@
 <div class="card">
-    <div class="card-header">
-      @if(id()){
-        Actualizar Usuario
-      }@else {
-        Crear Usuario
-      }
-    </div>
-
+  <div class="card-header">
+    @if(id()){ Actualizar Usuario }@else { Crear Usuario }
+  </div>
 
   <div class="card-body">
-    <form
-      [formGroup]="usuarioForm"
-      (ngSubmit)="onSubmit($event)"
-    >
+    <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit($event)">
+      <div class="row mb-3">
+        <img *ngIf="!imgTemps[0]" [src]="sinImagen" class="img-avatar" />
+        <img *ngIf="imgTemps[0]" [src]="imgTemps[0]" class="img-avatar" />
+        <img
+          *ngIf="usuarioForm.get('img')!.value && !imgTemps[0]"
+          [attr.src]="
+            usuarioForm.get('img')?.value | imagen: 'usuarios' | async
+          "
+          class="img-avatar"
+        />
 
-    <div class="row mb-3">
-      <label for="username" class="col-md-4 col-lg-3 col-form-label"
-        >Username</label
-      >
-      <div class="col-md-8 col-lg-9">
         <input
-          type="username"
-          class="form-control form-control-sm"
-          id="username"
-          formControlName="username"
+          class="form-control form-control-sm validation"
+          type="file"
+          id="fileInput"
+          (change)="actualizarImagen($event, usuarioForm.get('id')?.value)"
         />
       </div>
-    </div>
-
 
       <div class="row mb-3">
         <label for="usuario" class="col-md-4 col-lg-3 col-form-label"
@@ -42,12 +37,58 @@
           />
         </div>
       </div>
+
+      <div class="row mb-3">
+        <label for="username" class="col-md-4 col-lg-3 col-form-label"
+          >Username</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="username"
+            class="form-control form-control-sm"
+            id="username"
+            formControlName="username"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="password1" class="col-md-4 col-lg-3 col-form-label"
+          >Password</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="password1"
+            formControlName="password1"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="password2" class="col-md-4 col-lg-3 col-form-label"
+          >Password</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="password2"
+            formControlName="password2"
+          />
+        </div>
+      </div>
       <div class="row mb-3">
         <label for="sucursalId" class="col-md-4 col-lg-3 col-form-label"
           >Sucursal</label
         >
         <div class="col-md-8 col-lg-9">
-          <select class="custom-select custom-select-sm" formControlName="sucursalId" (ngModelChange)="sucursalChange($event)">
+          <select
+            class="custom-select custom-select-sm"
+            formControlName="sucursalId"
+            (ngModelChange)="sucursalChange($event)"
+          >
             <option *ngFor="let sucursal of sucursales()" [value]="sucursal.id">
               {{ sucursal.descripcion }}
             </option>
@@ -60,28 +101,28 @@
           >Numeracion</label
         >
         <div class="col-md-8 col-lg-9">
-          <select class="custom-select custom-select-sm" formControlName="numPrefId">
-            <option *ngFor="let numeracion of numeraciones()" [value]="numeracion.id">
+          <select
+            class="custom-select custom-select-sm"
+            formControlName="numPrefId"
+          >
+            <option
+              *ngFor="let numeracion of numeraciones()"
+              [value]="numeracion.id"
+            >
               {{ numeracion.timbrado }} {{ numeracion.serie }}-00000000
             </option>
           </select>
+        </div>
       </div>
-      </div>
-
-
 
       <div class="row mb-3">
-        <label for="rol" class="col-md-4 col-lg-3 col-form-label"
-          >Rol</label
-        >
+        <label for="rol" class="col-md-4 col-lg-3 col-form-label">Rol</label>
         <div class="col-md-8 col-lg-9">
           <select class="custom-select custom-select-sm" formControlName="rol">
-            <option  value="cajero" selected>Cajero</option>
-            <option  value="admin">Admin</option>
-
+            <option value="cajero" selected>Cajero</option>
+            <option value="admin">Admin</option>
           </select>
-      </div>
-
+        </div>
       </div>
 
       <div class="form-row">
@@ -91,7 +132,6 @@
               >Estados</label
             >
             <div class="col-md-8 col-lg-9">
-
               <div class="form-check">
                 <input
                   class="form-check-input"
@@ -114,18 +154,28 @@
                 />
                 <label class="form-check-label" for="activo"> activo </label>
               </div>
-
-
             </div>
           </div>
         </div>
       </div>
       <div class="text-center">
-        <div class=" btn-group">
-          <button  class="btn btn-outline-success" type="submit" class="btn btn-outline-success">@if(id()){ Actualizar <i class="bi bi-file-earmark-plus"></i>} @else { Crear <i class="bi bi-file-earmark-plus"></i>}      </button>
-          <button type="button" (click)="ngOnInit()" class="btn btn-outline-danger">Cancelar <i class="bi bi-x-lg"></i></button>
+        <div class="btn-group">
+          <button
+            class="btn btn-outline-success"
+            type="submit"
+            class="btn btn-outline-success"
+          >
+            @if(id()){ Actualizar <i class="bi bi-file-earmark-plus"></i>} @else
+            { Crear <i class="bi bi-file-earmark-plus"></i>}
+          </button>
+          <button
+            type="button"
+            (click)="ngOnInit()"
+            class="btn btn-outline-danger"
+          >
+            Cancelar <i class="bi bi-x-lg"></i>
+          </button>
         </div>
-
       </div>
     </form>
   </div>

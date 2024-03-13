@@ -31,6 +31,7 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">ID</th>
+                <th scope="col">AVATAR</th>
                 <th scope="col">USUARIO</th>
                 <th scope="col">USERNAME</th>
                 <th scope="col">SUCURSAL</th>
@@ -47,6 +48,10 @@
               <tr>
                 <th scope="row">{{ index + 1 }}</th>
                 <td>{{ usuario.id }}</td>
+                <td align="center" class="w70" align="center" style="background: white">
+                  <img *ngIf="usuario.img  " [attr.src]="usuario.img | imagen: 'usuarios' | async" class="img-producto60" />
+
+              </td>
                 <td  class="text-sm">{{ usuario.usuario }}</td>
                 <td  class="text-sm">{{ usuario.username }}</td>
                 <td  class="text-sm">{{ usuario.sucursal?.descripcion }}</td>

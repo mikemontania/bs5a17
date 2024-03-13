@@ -7,11 +7,12 @@ import { InputDebounceComponent } from '../../../components/inputDebounce/inputD
 import { PaginatorComponent } from '../../../components/paginator/paginator.component';
 import { UsuariosPage } from '../../../interfaces/pages.interfaces';
 import { UsuariosService } from '../../../services/usuarios.service';
+import { ImagenPipe } from '../../../pipes/imagen.pipe';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent,],
+  imports: [CommonModule, FormsModule, InputDebounceComponent,ImagenPipe, PaginatorComponent,],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.css'
 })

@@ -15,26 +15,33 @@ import { NumeracionService } from '../../../services/numeracion.service';
 import { Sucursal } from '../../../interfaces/sucursal.interface';
 import { Numeracion } from '../../../interfaces/numeracion.interface';
 import { AuthService } from '../../../auth/services/auth.service';
-
+import { FileUploadService } from '../../../services/file-upload.service';
+import { Location } from '@angular/common';
+import { ImagenPipe } from '../../../pipes/imagen.pipe';
 @Component({
   selector: 'app-usuario',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, ImagenPipe],
   templateUrl: './usuario.component.html',
   styleUrl: './usuario.component.css'
 })
 export class UsuarioComponent implements OnInit {
+  sinImagen: string = '../../../../assets/no-img.jpg';
+  public imagenesSubir: (File | null)[] = [];
+  public imgTemps: any[] = [];
   id = signal<number>(0)
   sucursales = signal<Sucursal[]>([])
   numeraciones = signal<Numeracion[]>([])
-  usuarioForm: FormGroup ;
+  usuarioForm: FormGroup;
   private fb = inject(FormBuilder)
   private _authService = inject(AuthService)
   private _sucursalService = inject(SucursalService)
   private _numeracionService = inject(NumeracionService)
+  private location = inject(Location)
+  private _fileUploadService = inject(FileUploadService);
   private router = inject(Router);
   private _usuarioService = inject(UsuariosService)
-  private activatedRoute= inject(ActivatedRoute);
+  private activatedRoute = inject(ActivatedRoute);
   constructor() {
     // Initialize the property in the constructor
     this.usuarioForm = this.initForm()
@@ -50,28 +57,29 @@ export class UsuarioComponent implements OnInit {
 
   }
 
-sucursalChange(sucursalId:number){
-  this.numeraciones.set([])
-  console.log(this.usuarioForm.value);
-
-  this._numeracionService.findAll(sucursalId).subscribe( (resp:any) =>{
-    this.usuarioForm.controls['numPrefId'].patchValue(null);
+  sucursalChange(sucursalId: number) {
+    this.numeraciones.set([])
     console.log(this.usuarioForm.value);
 
-    this.numeraciones.set(resp)
+    this._numeracionService.findAll(sucursalId).subscribe((resp: any) => {
+      this.usuarioForm.controls['numPrefId'].patchValue(null);
+      console.log(this.usuarioForm.value);
 
-  })
+      this.numeraciones.set(resp)
 
-}
+    })
+
+  }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id')
       console.log(id)
-      if ( id) {
+      if (id) {
         this.id.set(+id ?? 0); // Maneja la posibilidad de valor nulo
-        this._usuarioService.getById( this.id()).subscribe({
+        this._usuarioService.getById(this.id()).subscribe({
           next: (usuarioData) => {
+            console.log(usuarioData)
             this.usuarioForm.patchValue(usuarioData);
 
           },
@@ -84,34 +92,39 @@ sucursalChange(sucursalId:number){
     });
 
   }
-initForm(){
-  return this.fb.group({
-    sucursalId: [null, Validators.required],
-    numPrefId: [null, Validators.required],
-    rol: [null, Validators.required],
-    usuario: [null, Validators.required],
-    password1: [null, Validators.required],
-    password2: [null, Validators.required],
-    username: [null, [Validators.required, Validators.email]],
-    activo: [true],
-    bloqueado: [false]
-  });
-}
-  onSubmit(e:Event) {
+  initForm() {
+    return this.fb.group({
+      sucursalId: [null, Validators.required],
+      numPrefId: [null, Validators.required],
+      rol: [null, Validators.required],
+      usuario: [null, Validators.required],
+      img: [''],
+      password1: [null, Validators.required],
+      password2: [null, Validators.required],
+      password: [null, Validators.required],
+      username: [null, [Validators.required, Validators.email]],
+      activo: [true],
+      bloqueado: [false]
+    });
+  }
+  onSubmit(e: Event) {
     e.preventDefault()
-    const usuarioData: Usuario = this.usuarioForm.value;
+    const usuarioData = this.usuarioForm.value;
     Swal.showLoading();
 
 
 
-
+    console.log(usuarioData)
     if (this.id()) {
       const usuario = {
         ...usuarioData,
-        id:this.id()
-       }
+        id: this.id()
+      }
+
       this._usuarioService.update(usuario).subscribe({
-        next: (resp) => {
+        next: async (resp) => {
+          const img = await this.subirImagen(resp.id);
+          this.usuarioForm.patchValue({ ...usuario, img });
           Swal.close()
           Swal.fire("Actualización exitosa!!!", "Se ha actualizado al usuario: " + resp.razonSocial, "success");
           this.router.navigateByUrl('/usuarios');
@@ -126,10 +139,16 @@ initForm(){
       });
     } else {
 
+      if (usuarioData?.password1 != usuarioData?.password2 && usuarioData?.password1 != '') {
+        Swal.fire("Error", 'Password es un campo obligatorio', "error");
+        return
+      }
+      usuarioData.password = usuarioData.password1;
       this._usuarioService.create(usuarioData).subscribe({
-        next: (resp) => {
+        next: async (resp) => {
+          const img = await this.subirImagen(resp.id)
           Swal.close()
-          Swal.fire("Creación exitosa!!!", "Se ha registrado el usuario " + resp.razonSocial, "success");
+          Swal.fire("Creación exitosa!!!", "Se ha registrado el usuario " + resp.username, "success");
           this.router.navigateByUrl('/usuarios');
         },
         error: (error) => {
@@ -144,6 +163,45 @@ initForm(){
 
   }
 
+  actualizarImagen(event: any, id: number) {
 
+    this.imagenesSubir[0] = event.target.files[0];
+
+    if (!this.imagenesSubir[0]) {
+      this.imgTemps[0] = null;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.imagenesSubir[0]!);
+
+    reader.onloadend = () => {
+      this.imgTemps[0] = reader.result;
+    };
+  }
+
+  subirImagen(id: number): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (this.imagenesSubir[0]) {
+        this._fileUploadService.actualizarFoto(this.imagenesSubir[0]!, 'usuarios', id).subscribe(
+          img => {
+            const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+            if (fileInput) {
+              fileInput.value = ''; // Limpiar el campo de entrada de archivos
+            }
+            console.log(img);
+            // Swal.fire('Guardado', 'Imagen actualizada', 'success');
+            resolve(img);
+          },
+          error => reject(error)
+        );
+      } else {
+        resolve('No hay imagen para subir');
+      }
+    });
+  }
+  atras() {
+    this.location.back();
+  }
 
 }
