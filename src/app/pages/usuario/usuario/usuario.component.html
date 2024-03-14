@@ -6,7 +6,7 @@
   <div class="card-body">
     <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit($event)">
       <div class="row mb-3">
-        <img *ngIf="!imgTemps[0]" [src]="sinImagen" class="img-avatar" />
+        <img *ngIf="!imgTemps[0] && !usuarioForm.get('img')?.value" [src]="sinImagen" class="img-avatar" />
         <img *ngIf="imgTemps[0]" [src]="imgTemps[0]" class="img-avatar" />
         <img
           *ngIf="usuarioForm.get('img')!.value && !imgTemps[0]"

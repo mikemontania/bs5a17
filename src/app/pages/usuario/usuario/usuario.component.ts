@@ -48,29 +48,62 @@ export class UsuarioComponent implements OnInit {
 
     forkJoin([
       this._sucursalService.findAll(),
-      this._numeracionService.findAll(0),
 
-    ]).subscribe(([sucursales, numeraciones]) => {
+    ]).subscribe(([sucursales]) => {
       this.sucursales.set(sucursales);
-      this.numeraciones.set(numeraciones);
     });
 
   }
 
   sucursalChange(sucursalId: number) {
-    this.numeraciones.set([])
+    this.numeraciones.set([]);
     console.log(this.usuarioForm.value);
 
     this._numeracionService.findAll(sucursalId).subscribe((resp: any) => {
+      // Mapear la respuesta y convertir los IDs a números
+      const numeracionesMapped = resp.map((item: any) => ({
+        ...item,
+        id: +item.id
+      }));
+
+      // Restablecer el campo "numPrefId" a null
       this.usuarioForm.controls['numPrefId'].patchValue(null);
-      console.log(this.usuarioForm.value);
 
-      this.numeraciones.set(resp)
+      // Establecer las numeraciones mapeadas en el estado
+      this.numeraciones.set(numeracionesMapped);
 
-    })
 
+    });
   }
 
+
+  sucursalInit(sucursalId: number): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+
+      this._numeracionService.findAll(sucursalId)
+
+        .subscribe({
+          next: (resp) => {
+            // Mapear la respuesta y convertir los IDs a números
+            const numeracionesMapped = resp.map((item: any) => ({
+              ...item,
+              id: +item.id
+            }));
+            // Establecer las numeraciones mapeadas en el estado
+            this.numeraciones.set(numeracionesMapped);
+            resolve(); // Resuelve la promesa después de asignar las numeraciones
+          },
+          error: message => {
+            console.error(message);
+            reject(message);
+            // Maneja el error de forma adecuada (por ejemplo, mostrando un mensaje al usuario)
+          }
+        });
+
+
+
+    });
+  }
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id')
@@ -78,10 +111,12 @@ export class UsuarioComponent implements OnInit {
       if (id) {
         this.id.set(+id ?? 0); // Maneja la posibilidad de valor nulo
         this._usuarioService.getById(this.id()).subscribe({
-          next: (usuarioData) => {
+          next: async (usuarioData) => {
+            this.numeraciones.set([]);
+            this.usuarioForm.controls['numPrefId'].patchValue(null);
+            await this.sucursalChange(usuarioData.sucursalId); // Esperar a que las numeraciones se carguen
             console.log(usuarioData)
             this.usuarioForm.patchValue(usuarioData);
-
           },
           error: message => {
             console.error(message);
@@ -90,8 +125,9 @@ export class UsuarioComponent implements OnInit {
         });
       }
     });
-
   }
+
+
   initForm() {
     return this.fb.group({
       sucursalId: [null, Validators.required],
@@ -112,8 +148,13 @@ export class UsuarioComponent implements OnInit {
     const usuarioData = this.usuarioForm.value;
     Swal.showLoading();
 
-
-
+    // Verificar que las contraseñas coincidan y no estén vacías
+    if (usuarioData?.password1 !== usuarioData?.password2 || usuarioData?.password1 === '') {
+      Swal.fire("Error", 'Las contraseñas no coinciden o están vacías', "error");
+      return;
+    }
+    // Asignar el valor de password1 al campo password
+    usuarioData.password = usuarioData.password1;
     console.log(usuarioData)
     if (this.id()) {
       const usuario = {
@@ -139,11 +180,7 @@ export class UsuarioComponent implements OnInit {
       });
     } else {
 
-      if (usuarioData?.password1 != usuarioData?.password2 && usuarioData?.password1 != '') {
-        Swal.fire("Error", 'Password es un campo obligatorio', "error");
-        return
-      }
-      usuarioData.password = usuarioData.password1;
+
       this._usuarioService.create(usuarioData).subscribe({
         next: async (resp) => {
           const img = await this.subirImagen(resp.id)
