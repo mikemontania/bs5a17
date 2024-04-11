@@ -5,4 +5,6 @@ export interface Sucursal {
   telefono: string;
   empresasId: number;
   email: string;
+  activo:         boolean;
+
 }

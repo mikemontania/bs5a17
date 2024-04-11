@@ -1,0 +1,110 @@
+<div class="card">
+    <div class="card-header">
+      @if(id()){
+        Actualizar Sucursal
+      }@else {
+        Crear Sucursal
+      }
+    </div>
+
+
+  <div class="card-body">
+    <form
+      [formGroup]="sucursalForm"
+      (ngSubmit)="onSubmit($event)"
+    >
+      <div class="row mb-3">
+        <label for="descripcion" class="col-md-4 col-lg-3 col-form-label"
+          >Sucursal</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="descripcion"
+            formControlName="descripcion"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="direccion" class="col-md-4 col-lg-3 col-form-label"
+          >Direccion</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="direccion"
+            formControlName="direccion"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="telefono" class="col-md-4 col-lg-3 col-form-label"
+          >Telefono</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="telefono"
+            formControlName="telefono"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="email" class="col-md-4 col-lg-3 col-form-label"
+          >Email</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            formControlName="email"
+          />
+        </div>
+      </div>
+
+
+
+
+
+      <div class="form-row">
+        <div class="col-md-6">
+          <div class="row mb-3">
+            <label for="fullName" class="col-md-4 col-lg-3 col-form-label"
+              >Estados</label
+            >
+            <div class="col-md-8 col-lg-9">
+
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="activo"
+                  formControlName="activo"
+                  checked
+                />
+                <label class="form-check-label" for="activo"> activo </label>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <div class=" btn-group">
+          <button  class="btn btn-outline-success" type="submit" class="btn btn-outline-success">@if(id()){ Actualizar <i class="bi bi-file-earmark-plus"></i>} @else { Crear <i class="bi bi-file-earmark-plus"></i>}      </button>
+          <button type="button" (click)="ngOnInit()" class="btn btn-outline-danger">Cancelar <i class="bi bi-x-lg"></i></button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

@@ -85,6 +85,12 @@ export const navbarData: INavbarData[] = [
     rol:[ 'admin'],
     label: 'Numeraciones'
   },
+  {
+    routeLink: 'sucursales',
+    icon: 'fa-solid fa-store-alt',
+    rol:[ 'admin'],
+    label: 'Sucursales'
+  },
 
   {
     routeLink: 'usuarios',

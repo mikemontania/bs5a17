@@ -13,6 +13,8 @@ import { NumeracionesComponent } from './numeracion/numeraciones/numeraciones.co
 import { UsuariosComponent } from './usuario/usuarios/usuarios.component';
 import { UsuarioComponent } from './usuario/usuario/usuario.component';
 import { EmpresaComponent } from './empresa/empresa.component';
+import { SucursalesComponent } from './sucursal/sucursales/sucursales.component';
+import { SucursalComponent } from './sucursal/sucursal/sucursal.component';
 
 export default [
   {
@@ -83,6 +85,22 @@ export default [
         path: "numeraciones/numeracion",
         canActivate: [authGuard],
         component: NumeracionComponent
+      },
+
+      {
+        path: "sucursales",
+        canActivate: [authGuard],
+        component: SucursalesComponent
+      },
+      {
+        path: "sucursales/sucursal/:id",
+        canActivate: [authGuard],
+        component: SucursalComponent
+      },
+      {
+        path: "sucursales/sucursal",
+        canActivate: [authGuard],
+        component: SucursalComponent
       },
       {
         path: "usuarios",
