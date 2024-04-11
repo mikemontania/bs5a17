@@ -1,0 +1,158 @@
+<div class="card">
+  <div class="card-header">Datos de empresa</div>
+
+  <div class="card-body">
+    <form [formGroup]="empresaForm" (ngSubmit)="onSubmit($event)">
+      <div class="row mb-3">
+        <img
+          *ngIf="!imgTemps[0] && !empresaForm.get('img')?.value"
+          [src]="sinImagen"
+          class="img-avatar"
+        />
+        <img *ngIf="imgTemps[0]" [src]="imgTemps[0]" class="img-avatar" />
+        <img
+          *ngIf="empresaForm.get('img')!.value && !imgTemps[0]"
+          [attr.src]="
+            empresaForm.get('img')?.value | imagen: 'empresas' | async
+          "
+          class="img-avatar"
+        />
+
+        <input
+          class="form-control form-control-sm validation"
+          type="file"
+          id="fileInput"
+          (change)="actualizarImagen($event, empresaForm.get('id')?.value)"
+        />
+      </div>
+
+
+
+
+
+      <div class="row mb-3">
+        <label for="ruc" class="col-md-4 col-lg-3 col-form-label"
+          >Ruc</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="ruc"
+            formControlName="ruc"
+          />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="razonSocial" class="col-md-4 col-lg-3 col-form-label"
+          >Razon social</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="razonSocial"
+            formControlName="razonSocial"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="telefono" class="col-md-4 col-lg-3 col-form-label"
+          >Telefono</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="telefono"
+            class="form-control form-control-sm"
+            id="telefono"
+            formControlName="telefono"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="actividad1" class="col-md-4 col-lg-3 col-form-label"
+          >actividad1</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <textarea
+            type="text"
+            class="form-control"
+            id="actividad1"
+            formControlName="actividad1"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="actividad2" class="col-md-4 col-lg-3 col-form-label"
+          >actividad1</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <textarea
+            type="text"
+            class="form-control"
+            id="actividad2"
+            formControlName="actividad2"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="actividad3" class="col-md-4 col-lg-3 col-form-label"
+          >actividad3</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <textarea
+            type="text"
+            class="form-control"
+            id="actividad3"
+            formControlName="actividad3"
+          ></textarea>
+        </div>
+      </div>
+
+
+      <div class="row mb-3">
+        <label for="web" class="col-md-4 col-lg-3 col-form-label"
+          >Web</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="web"
+            formControlName="web"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="email" class="col-md-4 col-lg-3 col-form-label"
+          >Email</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="email"
+            class="form-control form-control-sm"
+            id="email"
+            formControlName="email"
+          />
+        </div>
+      </div>
+      <div class="text-center">
+        <div class="btn-group">
+          <button
+            class="btn btn-outline-success"
+            type="submit"
+            class="btn btn-outline-success"
+          >
+         Actualizar <i class="bi bi-file-earmark-plus"></i>
+          </button>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

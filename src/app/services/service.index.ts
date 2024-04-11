@@ -1,3 +1,4 @@
+export { EmpresaService } from './empresas.service';
 export { UsuariosService } from './usuarios.service';
 export { NumeracionService } from './numeracion.service';
 export { FileUploadService } from './file-upload.service';

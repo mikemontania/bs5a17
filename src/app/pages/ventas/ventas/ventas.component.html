@@ -39,7 +39,8 @@
                 <i class="mh-1 fa-solid fa-sort-down"></i>
               </span>
             </span>
-            <span (click)="createClienteModal()"
+            <span
+              (click)="createClienteModal()"
               class="input-group-text btn-outline-success text-success"
               id="basic-addon3"
             >
@@ -47,8 +48,8 @@
             </span>
           </div>
 
-          <div class="d-flex w-100">
-            <!-- Agrupación de Sucursal y Serie -->
+          <!-- Agrupación de Sucursal y Serie -->
+          <!--  <div class="d-flex w-100">
             <div class="input-group mb-3 w-50 d-flex selector">
               <span
                 (click)="buscarSucursal()"
@@ -90,10 +91,10 @@
                 </span>
               </span>
             </div>
-          </div>
+          </div> -->
 
-          <div class="d-flex w-100">
-            <!-- Agrupación de Forma de Venta y Lista de Precio -->
+          <!-- Agrupación de Forma de Venta y Lista de Precio -->
+          <!--   <div class="d-flex w-100">
             <div class="input-group mb-3 p w-50 d-flex selector">
               <span
                 (click)="buscarFormaVenta()"
@@ -134,7 +135,37 @@
                 </span>
               </span>
             </div>
+          </div> -->
+          <div class="container ">
+            <div class="row">
+              <div class="col-md-6">
+                <p>
+                  <strong>Sucursal:</strong>
+                  <span *ngIf="sucursal().id">{{ sucursal().descripcion }}</span>
+                  <span *ngIf="!sucursal().id" class="bg-danger text-white">Atención seleccione Sucursal</span>
+                </p>
+
+                <p>
+                  <strong>Timbrado:</strong>
+                  <span *ngIf="numeracion().id">{{ numeracion().timbrado }}</span>
+                  <span *ngIf="!numeracion().id" class="bg-danger text-white">Atención seleccione Numeración</span>
+                </p>
+              </div>
+              <div class="col-md-6">
+                <p>
+                  <strong>Lista Precio:</strong>
+                  <span *ngIf="listaPrecio().id">{{ listaPrecio().descripcion }}</span>
+                  <span *ngIf="!listaPrecio().id" class="bg-danger text-white">Cargando...</span>
+                </p>
+                <p>
+                  <strong>Serie:</strong>
+                  <span *ngIf="numeracion().id">{{ numeracion().serie }}</span>
+                  <span *ngIf="!numeracion().id" class="bg-danger text-white">Atención seleccione Numeración</span>
+                </p>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
 
@@ -143,7 +174,6 @@
         <div class="card-body pt-4 d-flex flex-column align-items-center">
           <div id="details">
             <table class="table table-sm">
-
               <thead>
                 <tr>
                   <th scope="col">Cant.</th>
@@ -206,39 +236,42 @@
       <!--   totales -->
       <div class="card">
         <div class="card-body">
-          <!--   <h5 class="card-title">Totales <span> </span></h5> -->
-          <div class="d-flex align-items-center">
-            <div class="ps-3">
-              <span class="text-danger small pt-1 fw-bold">Subtotal</span>
-              <h6 class="text-right">
-                {{ factura().importeSubtotal | number }} Gs
-              </h6>
+          <div class="row">
+            <div class="col-md-6">
+              <p class="ps-3">
+                <span class="text-danger small pt-1 fw-bold">Subtotal:</span>
+                <strong class="text-right">
+                  {{ factura().importeSubtotal | number }} Gs
+                </strong>
+              </p>
+
+              <p class="ps-3">
+                <span class="text-danger small pt-1 fw-bold">Descuento:</span>
+                <strong class="text-right">
+                  {{ factura().importeDescuento | number }} Gs
+                </strong>
+              </p>
             </div>
 
-            <div class="ps-3">
-              <span class="text-danger small pt-1 fw-bold">Descuento</span>
-              <h6 class="text-right">
-                {{ factura().importeDescuento | number }} Gs
-              </h6>
-            </div>
+            <div class="col-md-6">
+              <p class="ps-3">
+                <span class="text-danger small pt-1 fw-bold">Total:</span>
+                <strong class="text-right  ">
+                  {{ factura().importeTotal | number }} Gs
+                </strong>
+              </p>
 
-            <div class="ps-3">
-              <span class="text-danger small pt-1 fw-bold">Total</span>
-              <h6 class="text-right font-weight-bold">
-                {{ factura().importeTotal | number }} Gs
-              </h6>
-            </div>
-
-
-            <div class="ps-3">
-              <span class="text-danger small pt-1 fw-bold">Articulos</span>
-              <h6 class="text-right font-weight-bold">
-                {{ (detalles?.length ) | number }}
-              </h6>
+              <p class="ps-3">
+                <span class="text-danger small pt-1 fw-bold">Articulos:</span>
+                <strong class="text-right  ">
+                  {{ detalles?.length | number }}
+                </strong>
+              </p>
             </div>
           </div>
         </div>
       </div>
+
       <!--   botones -->
       <div class="card">
         <div class="card-body btn-group">
@@ -249,7 +282,13 @@
           >
             Registrar
           </button>
-          <button type="button" class="btn btn-outline-danger"  (click)="cancelar()">Cancelar</button>
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            (click)="cancelar()"
+          >
+            Cancelar
+          </button>
         </div>
       </div>
     </div>
@@ -257,69 +296,51 @@
 </section>
 <!-- selector de cliente-->
 
-
-
 @if(createCobranza ) {
-  <app-cobranza-create
-    [isOpen]="createCobranza"
-    [sucursalId]="sucursal().id"
-    [tipo]="'VENTA'"
-    [userId]="userId()"
-    [importeTotal]="factura().importeTotal"
-    (cobranza)="guardarCobranza($event)"
-    (closeModal)="createCobranza = false"
-  ></app-cobranza-create>
+<app-cobranza-create
+  [isOpen]="createCobranza"
+  [sucursalId]="sucursal().id"
+  [tipo]="'VENTA'"
+  [userId]="userId()"
+  [importeTotal]="factura().importeTotal"
+  (cobranza)="guardarCobranza($event)"
+  (closeModal)="createCobranza = false"
+></app-cobranza-create>
 
-  }
+} @if(createCliente ) {
+<app-cliente-create
+  [isOpen]="createCliente"
+  (cliente)="selectCliente($event)"
+  (closeModal)="createCliente = false"
+></app-cliente-create>
 
-
-@if(createCliente ) {
-  <app-cliente-create
-    [isOpen]="createCliente"
-    (cliente)="selectCliente($event)"
-    (closeModal)="createCliente = false"
-  ></app-cliente-create>
-
-  }
-
-
-@if(searchCliente ) {
+} @if(searchCliente ) {
 <app-cliente-search
   [isOpen]="searchCliente"
   (cliente)="selectCliente($event)"
   (closeModal)="searchCliente = false"
 ></app-cliente-search>
 
-}
-
-
-@if(searchSucursal  && _authService.currentUser()?.rol != 'cajero') {
+} @if(searchSucursal && _authService.currentUser()?.rol != 'vendedor') {
 <app-sucursal-search
   [isOpen]="searchSucursal"
   (sucursal)="selectSucursal($event)"
   (closeModal)="searchSucursal = false"
 ></app-sucursal-search>
-}
-
-@if(searchListaPrecio ) {
+} @if(searchListaPrecio ) {
 <app-lista-precio-search
   [isOpen]="searchListaPrecio"
   (listaPrecio)="selectListaPrecio($event)"
   (closeModal)="searchListaPrecio = false"
 ></app-lista-precio-search>
-}
-
-@if(searchFormaVenta ) {
+} @if(searchFormaVenta ) {
 <app-forma-venta-search
   [isOpen]="searchFormaVenta"
   (formaVenta)="selectFormaVenta($event)"
   (closeModal)="searchFormaVenta = false"
 ></app-forma-venta-search>
-}
-
-
-
-@if(searchNumeracion && sucursal().id && _authService.currentUser()?.rol != 'cajero' ) {
+} @if(searchNumeracion && sucursal().id && _authService.currentUser()?.rol !=
+'vendedor' ) {
 <app-numeracion-search
   [isOpen]="searchNumeracion"
   [sucursalId]="sucursal().id"

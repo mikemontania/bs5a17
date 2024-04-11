@@ -36,7 +36,7 @@
     </div>
 
     <!-- Sucursal Input -->
-    <div class="input-group mb-3 w-50 d-flex selector" *ngIf="_authService.currentUser()?.rol != 'cajero'">
+    <div class="input-group mb-3 w-50 d-flex selector" *ngIf="_authService.currentUser()?.rol != 'vendedor'">
       <span (click)="buscarSucursal()" class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
         @if(sucursal()?.id) {
           <span class="client-info">

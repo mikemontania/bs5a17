@@ -28,7 +28,7 @@
             <div class="col-md-3">
               <label for="fechaHasta" class="form-label">Sucursal</label>
               <select
-              [disabled]="role == 'cajero'"
+              [disabled]="role == 'vendedor'"
                 class="form-control form-control-sm"
                 [(ngModel)]="sucursalSeleccionada"
                 name="sucursalSeleccionada"
@@ -75,7 +75,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6" *ngIf="role != 'cajero'">
+    <div class="col-md-6" *ngIf="role != 'vendedor'">
       <div class="card">
         <div class="card-body">
           @if(cargadoVendedores){

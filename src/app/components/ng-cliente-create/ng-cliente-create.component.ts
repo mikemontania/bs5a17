@@ -19,7 +19,7 @@ import { ListaPrecioService } from "../../services/listaPrecio.service";
   styleUrl: "./ng-cliente-create.component.css"
 })
 export class NgClienteCreateComponent implements OnInit {
-  size = "medium";
+  size = "large";
   delay=200;
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
@@ -41,7 +41,7 @@ export class NgClienteCreateComponent implements OnInit {
     this.clienteForm = this.fb.group({
       empresaId: [null, Validators.required],
       listaPrecioId: [null, Validators.required],
-      formaVentaId: [null, Validators.required],
+      formaVentaId: [1, Validators.required],
       razonSocial: [null, Validators.required],
       nroDocumento: [null, Validators.required],
       direccion: [null, Validators.required],

@@ -66,7 +66,7 @@ initForm(){
   return this.fb.group({
     empresaId: [null, Validators.required],
     listaPrecioId: [null, Validators.required],
-    formaVentaId: [null, Validators.required],
+    formaVentaId: [1, Validators.required],
     razonSocial: [null, Validators.required],
     nroDocumento: [null, Validators.required],
     direccion: [null, Validators.required],

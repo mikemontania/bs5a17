@@ -1,7 +1,6 @@
 import { Route } from '@angular/router';
 import { DashbardComponent } from './dashbard/dashbard.component';
 import { PagesComponent } from './pages.component';
-import { UsersComponent } from './users/users.component';
 import { authGuard } from '../guards/auth-guard.guard';
 import { ClienteComponent } from './cliente/cliente/cliente.component';
 import { ClientesComponent } from './cliente/clientes/clientes.component';
@@ -13,6 +12,7 @@ import { NumeracionComponent } from './numeracion/numeracion/numeracion.componen
 import { NumeracionesComponent } from './numeracion/numeraciones/numeraciones.component';
 import { UsuariosComponent } from './usuario/usuarios/usuarios.component';
 import { UsuarioComponent } from './usuario/usuario/usuario.component';
+import { EmpresaComponent } from './empresa/empresa.component';
 
 export default [
   {
@@ -23,6 +23,11 @@ export default [
         path: "dashboard",
         canActivate: [authGuard],
         component: DashbardComponent
+      },
+      {
+        path: "empresa",
+        canActivate: [authGuard],
+        component: EmpresaComponent
       },
       {
         path: "ventas",

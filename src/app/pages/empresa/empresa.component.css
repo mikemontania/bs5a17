@@ -1,0 +1,15 @@
+
+.img-avatar {
+  max-height: 170px;
+  height: auto;
+  max-width: 170px;
+  width: auto;
+}
+
+.img-avatar:hover {
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -o-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  transform: scale(1.5);
+}
