@@ -18,7 +18,6 @@ export const navbarData: INavbarData[] = [
       {
         routeLink: 'ventas',
         rol:['vendedor','admin'],
-
         label: 'Ventas'
       },
       {
@@ -29,7 +28,7 @@ export const navbarData: INavbarData[] = [
       },
       {
         routeLink: 'ventas/reporteCobranza',
-        rol:[ 'admin'],
+        rol:['vendedor','admin'],
         label: 'Reporte Cobranza'
       },
 
@@ -45,17 +44,17 @@ export const navbarData: INavbarData[] = [
     items: [
       {
         routeLink: `valoraciones/PRECIO/IMPORTE`,
-        rol:['vendedor','admin'],
+        rol:['admin'],
         label: 'Precios'
       },
       {
         routeLink: `valoraciones/DESCUENTO/PRODUCTO`,
-        rol:['vendedor','admin'],
+        rol:['admin'],
         label: 'Descuento/Prd'
       },
       {
         routeLink: `valoraciones/DESCUENTO/IMPORTE`,
-        rol:['vendedor','admin'],
+        rol:['admin'],
         label: 'Descuento/Gs'
       },
     /*   {
@@ -95,8 +94,8 @@ export const navbarData: INavbarData[] = [
   {
     routeLink: 'usuarios',
     icon: 'fa-solid fa-user-tag',
-    rol:['vendedor','admin'],
-    label: 'usuarios'
+    label: 'usuarios',
+    rol:['admin'],
   },
   {
     routeLink: 'empresa',
