@@ -1,98 +1,142 @@
 <div class="card">
-  <div class="card-header"> Productos <button type="button" class="btn btn-sm btn-outline-success" (click)="agregar()"> <i class="bi bi-plus"></i></button></div>
-
   <div class="card-body">
 
-    <!-- Comprobante Numero Input -->
-    <div class="input-group mb-3 w-50 d-flex selector">
-      <div class="w-100 mb-3">
-        <input-debounce #inputSearch [delay]="300" id="inputSearch" type="text" placeholder="Buscar producto ..." required="" aria-invalid="false" (value)="debounceSearch($event)" />
-      </div>
-    </div>
+    <div class="row">
+      <div class="col-lg-8 col-sm-12">
 
-    <!-- Search and Cancel Buttons -->
-    <div class="card mb-3 w-50 d-flex selector">
-      <div class="btn-group">
-        <button type="button" class="btn btn-outline-success" (click)="buscar()">Buscar <i class="bi bi-search"></i></button>
-        <button type="button" class="btn btn-outline-danger" (click)="cancelar()">Cancelar <i class="bi bi-x-lg"></i></button>
-      </div>
-    </div>
 
-  </div>
-</div>
+        <div class="container-fluid">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="productos-tab" data-bs-toggle="tab" data-bs-target="#productos-content" role="tab" aria-controls="productos-content" aria-selected="true">Productos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="marcas-tab" data-bs-toggle="tab" data-bs-target="#marcas-content" role="tab" aria-controls="marcas-content" aria-selected="false">Marcas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="categorias-tab" data-bs-toggle="tab" data-bs-target="#categorias-content" role="tab" aria-controls="categorias-content" aria-selected="false">Categorías</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="subcategorias-tab" data-bs-toggle="tab" data-bs-target="#subcategorias-content" role="tab" aria-controls="subcategorias-content" aria-selected="false">Subcategorías</a>
+            </li>
+          </ul>
 
-<div class="card">
-  <div class="card-body">
-    @if(productos() && productos().length > 0) {
-    <div class="card">
-      <div class="card-body pt-4 d-flex flex-column align-items-center">
-        <div id="details" style="overflow-x: auto">
-          <table class="table  table-sm small-table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">ID</th>
-                <th scope="col">PRODUCTO</th>
-                <th scope="col">MARCA</th>
-                <th scope="col">CATEGORIA</th>
-                <th scope="col">SUBCATEGORIA</th>
-                <th scope="col">ACTIVO</th>
-                <th scope="col">EDITAR</th>
-                <th scope="col">VARIANTES</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (producto of productos(); track producto.id; let index = $index) {
-              <tr>
-                <th scope="row">{{ index + 1 }}</th>
-                <td>{{ producto.id }}</td>
-                <td  class="text-sm">{{ producto.nombre }}</td>
-                <td  class="text-sm">{{ producto.marca.descripcion }}</td>
-                <td  class="text-sm">{{ producto.categoria.descripcion }}</td>
-                <td  class="text-sm">{{ producto.subCategoria.descripcion }}</td>
-                <td  class="text-sm">{{ (producto.activo)?'SI':'NO' }}</td>
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-info text-info"
 
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Ver editar producto" (click)="verProducto(producto.id)" >
-                    <i class="bi bi-pencil"></i>
-                                    </button>
-                </td>
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-info text-info"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Ver editar variantes"    (click)="verVariantes(producto.id)" >
-                    <i class="bi bi-stack"></i>
-                                    </button>
-                </td>
-              </tr>
-              } @empty {
-              <tr></tr>
-              }
-            </tbody>
-          </table>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="productos-content">
+
+              <div class="card">
+                <div class="card-header"> Productos <button type="button" class="btn btn-sm btn-outline-success" (click)="agregar()"> <i class="bi bi-plus"></i></button></div>
+
+                <div class="card-body">
+
+                  <!-- Comprobante Numero Input -->
+                  <div class="input-group mb-3  d-flex selector">
+                    <div class="w-100 mb-3">
+                      <input-debounce #inputSearch [delay]="300" id="inputSearch" type="text" placeholder="Buscar producto ..." required="" aria-invalid="false" (value)="debounceSearch($event)" />
+                    </div>
+                  </div>
+
+
+
+
+                    @if(productos() && productos().length > 0) {
+
+                    <div class=" pt-4 d-flex flex-column align-items-center">
+                      <div id="details" style="overflow-x: auto">
+                        <table class="table  table-sm small-table">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">ID</th>
+                              <th scope="col">PRODUCTO</th>
+                              <th scope="col">MARCA</th>
+                              <th scope="col">CATEGORIA</th>
+                              <th scope="col">SUBCATEGORIA</th>
+                              <th scope="col">ACTIVO</th>
+                              <th scope="col">EDITAR</th>
+                              <th scope="col">VARIANTES</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @for (producto of productos(); track producto.id; let index = $index) {
+                            <tr>
+                              <th scope="row">{{ index + 1 }}</th>
+                              <td>{{ producto.id }}</td>
+                              <td  class="text-sm">{{ producto.nombre }}</td>
+                              <td  class="text-sm">{{ producto.marca.descripcion }}</td>
+                              <td  class="text-sm">{{ producto.categoria.descripcion }}</td>
+                              <td  class="text-sm">{{ producto.subCategoria.descripcion }}</td>
+                              <td  class="text-sm">{{ (producto.activo)?'SI':'NO' }}</td>
+                              <td  class="text-sm">
+                                <button class="btn btn-sm btn-outline-info text-info"
+
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="top"
+                                title="Ver editar producto" (click)="verProducto(producto.id)" >
+                                  <i class="bi bi-pencil"></i>
+                                                  </button>
+                              </td>
+                              <td  class="text-sm">
+                                <button class="btn btn-sm btn-outline-info text-info"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="top"
+                                title="Ver editar variantes"    (click)="verVariantes(producto.id)" >
+                                  <i class="bi bi-stack"></i>
+                                                  </button>
+                              </td>
+                            </tr>
+                            } @empty {
+                            <tr></tr>
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                  } @else {
+                  <div class="w-100 empty-message-container">
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                      <h4 class="alert-heading">Atención</h4>
+                      <p>No se han encontrado productos...</p>
+                    </div>
+                  </div>
+                  }
+
+                  <div class="d-flex justify-content-center">
+                    <app-paginator
+                      [totalPages]="totalPages()"
+                      [currentPage]="page()"
+                      (pageChanged)="onPageChanged($event)"
+                    >
+                    </app-paginator>
+                  </div>
+
+
+
+
+
+
+                </div>
+              </div>
+             </div>
+            <div class="tab-pane fade" id="marcas-content">
+              <app-entidades [tipo]="'marcas'"></app-entidades>
+            </div>
+            <div class="tab-pane fade" id="categorias-content">
+              <app-entidades [tipo]="'categorias'"></app-entidades>
+              </div>
+            <div class="tab-pane fade" id="subcategorias-content">
+              <app-entidades [tipo]="'subcategorias'"></app-entidades>
+              </div>
+
+          </div>
         </div>
-      </div>
-    </div>
-    } @else {
-    <div class="w-100 empty-message-container">
-      <div class="alert alert-info alert-dismissible fade show" role="alert">
-        <h4 class="alert-heading">Atención</h4>
-        <p>No se han encontrado productos...</p>
-      </div>
-    </div>
-    }
 
-    <div class="d-flex justify-content-center">
-      <app-paginator
-        [totalPages]="totalPages()"
-        [currentPage]="page()"
-        (pageChanged)="onPageChanged($event)"
-      >
-      </app-paginator>
+
+
+
+      </div>
     </div>
   </div>
 </div>

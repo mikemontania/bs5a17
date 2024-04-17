@@ -6,12 +6,13 @@ import { InputDebounceComponent } from "../../../components/inputDebounce/inputD
 import { PaginatorComponent } from "../../../components/paginator/paginator.component";
 import { ProductosService } from "../../../services/productos.service";
 import { PageProductosSimple } from "../../../interfaces/productos.interface";
+import { EntidadesComponent } from "../../../components/entidad/entidades/entidades.component";
 
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent,  ],
+  imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent  , EntidadesComponent ],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css'
 })

@@ -1,0 +1,99 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between">
+    <span>{{tipo}}</span>
+    <button type="button" class="btn btn-sm btn-outline-success" (click)="atras()">
+      <i class="bi bi-backspace"></i>
+    </button>
+  </div>
+
+  <div class="card-body">
+    <div id="details" style="overflow-x: auto">
+      <table class="table table-responsive-sm table-sm mt-2" id="tableProducts">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Descripcion</th>
+            @if(tipo == 'subcategorias'){
+              <th>Categoria</th>
+            }
+
+            <th>Activo</th>
+          </tr>
+        </thead>
+
+        <tbody id="entidades">
+          <tr [formGroup]="entidadForm" >
+            <td class="field">xxx</td>
+
+
+            <td class="field">
+              <input type="text" class="form-control form-control-sm validation" formControlName="descripcion" />
+            </td>
+            @if(tipo == 'subcategorias'){
+
+              <td class="field">
+                <select class="custom-select custom-select-sm" formControlName="categoriaId">
+                  <option *ngFor="let categoria of categorias" [value]="categoria.id">
+                    {{ categoria.descripcion }}
+                  </option>
+                </select>
+              </td>
+            }
+
+
+            <td class="field">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" formControlName="activo" checked />
+              </div>
+            </td>
+
+            <td class="field">
+              <button type="button" class="btn btn-sm btn-outline-success" (click)="crear($event)">
+                <i class="bi bi-file-earmark-plus"></i>
+              </button>
+            </td>
+          </tr>
+          @for (entidad of entidades;let index = $index; track entidad.id; )
+          {
+          <tr class=" ">
+            <td class="field">{{ entidad.id }}</td>
+
+
+            <td class="field">
+              <input class="form-control form-control-sm validation" [(ngModel)]="entidad.descripcion" type="text" name="descripcion" id="descripcion" />
+            </td>
+
+
+
+            @if(tipo == 'subcategorias'){
+
+              <td class="field">
+                <select class="custom-select custom-select-sm" id="categoriaId" [(ngModel)]="entidad.categoriaId">
+                  <option *ngFor="let categoria of categorias" [value]="categoria.id">
+                    {{ categoria.descripcion }}
+                  </option>
+                </select>
+              </td>
+            }
+
+            <td class="field">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="activo{{index}}" [(ngModel)]="entidad.activo" checked="" />
+              </div>
+            </td>
+
+
+            <td class="field">
+              <button type="button" class="btn btn-sm btn-outline-success" (click)="actualizar(entidad, index)">
+                <i class="bi bi-floppy"></i>
+              </button>
+            </td>
+          </tr>
+          }@empty {
+          <tr></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

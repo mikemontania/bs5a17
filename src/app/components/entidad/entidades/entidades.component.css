@@ -1,0 +1,5 @@
+ /* Define a custom class to make text smaller */
+ .small-table th,
+ .small-table td {
+   font-size: 0.8rem; /* Adjust the font size as needed */
+ }
