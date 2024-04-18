@@ -1,10 +1,4 @@
-<div class="card">
-  <div class="card-header d-flex justify-content-between">
-    <span>{{tipo}}</span>
-    <button type="button" class="btn btn-sm btn-outline-success" (click)="atras()">
-      <i class="bi bi-backspace"></i>
-    </button>
-  </div>
+
 
   <div class="card-body">
     <div id="details" style="overflow-x: auto">
@@ -15,6 +9,15 @@
             <th>Descripcion</th>
             @if(tipo == 'subcategorias'){
               <th>Categoria</th>
+            }
+            @if(tipo == 'presentaciones'){
+              <th>Sice</th>
+            }
+            @if(tipo == 'variedades'){
+              <th>Color</th>
+            }
+            @if(tipo == 'unidades'){
+              <th>Code</th>
             }
 
             <th>Activo</th>
@@ -39,7 +42,21 @@
                 </select>
               </td>
             }
-
+            @if(tipo == 'presentaciones'){
+              <td class="field">
+                <input type="text" class="form-control form-control-sm validation" formControlName="size" />
+              </td>
+            }
+            @if(tipo == 'variedades'){
+              <td class="field">
+                <input type="color" class="form-control form-control-color" formControlName="color" value="#fd9a6ce5" title="Seleccione color">
+              </td>
+            }
+            @if(tipo == 'unidades'){
+              <td class="field">
+                <input type="text" class="form-control form-control-sm validation" formControlName="code" />
+              </td>
+            }
 
             <td class="field">
               <div class="form-check form-switch">
@@ -76,6 +93,24 @@
               </td>
             }
 
+
+            @if(tipo == 'presentaciones'){
+              <td class="field">
+                <input type="text" class="form-control form-control-sm validation"  [(ngModel)]="entidad.size"name="size" id="size" />
+              </td>
+            }
+            @if(tipo == 'variedades'){
+              <td class="field">
+                <input type="color" class="form-control form-control-color"   [(ngModel)]="entidad.color" name="color" id="color" value="#4154f1" title="Seleccione color">
+              </td>
+            }
+            @if(tipo == 'unidades'){
+              <td class="field">
+                <input type="text" class="form-control form-control-sm validation"  [(ngModel)]="entidad.code"  name="code" id="code" />
+              </td>
+            }
+
+
             <td class="field">
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="activo{{index}}" [(ngModel)]="entidad.activo" checked="" />
@@ -84,7 +119,7 @@
 
 
             <td class="field">
-              <button type="button" class="btn btn-sm btn-outline-success" (click)="actualizar(entidad, index)">
+              <button type="button" class="btn btn-sm btn-outline-success" (click)="actualizar(entidad )">
                 <i class="bi bi-floppy"></i>
               </button>
             </td>
@@ -96,4 +131,3 @@
       </table>
     </div>
   </div>
-</div>

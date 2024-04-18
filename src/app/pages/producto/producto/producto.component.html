@@ -1,133 +1,165 @@
-<div class="card">
-    <div class="card-header">
-      @if(id()){
-        Acualizar Producto
-      }@else {
-        Crear Producto
-      }
+<div class="card-body">
+  <!-- Comprobante Numero Input -->
+  <div class="input-group  mt-3 mb-3  d-flex selector">
+    <div class="w-100 mb-3">
+      <input-debounce #inputSearch [delay]="300" id="inputSearch" type="text" placeholder="Buscar producto ..." required="" aria-invalid="false" (value)="debounceSearch($event)" />
     </div>
+  </div>
+
+  @if(productos() && productos().length > 0) {
+
+      <div id="details" style="overflow-x: auto">
+        <table class="table table-responsive-sm table-sm mt-2" id="tableProducts">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Producto</th>
+         <!--      <th>Descripcion</th> -->
+              <th>Marca</th>
+              <th>Categoria</th>
+              <th>subcategorias</th>
+              <th>Activo</th>
+            </tr>
+          </thead>
+
+          <tbody id="productos">
+            <tr [formGroup]="productoForm" >
+              <td class="field">xxx</td>
 
 
-  <div class="card-body">
-    <form
-      [formGroup]="productoForm"
-      (ngSubmit)="onSubmit($event)"
+              <td class="field">
+                <input type="text" class="form-control form-control-sm validation" formControlName="nombre" />
+              </td>
+      <!--         <td class="field">
+                <input type="text" class="form-control form-control-sm validation" formControlName="descripcion" />
+              </td>
+ -->
+              <td class="field">
+                  <select class="custom-select custom-select-sm" formControlName="marcaId">
+                    <option *ngFor="let marca of marcas" [value]="marca.id">
+                      {{ marca.descripcion }}
+                    </option>
+                  </select>
+                </td>
+
+                <td class="field">
+                  <select class="custom-select custom-select-sm" formControlName="categoriaId">
+                    <option *ngFor="let categoria of categorias" [value]="categoria.id">
+                      {{ categoria.descripcion }}
+                    </option>
+                  </select>
+                </td>
+
+                <td class="field">
+                  <select class="custom-select custom-select-sm" formControlName="subCategoriaId">
+                    <option *ngFor="let subCategoria of subCategorias" [value]="subCategoria.id">
+                      {{ subCategoria.descripcion }}
+                    </option>
+                  </select>
+                </td>
+
+
+
+              <td class="field">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" formControlName="activo" checked />
+                </div>
+              </td>
+
+              <td class="field">
+                <button type="button" class="btn btn-sm btn-outline-success" (click)="crear($event)">
+                  <i class="bi bi-file-earmark-plus"></i>
+                </button>
+              </td>
+            </tr>
+            @for (producto of productos();let index = $index; track producto.id; )
+            {
+            <tr class=" ">
+              <td class="field">{{ producto.id }}</td>
+
+
+              <td class="field">
+                <input class="form-control form-control-sm validation" [(ngModel)]="producto.nombre" type="text" name="nombre" id="nombre" />
+              </td>
+
+<!--
+              <td class="field">
+                <input class="form-control form-control-sm validation" [(ngModel)]="producto.descripcion" type="text" name="descripcion" id="descripcion" />
+              </td>
+
+ -->
+
+              <td class="field">
+                <select class="custom-select custom-select-sm" id="categoriaId" [(ngModel)]="producto.marcaId">
+                  <option *ngFor="let marca of marcas" [value]="marca.id">
+                    {{ marca.descripcion }}
+                  </option>
+                </select>
+              </td>
+
+                <td class="field">
+                  <select class="custom-select custom-select-sm" id="categoriaId" [(ngModel)]="producto.categoriaId">
+                    <option *ngFor="let categoria of categorias" [value]="categoria.id">
+                      {{ categoria.descripcion }}
+                    </option>
+                  </select>
+                </td>
+
+
+
+                <td class="field">
+                  <select class="custom-select custom-select-sm" id="categoriaId" [(ngModel)]="producto.subCategoriaId">
+                    <option *ngFor="let subCategoria of subCategorias" [value]="subCategoria.id">
+                      {{ subCategoria.descripcion }}
+                    </option>
+                  </select>
+                </td>
+
+
+              <td class="field">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="activo{{index}}" [(ngModel)]="producto.activo" checked="" />
+                </div>
+              </td>
+
+
+              <td class="field">
+                <button type="button" class="btn btn-sm btn-outline-success" (click)="actualizar(producto )">
+                  <i class="bi bi-floppy"></i>
+                </button>
+              </td>
+              <td class="field">
+                  <button class="btn btn-sm btn-outline-info text-info"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ver editar variantes"    (click)="verVariantes(producto.id)" >
+                    <i class="bi bi-stack"></i>
+                                    </button>
+
+              </td>
+            </tr>
+            }@empty {
+            <tr></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+  } @else {
+  <div class="w-100 empty-message-container">
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+      <h4 class="alert-heading">Atención</h4>
+      <p>No se han encontrado productos...</p>
+    </div>
+  </div>
+  }
+
+  <div class="d-flex justify-content-center">
+    <app-paginator
+      [totalPages]="totalPages()"
+      [currentPage]="page()"
+      (pageChanged)="onPageChanged($event)"
     >
-      <div class="row mb-3">
-        <label for="nombre" class="col-md-4 col-lg-3 col-form-label"
-          >Nombre del Producto</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="text"
-            class="form-control"
-            id="nombre"
-            formControlName="nombre"
-          />
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label for="descripcion" class="col-md-4 col-lg-3 col-form-label"
-          >Descripcion</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <textarea
-            type="text"
-            class="form-control"
-            id="descripcion"
-            formControlName="descripcion"
-          ></textarea>
-        </div>
-      </div>
-
-
-      <div class="row mb-3">
-        <label for="marcaId" class="col-md-4 col-lg-3 col-form-label"
-          >Marca</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <select
-            class="form-control"
-            id="marcaId"
-            formControlName="marcaId"
-          >
-            <option *ngFor="let marca of marcas()" [value]="marca.id">
-              {{ marca.descripcion }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-
-      <div class="row mb-3">
-        <label for="categoriaId" class="col-md-4 col-lg-3 col-form-label"
-          >Categoria</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <select
-            class="form-control"
-            id="categoriaId"
-            formControlName="categoriaId"
-          >
-            <option *ngFor="let categoria of categorias()" [value]="categoria.id">
-              {{ categoria.descripcion }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <label for="subCategoriaId" class="col-md-4 col-lg-3 col-form-label"
-          >SubCategoria</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <select
-            class="form-control"
-            id="subCategoriaId"
-            formControlName="subCategoriaId"
-          >
-            <option *ngFor="let subCategoria of subCategorias()" [value]="subCategoria.id">
-              {{ subCategoria.descripcion }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-
-
-      <div class="form-row">
-        <div class="col-md-6">
-          <div class="row mb-3">
-            <label for="fullName" class="col-md-4 col-lg-3 col-form-label"
-              >Estado</label
-            >
-            <div class="col-md-8 col-lg-9">
-
-
-
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="activo"
-                  formControlName="activo"
-                  checked
-                />
-                <label class="form-check-label" for="activo"> activo </label>
-              </div>
-
-
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="text-center">
-        <div class=" btn-group">
-          <button  class="btn btn-outline-success" type="submit" class="btn btn-outline-success">@if(id()){ Acualizar <i class="bi bi-file-earmark-plus"></i>} @else { Crear <i class="bi bi-file-earmark-plus"></i>}      </button>
-          <button type="button" (click)="ngOnInit()" class="btn btn-outline-danger">Cancelar <i class="bi bi-x-lg"></i></button>
-        </div>
-
-      </div>
-    </form>
+    </app-paginator>
   </div>
 </div>

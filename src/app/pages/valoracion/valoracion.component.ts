@@ -305,9 +305,8 @@ if (this.registro=='PUNTO' && this.tipo=='IMPORTE') this.valor = 'pts';
   }
 
   cancelar() {
-    this.fechaDesde = moment(new Date()).format("YYYY-MM-DD");
-    this.listaPrecioId = 1;
-    this.sucursalId = 0;
+    this.valoraciones = [];
+   this.ngOnInit()
 
   }
 

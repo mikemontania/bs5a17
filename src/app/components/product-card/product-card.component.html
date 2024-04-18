@@ -6,6 +6,7 @@
     />
     <img *ngIf="!producto.img" src="../../../assets/img/sin-imagen.jpg" />
     <div  *ngIf="producto.descuento"class="discount-badge">{{ producto.descuento | number  }}%</div>
+    <div *ngIf="producto.color" class="color-badge" [ngStyle]="{ 'background-color': producto.color }"></div>
     <div class="code-badge"> {{ producto.precio | number }} GS</div>
   </div>
   <div class="description-badge  text-center p-2">

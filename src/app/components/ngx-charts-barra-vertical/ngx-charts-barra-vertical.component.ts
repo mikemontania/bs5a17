@@ -14,26 +14,6 @@ export class NgxBarraVerticalComponent implements OnDestroy {
   @Input() legendTitle: string = '';
   @Input() dashTema = 'night';
   @Input() results: any[] = [];
-  // results: any[] = [
-  //   {
-  //     "name": "Juego 1",
-  //     "value": 20
-  //   },
-  //   {
-  //     "name": "Juego 2",
-  //     "value": 25
-  //   },
-  //   {
-  //     "name": "Juego 3",
-  //     "value": 15
-  //   },
-  //   {
-  //     "name": "Juego 4",
-  //     "value": 30
-  //   }
-  // ];
-
-
   // options
   showXAxis  = false;
   showYAxis  = true;
@@ -49,18 +29,6 @@ export class NgxBarraVerticalComponent implements OnDestroy {
 
   constructor() {
 
-    // this.intervalo = setInterval( () => {
-    //   console.log('tick');
-
-    //   const newResults = [...this.results];
-
-    //   for( let i in newResults ) {
-    //     newResults[i].value = Math.round( Math.random() * 500 )
-    //   }
-
-    //   this.results = [...newResults];
-
-    // }, 1500 );
 
   }
 

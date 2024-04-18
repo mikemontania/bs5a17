@@ -34,7 +34,13 @@
   padding: 5px;
   border-radius: 5px;
 }
-
+.color-badge {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  padding: 5px;
+  border-radius: 5px;
+}
 .code-badge {
   position: absolute;
   bottom: 0px;

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import moment from 'moment';
@@ -57,6 +57,19 @@ export class DashbardComponent {
   _authService = inject(AuthService);
   _sucursalesService = inject(SucursalService);
   _reportService = inject(ReportesService);
+  public dashcliente_totalimporte = computed(() => this.rptClientes.reduce((total, detalle) => total + +detalle.totalimporte, 0) ?? 0);
+  public dashcliente_totalfacturas = computed(() => this.rptClientes.reduce((total, detalle) => total + +detalle.totalfacturas, 0) ?? 0);
+  public dashsucursal_totalimporte = computed(() => this.rptSucursales.reduce((total, detalle) => total + +detalle.totalimporte, 0) ?? 0);
+  public dashsucursal_totalventas = computed(() => this.rptSucursales.reduce((total, detalle) => total + +detalle.totalventas, 0) ?? 0);
+  public dashvariante_totalimporte = computed(() => this.rptVariantes.reduce((total, detalle) => total + +detalle.totalimporte, 0) ?? 0);
+  public dashvariante_peso = computed(() => this.rptVariantes.reduce((total, detalle) => total + +detalle.peso, 0) ?? 0);
+  public dashvariante_vendidos = computed(() => this.rptVariantes.reduce((total, detalle) => total + +detalle.vendidos, 0) ?? 0);
+  public dashmedio_importeCobrado = computed(() => this.rptMediosPago.reduce((total, detalle) => total + +detalle.totalimportecobrado, 0) ?? 0);
+  public dashmedio_cantidad = computed(() => this.rptMediosPago.reduce((total, detalle) => total + +detalle.cantidad, 0) ?? 0);
+  public dashvend_peso = computed(() => this.rptVendedores.reduce((total, detalle) => total + +detalle.peso, 0) ?? 0);
+  public dashvend_total = computed(() => this.rptVendedores.reduce((total, detalle) => total + +detalle.total, 0) ?? 0);
+  public dashvend_cantidad = computed(() => this.rptVendedores.reduce((total, detalle) => total + +detalle.cantidad, 0) ?? 0);
+
 
   constructor() {
     this.cargadoSucursales = false;
@@ -94,7 +107,7 @@ export class DashbardComponent {
       this._reportService.getVendedoresPorTotal(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
 
     ]).subscribe(async ([rptSucursales, rptVariantes, rptClientes, rptMediosPago, rptVendedores]) => {
-
+console.log({rptSucursales, rptVariantes, rptClientes, rptMediosPago, rptVendedores})
       this.rptSucursales = rptSucursales;//
       this.rptVariantes = rptVariantes;//
       this.rptClientes = rptClientes;//

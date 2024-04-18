@@ -10,19 +10,7 @@
       </div>
     </div>
 
-    <!-- Search and Cancel Buttons -->
-    <div class="card mb-3 w-50 d-flex selector">
-      <div class="btn-group">
-        <button type="button" class="btn btn-outline-success" (click)="buscar()">Buscar <i class="bi bi-search"></i></button>
-        <button type="button" class="btn btn-outline-danger" (click)="cancelar()">Cancelar <i class="bi bi-x-lg"></i></button>
-      </div>
-    </div>
 
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-body pt-4 d-flex flex-column align-items-center">
     @if(usuarios() && usuarios().length > 0) {
 
         <div id="details" style="overflow-x: auto">

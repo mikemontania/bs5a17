@@ -2,3 +2,7 @@
   display: grid;
   height: 300px;
 }
+.chart-totals {
+  display: flex;
+  justify-content: space-between;
+}

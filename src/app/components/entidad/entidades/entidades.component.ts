@@ -1,5 +1,5 @@
 
- import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, signal, inject, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PaginatorComponent } from '../../../components/paginator/paginator.component';
@@ -10,22 +10,22 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'app-entidades',
   standalone: true,
-  imports: [CommonModule, FormsModule, PaginatorComponent,ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, PaginatorComponent, ReactiveFormsModule],
   templateUrl: './entidades.component.html',
   styleUrl: './entidades.component.css'
 })
 export class EntidadesComponent {
-  @Input()  tipo:string ='';
+  @Input() tipo: string = '';
   size = "medium";
   delay = 200;
   id = signal<number>(0)
-  entidades  :any[] =[];
-  categorias  :any[] =[];
+  entidades: any[] = [];
+  categorias: any[] = [];
   entidadForm: FormGroup;
 
   private fb = inject(FormBuilder)
   private _entidadService = inject(EntidadesService)
-  private location= inject(Location)
+  private location = inject(Location)
   constructor() {
     // Initialize the property in the constructor
     this.entidadForm = this.initForm()
@@ -33,7 +33,7 @@ export class EntidadesComponent {
 
   }
   ngOnInit() {
-
+    this.entidadForm = this.initForm()
     if (this.tipo == 'subcategorias') {
       this._entidadService.findAll('categorias').subscribe({
         next: (categorias) => {
@@ -47,17 +47,17 @@ export class EntidadesComponent {
         }
       });
     }
-        this._entidadService.findAll(this.tipo).subscribe({
-          next: (entidades) => {
-            console.log(entidades)
-            this.entidades = entidades;
+    this._entidadService.findAll(this.tipo).subscribe({
+      next: (entidades) => {
+        console.log(entidades)
+        this.entidades = entidades;
 
-          },
-          error: message => {
-            console.error(message);
-            // Maneja el error de forma adecuada (por ejemplo, mostrando un mensaje al usuario)
-          }
-        });
+      },
+      error: message => {
+        console.error(message);
+        // Maneja el error de forma adecuada (por ejemplo, mostrando un mensaje al usuario)
+      }
+    });
 
 
 
@@ -69,6 +69,24 @@ export class EntidadesComponent {
         categoriasId: [null, Validators.required],
         activo: [true]
       });
+    } else if (this.tipo == 'presentaciones') {
+      return this.fb.group({
+        descripcion: [null, Validators.required],
+        size: [null, Validators.required],
+        activo: [true]
+      });
+    } else if (this.tipo == 'variedades') {
+      return this.fb.group({
+        descripcion: [null, Validators.required],
+        color: [null, Validators.required],
+        activo: [true]
+      });
+    } else if (this.tipo == 'unidades') {
+      return this.fb.group({
+        descripcion: [null, Validators.required],
+        code: ['', Validators.required],
+        activo: [true]
+      });
     } else {
       return this.fb.group({
         descripcion: [null, Validators.required],
@@ -76,12 +94,16 @@ export class EntidadesComponent {
       });
     }
 
+
+
+
+
   }
 
 
-  actualizar(entidad: any, index: number) {
+  actualizar(entidad: any) {
     console.log(entidad)
-    this._entidadService.update(this.tipo,entidad).subscribe({
+    this._entidadService.update(this.tipo, entidad).subscribe({
       next: async (resp) => {
 
         Swal.close();
@@ -102,9 +124,9 @@ export class EntidadesComponent {
     e.preventDefault();
 
     const entidadData = { ...this.entidadForm.value, productoId: this.id() };
-    this._entidadService.create(this.tipo,entidadData).subscribe({
+    this._entidadService.create(this.tipo, entidadData).subscribe({
       next: async (resp: any) => {
-
+        console.log(resp)
         this.entidades.push({ ...resp })
         Swal.close();
         Swal.fire("Creación exitosa!!!", "Se ha registrado la entidad", "success").then(() => {
@@ -123,7 +145,7 @@ export class EntidadesComponent {
   }
 
 
-atras(){
-  this.location.back();
-}
+  atras() {
+    this.location.back();
+  }
 }
