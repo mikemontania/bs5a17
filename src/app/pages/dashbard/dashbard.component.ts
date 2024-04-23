@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import moment from 'moment';
@@ -20,7 +20,7 @@ import { AuthService } from '../../auth/services/auth.service';
   templateUrl: './dashbard.component.html',
   styleUrl: './dashbard.component.css'
 })
-export class DashbardComponent {
+export class DashbardComponent implements OnInit {
   fechaDesde = moment(new Date()).format("YYYY-MM-DD");
   fechaHasta = moment(new Date()).format("YYYY-MM-DD");
   rptSucursales: ReporteSucursal[] = [];
@@ -38,7 +38,7 @@ export class DashbardComponent {
   cargadoClientes: boolean = false
   cargadoMediosPago: boolean = false;
   cargadoVendedores: boolean = false;
-  role:string ='';
+  role: string = '';
 
   sucursalSeleccionada: number = 1; // Valor predeterminado
   sucursales: Sucursal[] = [];
@@ -57,19 +57,19 @@ export class DashbardComponent {
   _authService = inject(AuthService);
   _sucursalesService = inject(SucursalService);
   _reportService = inject(ReportesService);
-  public dashcliente_totalimporte = computed(() => this.rptClientes.reduce((total, detalle) => total + +detalle.totalimporte, 0) ?? 0);
-  public dashcliente_totalfacturas = computed(() => this.rptClientes.reduce((total, detalle) => total + +detalle.totalfacturas, 0) ?? 0);
-  public dashsucursal_totalimporte = computed(() => this.rptSucursales.reduce((total, detalle) => total + +detalle.totalimporte, 0) ?? 0);
-  public dashsucursal_totalventas = computed(() => this.rptSucursales.reduce((total, detalle) => total + +detalle.totalventas, 0) ?? 0);
-  public dashvariante_totalimporte = computed(() => this.rptVariantes.reduce((total, detalle) => total + +detalle.totalimporte, 0) ?? 0);
-  public dashvariante_peso = computed(() => this.rptVariantes.reduce((total, detalle) => total + +detalle.peso, 0) ?? 0);
-  public dashvariante_vendidos = computed(() => this.rptVariantes.reduce((total, detalle) => total + +detalle.vendidos, 0) ?? 0);
-  public dashmedio_importeCobrado = computed(() => this.rptMediosPago.reduce((total, detalle) => total + +detalle.totalimportecobrado, 0) ?? 0);
-  public dashmedio_cantidad = computed(() => this.rptMediosPago.reduce((total, detalle) => total + +detalle.cantidad, 0) ?? 0);
-  public dashvend_peso = computed(() => this.rptVendedores.reduce((total, detalle) => total + +detalle.peso, 0) ?? 0);
-  public dashvend_total = computed(() => this.rptVendedores.reduce((total, detalle) => total + +detalle.total, 0) ?? 0);
-  public dashvend_cantidad = computed(() => this.rptVendedores.reduce((total, detalle) => total + +detalle.cantidad, 0) ?? 0);
 
+  dashvariante_totalimporte:number=0;
+  dashcliente_totalimporte:number=0;
+  dashcliente_totalfacturas:number=0;
+  dashsucursal_totalimporte:number=0;
+  dashsucursal_totalventas:number=0;
+  dashvariante_peso:number=0;
+  dashvariante_vendidos:number=0;
+  dashmedio_importeCobrado:number=0;
+  dashmedio_cantidad:number=0;
+  dashvend_peso:number=0;
+  dashvend_total:number=0;
+  dashvend_cantidad:number=0;
 
   constructor() {
     this.cargadoSucursales = false;
@@ -78,8 +78,16 @@ export class DashbardComponent {
     this.cargadoMediosPago = false;
     this.cargadoVendedores = false;
     this._sucursalesService.findAll().subscribe(resp => this.sucursales = resp);
-    this.sucursalSeleccionada = this._authService.currentUser()!.sucursalId;
+
+  }
+
+  ngOnInit() {
     this.role = this._authService.currentUser()!.rol;
+    if (this.role =='admin') {
+      this.sucursalSeleccionada =0;
+    }else{
+      this.sucursalSeleccionada = this._authService.currentUser()!.sucursalId;
+    }
     this.getReport()
   }
 
@@ -89,7 +97,12 @@ export class DashbardComponent {
 
 
   getReport() {
-
+    this.cargadoSucursales = false;
+    this.cargadoVariantes = false;
+    this.cargadoClientes = false
+    this.cargadoMediosPago = false;
+    this.cargadoVendedores = false;
+    console.log(this.sucursalSeleccionada)
     if (!this.sucursalSeleccionada) {
       this.sucursalSeleccionada = 0;
     }
@@ -107,7 +120,7 @@ export class DashbardComponent {
       this._reportService.getVendedoresPorTotal(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
 
     ]).subscribe(async ([rptSucursales, rptVariantes, rptClientes, rptMediosPago, rptVendedores]) => {
-console.log({rptSucursales, rptVariantes, rptClientes, rptMediosPago, rptVendedores})
+      console.log({ rptSucursales, rptVariantes, rptClientes, rptMediosPago, rptVendedores })
       this.rptSucursales = rptSucursales;//
       this.rptVariantes = rptVariantes;//
       this.rptClientes = rptClientes;//
@@ -125,6 +138,7 @@ console.log({rptSucursales, rptVariantes, rptClientes, rptMediosPago, rptVendedo
       console.log(this.chatResulsClientes)
       console.log(this.chatResulsMediosPago)
       console.log(this.chatResulsVendedores)
+      this.sumTotales();
       this.cargadoSucursales = true;
       this.cargadoVariantes = true;
       this.cargadoClientes = true
@@ -135,12 +149,25 @@ console.log({rptSucursales, rptVariantes, rptClientes, rptMediosPago, rptVendedo
 
 
 
-
   }
   onSeleccionMedioPago(event: any) { console.log(event) }
   onSeleccionSucursal(event: any) { console.log(event) }
   onSeleccionVendedor(event: any) { console.log(event) }
   onSeleccionVariante(event: any) { console.log(event) }
   onSeleccionCliente(event: any) { console.log(event) }
+  sumTotales(){
+    this.dashmedio_importeCobrado =  this.rptMediosPago.reduce((total, detalle) => total + +detalle.totalimportecobrado, 0) ;
+    this.dashsucursal_totalimporte =  this.rptSucursales.reduce((total, detalle) => total + +detalle.totalimporte, 0) ;
+    this.dashcliente_totalimporte =  this.rptClientes.reduce((total, detalle) => total + +detalle.totalimporte, 0) ;
+    this.dashcliente_totalfacturas =  this.rptClientes.reduce((total, detalle) => total + +detalle.totalfacturas, 0) ;
+    this.dashsucursal_totalventas =  this.rptSucursales.reduce((total, detalle) => total + +detalle.totalventas, 0) ;
+    this.dashvariante_totalimporte =  this.rptVariantes.reduce((total, detalle) => total + +detalle.totalimporte, 0) ;
+    this.dashvariante_peso =  this.rptVariantes.reduce((total, detalle) => total + +detalle.peso, 0) ;
+    this.dashvariante_vendidos =  this.rptVariantes.reduce((total, detalle) => total + +detalle.vendidos, 0) ;
+    this.dashmedio_cantidad =  this.rptMediosPago?.length || 0 ;
+    this.dashvend_peso =  this.rptVendedores.reduce((total, detalle) => total + +detalle.peso, 0) ;
+    this.dashvend_total =  this.rptVendedores.reduce((total, detalle) => total + +detalle.total, 0) ;
+    this.dashvend_cantidad =  this.rptVendedores.reduce((total, detalle) => total + +detalle.cantidad, 0) ;
+  }
 
 }

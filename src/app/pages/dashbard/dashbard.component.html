@@ -75,11 +75,11 @@
 
             <div class="chart-amount">
               Cantidad:<strong>
-                {{ dashmedio_cantidad() | number }} Medios Pago</strong
+                {{ dashmedio_cantidad | number }} Medios Pago</strong
               >
             </div>
             <div class="chart-amount">
-              Total:<strong>{{ dashmedio_importeCobrado() | number }} Gs</strong>
+              Total:<strong>{{ dashmedio_importeCobrado | number }} Gs</strong>
             </div>
           </div>
           }
@@ -101,14 +101,14 @@
           <div class="chart-totals">
           <div class="chart-amount">
             Cantidad:<strong>
-              {{ dashvend_cantidad() | number }} Facturas</strong
+              {{ dashvend_cantidad | number }} Facturas</strong
             >
           </div>
+        <!--   <div class="chart-amount">
+            Vendido Kg:<strong>{{ dashvend_peso | number }} kg</strong>
+          </div> -->
           <div class="chart-amount">
-            Vendido Kg:<strong>{{ dashvend_peso() | number }} kg</strong>
-          </div>
-          <div class="chart-amount">
-            Vendido :<strong>{{ dashvend_total() | number }} Gs</strong>
+            Vendido :<strong>{{ dashvend_total | number }} Gs</strong>
           </div>
           </div>
           }
@@ -130,12 +130,12 @@
           <div class="chart-totals">
           <div class="chart-amount">
             Cantidad:<strong>
-              {{ dashsucursal_totalventas() | number }}  </strong
+              {{ dashsucursal_totalventas | number }}  Facturas</strong
             >
           </div>
           <div class="chart-amount">
             Vendido :<strong
-              >{{ dashsucursal_totalimporte() | number }} Gs</strong
+              >{{ dashsucursal_totalimporte | number }} Gs</strong
             >
           </div>
           </div>
@@ -158,12 +158,12 @@
           <div class="chart-totals">
           <div class="chart-amount">
             Cantidad:<strong>
-              {{ dashcliente_totalfacturas() | number }}    </strong
+              {{ dashcliente_totalfacturas | number }}    </strong
             >
           </div>
           <div class="chart-amount">
             Comprado :<strong
-              >{{ dashcliente_totalimporte() | number }} Gs</strong
+              >{{ dashcliente_totalimporte | number }} Gs</strong
             >
           </div>
           </div>
@@ -186,15 +186,15 @@
           <div class="chart-totals">
           <div class="chart-amount">
             Cantidad:<strong>
-              {{ dashvariante_vendidos() | number }}  variantes</strong
+              {{ dashvariante_vendidos | number }}  variantes</strong
             >
           </div>
-          <div class="chart-amount">
-            Vendidos :<strong>{{ dashvariante_peso() | number }} Kg</strong>
-          </div>
+       <!--    <div class="chart-amount">
+            Vendidos :<strong>{{ dashvariante_peso | number }} Kg</strong>
+          </div> -->
           <div class="chart-amount">
             Vendidos :<strong
-              >{{ dashvariante_totalimporte() | number }} Gs</strong
+              >{{ dashvariante_totalimporte | number }} Gs</strong
             >
           </div>
           </div>
