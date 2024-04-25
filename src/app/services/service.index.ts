@@ -1,3 +1,4 @@
+export { AuditoriaService } from './auditoria.service';
 export { EntidadesService } from './entidades.service';
 export { EmpresaService } from './empresas.service';
 export { UsuariosService } from './usuarios.service';

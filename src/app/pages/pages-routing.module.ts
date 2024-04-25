@@ -15,6 +15,7 @@ import { UsuarioComponent } from './usuario/usuario/usuario.component';
 import { EmpresaComponent } from './empresa/empresa.component';
 import { SucursalesComponent } from './sucursal/sucursales/sucursales.component';
 import { SucursalComponent } from './sucursal/sucursal/sucursal.component';
+import { AuditoriasComponent } from './auditorias/auditorias.component';
 
 export default [
   {
@@ -45,6 +46,12 @@ export default [
 
         component: ProductosComponent
       },
+      {
+        path: "auditorias",
+        canActivate: [authGuard],
+        component: AuditoriasComponent
+      },
+
       {
         path: "productos/variantes/:id",
         canActivate: [authGuard],

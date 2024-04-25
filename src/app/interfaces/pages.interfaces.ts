@@ -1,6 +1,7 @@
 import { Cliente } from './clientes.interface';
 import { Venta } from './facturas.interface';
 import { Numeracion } from './numeracion.interface';
+import { Sucursal } from './sucursal.interface';
 import { Usuario } from './usuario.interface';
 
 
@@ -41,4 +42,28 @@ export interface UsuariosPage {
 
 export interface VendedorCreacion {
   usuario: string;
+}
+export interface AuditoriaPage {
+  total:      number;
+  totalPages: number;
+  page:       number;
+  pageSize:   number;
+  auditados:  Auditado[];
+}
+
+export interface Auditado {
+  fecha:             string;
+  fechaModificacion: string;
+  id:                number;
+  empresaId:         number;
+  sucursalId:        number;
+  usuarioId:         number;
+  metodo:            string;
+  path:              string;
+  detalles:          string;
+  status:            string;
+  mensaje:           string;
+  ipCliente:         string;
+  usuario:           Usuario;
+  sucursalUsuario:   Sucursal;
 }
