@@ -86,6 +86,13 @@ export class VentasComponent implements OnInit {
   _reportService = inject(ReportesService);
 
   constructor() {
+    this.initValues();
+  }
+
+
+  ngOnInit() { }
+
+  initValues() {
     forkJoin([
       this._sucursalService.getById(this._authService.sucursalId()!),
       this._numeracionService.getById(this._authService.numeracionPrefId()!),
@@ -98,7 +105,6 @@ export class VentasComponent implements OnInit {
     });
   }
 
-  ngOnInit() { }
 
   actualizarCargador() {
     forkJoin([
@@ -125,7 +131,7 @@ export class VentasComponent implements OnInit {
   buscarFormaVenta() { this.searchFormaVenta = true; }
   buscarSucursal() {
 
-      this.searchSucursal = true;
+    this.searchSucursal = true;
   }
 
   buscarListaPrecio() {
@@ -285,8 +291,22 @@ export class VentasComponent implements OnInit {
         this.detalles.push(this.inicializarDetalle(item));
         indice = this.detalles.findIndex(d => d.varianteId == item.id);
       }
+      console.log(this.cliente().excentoIva == true)
+      if (item.precio) {
+        // si el producto tiene precio
+        this.detalles[indice].importePrecio = item.precio;
+        if (this.cliente().excentoIva == true) {
+          this.detalles[indice].porcIva = 0;
+          if (this.detalles[indice].porcIva == 0) {
+            this.detalles[indice].importePrecio = item.precio;
+          } else if (this.detalles[indice].porcIva == 5) {
+            this.detalles[indice].importePrecio = item.precio - Math.round(item.precio / 21);
+          } else if (this.detalles[indice].porcIva == 10) {
+            this.detalles[indice].importePrecio = item.precio - Math.round(item.precio / 11);
+          }
+        }
+      }
       this.detalles[indice].cantidad += this.cantidad;
-      this.detalles[indice].importePrecio = item.precio;
       this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * item.precio;
       this.detalles[indice].totalKg = this.detalles[indice].cantidad * item.peso;
 
@@ -330,16 +350,22 @@ export class VentasComponent implements OnInit {
         }
       }
 
+      let porcIva = +detalle.porcIva;
+      let porcIva5 = 0;
+      let porcIva10 = 0;
+      let porcIvaExenta =0;
+      let porcNeto = 0;
       //calcular total
       detalle.importeTotal = detalle.importeSubtotal - detalle.importeDescuento;
-
-      const porcIva = +detalle.porcIva;
-      const porcIva5 = porcIva === 5 ? Math.round(detalle.importeTotal / 21) : 0;
-      const porcIva10 = porcIva === 10 ? Math.round(detalle.importeTotal / 11) : 0;
-      const porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
-      const porcNeto = detalle.importeTotal - (porcIva5 + porcIva10);
+      if (this.cliente().excentoIva == true) {
+          porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
+      } else {
+          porcIva5 = porcIva === 5 ? Math.round(detalle.importeTotal / 21) : 0;
+          porcIva10 = porcIva === 10 ? Math.round(detalle.importeTotal / 11) : 0;
+          porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
+          porcNeto = detalle.importeTotal - (porcIva5 + porcIva10);
+      }
       // Asignar los resultados
-
       detalle.importeIva5 = porcIva5;
       detalle.importeIva10 = porcIva10;
       detalle.importeIvaExenta = porcIvaExenta;
@@ -436,7 +462,7 @@ export class VentasComponent implements OnInit {
           })
           Swal.close();
           Swal.fire('Factura guardada!!!', 'factura creada con exito!!! comprobante:' + resp.nroComprobante, 'success');
-
+          this.initValues()
           this.detalles = [];
           this.factura.set({} as ModelCab);
 
@@ -456,5 +482,6 @@ export class VentasComponent implements OnInit {
   cancelar() {
     this.detalles = [];
     this.actualizarCabecera()
+    this.initValues()
   }
 }
