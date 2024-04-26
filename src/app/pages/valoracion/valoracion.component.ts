@@ -168,7 +168,7 @@ if (this.registro=='PUNTO' && this.tipo=='IMPORTE') this.valor = 'pts';
               this.valoraciones = this.valoraciones.filter((valoracion, i) => i !== index);
             },
             error: (error) => {
-              Swal.fire("Error", error.message, "error");
+              Swal.fire("Error", error, "error");
             },
           });
         } else {
@@ -218,7 +218,7 @@ if (this.registro=='PUNTO' && this.tipo=='IMPORTE') this.valor = 'pts';
               this.valoraciones = this.valoraciones.filter((valoracion) => !valoracion.isSelected);
             },
             error: (error) => {
-              Swal.fire("Error", error.message, "error");
+              Swal.fire("Error", error, "error");
             }
           });
       }
@@ -242,7 +242,7 @@ if (this.registro=='PUNTO' && this.tipo=='IMPORTE') this.valor = 'pts';
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
       });
     } else {
@@ -256,7 +256,7 @@ if (this.registro=='PUNTO' && this.tipo=='IMPORTE') this.valor = 'pts';
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
 
       });

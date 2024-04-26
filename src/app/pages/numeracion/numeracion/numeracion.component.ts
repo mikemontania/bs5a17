@@ -92,7 +92,7 @@ export class NumeracionComponent implements OnInit {
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
         complete: () => {
           this.numeracionForm = this.fb.group({});
@@ -110,7 +110,7 @@ export class NumeracionComponent implements OnInit {
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
         complete: () => {
           this.numeracionForm = this.fb.group({});

@@ -60,7 +60,8 @@ export interface Auditado {
   usuarioId:         number;
   metodo:            string;
   path:              string;
-  detalles:          string;
+  oldValue:          JSON;
+  newValue:          JSON;
   status:            string;
   mensaje:           string;
   ipCliente:         string;

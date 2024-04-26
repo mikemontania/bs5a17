@@ -87,7 +87,7 @@ export class ProductoComponent implements OnInit {
       },
       error: (error) => {
         Swal.close();
-        Swal.fire("Error", error.message, "error");
+        Swal.fire("Error", error, "error");
       },
 
     });
@@ -111,7 +111,7 @@ export class ProductoComponent implements OnInit {
       },
       error: (error) => {
         Swal.close();
-        Swal.fire("Error", error.message, "error");
+        Swal.fire("Error", error, "error");
       },
 
     });

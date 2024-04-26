@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { AuthService } from "../../auth/services/auth.service";
 import { InputDebounceComponent } from "../../components/inputDebounce/inputDebounce.component";
 import { PaginatorComponent } from "../../components/paginator/paginator.component";
-import { AuditoriaPage  } from "../../interfaces/pages.interfaces";
+import { Auditado, AuditoriaPage  } from "../../interfaces/pages.interfaces";
 import { AuditoriaService } from '../../services/auditoria.service';
 
 @Component({
@@ -23,11 +23,8 @@ export class AuditoriasComponent {
   page = signal<number>(1);
   totalPages = signal<number>(1);
   pageSize = signal<number>(15);
-
   fechaDesde = moment(new Date()).format("YYYY-MM-DD");
   fechaHasta = moment(new Date()).format("YYYY-MM-DD");
-
-
   auditados = computed(() => this.auditoriasPage().auditados ?? []);
 
   private _router = inject(Router)
@@ -94,9 +91,6 @@ export class AuditoriasComponent {
         }
       });
 
-
-
-
   }
 
 
@@ -135,12 +129,21 @@ export class AuditoriasComponent {
   }
 
 
+  mostrarModal(titulo: string, audit: Auditado) {
+    const jsonFormatted = JSON.stringify((titulo === 'Valor Anterior') ? audit.oldValue : audit.newValue, null, 2);
+    Swal.fire({
+      title: titulo,
+      html: `<pre style="text-align: left;">${jsonFormatted}</pre>`, // Alineamos el texto a la izquierda
+      icon: 'info',
+      confirmButtonText: 'Cerrar'
+    });
+  }
+
   cancelar() {
 
     try {
 
       this.searchTerm.set('');
-
       this.page.set(1);
       this.pageSize.set(10);
       this.fechaDesde = moment(new Date()).format("YYYY-MM-DD");

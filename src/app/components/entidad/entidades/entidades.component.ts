@@ -114,7 +114,7 @@ export class EntidadesComponent {
       },
       error: (error) => {
         Swal.close();
-        Swal.fire("Error", error.message, "error");
+        Swal.fire("Error", error, "error");
       },
 
     });
@@ -138,7 +138,7 @@ export class EntidadesComponent {
       },
       error: (error) => {
         Swal.close();
-        Swal.fire("Error", error.message, "error");
+        Swal.fire("Error", error, "error");
       },
 
     });

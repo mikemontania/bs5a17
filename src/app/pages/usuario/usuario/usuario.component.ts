@@ -139,7 +139,7 @@ export class UsuarioComponent implements OnInit {
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
         complete: () => {
           this.usuarioForm = this.fb.group({});
@@ -157,7 +157,7 @@ export class UsuarioComponent implements OnInit {
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
         complete: () => {
           this.usuarioForm = this.fb.group({});

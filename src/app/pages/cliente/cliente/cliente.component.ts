@@ -8,7 +8,7 @@ import { ClientesService } from '../../../services/clientes.service';
 import { ListaPrecio } from '../../../interfaces/listaPrecio.interface';
 import { FormaVenta } from '../../../interfaces/formaventa.interface';
 import Swal from 'sweetalert2';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -28,6 +28,7 @@ export class ClienteComponent implements OnInit {
   private _formaventaService = inject(FormaVentaService)
   private _clienteService = inject(ClientesService)
   private activatedRoute= inject(ActivatedRoute);
+  private router= inject(Router);
   constructor() {
     // Initialize the property in the constructor
     this.clienteForm = this.initForm()
@@ -99,11 +100,12 @@ initForm(){
         next: (resp) => {
           Swal.close()
           Swal.fire("Actualización exitosa!!!", "Se ha actualizado al cliente: " + resp.razonSocial, "success");
+          this.router.navigateByUrl('/clientes');
 
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
         complete: () => {
           this.clienteForm = this.fb.group({});
@@ -115,11 +117,12 @@ initForm(){
         next: (resp) => {
           Swal.close()
           Swal.fire("Creación exitosa!!!", "Se ha registrado el cliente " + resp.razonSocial, "success");
+          this.router.navigateByUrl('/clientes');
 
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
         complete: () => {
           this.clienteForm = this.fb.group({});

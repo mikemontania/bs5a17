@@ -96,7 +96,7 @@ export class EmpresaComponent implements OnInit {
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
         complete: () => {
           this.empresaForm = this.fb.group({});

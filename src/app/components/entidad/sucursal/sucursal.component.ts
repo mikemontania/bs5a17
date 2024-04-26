@@ -85,7 +85,7 @@ export class SucursalComponent implements OnInit {
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
         complete: () => {
           this.sucursalForm = this.fb.group({});
@@ -103,7 +103,7 @@ export class SucursalComponent implements OnInit {
         },
         error: (error) => {
           Swal.close()
-          Swal.fire("Error", error.message, "error");
+          Swal.fire("Error", error, "error");
         },
         complete: () => {
           this.sucursalForm = this.fb.group({});

@@ -77,7 +77,7 @@ export class NgClienteCreateComponent implements OnInit {
       },
       error: (error) => {
    console.error(error)
-        Swal.fire("Error", error.message, "error");
+        Swal.fire("Error", error, "error");
       },
       complete: () => {
         this.clienteForm = this.fb.group({});

@@ -157,7 +157,7 @@
                 <td  class="text-sm">{{ venta.importeTotal | number }} Gs</td>
                 <td  class="text-sm">{{ venta.anulado }}</td>
                 <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(venta.id)"
+                  <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(venta.id)"[disabled]="venta.anulado"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Anular ventas"   >

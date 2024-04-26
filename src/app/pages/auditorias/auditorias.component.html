@@ -54,9 +54,8 @@
                 <th scope="col">PATH</th>
                 <th scope="col">STATUS</th>
                 <th scope="col">MENSAJE</th>
-<!--
-                <th scope="col">DEL</th> -->
-
+                <th scope="col">V.ANTERIOR</th>
+                <th scope="col">V.NUEVO</th>
 
               </tr>
             </thead>
@@ -75,16 +74,19 @@
                 <td  class="text-sm">{{ auditado.status }}</td>
                 <td  class="text-sm">{{ auditado.mensaje  }}  </td>
 
-            <!--     <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-danger text-danger"(click)="delete(auditado.id)"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="quita auditados"   >
-                    <i class="bi bi-trash-x"></i>
+            <td  class="text-sm">
+
+                  <button *ngIf="auditado.oldValue" class="btn btn-sm btn-outline-info text-info" (click)="mostrarModal('Valor Anterior', auditado)">
+                    <i class="bi bi-arrow-left"></i>
                   </button>
+            </td>
+            <td  class="text-sm">
+              <button class="btn btn-sm btn-outline-success text-success" [disabled]="!auditado.newValue" (click)="mostrarModal('Valor Nuevo', auditado)">
+                <i class="bi bi-arrow-right"></i>
+              </button>
                 </td>
 
- -->
+
               </tr>
               } @empty {
               <tr></tr>
