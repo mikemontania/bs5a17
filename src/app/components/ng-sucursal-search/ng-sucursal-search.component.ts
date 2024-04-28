@@ -10,6 +10,7 @@ import {
 import { InputDebounceComponent } from "../inputDebounce/inputDebounce.component";
 import { Sucursal } from "../../interfaces/sucursal.interface";
 import { SucursalService } from "../../services/service.index";
+import { AuthService } from "../../auth/services/auth.service";
 @Component({
   selector: "app-sucursal-search",
   standalone: true,
@@ -27,7 +28,7 @@ export class NgSucursalSearchComponent implements OnInit {
   sucursales: Sucursal[] = [];
   sucursalesAux: Sucursal[] = [];
   _sucursalesService = inject(SucursalService);
-
+  _authService = inject(AuthService);
   ngOnInit(): void {
     this.sucursales = [];
 
@@ -46,7 +47,10 @@ export class NgSucursalSearchComponent implements OnInit {
   }
 
   buscar(termino: string) {
-      this._sucursalesService.findAll().subscribe(resp=> this.sucursalesAux=resp);
+      this._sucursalesService.findAll().subscribe(resp=> {
+        this.sucursalesAux=resp;
+       ( this._authService.currentUser()?.rol == 'admin' )? this.sucursalesAux.push({descripcion:'TODAS LAS SUCURSALES',id:0} as Sucursal):null;
+      });
     console.log("sucursales aux", this.sucursalesAux);
 
     if (termino) {

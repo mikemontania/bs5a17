@@ -294,20 +294,22 @@ export class VentasComponent implements OnInit {
       console.log(this.cliente().excentoIva == true)
       if (item.precio) {
         // si el producto tiene precio
-        this.detalles[indice].importePrecio = item.precio;
         if (this.cliente().excentoIva == true) {
           this.detalles[indice].porcIva = 0;
-          if (this.detalles[indice].porcIva == 0) {
+          if (+item.porcIva == 0) {
             this.detalles[indice].importePrecio = item.precio;
-          } else if (this.detalles[indice].porcIva == 5) {
+          } else if (+item.porcIva == 5) {
             this.detalles[indice].importePrecio = item.precio - Math.round(item.precio / 21);
-          } else if (this.detalles[indice].porcIva == 10) {
+          } else if (+item.porcIva == 10) {
             this.detalles[indice].importePrecio = item.precio - Math.round(item.precio / 11);
           }
+        }else{
+          this.detalles[indice].importePrecio = item.precio;
+
         }
       }
       this.detalles[indice].cantidad += this.cantidad;
-      this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * item.precio;
+      this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad *  this.detalles[indice].importePrecio;
       this.detalles[indice].totalKg = this.detalles[indice].cantidad * item.peso;
 
       // Calcular descuento
