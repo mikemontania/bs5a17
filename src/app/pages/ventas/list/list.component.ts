@@ -19,6 +19,9 @@ import { ReportesService } from '../../../services/reportes.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
+import { SucursalService } from '../../../services/sucursal.service';
+import { ListaPrecioService } from '../../../services/service.index';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-list',
@@ -35,47 +38,69 @@ export class ListComponent {
   totalPages = signal<number>(1);
   pageSize = signal<number>(15);
   cliente = signal<Cliente | null>(null);
-  sucursal = signal<Sucursal | null>(null);
-  listaPrecio = signal<ListaPrecio | null>(null);
-  formaVenta = signal<FormaVenta | null>(null);
   fechaDesde = moment(new Date()).format("YYYY-MM-DD");
   fechaHasta = moment(new Date()).format("YYYY-MM-DD");
-
+  role: string = '';
+  sucursalSeleccionada: number = 0;
+  listaSeleccionada: number = 1;
   searchCliente = false;
   searchSucursal = false;
-  searchListaPrecio = false;
-  searchFormaVenta = false;
-
+  sucursales: Sucursal[] = [];
+  listas: ListaPrecio[] = [];
+  listaPrecio:ListaPrecio ={}as ListaPrecio;
   ventas = computed(() => this.ventasPage().ventas ?? []);
   clienteId = computed(() => this.cliente()?.id ?? 0);
-  sucursalId = computed(() => this.sucursal()?.id ?? this._authService.currentUser()!.sucursalId);
-  formaVentaId = computed(() => this.formaVenta()?.id ?? 0);
-  listaPrecioId = computed(() => this.listaPrecio()?.id ?? 0);
+
   private _router = inject(Router)
   _ventasService = inject(VentasService);
+  _sucursalesService = inject(SucursalService);
+  _listasPrecioService = inject(ListaPrecioService);
   _reportService = inject(ReportesService)
   _authService = inject(AuthService)
-  constructor() {
-    const storedSearchData = localStorage.getItem('searchData');
+  constructor( ) {
+    const storedSearchData = localStorage.getItem('searchDataVenta');
 
-    if (storedSearchData) {
-      try {
-        const parsedData = JSON.parse(storedSearchData);
-        this.searchComprobante.set(parsedData.searchComprobante);
-        this.cliente.set(parsedData.cliente);
-        this.sucursal.set(parsedData.sucursal);
-        this.listaPrecio.set(parsedData.listaPrecio);
-        this.formaVenta.set(parsedData.formaVenta);
-        this.page.set(parsedData.page);
-        this.pageSize.set(parsedData.pageSize);
-        this.fechaDesde = parsedData.fechaDesde;
-        this.fechaHasta = parsedData.fechaHasta;
-      } catch (error) {
-        console.error('Error parsing stored search data:', error);
+    // Realizar las dos solicitudes HTTP simultáneamente
+    forkJoin({
+      sucursales: this._sucursalesService.findAll(),
+      listas: this._listasPrecioService.findAll(),
+      predeterminada: this._listasPrecioService.findPredeterminado()
+    }).subscribe({
+      next: (results) => {
+        // Procesar los resultados
+        this.sucursales = results.sucursales;
+        this.listas = results.listas;
+        this.listaPrecio=results.predeterminada;
+        this.listaSeleccionada = results.predeterminada.id;
+        // Resto del código para manejar los datos almacenados, si es necesario
+        if (storedSearchData) {
+          try {
+            const parsedData = JSON.parse(storedSearchData);
+            this.searchComprobante.set(parsedData.searchComprobante);
+            this.cliente.set(parsedData.cliente);
+            this.sucursalSeleccionada = parsedData.sucursalId;
+            this.listaSeleccionada = parsedData.listaPrecioId;
+            this.page.set(parsedData.page);
+            this.pageSize.set(parsedData.pageSize);
+            this.fechaDesde = parsedData.fechaDesde;
+            this.fechaHasta = parsedData.fechaHasta;
+          } catch (error) {
+            console.error('Error parsing stored search data:', error);
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching data:', err);
       }
-    }
+    });
   }
   ngOnInit() {
+    this.role = this._authService.currentUser()!.rol;
+    if (this.role =='admin') {
+      this.sucursalSeleccionada =0;
+    }else{
+      this.sucursalSeleccionada = this._authService.currentUser()!.sucursalId;
+    }
     this.buscar();
   }
   buscar() {
@@ -95,12 +120,11 @@ export class ListComponent {
     }
     this.page.set(page);
 
-    localStorage.setItem('searchData', JSON.stringify({
+    localStorage.setItem('searchDataVenta', JSON.stringify({
       searchComprobante: this.searchComprobante(),
       cliente: this.cliente(),
-      sucursal: this.sucursal(),
-      listaPrecio: this.listaPrecio(),
-      formaVenta: this.formaVenta(),
+      sucursalId: this.sucursalSeleccionada,
+      listaPrecioId: this.listaSeleccionada,
       page: this.page(),
       pageSize: this.pageSize(),
       fechaDesde: this.fechaDesde,
@@ -108,7 +132,7 @@ export class ListComponent {
     }));
 
     this._ventasService
-      .search(this.page(), this.pageSize(), this.fechaDesde, this.fechaHasta, this.clienteId(), this.sucursalId(), this.formaVentaId(), this.listaPrecioId(), this.searchComprobante())
+      .search(this.page(), this.pageSize(), this.fechaDesde, this.fechaHasta, this.clienteId(), this.sucursalSeleccionada,  1, this.listaSeleccionada, this.searchComprobante())
       .subscribe({
         next: (resp) => {
           this.ventasPage.set(resp);
@@ -127,9 +151,7 @@ export class ListComponent {
   }
   buscarCliente() { this.searchCliente = true; }
 
-  buscarFormaVenta() { this.searchFormaVenta = true; }
   buscarSucursal() { this.searchSucursal = true }
-  buscarListaPrecio() { this.searchListaPrecio = true }
 
   onPageChanged(newPage: number) {
     this.getPage(newPage);
@@ -141,24 +163,6 @@ export class ListComponent {
 
   }
 
-  selectSucursal(sucursal: Sucursal) {
-    console.log("Selected sucursal:", sucursal);
-    this.sucursal.set(sucursal); // Update the client signal
-    this.searchSucursal = false; // Close the modal
-
-  }
-
-  selectFormaVenta(formaVenta: FormaVenta) {
-    console.log("Selected formaVenta:", formaVenta);
-    this.formaVenta.set(formaVenta); // Update the client signal
-    this.searchFormaVenta = false; // Close the modal
-  }
-  selectListaPrecio(listaPrecio: ListaPrecio) {
-    console.log("Selected listaPrecio:", listaPrecio);
-    this.listaPrecio.set(listaPrecio); // Update the client signal
-    this.searchListaPrecio = false; // Close the modal
-
-  }
 
 
   verDetalles(ventaId: number) {
@@ -208,9 +212,12 @@ export class ListComponent {
 
       this.searchComprobante.set('');
       this.cliente.set({} as Cliente);
-      this.sucursal.set({} as Sucursal);
-      this.listaPrecio.set({} as ListaPrecio);
-      this.formaVenta.set({} as FormaVenta);
+      if (this.role =='admin') {
+        this.sucursalSeleccionada =0;
+      }else{
+        this.sucursalSeleccionada = this._authService.currentUser()!.sucursalId;
+      }
+      this.listaSeleccionada=this.listaPrecio.id;
       this.page.set(1);
       this.pageSize.set(10);
       this.fechaDesde = moment(new Date()).format("YYYY-MM-DD");

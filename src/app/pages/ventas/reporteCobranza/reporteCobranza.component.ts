@@ -45,7 +45,7 @@ export class ReporteCobranzaComponent {
   _reporteService = inject(ReportesService);
   _authService = inject(AuthService);
   constructor() {
-    const storedSearchDatacobranza = localStorage.getItem('searchData');
+    const storedSearchDatacobranza = localStorage.getItem('searchDataCobranza');
 
     if (storedSearchDatacobranza) {
       try {
@@ -76,7 +76,7 @@ export class ReporteCobranzaComponent {
     }
 
 
-    localStorage.setItem('searchData', JSON.stringify({
+    localStorage.setItem('searchDataCobranza', JSON.stringify({
       medioPago: this.medioPago(),
       sucursal: this.sucursal(),
       fechaDesde: this.fechaDesde,

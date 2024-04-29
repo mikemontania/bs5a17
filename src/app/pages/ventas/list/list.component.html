@@ -24,8 +24,11 @@
       <span (click)="buscarCliente()" class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
         @if(cliente()?.id) {
           <span class="client-info">
-            <small>{{ cliente()?.razonSocial }}-{{ cliente()?.nroDocumento }}</small>
+            Cliente:
           </span>
+
+             <small>{{ cliente()?.razonSocial }}-{{ cliente()?.nroDocumento }}</small>
+
         } @else {
           <span class="client-info"><small>Buscar Cliente ...</small></span>
         }
@@ -36,53 +39,51 @@
     </div>
 
     <!-- Sucursal Input -->
-    <div class="input-group mb-3 w-50 d-flex selector" *ngIf="_authService.currentUser()?.rol != 'vendedor'">
-      <span (click)="buscarSucursal()" class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
-        @if(sucursal()?.id) {
-          <span class="client-info">
-            <small>{{ sucursal()?.descripcion }}</small>
-          </span>
-        } @else {
-          <span class="client-info"><small>Buscar Sucursal ...</small></span>
-        }
-        <span class="dropdown-icon">
-          <i class="mh-1 fa-solid fa-sort-down"></i>
-        </span>
-      </span>
+
+
+    <div class="input-group mb-3 w-50 d-flex selector">
+
+      <div class="input-group d-flex">
+
+        <span class="input-group-text">Sucursal</span>
+        <select
+        [disabled]="role == 'vendedor'"
+        class="form-control form-control-sm"
+        [(ngModel)]="sucursalSeleccionada"
+        name="sucursalSeleccionada"
+        id="sucursal"
+      >
+        <option [value]="0">TODAS LAS SUCURSALES</option>
+        <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
+          {{ sucursal.descripcion }}
+        </option>
+      </select>
+      </div>
     </div>
 
 
-       <!-- Sucursal Input -->
+       <!-- lista Precio Input -->
        <div class="input-group mb-3 w-50 d-flex selector">
-        <span (click)="buscarListaPrecio()" class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
-          @if(listaPrecio()?.id) {
-            <span class="client-info">
-              <small>{{ listaPrecio()?.descripcion }}</small>
-            </span>
-          } @else {
-            <span class="client-info"><small>Buscar listaPrecio ...</small></span>
-          }
-          <span class="dropdown-icon">
-            <i class="mh-1 fa-solid fa-sort-down"></i>
-          </span>
-        </span>
+
+        <div class="input-group d-flex">
+
+          <span class="input-group-text">Lista Precio</span>
+          <select
+
+          class="form-control form-control-sm"
+          [(ngModel)]="listaSeleccionada"
+          name="listaSeleccionada"
+          id="listaPrecio"
+        >
+
+          <option *ngFor="let lista of listas" [value]="lista.id">
+            {{ lista.descripcion }}
+          </option>
+        </select>
+        </div>
       </div>
 
-    <!-- Forma de Venta Input -->
-    <div class="input-group mb-3 p w-50 d-flex selector">
-      <span (click)="buscarFormaVenta()" class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
-        @if(formaVenta()?.id) {
-          <span class="client-info">
-            Forma venta: <small>{{ formaVenta()?.descripcion }}</small>
-          </span>
-        } @else {
-          <span class="client-info"><small>Buscar Forma Venta ...</small></span>
-        }
-        <span class="dropdown-icon">
-          <i class="mh-1 fa-solid fa-sort-down"></i>
-        </span>
-      </span>
-    </div>
+
 
     <!-- Search and Cancel Buttons -->
     <div class="card mb-3 w-50 d-flex selector">
@@ -155,7 +156,7 @@
                   </div>
                  </td>
                 <td  class="text-sm">{{ venta.importeTotal | number }} Gs</td>
-                <td  class="text-sm">{{ venta.anulado }}</td>
+                <td  class="text-sm">{{ (venta.anulado )?'SI':'NO' }}</td>
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(venta.id)"[disabled]="venta.anulado"
                   data-bs-toggle="tooltip"
@@ -216,22 +217,4 @@
   (closeModal)="searchCliente = false"
 ></app-cliente-search>
 
-} @if(searchSucursal ) {
-<app-sucursal-search
-  [isOpen]="searchSucursal"
-  (sucursal)="selectSucursal($event)"
-  (closeModal)="searchSucursal = false"
-></app-sucursal-search>
-} @if(searchListaPrecio ) {
-<app-lista-precio-search
-  [isOpen]="searchListaPrecio"
-  (listaPrecio)="selectListaPrecio($event)"
-  (closeModal)="searchListaPrecio = false"
-></app-lista-precio-search>
-} @if(searchFormaVenta ) {
-<app-forma-venta-search
-  [isOpen]="searchFormaVenta"
-  (formaVenta)="selectFormaVenta($event)"
-  (closeModal)="searchFormaVenta = false"
-></app-forma-venta-search>
 }

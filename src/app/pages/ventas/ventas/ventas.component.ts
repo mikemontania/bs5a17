@@ -178,7 +178,7 @@ export class VentasComponent implements OnInit {
     this.cliente.set(cliente); // Update the client signal
     this.searchCliente = false; // Close the modal
     this.actualizarCargador()
-
+this.refresh()
   }
 
   selectSucursal(sucursal: Sucursal) {

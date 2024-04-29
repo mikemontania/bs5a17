@@ -40,7 +40,7 @@ export class DashbardComponent implements OnInit {
   cargadoVendedores: boolean = false;
   role: string = '';
 
-  sucursalSeleccionada: number = 1; // Valor predeterminado
+  sucursalSeleccionada: number = 0; // Valor predeterminado
   sucursales: Sucursal[] = [];
   legendTitle: string = '';
   dashTema = 'night';
