@@ -111,17 +111,18 @@
       class="table-header mb-1 d-flex justify-content-between align-items-center"
     >
       <div class="btn-group">
-        <button class="btn btn-outline-danger" (click)="removeSelectedRows()">
+        <button class="btn btn-outline-danger" (click)="removeSelectedRows()"  *ngIf="hayRegistrosSeleccionados()">
           Eliminar Selección <i class="bi bi-trash"></i>
         </button>
         <button class="btn btn-outline-info" (click)="addRow()">
           Agregar Fila <i class="bi bi-file-earmark-plus"></i>
         </button>
-        <button class="btn btn-outline-info" (click)="cloneSelectedRows()" *ngIf="hayRegistrosSeleccionados()">
+        <button class="btn btn-outline-info" (click)="openModal('CLONAR')" *ngIf="hayRegistrosSeleccionados()">
           Clonar Filas <i class="bi bi-copy"></i
           ><i class="bi bi-list-check"></i>
         </button>
-        <button class="btn btn-outline-info" (click)="openModal()" *ngIf="hayRegistrosSeleccionados()">
+
+        <button class="btn btn-outline-info" (click)="openModal('MODIFICAR')" *ngIf="hayRegistrosSeleccionados()">
           Modificar<i class="bi bi-copy"></i><i class="bi bi-pencil"></i>
         </button>
       </div>
@@ -627,6 +628,6 @@
 
 
     <!-- Botón de Enviar -->
-    <button type="submit" class="btn btn-primary">Modificar</button>
+    <button type="submit" class="btn btn-primary">Ejecutar valores</button>
   </form>
 </app-ng-modal>

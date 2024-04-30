@@ -39,6 +39,7 @@ export class ValoracionComponent implements OnInit {
   selectAllCheckbox: boolean = false;
   valor = '';
   modalUpdateOpen = false;
+  modoModal = '';
   key: string = '';       // Columna actualmente ordenada
   reverse: boolean = false;  // Dirección de la ordenación
   filterText: string = '';   // Texto de filtro
@@ -97,7 +98,7 @@ export class ValoracionComponent implements OnInit {
 
     })
   }
-  openModal() {
+  openModal(tipo: string) {
     this.fechaDesdeM = moment(new Date()).format("YYYY-MM-DD");
     this.fechaHastaM = moment(new Date()).format("YYYY-MM-DD");
     this.cantDesdeM = 1;
@@ -107,33 +108,100 @@ export class ValoracionComponent implements OnInit {
     this.listaPrecioIdM = 1;
     this.activoM = true;
     this.modalUpdateOpen = true;
+    this.modoModal = tipo;
   }
 
   closeModal() {
+    this.modoModal = '';
     this.modalUpdateOpen = false;
   }
 
   submitForm() {
-    this.closeModal();
-    Swal.fire({
-      title: 'Espere por favor...',
-      allowOutsideClick: false,
-      icon: 'info',
-    });
-    Swal.showLoading();
-    const selectedRows = this.valoraciones.filter((valoracion) => valoracion.isSelected);
-    // Iterar sobre cada fila seleccionada de manera secuencial
-    this.modifySelectedRowsSequentially(selectedRows)
-      .then(() => {
-        // Acciones a realizar después de modificar todas las filas seleccionadas
-        this.desmarcar();
-        this.buscar();
-        Swal.close()
-      })
-      .catch((error) => {
-        console.error(error);
-        Swal.close()
+    console.log(this.modoModal)
+
+    console.log('1')
+    if (this.modoModal === 'MODIFICAR') {
+      this.closeModal();
+      Swal.fire({
+        title: 'Espere por favor...',
+        allowOutsideClick: false,
+        icon: 'info',
       });
+      Swal.showLoading();
+      const selectedRows = this.valoraciones.filter((valoracion) => valoracion.isSelected);
+      // Iterar sobre cada fila seleccionada de manera secuencial
+      this.modifySelectedRowsSequentially(selectedRows)
+        .then(() => {
+          // Acciones a realizar después de modificar todas las filas seleccionadas
+          this.desmarcar();
+          this.buscar();
+          Swal.close()
+          Swal.fire("Modificacion exitosa!!!", "Registro actualizados correctamente", "success");
+
+        })
+        .catch((error) => {
+          console.error(error);
+          Swal.close()
+        });
+    } else if (this.modoModal === 'CLONAR') {
+      this.closeModal();
+      Swal.fire({
+        title: 'Espere por favor...',
+        allowOutsideClick: false,
+        icon: 'info',
+      });
+      Swal.showLoading();
+      const selectedRows = this.valoraciones.filter((valoracion) => valoracion.isSelected);
+      if (selectedRows.length > 0) {
+        const clonedRows: Valoracion[] = selectedRows.map((row) => ({
+          ...row,
+          cantDesde: this.camposActivos['cantDesde'] ? this.cantDesdeM : +row.cantDesde,
+          cantHasta: this.camposActivos['cantHasta'] ? this.cantHastaM : +row.cantHasta,
+          fechaDesde: this.camposActivos['fechaDesde'] ? this.fechaDesdeM : row.fechaDesde,
+          fechaHasta: this.camposActivos['fechaHasta'] ? this.fechaHastaM : row.fechaHasta,
+          valor: this.camposActivos['valor'] ? this.valorM : +row.valor,
+          listaPrecioId: this.camposActivos['listaPrecio'] ? this.listaPrecioIdM : +row.listaPrecioId,
+          sucursalId: this.camposActivos['sucursal'] ? this.sucursalIdM : +row.sucursalId,
+          activo: this.camposActivos['activo'] ? this.activoM : row.activo,
+/*           listaPrecio:this.listasPrecio[(this.camposActivos['listaPrecio']) ? +this.listaPrecioIdM : +row.listaPrecioId],
+          sucursal:this.sucursales[(this.camposActivos['sucursal'] )? +this.sucursalIdM : +row.sucursalId], */
+          id: null,
+
+        }));
+
+        // Iterar sobre cada fila seleccionada de manera secuencial
+        this.createSelectedRowsSequentially(clonedRows)
+          .then(() => {
+            // Acciones a realizar después de modificar todas las filas seleccionadas
+            this.desmarcar();
+
+            Swal.close()
+            Swal.fire("Creación exitosa!!!", "Nuevos registro se han agregado a la bd", "success");
+          })
+          .catch((error) => {
+            console.error(error);
+            Swal.close()
+          });
+      } else {
+        console.log(this.modoModal)
+      }
+
+    }
+
+
+
+  }
+  // Función para crear cada fila seleccionada de manera secuencial
+  async createSelectedRowsSequentially(selectedRows: any[]) {
+    for (const valoracion of selectedRows) {
+      try {
+
+        // Modificar la fila actual
+        await this.createRow({ ...valoracion });
+      } catch (error) {
+        console.error(`Error al crear la fila  `, error);
+      }
+    }
   }
   // Función para modificar cada fila seleccionada de manera secuencial
   async modifySelectedRowsSequentially(selectedRows: any[]) {
@@ -175,6 +243,26 @@ export class ValoracionComponent implements OnInit {
         });
     });
   }
+  // Función para modificar una fila individualmente
+  createRow(valoracion: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      // Realizar la solicitud de modificación para la fila actual
+      this._valoracionService.create(valoracion)
+        .subscribe({
+          next: (resp) => {
+            console.log()
+          /*   this.valoraciones = [
+              ...this.valoraciones,{...valoracion,id:resp.id},
+            ]; */
+            // Acciones después de modificar la fila actual (opcional)
+            resolve(resp); // Resuelve la promesa para pasar a la siguiente fila
+          },
+          error: (error) => {
+            reject(error); // Rechaza la promesa si hay un error
+          }
+        });
+    });
+  }
 
   toggleCampoActivo(campo: string) {
     this.camposActivos[campo] = !this.camposActivos[campo];
@@ -202,7 +290,7 @@ export class ValoracionComponent implements OnInit {
     if (id) {
       return this.sucursales.find(suc => suc.id == id)?.descripcion;
     }
-    return 'Todas'
+    return 'TODAS LAS SUCURSALES'
   }
   cargarValoraciones(valoraciones: any[]) {
     this.valoraciones = valoraciones.map(valoracion => ({
@@ -381,31 +469,7 @@ export class ValoracionComponent implements OnInit {
   }
 
 
-  cloneSelectedRows() {
-    const selectedRows = this.valoraciones.filter((valoracion) => valoracion.isSelected);
-    if (selectedRows.length > 0) {
-      const firstSelectedIndex = this.valoraciones.indexOf(selectedRows[0]);
-      const clonedRows: Valoracion[] = selectedRows.map((row) => ({
-        ...row,
-        valor: +row.valor,
-        cantDesde: +row.cantDesde,
-        cantHasta: +row.cantHasta,
-        id: null,
-        isSelected: false,
-        isEdit: true
-      }));
 
-      // Insertar las filas clonadas al principio del array
-      this.valoraciones = [
-        ...clonedRows,
-        ...this.valoraciones
-      ];
-
-      // Desmarcar todas las filas después de clonarlas
-      this.desmarcar()
-    }
-
-  }
 
   selectAll(event: any) {
     console.log(event)
