@@ -17,16 +17,7 @@ import { Valoracion } from '../../interfaces/valoracion.interface';
 import { Variante } from '../../interfaces/facturas.interface';
 import { Cliente } from '../../interfaces/clientes.interface';
 import { NgModalComponent } from '../../components/ng-modal/ng-modal.component';
-export interface Modif {
-  fechaDesde: string | null,
-  fechaHasta: string | null,
-  valor: number | null,
-  sucursalId: number | null,
-  listaPrecioId: number | null,
-  cantDesde: number | null,
-  cantHasta: number | null,
-  ids: number[] | null,
-}
+
 @Component({
   selector: 'app-valoracion',
   standalone: true,
@@ -47,21 +38,22 @@ export class ValoracionComponent implements OnInit {
   listaPrecioId: number = 1;
   selectAllCheckbox: boolean = false;
   valor = '';
-  modalOpen = false;
+  modalUpdateOpen = false;
   key: string = '';       // Columna actualmente ordenada
   reverse: boolean = false;  // Dirección de la ordenación
   filterText: string = '';   // Texto de filtro
 
   // Variables para activar/desactivar campos
-  activarFechaDesde: boolean = false;
-  activarFechaHasta: boolean = false;
-  activarValor: boolean = false;
-  activarCantDesde: boolean = false;
-  activarCantHasta: boolean = false;
-  activarSucursal: boolean = false;
-  activarListaPrecio: boolean = false;
-  activarDesde: boolean = false;
-  activarHasta: boolean = false;
+  camposActivos: any = {
+    fechaDesde: false,
+    fechaHasta: false,
+    valor: false,
+    cantDesde: false,
+    cantHasta: false,
+    sucursal: false,
+    listaPrecio: false,
+    activo: false
+  };
 
   // Otras variables del formulario
   fechaDesdeM: string = moment(new Date()).format("YYYY-MM-DD");
@@ -71,16 +63,8 @@ export class ValoracionComponent implements OnInit {
   valorM: number = 1;
   sucursalIdM: number = 1;
   listaPrecioIdM: number = 1;
-  body: Modif = {
-    fechaDesde: null,
-    fechaHasta: null,
-    valor: null,
-    sucursalId: null,
-    listaPrecioId: null,
-    cantDesde: null,
-    cantHasta: null,
-    ids: null,
-  }
+  activoM: boolean = true;
+
 
 
   private _router = inject(Router)
@@ -121,11 +105,12 @@ export class ValoracionComponent implements OnInit {
     this.valorM = 1;
     this.sucursalIdM = 0;
     this.listaPrecioIdM = 1;
-    this.modalOpen = true;
+    this.activoM = true;
+    this.modalUpdateOpen = true;
   }
 
   closeModal() {
-    this.modalOpen = false;
+    this.modalUpdateOpen = false;
   }
 
   submitForm() {
@@ -137,99 +122,75 @@ export class ValoracionComponent implements OnInit {
     });
     Swal.showLoading();
     const selectedRows = this.valoraciones.filter((valoracion) => valoracion.isSelected);
-   // Iterar sobre cada fila seleccionada de manera secuencial
-  this.modifySelectedRowsSequentially(selectedRows)
-  .then(() => {
-    // Acciones a realizar después de modificar todas las filas seleccionadas
-    this.desmarcar();
-    this.buscar();
-    Swal.close()
-  })
-  .catch((error) => {
-    console.error(error);
-    Swal.close()
-  });
+    // Iterar sobre cada fila seleccionada de manera secuencial
+    this.modifySelectedRowsSequentially(selectedRows)
+      .then(() => {
+        // Acciones a realizar después de modificar todas las filas seleccionadas
+        this.desmarcar();
+        this.buscar();
+        Swal.close()
+      })
+      .catch((error) => {
+        console.error(error);
+        Swal.close()
+      });
   }
-// Función para modificar cada fila seleccionada de manera secuencial
-async modifySelectedRowsSequentially(selectedRows: any[]) {
-  for (const valoracion of selectedRows) {
-    try {
-      const updatedValoracion = {
-        ...valoracion,
-        cantDesde: this.activarCantDesde ? this.cantDesdeM : valoracion.cantDesde,
-        cantHasta: this.activarCantHasta ? this.cantHastaM : valoracion.cantHasta,
-        fechaDesde: this.activarFechaDesde ? this.fechaDesdeM : valoracion.fechaDesde,
-        fechaHasta: this.activarFechaHasta ? this.fechaHastaM : valoracion.fechaHasta,
-        valor: this.activarValor ? this.valorM : valoracion.valor,
-        listaPrecioId: this.activarListaPrecio ? this.listaPrecioIdM : valoracion.listaPrecioId,
-        sucursalId: this.activarSucursal ? this.sucursalIdM : valoracion.sucursalId
-      };
-      // Modificar la fila actual
-      await this.modifyRow({...updatedValoracion});
-    } catch (error) {
-      console.error(`Error al modificar la fila con ID ${valoracion.id}:`, error);
-      // Puedes manejar el error aquí, como registrar el error o mostrar un mensaje al usuario
+  // Función para modificar cada fila seleccionada de manera secuencial
+  async modifySelectedRowsSequentially(selectedRows: any[]) {
+    for (const valoracion of selectedRows) {
+      try {
+        const updatedValoracion = {
+          ...valoracion,
+          cantDesde: this.camposActivos['cantDesde'] ? this.cantDesdeM : valoracion.cantDesde,
+          cantHasta: this.camposActivos['cantHasta'] ? this.cantHastaM : valoracion.cantHasta,
+          fechaDesde: this.camposActivos['fechaDesde'] ? this.fechaDesdeM : valoracion.fechaDesde,
+          fechaHasta: this.camposActivos['fechaHasta'] ? this.fechaHastaM : valoracion.fechaHasta,
+          valor: this.camposActivos['valor'] ? this.valorM : valoracion.valor,
+          listaPrecioId: this.camposActivos['listaPrecio'] ? this.listaPrecioIdM : valoracion.listaPrecioId,
+          sucursalId: this.camposActivos['sucursal'] ? this.sucursalIdM : valoracion.sucursalId,
+          activo: this.camposActivos['activo'] ? this.activoM : valoracion.activo
+        };
+        // Modificar la fila actual
+        await this.modifyRow({ ...updatedValoracion });
+      } catch (error) {
+        console.error(`Error al modificar la fila con ID ${valoracion.id}:`, error);
+        // Puedes manejar el error aquí, como registrar el error o mostrar un mensaje al usuario
+      }
     }
   }
-}
 
-// Función para modificar una fila individualmente
-modifyRow(valoracion: any): Promise<any> {
-  return new Promise((resolve, reject) => {
-    // Realizar la solicitud de modificación para la fila actual
-    this._valoracionService.update(valoracion)
-      .subscribe({
-        next: (resp) => {
-          // Acciones después de modificar la fila actual (opcional)
-          resolve(resp); // Resuelve la promesa para pasar a la siguiente fila
-        },
-        error: (error) => {
-          reject(error); // Rechaza la promesa si hay un error
-        }
-      });
-  });
-}
-
-  toggleFechaDesde() {
-    this.activarFechaDesde = !this.activarFechaDesde;
+  // Función para modificar una fila individualmente
+  modifyRow(valoracion: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      // Realizar la solicitud de modificación para la fila actual
+      this._valoracionService.update(valoracion)
+        .subscribe({
+          next: (resp) => {
+            // Acciones después de modificar la fila actual (opcional)
+            resolve(resp); // Resuelve la promesa para pasar a la siguiente fila
+          },
+          error: (error) => {
+            reject(error); // Rechaza la promesa si hay un error
+          }
+        });
+    });
   }
 
-  toggleFechaHasta() {
-    this.activarFechaHasta = !this.activarFechaHasta;
+  toggleCampoActivo(campo: string) {
+    this.camposActivos[campo] = !this.camposActivos[campo];
   }
 
-  toggleValor() {
-    this.activarValor = !this.activarValor;
-  }
-
-  toggleCantDesde() {
-    this.activarDesde = !this.activarDesde;
-  }
-
-  toggleCantHasta() {
-    this.activarHasta = !this.activarHasta;
-  }
-
-  toggleSucursal() {
-    this.activarSucursal = !this.activarSucursal;
-  }
-
-  toggleListaPrecio() {
-    this.activarListaPrecio = !this.activarListaPrecio;
-  }
   initList() {
     forkJoin([
       this._listaPrecioService.findAll(),
       this._sucursalService.findAll(),
       this._varianteService.findAllDescripcion(),
-
     ]).subscribe(([listas, sucursales, variantes]) => {
       this.listasPrecio = listas;
       this.sucursales = sucursales;
-      this.sucursales.push({ id: 0, descripcion: 'Todas' })
+      this.sucursales.push({ id: 0, descripcion: 'TODAS LAS SUCURSALES' })
       this.variantes = variantes.resultados;
     });
-
   }
   seleccionaVariante(valoracion: any, event: any) {
     valoracion.varianteId = event?.id;
@@ -363,7 +324,6 @@ modifyRow(valoracion: any): Promise<any> {
             next: (resp) => {
               // Eliminar las filas con ID del array
               this.valoraciones = this.valoraciones.filter((valoracion) => !valoracion.isSelected && valoracion.id !== null);
-
               // Quitar las filas sin ID del array
               this.valoraciones = this.valoraciones.filter((valoracion) => !valoracion.isSelected);
             },
@@ -411,8 +371,6 @@ modifyRow(valoracion: any): Promise<any> {
 
       });
     }
-
-
   }
 
   isAllSelected() {
@@ -444,7 +402,7 @@ modifyRow(valoracion: any): Promise<any> {
       ];
 
       // Desmarcar todas las filas después de clonarlas
- this.desmarcar()
+      this.desmarcar()
     }
 
   }
@@ -459,17 +417,16 @@ modifyRow(valoracion: any): Promise<any> {
     }));
   }
 
-  desmarcar(){
+  desmarcar() {
     this.valoraciones.forEach((valoracion) => {
       valoracion.isSelected = false;
     });
-    this.selectAllCheckbox =false;
+    this.selectAllCheckbox = false;
   }
 
   cancelar() {
     this.valoraciones = [];
     this.ngOnInit()
-
   }
 
   sort(key: string): void {
@@ -518,10 +475,8 @@ modifyRow(valoracion: any): Promise<any> {
         item.fechaDesde.toLowerCase().includes(this.filterText.toLowerCase()) ||
         item.fechaHasta.toLowerCase().includes(this.filterText.toLowerCase()) ||
         item.fechaHasta.toLowerCase().includes(this.filterText.toLowerCase()) ||
-
         item.valoracion?.cliente?.nroDocumento.toLowerCase().includes(this.filterText.toLowerCase()) ||
         item.valoracion?.cliente?.razonSocial.toLowerCase().includes(this.filterText.toLowerCase()) ||
-
         item.sucursal?.descripcion.toLowerCase().includes(this.filterText.toLowerCase()) ||
         item.listaPrecio?.descripcion.toLowerCase().includes(this.filterText.toLowerCase()) ||
         item.valoracion?.erp.toLowerCase().includes(this.filterText.toLowerCase()) ||

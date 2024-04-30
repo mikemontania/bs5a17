@@ -457,9 +457,9 @@
   </div>
 </div>
 <app-ng-modal
-  [isOpen]="modalOpen"
+  [isOpen]="modalUpdateOpen"
   [titulo]="'Modificacion de Marcados'"
-  (closeModal)="modalOpen = false"
+  (closeModal)="modalUpdateOpen = false"
 >
   <form (submit)="submitForm()">
     <!-- Campo Fecha Desde -->
@@ -468,12 +468,12 @@
         class="form-check-input"
         type="checkbox"
         id="checkFechaDesde"
-        [checked]="activarFechaDesde"
-        (change)="toggleFechaDesde()"
+        [checked]="camposActivos['fechaDesde']"
+        (change)="toggleCampoActivo('fechaDesde')"
       />
       <label class="form-check-label" for="checkFechaDesde">Fecha Desde</label>
       <input
-        *ngIf="activarFechaDesde"
+        *ngIf="camposActivos['fechaDesde']"
         type="date"
         class="form-control"
         name="fechaDesdeM"
@@ -487,12 +487,12 @@
         class="form-check-input"
         type="checkbox"
         id="checkFechaHasta"
-        [checked]="activarFechaHasta"
-        (change)="toggleFechaHasta()"
+        [checked]="camposActivos['fechaHasta']"
+        (change)="toggleCampoActivo('fechaHasta')"
       />
       <label class="form-check-label" for="checkFechaHasta">Fecha Hasta</label>
       <input
-        *ngIf="activarFechaHasta"
+        *ngIf="camposActivos['fechaHasta']"
         type="date"
         class="form-control"
         name="fechaHastaM"
@@ -506,12 +506,12 @@
         class="form-check-input"
         type="checkbox"
         id="checkCantDesde"
-        [checked]="activarCantDesde"
-        (change)="toggleCantDesde()"
+        [checked]="camposActivos['cantDesde']"
+        (change)="toggleCampoActivo('cantDesde')"
       />
       <label class="form-check-label" for="checkCantDesde">Cant Desde</label>
       <input
-        *ngIf="activarCantDesde"
+        *ngIf="camposActivos['cantDesde']"
         type="number"
         class="form-control"
         name="cantDesdeM"
@@ -525,12 +525,12 @@
         class="form-check-input"
         type="checkbox"
         id="checkCantHasta"
-        [checked]="activarCantHasta"
-        (change)="toggleCantHasta()"
+        [checked]="camposActivos['cantHasta']"
+        (change)="toggleCampoActivo('cantHasta')"
       />
       <label class="form-check-label" for="checkCantHasta">CantHasta</label>
       <input
-        *ngIf="activarCantHasta"
+        *ngIf="camposActivos['cantHasta']"
         type="number"
         class="form-control"
         name="cantHastaM"
@@ -544,12 +544,12 @@
         class="form-check-input"
         type="checkbox"
         id="checkValor"
-        [checked]="activarValor"
-        (change)="toggleValor()"
+        [checked]="camposActivos['valor']"
+        (change)="toggleCampoActivo('valor')"
       />
       <label class="form-check-label" for="checkValor">Valor</label>
       <input
-        *ngIf="activarValor"
+        *ngIf="camposActivos['valor']"
         type="number"
         class="form-control"
         name="valorM"
@@ -565,12 +565,12 @@
         class="form-check-input"
         type="checkbox"
         id="checkSucursal"
-        [checked]="activarSucursal"
-        (change)="toggleSucursal()"
+        [checked]="camposActivos['sucursal']"
+        (change)="toggleCampoActivo('sucursal')"
       />
       <label class="form-check-label" for="checkSucursal">Sucursal</label>
       <select
-        *ngIf="activarSucursal"
+        *ngIf="camposActivos['sucursal']"
         class="form-control"
         [(ngModel)]="sucursalIdM"
         name="sucursalIdM"
@@ -588,14 +588,14 @@
         class="form-check-input"
         type="checkbox"
         id="checkListaPrecio"
-        [checked]="activarListaPrecio"
-        (change)="toggleListaPrecio()"
+        [checked]="camposActivos['listaPrecio']"
+        (change)="toggleCampoActivo('listaPrecio')"
       />
       <label class="form-check-label" for="checkListaPrecio"
         >Lista Precio</label
       >
       <select
-        *ngIf="activarListaPrecio"
+        *ngIf="camposActivos['listaPrecio']"
         class="form-control"
         [(ngModel)]="listaPrecioIdM"
         name="listaPrecioIdM"
@@ -605,6 +605,26 @@
         </option>
       </select>
     </div>
+
+       <!-- Campo Activo -->
+       <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="checkActivo"
+          [checked]="camposActivos['activo']"
+        (change)="toggleCampoActivo('activo')"
+        />
+        <label class="form-check-label" for="checkListaPrecio"
+          >Activo</label
+        >
+        <div class="form-check form-switch">
+          <input  *ngIf="camposActivos['activo']" class="form-check-input" type="checkbox" name="activoM"
+          [(ngModel)]="activoM"checked />
+        </div>
+      </div>
+
+
 
     <!-- Botón de Enviar -->
     <button type="submit" class="btn btn-primary">Modificar</button>
