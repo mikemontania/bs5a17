@@ -11,7 +11,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class NgModalComponent {
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
   @Input() isOpen = false;
-
+  @Input() titulo = '';
   @Output() closeModal = new EventEmitter<void>();
 
   close() {

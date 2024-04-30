@@ -107,7 +107,9 @@
 
 <div class="card">
   <div class="card-body">
-    <article class="table-header mb-1 d-flex justify-content-between align-items-center">
+    <article
+      class="table-header mb-1 d-flex justify-content-between align-items-center"
+    >
       <div class="btn-group">
         <button class="btn btn-outline-danger" (click)="removeSelectedRows()">
           Eliminar Selección <i class="bi bi-trash"></i>
@@ -115,11 +117,15 @@
         <button class="btn btn-outline-info" (click)="addRow()">
           Agregar Fila <i class="bi bi-file-earmark-plus"></i>
         </button>
-        <button class="btn btn-outline-info" (click)="cloneSelectedRows()">
-          Clonar Filas <i class="bi bi-copy"></i><i class="bi bi-list-check"></i>
+        <button class="btn btn-outline-info" (click)="cloneSelectedRows()" *ngIf="hayRegistrosSeleccionados()">
+          Clonar Filas <i class="bi bi-copy"></i
+          ><i class="bi bi-list-check"></i>
+        </button>
+        <button class="btn btn-outline-info" (click)="openModal()" *ngIf="hayRegistrosSeleccionados()">
+          Modificar<i class="bi bi-copy"></i><i class="bi bi-pencil"></i>
         </button>
       </div>
-    <!--   <div class="mb-1 d-flex justify-content-between align-items-center">
+      <!--   <div class="mb-1 d-flex justify-content-between align-items-center">
         <label for="filterText" class="form-label mp-2">Filtrar:</label>
         <input type="text" class="form-control" id="filterText" [(ngModel)]="filterText" (input)="applyFilter()">
       </div> -->
@@ -139,17 +145,37 @@
                 (change)="selectAll($event)"
               />
             </th>
-            <th (click)="sort('id')">Id </th>
+            <th (click)="sort('id')">Id</th>
             <th (click)="sort('activo')">Activo</th>
-            <th *ngIf="tipo == 'IMPORTE' && registro != 'PRECIO'" (click)="sort('cantDesde')">Can Desde</th>
-            <th *ngIf="tipo == 'IMPORTE' && registro != 'PRECIO'" (click)="sort('cantHasta')">Can Hasta</th>
-            <th  (click)="sort('fechaDesde')">F. Desde</th>
-            <th  (click)="sort('fechaHasta')">F. Hasta</th>
-            <th  (click)="sort('valor')">Valor {{valor}}</th>
+            <th
+              *ngIf="tipo == 'IMPORTE' && registro != 'PRECIO'"
+              (click)="sort('cantDesde')"
+            >
+              Can Desde
+            </th>
+            <th
+              *ngIf="tipo == 'IMPORTE' && registro != 'PRECIO'"
+              (click)="sort('cantHasta')"
+            >
+              Can Hasta
+            </th>
+            <th (click)="sort('fechaDesde')">F. Desde</th>
+            <th (click)="sort('fechaHasta')">F. Hasta</th>
+            <th (click)="sort('valor')">Valor {{ valor }}</th>
             <th (click)="sort('listaPrecioId')">Lista P.</th>
             <th (click)="sort('sucursalId')">Sucursal</th>
-            <th *ngIf="tipo == 'PRODUCTO' || ( tipo == 'IMPORTE' && registro == 'PRECIO')"(click)="sort('varianteId')" >Variante</th>
-            <th (click)="sort('clienteId')" *ngIf="tipo == 'CLIENTE'">Cliente</th>
+            <th
+              *ngIf="
+                tipo == 'PRODUCTO' ||
+                (tipo == 'IMPORTE' && registro == 'PRECIO')
+              "
+              (click)="sort('varianteId')"
+            >
+              Variante
+            </th>
+            <th (click)="sort('clienteId')" *ngIf="tipo == 'CLIENTE'">
+              Cliente
+            </th>
             <th>Acción</th>
           </tr>
         </thead>
@@ -185,21 +211,28 @@
               [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
               *ngIf="valoracion.isEdit"
             >
-
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox"  [(ngModel)]="valoracion.activo" />
-            </div>
+              <div class="form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [(ngModel)]="valoracion.activo"
+                />
+              </div>
             </td>
 
             <td
               [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
-              *ngIf="!valoracion.isEdit && tipo == 'IMPORTE' && registro != 'PRECIO'"
+              *ngIf="
+                !valoracion.isEdit && tipo == 'IMPORTE' && registro != 'PRECIO'
+              "
             >
               {{ valoracion.cantDesde | number }}
             </td>
             <td
               [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
-              *ngIf="valoracion.isEdit && tipo == 'IMPORTE' && registro != 'PRECIO'"
+              *ngIf="
+                valoracion.isEdit && tipo == 'IMPORTE' && registro != 'PRECIO'
+              "
             >
               <input
                 [(ngModel)]="valoracion.cantDesde"
@@ -210,13 +243,17 @@
 
             <td
               [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
-              *ngIf="!valoracion.isEdit && tipo == 'IMPORTE' && registro != 'PRECIO'"
+              *ngIf="
+                !valoracion.isEdit && tipo == 'IMPORTE' && registro != 'PRECIO'
+              "
             >
               {{ valoracion.cantHasta | number }}
             </td>
             <td
               [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
-              *ngIf="valoracion.isEdit && tipo == 'IMPORTE' && registro != 'PRECIO'"
+              *ngIf="
+                valoracion.isEdit && tipo == 'IMPORTE' && registro != 'PRECIO'
+              "
             >
               <input
                 [(ngModel)]="valoracion.cantHasta"
@@ -330,19 +367,34 @@
 
             <td
               [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
-              *ngIf="!valoracion.isEdit && (tipo == 'PRODUCTO' || ( tipo == 'IMPORTE' && registro == 'PRECIO'))"
+              *ngIf="
+                !valoracion.isEdit &&
+                (tipo == 'PRODUCTO' ||
+                  (tipo == 'IMPORTE' && registro == 'PRECIO'))
+              "
             >
-              <small *ngIf="valoracion?.variante?.codErp && valoracion?.variante?.producto?.nombre">
+              <small
+                *ngIf="
+                  valoracion?.variante?.codErp &&
+                  valoracion?.variante?.producto?.nombre
+                "
+              >
                 {{ valoracion?.variante?.codErp }}
                 {{ valoracion?.variante?.producto?.nombre }}
                 {{ valoracion?.variante?.variedad?.descripcion }}
                 {{ valoracion?.variante?.presentacion?.descripcion }}
               </small>
-              <small *ngIf="valoracion?.variante?.concat ">{{ valoracion?.variante?.concat }}         </small>
+              <small *ngIf="valoracion?.variante?.concat"
+                >{{ valoracion?.variante?.concat }}
+              </small>
             </td>
             <td
               [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
-              *ngIf="valoracion.isEdit && (tipo == 'PRODUCTO' || ( tipo == 'IMPORTE' && registro == 'PRECIO'))"
+              *ngIf="
+                valoracion.isEdit &&
+                (tipo == 'PRODUCTO' ||
+                  (tipo == 'IMPORTE' && registro == 'PRECIO'))
+              "
             >
               <app-custom-select
                 [size]="'sm'"
@@ -357,9 +409,8 @@
               [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
               *ngIf="!valoracion.isEdit && tipo == 'CLIENTE'"
             >
-              {{
-                valoracion?.cliente?.nroDocumento }}   {{valoracion?.cliente?.razonSocial }}
-
+              {{ valoracion?.cliente?.nroDocumento }}
+              {{ valoracion?.cliente?.razonSocial }}
             </td>
             <td
               [ngClass]="{ rowEditModeColor: valoracion.isEdit }"
@@ -403,6 +454,159 @@
         </tbody>
       </table>
     </div>
-
   </div>
 </div>
+<app-ng-modal
+  [isOpen]="modalOpen"
+  [titulo]="'Modificacion de Marcados'"
+  (closeModal)="modalOpen = false"
+>
+  <form (submit)="submitForm()">
+    <!-- Campo Fecha Desde -->
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="checkFechaDesde"
+        [checked]="activarFechaDesde"
+        (change)="toggleFechaDesde()"
+      />
+      <label class="form-check-label" for="checkFechaDesde">Fecha Desde</label>
+      <input
+        *ngIf="activarFechaDesde"
+        type="date"
+        class="form-control"
+        name="fechaDesdeM"
+        [(ngModel)]="fechaDesdeM"
+      />
+    </div>
+
+    <!-- Campo Fecha Hasta -->
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="checkFechaHasta"
+        [checked]="activarFechaHasta"
+        (change)="toggleFechaHasta()"
+      />
+      <label class="form-check-label" for="checkFechaHasta">Fecha Hasta</label>
+      <input
+        *ngIf="activarFechaHasta"
+        type="date"
+        class="form-control"
+        name="fechaHastaM"
+        [(ngModel)]="fechaHastaM"
+      />
+    </div>
+
+    <!-- Campo cantDesde -->
+    <div class="form-check"   *ngIf="tipo == 'IMPORTE' && registro != 'PRECIO'">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="checkCantDesde"
+        [checked]="activarCantDesde"
+        (change)="toggleCantDesde()"
+      />
+      <label class="form-check-label" for="checkCantDesde">Cant Desde</label>
+      <input
+        *ngIf="activarCantDesde"
+        type="number"
+        class="form-control"
+        name="cantDesdeM"
+        [(ngModel)]="cantDesdeM"
+      />
+    </div>
+
+    <!-- Campo CantHasta -->
+    <div class="form-check"  *ngIf="tipo == 'IMPORTE' && registro != 'PRECIO'">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="checkCantHasta"
+        [checked]="activarCantHasta"
+        (change)="toggleCantHasta()"
+      />
+      <label class="form-check-label" for="checkCantHasta">CantHasta</label>
+      <input
+        *ngIf="activarCantHasta"
+        type="number"
+        class="form-control"
+        name="cantHastaM"
+        [(ngModel)]="cantHastaM"
+      />
+    </div>
+
+    <!-- Campo Valor -->
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="checkValor"
+        [checked]="activarValor"
+        (change)="toggleValor()"
+      />
+      <label class="form-check-label" for="checkValor">Valor</label>
+      <input
+        *ngIf="activarValor"
+        type="number"
+        class="form-control"
+        name="valorM"
+        [(ngModel)]="valorM"
+      />
+    </div>
+
+
+
+    <!-- Campo Sucursal -->
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="checkSucursal"
+        [checked]="activarSucursal"
+        (change)="toggleSucursal()"
+      />
+      <label class="form-check-label" for="checkSucursal">Sucursal</label>
+      <select
+        *ngIf="activarSucursal"
+        class="form-control"
+        [(ngModel)]="sucursalIdM"
+        name="sucursalIdM"
+      >
+        <option value="0">Todas</option>
+        <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
+          {{ sucursal.descripcion }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Campo Lista de Precio -->
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="checkListaPrecio"
+        [checked]="activarListaPrecio"
+        (change)="toggleListaPrecio()"
+      />
+      <label class="form-check-label" for="checkListaPrecio"
+        >Lista Precio</label
+      >
+      <select
+        *ngIf="activarListaPrecio"
+        class="form-control"
+        [(ngModel)]="listaPrecioIdM"
+        name="listaPrecioIdM"
+      >
+        <option *ngFor="let lista of listasPrecio" [value]="lista.id">
+          {{ lista.descripcion }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Botón de Enviar -->
+    <button type="submit" class="btn btn-primary">Modificar</button>
+  </form>
+</app-ng-modal>

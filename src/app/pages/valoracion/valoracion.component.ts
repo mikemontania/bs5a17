@@ -16,10 +16,21 @@ import Swal from 'sweetalert2';
 import { Valoracion } from '../../interfaces/valoracion.interface';
 import { Variante } from '../../interfaces/facturas.interface';
 import { Cliente } from '../../interfaces/clientes.interface';
+import { NgModalComponent } from '../../components/ng-modal/ng-modal.component';
+export interface Modif {
+  fechaDesde: string | null,
+  fechaHasta: string | null,
+  valor: number | null,
+  sucursalId: number | null,
+  listaPrecioId: number | null,
+  cantDesde: number | null,
+  cantHasta: number | null,
+  ids: number[] | null,
+}
 @Component({
   selector: 'app-valoracion',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgVariante, CustomSelectComponent],
+  imports: [CommonModule, FormsModule, NgVariante, CustomSelectComponent, NgModalComponent],
   templateUrl: './valoracion.component.html',
   styleUrl: './valoracion.component.css'
 })
@@ -35,10 +46,43 @@ export class ValoracionComponent implements OnInit {
   sucursalId: number = 0;
   listaPrecioId: number = 1;
   selectAllCheckbox: boolean = false;
-  valor='';
+  valor = '';
+  modalOpen = false;
   key: string = '';       // Columna actualmente ordenada
   reverse: boolean = false;  // Dirección de la ordenación
   filterText: string = '';   // Texto de filtro
+
+  // Variables para activar/desactivar campos
+  activarFechaDesde: boolean = false;
+  activarFechaHasta: boolean = false;
+  activarValor: boolean = false;
+  activarCantDesde: boolean = false;
+  activarCantHasta: boolean = false;
+  activarSucursal: boolean = false;
+  activarListaPrecio: boolean = false;
+  activarDesde: boolean = false;
+  activarHasta: boolean = false;
+
+  // Otras variables del formulario
+  fechaDesdeM: string = moment(new Date()).format("YYYY-MM-DD");
+  fechaHastaM: string = moment(new Date()).format("YYYY-MM-DD");
+  cantDesdeM: number = 1;
+  cantHastaM: number = 1;
+  valorM: number = 1;
+  sucursalIdM: number = 1;
+  listaPrecioIdM: number = 1;
+  body: Modif = {
+    fechaDesde: null,
+    fechaHasta: null,
+    valor: null,
+    sucursalId: null,
+    listaPrecioId: null,
+    cantDesde: null,
+    cantHasta: null,
+    ids: null,
+  }
+
+
   private _router = inject(Router)
   _valoracionService = inject(ValoracionService);
   _sucursalService = inject(SucursalService);
@@ -47,28 +91,132 @@ export class ValoracionComponent implements OnInit {
   _clientesService = inject(ClientesService);
   private activatedRoute = inject(ActivatedRoute);
 
-
+  constructor() {
+    this.initList();
+  }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.registro = params.get('registro')!
       this.tipo = params.get('tipo')!
- if (!this.registro || !this.tipo)    this._router.navigateByUrl('/dashboard');
+      if (!this.registro || !this.tipo) this._router.navigateByUrl('/dashboard');
 
-if (this.registro=='PRECIO' && this.tipo=='IMPORTE') this.valor = 'Gs.';
-if (this.registro=='DESCUENTO' && this.tipo=='PRODUCTO') this.valor = '%';
-if (this.registro=='DESCUENTO' && this.tipo=='IMPORTE') this.valor = '%';
-if (this.registro=='DESCUENTO' && this.tipo=='CLIENTE') this.valor = '%';
-if (this.registro=='PUNTO' && this.tipo=='PRODUCTO') this.valor = 'pts';
-if (this.registro=='PUNTO' && this.tipo=='IMPORTE') this.valor = 'pts';
+      if (this.registro == 'PRECIO' && this.tipo == 'IMPORTE') this.valor = 'Gs.';
+      if (this.registro == 'DESCUENTO' && this.tipo == 'PRODUCTO') this.valor = '%';
+      if (this.registro == 'DESCUENTO' && this.tipo == 'IMPORTE') this.valor = '%';
+      if (this.registro == 'DESCUENTO' && this.tipo == 'CLIENTE') this.valor = '%';
+      if (this.registro == 'PUNTO' && this.tipo == 'PRODUCTO') this.valor = 'pts';
+      if (this.registro == 'PUNTO' && this.tipo == 'IMPORTE') this.valor = 'pts';
 
       console.log(this.tipo)
       this.buscar();
-      this.initList();
+
     })
   }
+  openModal() {
+    this.fechaDesdeM = moment(new Date()).format("YYYY-MM-DD");
+    this.fechaHastaM = moment(new Date()).format("YYYY-MM-DD");
+    this.cantDesdeM = 1;
+    this.cantHastaM = 1;
+    this.valorM = 1;
+    this.sucursalIdM = 0;
+    this.listaPrecioIdM = 1;
+    this.modalOpen = true;
+  }
 
+  closeModal() {
+    this.modalOpen = false;
+  }
 
+  submitForm() {
+    this.closeModal();
+    Swal.fire({
+      title: 'Espere por favor...',
+      allowOutsideClick: false,
+      icon: 'info',
+    });
+    Swal.showLoading();
+    const selectedRows = this.valoraciones.filter((valoracion) => valoracion.isSelected);
+   // Iterar sobre cada fila seleccionada de manera secuencial
+  this.modifySelectedRowsSequentially(selectedRows)
+  .then(() => {
+    // Acciones a realizar después de modificar todas las filas seleccionadas
+    this.desmarcar();
+    this.buscar();
+    Swal.close()
+  })
+  .catch((error) => {
+    console.error(error);
+    Swal.close()
+  });
+  }
+// Función para modificar cada fila seleccionada de manera secuencial
+async modifySelectedRowsSequentially(selectedRows: any[]) {
+  for (const valoracion of selectedRows) {
+    try {
+      const updatedValoracion = {
+        ...valoracion,
+        cantDesde: this.activarCantDesde ? this.cantDesdeM : valoracion.cantDesde,
+        cantHasta: this.activarCantHasta ? this.cantHastaM : valoracion.cantHasta,
+        fechaDesde: this.activarFechaDesde ? this.fechaDesdeM : valoracion.fechaDesde,
+        fechaHasta: this.activarFechaHasta ? this.fechaHastaM : valoracion.fechaHasta,
+        valor: this.activarValor ? this.valorM : valoracion.valor,
+        listaPrecioId: this.activarListaPrecio ? this.listaPrecioIdM : valoracion.listaPrecioId,
+        sucursalId: this.activarSucursal ? this.sucursalIdM : valoracion.sucursalId
+      };
+      // Modificar la fila actual
+      await this.modifyRow({...updatedValoracion});
+    } catch (error) {
+      console.error(`Error al modificar la fila con ID ${valoracion.id}:`, error);
+      // Puedes manejar el error aquí, como registrar el error o mostrar un mensaje al usuario
+    }
+  }
+}
+
+// Función para modificar una fila individualmente
+modifyRow(valoracion: any): Promise<any> {
+  return new Promise((resolve, reject) => {
+    // Realizar la solicitud de modificación para la fila actual
+    this._valoracionService.update(valoracion)
+      .subscribe({
+        next: (resp) => {
+          // Acciones después de modificar la fila actual (opcional)
+          resolve(resp); // Resuelve la promesa para pasar a la siguiente fila
+        },
+        error: (error) => {
+          reject(error); // Rechaza la promesa si hay un error
+        }
+      });
+  });
+}
+
+  toggleFechaDesde() {
+    this.activarFechaDesde = !this.activarFechaDesde;
+  }
+
+  toggleFechaHasta() {
+    this.activarFechaHasta = !this.activarFechaHasta;
+  }
+
+  toggleValor() {
+    this.activarValor = !this.activarValor;
+  }
+
+  toggleCantDesde() {
+    this.activarDesde = !this.activarDesde;
+  }
+
+  toggleCantHasta() {
+    this.activarHasta = !this.activarHasta;
+  }
+
+  toggleSucursal() {
+    this.activarSucursal = !this.activarSucursal;
+  }
+
+  toggleListaPrecio() {
+    this.activarListaPrecio = !this.activarListaPrecio;
+  }
   initList() {
     forkJoin([
       this._listaPrecioService.findAll(),
@@ -123,24 +271,26 @@ if (this.registro=='PUNTO' && this.tipo=='IMPORTE') this.valor = 'pts';
       });
   }
 
-
+  hayRegistrosSeleccionados(): boolean {
+    return this.valoraciones.some(valoracion => valoracion.isSelected);
+  }
 
 
   addRow() {
-    let newRow :Valoracion = {} as Valoracion;
-    newRow.variante = { }as Variante;
-    newRow.cliente = { }as Cliente;
-    newRow.cantHasta= 999999999;
-    newRow.valor= 1;
-    newRow.fechaDesde= this.fechaDesde;
-    newRow.fechaHasta= this.fechaDesde;
-    newRow.registro= this.registro,
-    newRow.tipo= this.tipo;
-    newRow.sucursalId= this.sucursalId;
-    newRow.listaPrecioId= this.listaPrecioId;
-    newRow.isSelected= false; // Asegúrate de inicializar isSelected
-    newRow.isEdit= true;
-    newRow.activo= true;
+    let newRow: Valoracion = {} as Valoracion;
+    newRow.variante = {} as Variante;
+    newRow.cliente = {} as Cliente;
+    newRow.cantHasta = 999999999;
+    newRow.valor = 1;
+    newRow.fechaDesde = this.fechaDesde;
+    newRow.fechaHasta = this.fechaDesde;
+    newRow.registro = this.registro,
+      newRow.tipo = this.tipo;
+    newRow.sucursalId = this.sucursalId;
+    newRow.listaPrecioId = this.listaPrecioId;
+    newRow.isSelected = false; // Asegúrate de inicializar isSelected
+    newRow.isEdit = true;
+    newRow.activo = true;
     this.valoraciones = [newRow, ...this.valoraciones];
   }
 
@@ -279,9 +429,9 @@ if (this.registro=='PUNTO' && this.tipo=='IMPORTE') this.valor = 'pts';
       const firstSelectedIndex = this.valoraciones.indexOf(selectedRows[0]);
       const clonedRows: Valoracion[] = selectedRows.map((row) => ({
         ...row,
-        valor:+row.valor,
-        cantDesde:+row.cantDesde,
-        cantHasta:+row.cantHasta,
+        valor: +row.valor,
+        cantDesde: +row.cantDesde,
+        cantHasta: +row.cantHasta,
         id: null,
         isSelected: false,
         isEdit: true
@@ -289,13 +439,18 @@ if (this.registro=='PUNTO' && this.tipo=='IMPORTE') this.valor = 'pts';
 
       // Insertar las filas clonadas al principio del array
       this.valoraciones = [
-        ...clonedRows  ,
+        ...clonedRows,
         ...this.valoraciones
       ];
+
+      // Desmarcar todas las filas después de clonarlas
+ this.desmarcar()
     }
+
   }
 
   selectAll(event: any) {
+    console.log(event)
     this.selectAllCheckbox = event.target.checked;
 
     this.valoraciones = this.valoraciones.map((valoracion) => ({
@@ -304,9 +459,16 @@ if (this.registro=='PUNTO' && this.tipo=='IMPORTE') this.valor = 'pts';
     }));
   }
 
+  desmarcar(){
+    this.valoraciones.forEach((valoracion) => {
+      valoracion.isSelected = false;
+    });
+    this.selectAllCheckbox =false;
+  }
+
   cancelar() {
     this.valoraciones = [];
-   this.ngOnInit()
+    this.ngOnInit()
 
   }
 

@@ -69,6 +69,20 @@ export class ValoracionService {
       );
   }
 
+  updateFields(body: any): Observable<any> {
+    console.log(body);
+    return this.http.put(BASE_URL + '/valoraciones/updateFields', body)
+      .pipe(
+        map((response: any) => response ),
+        catchError(e => {
+
+          console.error('ERROR', e.error);
+
+         return throwError(() => e.error.error);
+        })
+      );
+  }
+
 
 
   update(valoracion: any): Observable<any> {

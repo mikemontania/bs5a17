@@ -7,7 +7,14 @@
       large: size === 'large'
     }"
   >
+  <div class="modal-header">
+    <h5 class="modal-title">{{titulo}}</h5>
+    <button type="button" class="btn-close" (click)="close()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div (click)="$event.stopPropagation()">
     <ng-content></ng-content>
-    <button (click)="close()">Cerrar</button>
+  </div>
   </div>
 </div>

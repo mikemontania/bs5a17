@@ -23,5 +23,5 @@
   position: sticky;
   top: 0;
   background-color: #fff; /* Color de fondo para la cabecera fija */
-  z-index: 1; /* Asegura que la cabecera esté por encima del contenido */
+  z-index: 0; /* Asegura que la cabecera esté por encima del contenido */
 }
