@@ -12,7 +12,7 @@ export const navbarData: INavbarData[] = [
   {
     routeLink: 'ventas',
     icon: 'fa-solid fa-cash-register',
-    label: 'Facutacion',
+    label: 'Facturación',
     rol:['vendedor','admin'],
     items: [
       {
