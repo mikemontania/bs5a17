@@ -178,7 +178,8 @@ export class VentasComponent implements OnInit {
     this.cliente.set(cliente); // Update the client signal
     this.searchCliente = false; // Close the modal
     this.actualizarCargador()
-this.refresh()
+    this.reCalcular();
+    this.refresh()
   }
 
   selectSucursal(sucursal: Sucursal) {
@@ -211,49 +212,57 @@ this.refresh()
 
   async reCalcular() {
     try {
-      console.log('reCalcular');
+        console.log('reCalcular');
 
-      Swal.fire({
-        title: 'Espere por favor...',
-        allowOutsideClick: false,
-        icon: 'info',
-      });
-      Swal.showLoading();
-      const respuesta: any = await lastValueFrom(this._valoracionService.obtenerDescuentoImporte(this.listaPrecio().id, this.sucursal().id));
-      this.descuentosEscala = (respuesta?.descuentos) ? respuesta?.descuentos : [];
+        Swal.fire({
+            title: 'Espere por favor...',
+            allowOutsideClick: false,
+            icon: 'info',
+        });
+        Swal.showLoading();
+        const respuesta: any = await lastValueFrom(this._valoracionService.obtenerDescuentoImporte(this.listaPrecio().id, this.sucursal().id));
+        this.descuentosEscala = (respuesta?.descuentos) ? respuesta?.descuentos : [];
 
-      const promises = this.detalles.map(async detalle => {
-        try {
-          console.log({ variedadID: detalle.varianteId, sucursalID: this.sucursal().id, listaPrecio: this.listaPrecio().id });
-          const valoracion: any = await lastValueFrom(this._valoracionService.obtenerVigente(detalle.varianteId, this.sucursal().id, this.listaPrecio().id));
-          console.log(valoracion)
-          if (valoracion) {
-            if (valoracion.descuento) {
-              detalle.porcDescuento = valoracion.descuento.valor;
-              detalle.tipoDescuento = valoracion.descuento.tipo;
+        for (const detalle of this.detalles) {
+            try {
+                console.log({ variedadID: detalle.varianteId, sucursalID: this.sucursal().id, listaPrecio: this.listaPrecio().id });
+                const valoracion: any = await lastValueFrom(this._valoracionService.obtenerVigente(detalle.varianteId, this.sucursal().id, this.listaPrecio().id));
+                if (valoracion) {
+                    if (valoracion.precio) {
+                        if (this.cliente().excentoIva == true) {
+                            console.log(valoracion)
+                            console.log(+valoracion.precio.variante.porcIva)
+                            detalle.porcIva = 0;
+                            if (+valoracion.precio.variante.porcIva == 0) {
+                                detalle.importePrecio = valoracion.precio.valor;
+                            } else if (+valoracion.precio.variante.porcIva == 5) {
+                                detalle.importePrecio = valoracion.precio.valor - Math.round(valoracion.precio.valor / 21);
+                            } else if (+valoracion.precio.variante.porcIva == 10) {
+                                detalle.importePrecio = valoracion.precio.valor - Math.round(valoracion.precio.valor / 11);
+                            }
+                            console.log(detalle.importePrecio)
+                        } else {
+                            detalle.importePrecio = valoracion.precio.valor;
+                        }
+
+                        detalle.importeSubtotal = detalle.cantidad * detalle.importePrecio;
+                        this.reAjustarDetalles();
+                        this.actualizarCabecera();
+
+                    }
+                }
+            } catch (error) {
+                // Manejar el error de obtenerDescuentoEscala aquí
+                console.error(`Error al obtener descuento de escala: ${error}`);
             }
-            if (valoracion.precio) {
-              detalle.importePrecio = valoracion.precio.valor;
-            } else {
-              detalle.importePrecio = 0;
-            }
-            detalle.importeSubtotal = detalle.cantidad * detalle.importePrecio;
-            this.reAjustarDetalles();
-            this.actualizarCabecera();
-          }
-        } catch (error) {
-          // Manejar el error de obtenerDescuentoEscala aquí
-          console.error(`Error al obtener descuento de escala: ${error}`);
         }
-      });
 
-      await Promise.all(promises);
-
-      Swal.close();
+        Swal.close();
     } catch (error) {
-      console.error(`Error al obtener descuento de escala: ${error}`);
+        console.error(`Error al obtener descuento de escala: ${error}`);
     }
-  }
+}
+
 
 
   // Función para inicializar un detalle
@@ -303,13 +312,13 @@ this.refresh()
           } else if (+item.porcIva == 10) {
             this.detalles[indice].importePrecio = item.precio - Math.round(item.precio / 11);
           }
-        }else{
+        } else {
           this.detalles[indice].importePrecio = item.precio;
 
         }
       }
       this.detalles[indice].cantidad += this.cantidad;
-      this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad *  this.detalles[indice].importePrecio;
+      this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * this.detalles[indice].importePrecio;
       this.detalles[indice].totalKg = this.detalles[indice].cantidad * item.peso;
 
       // Calcular descuento
@@ -355,17 +364,17 @@ this.refresh()
       let porcIva = +detalle.porcIva;
       let porcIva5 = 0;
       let porcIva10 = 0;
-      let porcIvaExenta =0;
+      let porcIvaExenta = 0;
       let porcNeto = 0;
       //calcular total
       detalle.importeTotal = detalle.importeSubtotal - detalle.importeDescuento;
       if (this.cliente().excentoIva == true) {
-          porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
+        porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
       } else {
-          porcIva5 = porcIva === 5 ? Math.round(detalle.importeTotal / 21) : 0;
-          porcIva10 = porcIva === 10 ? Math.round(detalle.importeTotal / 11) : 0;
-          porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
-          porcNeto = detalle.importeTotal - (porcIva5 + porcIva10);
+        porcIva5 = porcIva === 5 ? Math.round(detalle.importeTotal / 21) : 0;
+        porcIva10 = porcIva === 10 ? Math.round(detalle.importeTotal / 11) : 0;
+        porcIvaExenta = porcIva === 0 ? detalle.importeTotal : 0;
+        porcNeto = detalle.importeTotal - (porcIva5 + porcIva10);
       }
       // Asignar los resultados
       detalle.importeIva5 = porcIva5;

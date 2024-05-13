@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, computed, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, computed, signal } from '@angular/core';
 import { ProductoPage, ProductosItem } from '../../interfaces/productoItem.inteface';
 import { ProductosService } from '../../services/productos.service';
 import { CommonModule } from '@angular/common';
@@ -25,6 +25,7 @@ export class ProductsListComponent implements OnInit {
   @Input() cantidad: number = 1;
   @Output() productClicked = new EventEmitter<ProductosItem>();
   @Output() cantidadChange = new EventEmitter<number>();
+  @ViewChild(InputDebounceComponent) inputDebounceComponent!: InputDebounceComponent;
 
   marcaId: number = 0;
   categoriaId: number = 0;
@@ -53,6 +54,12 @@ export class ProductsListComponent implements OnInit {
         this.productosPage.set(resp);
         console.log(resp)
         this.page.set(resp.page);
+        if (this.productos()?.length == 1) {
+          //seleccionarlo
+          this.limpiarCampo()
+          this.buscar('')
+          this.seleccionarProducto(this.productos()[0])
+        }
         this.totalPages.set(resp.totalPages);
       }, err => {
         console.error(err);
@@ -68,7 +75,9 @@ export class ProductsListComponent implements OnInit {
       this.cantidadChange.emit(this.cantidad);
     }
   }
-
+  limpiarCampo() {
+    this.inputDebounceComponent.clearInput()
+  }
   seleccionarProducto(event: ProductosItem) {
     this.productClicked.emit(event);
   }
