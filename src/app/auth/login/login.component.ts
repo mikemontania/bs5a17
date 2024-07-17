@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
-
+//este es un comentario
 
 @Component({
   standalone:true,
