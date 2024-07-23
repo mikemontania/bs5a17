@@ -69,7 +69,7 @@ export class ListComponent {
       next: (results) => {
         // Procesar los resultados
         this.sucursales = results.sucursales;
-        this.listas = results.listas;
+        this.listas = [...results.listas,{id:0,descripcion:'Todas las listas'}];
         this.listaPrecio=results.predeterminada;
         this.listaSeleccionada = results.predeterminada.id;
         // Resto del código para manejar los datos almacenados, si es necesario
