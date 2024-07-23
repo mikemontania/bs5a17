@@ -59,7 +59,7 @@ export class ListComponent {
   _authService = inject(AuthService)
   constructor( ) {
     const storedSearchData = localStorage.getItem('searchDataVenta');
-
+//coment
     // Realizar las dos solicitudes HTTP simultáneamente
     forkJoin({
       sucursales: this._sucursalesService.findAll(),
