@@ -91,8 +91,8 @@ export class EmpresaComponent implements OnInit {
           const img = await this.subirImagen(resp.id);
           this.empresaForm.patchValue({ ...empresaData, img });
           Swal.close()
-          Swal.fire("Actualización exitosa!!!", "Ok !!!"  , "success");
-          this.router.navigateByUrl('/usuarios');
+          Swal.fire("Actualización exitosa!!!", "Guardado con exito !!!"  , "success");
+          this.router.navigateByUrl('/empresa');
         },
         error: (error) => {
           Swal.close()

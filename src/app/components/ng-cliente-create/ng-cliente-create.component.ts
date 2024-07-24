@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component,       EventEmitter, Input, OnInit, Output, ViewContainerRef, inject, signal } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef, inject, signal } from "@angular/core";
 import { debounceTime, distinctUntilChanged } from "rxjs";
 import { InputDebounceComponent } from "../inputDebounce/inputDebounce.component";
 import { Cliente } from '../../interfaces/clientes.interface';
@@ -20,7 +20,7 @@ import { ListaPrecioService } from "../../services/listaPrecio.service";
 })
 export class NgClienteCreateComponent implements OnInit {
   size = "large";
-  delay=200;
+  delay = 200;
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
   @Output() cliente = new EventEmitter<Cliente>();
@@ -39,14 +39,24 @@ export class NgClienteCreateComponent implements OnInit {
   }
   ngOnInit() {
     this.clienteForm = this.fb.group({
-      empresaId: [null, Validators.required],
-      listaPrecioId: [null, Validators.required],
+      empresaId: [1, Validators.required],
+      listaPrecioId: [1, Validators.required], // Valor por defecto
       formaVentaId: [1, Validators.required],
-      razonSocial: [null, Validators.required],
-      nroDocumento: [null, Validators.required],
+      razonSocial: [null, [Validators.required, Validators.minLength(7)]],
+      nroDocumento: [null, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-zA-Z0-9-]+$/)]],
       direccion: [null, Validators.required],
-      telefono: [null, Validators.required],
-      cel: [null, Validators.nullValidator], // Optional field
+      telefono: [null, [
+        Validators.required,
+        Validators.pattern(/^[0-9]+$/),
+        Validators.minLength(6),
+        Validators.maxLength(15)
+      ]],
+      cel: [null, [
+        Validators.required,
+        Validators.pattern(/^[0-9]+$/),
+        Validators.minLength(10),
+        Validators.maxLength(15)
+      ]],
       email: [null, [Validators.required, Validators.email]],
       excentoIva: [false],
       latitud: [null],
@@ -66,17 +76,30 @@ export class NgClienteCreateComponent implements OnInit {
   getFormaVenta() {
     this._formaventaService.findAll().subscribe((resp: any) => this.formas.set(resp));
   }
-  onSubmit(e:Event) {
+  onSubmit(e: Event) {
     e.preventDefault()
+    console.log(this.clienteForm)
+    if (this.clienteForm.invalid) {
+      this.clienteForm.markAllAsTouched();
+
+      // Log the errors to the console
+      console.log(this.getFormErrors());
+
+      return;
+    }
     const clienteData: Cliente = this.clienteForm.value;
 
-    this._clienteService.create(clienteData).subscribe({
+    this._clienteService.create({
+      ...clienteData,
+      razonSocial: clienteData.razonSocial.toUpperCase(),
+      direccion: clienteData.direccion.toUpperCase()
+    }).subscribe({
       next: (cliente) => {
         this.cliente.emit(cliente);
         this.isOpen = false;
       },
       error: (error) => {
-   console.error(error)
+        console.error(error)
         Swal.fire("Error", error, "error");
       },
       complete: () => {
@@ -84,7 +107,21 @@ export class NgClienteCreateComponent implements OnInit {
       }// Use 'complete' instead of 'finally'
     });
   }
+  getFormErrors() {
+    const errors: { field: string; errors: any }[] = [];
 
+    Object.keys(this.clienteForm.controls).forEach(key => {
+      const control = this.clienteForm.get(key);
+      if (control && control.invalid && (control.touched || control.dirty)) {
+        errors.push({ field: key, errors: control.errors });
+      }
+    });
+
+    return errors;
+  }
+  toUpeCaseEvent(evento: string) {
+    return evento.toLocaleUpperCase();
+  }
   close() {
     this.closeModal.emit();
   }

@@ -173,15 +173,29 @@ export class VentasComponent implements OnInit {
     this.pagar()
   }
 
-  selectCliente(cliente: Cliente) {
+  async selectCliente(cliente: Cliente) {
     console.log("Selected client:", cliente);
-    this.cliente.set(cliente); // Update the client signal
-    this.searchCliente = false; // Close the modal
-    this.actualizarCargador()
+    // Actualiza la señal del cliente
+    this.cliente.set(cliente);
+    // Espera a la lista de precios y actualiza la señal correspondiente
+    try {
+      const listaPrecio = await this.seleccionarLista(cliente.listaPrecioId);
+      this.listaPrecio.set(listaPrecio);
+    } catch (error) {
+      console.error("Error al seleccionar la lista de precios:", error);
+      // Maneja el error de manera apropiada aquí
+    }
+    // Cierra el modal y realiza otras operaciones necesarias
+    this.searchCliente = false;
+    this.actualizarCargador();
     this.reCalcular();
-    this.refresh()
+    this.refresh();
   }
 
+  seleccionarLista(listaPrecioId: number): Promise<ListaPrecio> {
+    // Retorna directamente la promesa del servicio
+    return this._listaPrecioService.getById(listaPrecioId).toPromise();
+  }
   selectSucursal(sucursal: Sucursal) {
     console.log("Selected sucursal:", sucursal);
     this.sucursal.set(sucursal); // Update the client signal

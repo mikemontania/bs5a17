@@ -13,32 +13,41 @@
       [formGroup]="clienteForm"
       (ngSubmit)="onSubmit($event)"
     >
-      <div class="row mb-3">
-        <label for="razonSocial" class="col-md-4 col-lg-3 col-form-label"
-          >Razón Social</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="text"
-            class="form-control"
-            id="razonSocial"
-            formControlName="razonSocial"
-          />
+    <div class="row mb-3">
+      <label for="razonSocial" class="col-md-4 col-lg-3 col-form-label">Razón Social <span style="color:red">(*)</span></label>
+      <div class="col-md-8 col-lg-9">
+        <input
+          type="text"
+          class="form-control"
+          id="razonSocial"
+          formControlName="razonSocial"
+        />
+        <div *ngIf="clienteForm.get('razonSocial')?.touched && clienteForm.get('razonSocial')?.invalid" class="text-danger">
+          <div *ngIf="clienteForm.get('razonSocial')?.errors?.['required']">Razón Social es un campo obligatorio.</div>
+          <div *ngIf="clienteForm.get('razonSocial')?.errors?.['minlength']">Razón Social debe tener al menos 7 caracteres.</div>
         </div>
       </div>
-      <div class="row mb-3">
-        <label for="nroDocumento" class="col-md-4 col-lg-3 col-form-label"
-          >Nro Documento</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="text"
-            class="form-control"
-            id="nroDocumento"
-            formControlName="nroDocumento"
-          />
+    </div>
+
+    <div class="row mb-3">
+      <label for="nroDocumento" class="col-md-4 col-lg-3 col-form-label">
+        Nro Documento <span style="color:red">(*)</span>
+      </label>
+      <div class="col-md-8 col-lg-9">
+        <input
+          type="text"
+          class="form-control"
+          id="nroDocumento"
+          formControlName="nroDocumento"
+          [ngClass]="{ 'is-invalid': clienteForm.get('nroDocumento')?.invalid && clienteForm.get('nroDocumento')?.touched }"
+        />
+        <div *ngIf="clienteForm.get('nroDocumento')?.invalid && clienteForm.get('nroDocumento')?.touched" class="invalid-feedback">
+          <div *ngIf="clienteForm.get('nroDocumento')?.errors?.['required']">RUC/CI/CE es un campo obligatorio.</div>
+          <div *ngIf="clienteForm.get('nroDocumento')?.errors?.['minlength']">RUC/CI/CE debe tener al menos 7 caracteres.</div>
+          <div *ngIf="clienteForm.get('nroDocumento')?.errors?.['pattern']">RUC/CI/CE solo puede contener números, letras y guiones. ej 1258654-0</div>
         </div>
       </div>
+    </div>
 
       <div class="row mb-3">
         <label for="direccion" class="col-md-4 col-lg-3 col-form-label"
@@ -55,46 +64,59 @@
       </div>
 
       <div class="row mb-3">
-        <label for="telefono" class="col-md-4 col-lg-3 col-form-label"
-          >telefono</label
-        >
+        <label for="telefono" class="col-md-4 col-lg-3 col-form-label">Teléfono <span style="color:red">(*)</span></label>
         <div class="col-md-8 col-lg-9">
           <input
             type="text"
             class="form-control"
             id="telefono"
             formControlName="telefono"
+            [ngClass]="{ 'is-invalid': clienteForm.get('telefono')?.invalid && clienteForm.get('telefono')?.touched }"
           />
+          <div *ngIf="clienteForm.get('telefono')?.invalid && clienteForm.get('telefono')?.touched" class="invalid-feedback">
+            <div *ngIf="clienteForm.get('telefono')?.errors?.['required']">Teléfono es un campo obligatorio.</div>
+            <div *ngIf="clienteForm.get('telefono')?.errors?.['pattern']">El teléfono solo puede contener números.</div>
+            <div *ngIf="clienteForm.get('telefono')?.errors?.['minlength']">El teléfono debe tener al menos 6 caracteres.</div>
+            <div *ngIf="clienteForm.get('telefono')?.errors?.['maxlength']">El teléfono debe tener como máximo 15 caracteres.</div>
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="cel" class="col-md-4 col-lg-3 col-form-label"
-          >Celular</label
-        >
+        <label for="cel" class="col-md-4 col-lg-3 col-form-label">Celular <span style="color:red">(*)</span></label>
         <div class="col-md-8 col-lg-9">
           <input
             type="text"
             class="form-control"
             id="cel"
             formControlName="cel"
+            [ngClass]="{ 'is-invalid': clienteForm.get('cel')?.invalid && clienteForm.get('cel')?.touched }"
           />
+          <div *ngIf="clienteForm.get('cel')?.invalid && clienteForm.get('cel')?.touched" class="invalid-feedback">
+            <div *ngIf="clienteForm.get('cel')?.errors?.['required']">Celular es un campo obligatorio.</div>
+            <div *ngIf="clienteForm.get('cel')?.errors?.['pattern']">El celular solo puede contener números.</div>
+            <div *ngIf="clienteForm.get('cel')?.errors?.['minlength']">El celular debe tener al menos 10 caracteres.</div>
+            <div *ngIf="clienteForm.get('cel')?.errors?.['maxlength']">El celular debe tener como máximo 15 caracteres.</div>
+          </div>
         </div>
       </div>
 
-      <div class="row mb-3">
-        <label for="email" class="col-md-4 col-lg-3 col-form-label"
-          >Email</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            formControlName="email"
-          />
-        </div>
-      </div>
+<div class="row mb-3">
+  <label for="email" class="col-md-4 col-lg-3 col-form-label">Email <span style="color:red">(*)</span></label>
+  <div class="col-md-8 col-lg-9">
+    <input
+      type="email"
+      class="form-control"
+      id="email"
+      formControlName="email"
+      [ngClass]="{ 'is-invalid': clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched }"
+    />
+    <div *ngIf="clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched" class="invalid-feedback">
+      <div *ngIf="clienteForm.get('email')?.errors?.['required']">El email es un campo obligatorio.</div>
+      <div *ngIf="clienteForm.get('email')?.errors?.['email']">El formato del email es inválido.</div>
+    </div>
+  </div>
+</div>
 
       <div class="row mb-3">
         <label for="listaPrecioId" class="col-md-4 col-lg-3 col-form-label"
@@ -230,6 +252,7 @@
           </div>
         </div>
       </div>
+
       <div class="text-center">
         <div class=" btn-group">
           <button  class="btn btn-outline-success" type="submit" class="btn btn-outline-success">@if(id()){ Actualizar <i class="bi bi-file-earmark-plus"></i>} @else { Crear <i class="bi bi-file-earmark-plus"></i>}      </button>
