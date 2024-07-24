@@ -26,7 +26,7 @@
 
       <div class="row mb-3">
         <label for="usuario" class="col-md-4 col-lg-3 col-form-label"
-          >Usuario</label
+          >Usuario <span style="color:red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <input
@@ -34,94 +34,117 @@
             class="form-control form-control-sm"
             id="usuario"
             formControlName="usuario"
+            [ngClass]="{ 'is-invalid': usuarioForm.get('usuario')?.invalid && usuarioForm.get('usuario')?.touched }"
           />
+          <div *ngIf="usuarioForm.get('usuario')?.touched && usuarioForm.get('usuario')?.invalid" class="invalid-feedback">
+            <div *ngIf="usuarioForm.get('usuario')?.errors?.['required']">Usuario es un campo obligatorio.</div>
+            <div *ngIf="usuarioForm.get('usuario')?.errors?.['minlength']">Usuario debe tener al menos 3 caracteres.</div>
+          </div>
         </div>
       </div>
 
+
       <div class="row mb-3">
-        <label for="username" class="col-md-4 col-lg-3 col-form-label"
-          >Username</label
-        >
+        <label for="email" class="col-md-4 col-lg-3 col-form-label">Username <span style="color:red">(*)</span></label>
         <div class="col-md-8 col-lg-9">
           <input
-            type="username"
-            class="form-control form-control-sm"
+            type="email"
+            class="form-control"
             id="username"
             formControlName="username"
+            [ngClass]="{ 'is-invalid': usuarioForm.get('username')?.invalid && usuarioForm.get('username')?.touched }"
           />
+          <div *ngIf="usuarioForm.get('username')?.invalid && usuarioForm.get('username')?.touched" class="invalid-feedback">
+            <div *ngIf="usuarioForm.get('username')?.errors?.['required']">El username es un campo obligatorio.</div>
+            <div *ngIf="usuarioForm.get('username')?.errors?.['username']">El formato del username es inválido.</div>
+          </div>
         </div>
       </div>
 
-      <div class="row mb-3">
-        <label for="password1" class="col-md-4 col-lg-3 col-form-label"
-          >Password</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="password1"
-            formControlName="password1"
-          />
-        </div>
-      </div>
+
 
       <div class="row mb-3">
-        <label for="password2" class="col-md-4 col-lg-3 col-form-label"
-          >Password</label
-        >
+        <label for="password1" class="col-md-4 col-lg-3 col-form-label">Contraseña: <span *ngIf="!id()" style="color:red">(*)</span></label>
         <div class="col-md-8 col-lg-9">
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="password2"
-            formControlName="password2"
-          />
+        <input type="text" id="password1" formControlName="password1" class="form-control"
+        [ngClass]="{ 'is-invalid': usuarioForm.get('password1')?.invalid && usuarioForm.get('password1')?.touched }"
+        />
+        <div *ngIf="usuarioForm.get('password1')?.touched && usuarioForm.get('password1')?.invalid" class="invalid-feedback">
+          <div *ngIf="usuarioForm.get('password1')?.errors?.['required']">
+            La contraseña es obligatoria.
+          </div>
         </div>
       </div>
+      </div>
       <div class="row mb-3">
-        <label for="sucursalId" class="col-md-4 col-lg-3 col-form-label"
-          >Sucursal</label
-        >
+        <label for="password2" class="col-md-4 col-lg-3 col-form-label">Repetir Contraseña: <span *ngIf="!id()" style="color:red">(*)</span></label>
+        <div class="col-md-8 col-lg-9">
+        <input type="text" id="password2" formControlName="password2" class="form-control"
+         [ngClass]="{ 'is-invalid': usuarioForm.get('password2')?.invalid && usuarioForm.get('password2')?.touched }"
+        />
+        <div *ngIf="usuarioForm.get('password2')?.touched && usuarioForm.get('password2')?.invalid"class="invalid-feedback">
+          <div *ngIf="usuarioForm.get('password2')?.errors?.['required']">
+            La contraseña es obligatoria.
+          </div>
+        </div>
+      </div>
+      </div>
+
+
+
+      <div class="row mb-3">
+        <label for="sucursalId" class="col-md-4 col-lg-3 col-form-label">Sucursal</label>
         <div class="col-md-8 col-lg-9">
           <select
             class="custom-select custom-select-sm"
             formControlName="sucursalId"
             (ngModelChange)="sucursalChange($event)"
-          >
+            [ngClass]="{ 'is-invalid': usuarioForm.get('sucursalId')?.invalid && usuarioForm.get('sucursalId')?.touched }"
+            >
             <option *ngFor="let sucursal of sucursales()" [value]="sucursal.id">
               {{ sucursal.descripcion }}
             </option>
           </select>
+          <div *ngIf="usuarioForm.get('sucursalId')?.touched && usuarioForm.get('sucursalId')?.invalid"class="invalid-feedback">
+            <div *ngIf="usuarioForm.get('sucursalId')?.errors?.['required']">
+              La sucursal es obligatoria.
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="numPrefId" class="col-md-4 col-lg-3 col-form-label"
-          >Numeracion</label
-        >
+        <label for="numPrefId" class="col-md-4 col-lg-3 col-form-label">Numeracion</label>
         <div class="col-md-8 col-lg-9">
           <select
             class="custom-select custom-select-sm"
             formControlName="numPrefId"
-          >
-            <option
-              *ngFor="let numeracion of numeraciones()"
-              [value]="numeracion.id"
+            [ngClass]="{ 'is-invalid': usuarioForm.get('numPrefId')?.invalid && usuarioForm.get('numPrefId')?.touched }"
             >
+            <option *ngFor="let numeracion of numeraciones()" [value]="numeracion.id">
               {{ numeracion.timbrado }} {{ numeracion.serie }}-00000000
             </option>
           </select>
+          <div *ngIf="usuarioForm.get('numPrefId')?.touched && usuarioForm.get('numPrefId')?.invalid"class="invalid-feedback">
+            <div *ngIf="usuarioForm.get('numPrefId')?.errors?.['required']">
+              El número de preferencia es obligatorio.
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
         <label for="rol" class="col-md-4 col-lg-3 col-form-label">Rol</label>
         <div class="col-md-8 col-lg-9">
-          <select class="custom-select custom-select-sm" formControlName="rol">
+          <select class="custom-select custom-select-sm" formControlName="rol"  [ngClass]="{ 'is-invalid': usuarioForm.get('rol')?.invalid && usuarioForm.get('rol')?.touched }">
             <option value="vendedor" selected>vendedor</option>
             <option value="admin">Admin</option>
           </select>
+          <div *ngIf="usuarioForm.get('rol')?.touched && usuarioForm.get('rol')?.invalid"class="invalid-feedback">
+            <div *ngIf="usuarioForm.get('rol')?.errors?.['required']">
+              El número de preferencia es obligatorio.
+            </div>
+          </div>
         </div>
       </div>
 

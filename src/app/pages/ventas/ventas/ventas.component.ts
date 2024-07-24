@@ -174,6 +174,7 @@ export class VentasComponent implements OnInit {
   }
 
   async selectCliente(cliente: Cliente) {
+    this.showShop = false;
     console.log("Selected client:", cliente);
     // Actualiza la señal del cliente
     this.cliente.set(cliente);
@@ -190,6 +191,8 @@ export class VentasComponent implements OnInit {
     this.actualizarCargador();
     this.reCalcular();
     this.refresh();
+    this.showShop = true;
+
   }
 
   seleccionarLista(listaPrecioId: number): Promise<ListaPrecio> {

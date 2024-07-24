@@ -83,6 +83,8 @@ export class UsuarioComponent implements OnInit {
               this.numeraciones.set(resp);
               console.log(this.usuarioForm.value);
               this.usuarioForm.patchValue(usuarioData);
+               // Update the form based on the presence of an id
+               this.updateFormForEdit();
             });
           },
           error: message => {
@@ -90,20 +92,33 @@ export class UsuarioComponent implements OnInit {
             // Maneja el error de forma adecuada (por ejemplo, mostrando un mensaje al usuario)
           }
         });
+      }else {
+        this.updateFormForCreate();
       }
     });
   }
-
-
+  updateFormForEdit() {
+    this.usuarioForm.get('password1')?.clearValidators();
+    this.usuarioForm.get('password2')?.clearValidators();
+    this.usuarioForm.get('password1')?.updateValueAndValidity();
+    this.usuarioForm.get('password2')?.updateValueAndValidity();
+  }
+  updateFormForCreate() {
+    this.usuarioForm.get('password1')?.setValidators(Validators.required);
+    this.usuarioForm.get('password2')?.setValidators(Validators.required);
+    this.usuarioForm.get('password1')?.updateValueAndValidity();
+    this.usuarioForm.get('password2')?.updateValueAndValidity();
+  }
   initForm() {
     return this.fb.group({
+      empresaId: [1, Validators.required],
       sucursalId: [null, Validators.required],
       numPrefId: [null, Validators.required],
       rol: [null, Validators.required],
-      usuario: [null, Validators.required],
+      usuario: [null, [Validators.required, Validators.minLength(3)]],
       img: [''],
-      password1: [null, Validators.required],
-      password2: [null, Validators.required],
+      password1: [null],
+      password2: [null],
       password: [null, Validators.required],
       username: [null, [Validators.required, Validators.email]],
       activo: [true],
@@ -112,6 +127,14 @@ export class UsuarioComponent implements OnInit {
   }
   onSubmit(e: Event) {
     e.preventDefault()
+    if (this.usuarioForm.invalid) {
+      this.usuarioForm.markAllAsTouched();
+
+      // Log the errors to the console
+      console.log(this.getFormErrors());
+
+      return;
+    }
     const usuarioData = this.usuarioForm.value;
     Swal.showLoading();
 
@@ -166,7 +189,18 @@ export class UsuarioComponent implements OnInit {
     }
 
   }
+  getFormErrors() {
+    const errors: { field: string; errors: any }[] = [];
 
+    Object.keys(this.usuarioForm.controls).forEach(key => {
+      const control = this.usuarioForm.get(key);
+      if (control && control.invalid && (control.touched || control.dirty)) {
+        errors.push({ field: key, errors: control.errors });
+      }
+    });
+
+    return errors;
+  }
   actualizarImagen(event: any, id: number) {
 
     this.imagenesSubir[0] = event.target.files[0];
