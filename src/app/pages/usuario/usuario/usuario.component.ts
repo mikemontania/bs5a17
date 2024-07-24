@@ -119,7 +119,6 @@ export class UsuarioComponent implements OnInit {
       img: [''],
       password1: [null],
       password2: [null],
-      password: [null, Validators.required],
       username: [null, [Validators.required, Validators.email]],
       activo: [true],
       bloqueado: [false]
@@ -128,6 +127,7 @@ export class UsuarioComponent implements OnInit {
   onSubmit(e: Event) {
     e.preventDefault()
     if (this.usuarioForm.invalid) {
+      console.log(this.usuarioForm)
       this.usuarioForm.markAllAsTouched();
 
       // Log the errors to the console

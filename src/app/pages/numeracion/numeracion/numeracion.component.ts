@@ -60,23 +60,30 @@ export class NumeracionComponent implements OnInit {
   }
   private initForm(){
     return this.fb.group({
+      empresaId: [1, Validators.required],
       inicioTimbrado: [null, Validators.required],
       finTimbrado: [null, Validators.required],
-      id: [null, Validators.required],
-      empresaId: [null, Validators.required],
       sucursalId: [null, Validators.required],
-      numeroInicio: [null, Validators.required],
-      numeroFin: [null, Validators.required],
-      serie: [null, Validators.required],
-      timbrado: ['', Validators.required],
+      numeroInicio: [null, [Validators.required, Validators.min(1), Validators.max(999999999)]],
+      numeroFin: [null, [Validators.required, Validators.min(1), Validators.max(999999999)]],
+      serie: ['', [Validators.required, Validators.pattern(/^\d{3}-\d{3}$/)]],
+      timbrado: ['', [Validators.required, Validators.pattern(/^\d{8}$/)]],
       tipoComprobante: ['FACTURA', Validators.required],
-      ultimoNumero: [null, Validators.required],
+      ultimoNumero: [null, [Validators.required, Validators.min(0)]],
       tipoImpresion: ['FACTURA', Validators.required],
       activo: [false]  // Puedes ajustar el valor predeterminado según tus necesidades
     });
   }
   onSubmit(e:Event) {
     e.preventDefault()
+    if (this.numeracionForm.invalid) {
+      this.numeracionForm.markAllAsTouched();
+
+      // Log the errors to the console
+      console.log(this.getFormErrors());
+
+      return;
+    }
     const numeracionData: Numeracion = this.numeracionForm.value;
     Swal.showLoading();
     if (this.id()) {
@@ -119,7 +126,18 @@ export class NumeracionComponent implements OnInit {
     }
 
   }
+  getFormErrors() {
+    const errors: { field: string; errors: any }[] = [];
 
+    Object.keys(this.numeracionForm.controls).forEach(key => {
+      const control = this.numeracionForm.get(key);
+      if (control && control.invalid && (control.touched || control.dirty)) {
+        errors.push({ field: key, errors: control.errors });
+      }
+    });
+
+    return errors;
+  }
 
 
 }

@@ -1,21 +1,13 @@
 <div class="card">
-    <div class="card-header">
-      @if(id()){
-        Actualizar Sucursal
-      }@else {
-        Crear Sucursal
-      }
-    </div>
-
+  <div class="card-header">
+    @if(id()){ Actualizar Sucursal }@else { Crear Sucursal }
+  </div>
 
   <div class="card-body">
-    <form
-      [formGroup]="sucursalForm"
-      (ngSubmit)="onSubmit($event)"
-    >
+    <form [formGroup]="sucursalForm" (ngSubmit)="onSubmit($event)">
       <div class="row mb-3">
         <label for="descripcion" class="col-md-4 col-lg-3 col-form-label"
-          >Sucursal</label
+          >Sucursal <span style="color: red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <input
@@ -24,12 +16,26 @@
             id="descripcion"
             formControlName="descripcion"
           />
+          <div
+            *ngIf="
+              sucursalForm.get('descripcion')?.touched &&
+              sucursalForm.get('descripcion')?.invalid
+            "
+            class="text-danger"
+          >
+            <div *ngIf="sucursalForm.get('descripcion')?.errors?.['required']">
+              Sucursal es un campo obligatorio.
+            </div>
+            <div *ngIf="sucursalForm.get('descripcion')?.errors?.['minlength']">
+              La descripcion debe tener al menos 5 caracteres.
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
         <label for="direccion" class="col-md-4 col-lg-3 col-form-label"
-          >Direccion</label
+          >Direccion <span style="color: red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <input
@@ -38,12 +44,55 @@
             id="direccion"
             formControlName="direccion"
           />
+          <div
+            *ngIf="
+              sucursalForm.get('direccion')?.touched &&
+              sucursalForm.get('direccion')?.invalid
+            "
+            class="text-danger"
+          >
+            <div *ngIf="sucursalForm.get('direccion')?.errors?.['required']">
+              dirección es un campo obligatorio.
+            </div>
+            <div *ngIf="sucursalForm.get('direccion')?.errors?.['minlength']">
+              La direccion debe tener al menos 5 caracteres.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="cel" class="col-md-4 col-lg-3 col-form-label"
+          >Cel <span style="color: red">(*)</span></label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="cel"
+            formControlName="cel"
+            [mask]="'(0000) 000-000'"
+          />
+          <div
+            *ngIf="
+              sucursalForm.get('cel')?.touched &&
+              sucursalForm.get('cel')?.invalid
+            "
+            class="text-danger"
+          >
+            <div *ngIf="sucursalForm.get('cel')?.errors?.['required']">
+              cel es un campo obligatorio.
+            </div>
+            <div *ngIf="sucursalForm.get('cel')?.errors?.['minlength']">
+              La cel debe tener al menos 10 caracteres.
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
         <label for="telefono" class="col-md-4 col-lg-3 col-form-label"
-          >Telefono</label
+          >Telefono <span style="color: red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <input
@@ -51,13 +100,15 @@
             class="form-control"
             id="telefono"
             formControlName="telefono"
+            [mask]="'(000) 000-0009'"
+            [dropSpecialCharacters]="false"
           />
         </div>
       </div>
 
       <div class="row mb-3">
         <label for="email" class="col-md-4 col-lg-3 col-form-label"
-          >Email</label
+          >Email <span style="color: red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <input
@@ -65,13 +116,28 @@
             class="form-control"
             id="email"
             formControlName="email"
+            [ngClass]="{
+              'is-invalid':
+                sucursalForm.get('email')?.invalid &&
+                sucursalForm.get('email')?.touched
+            }"
           />
+          <div
+            *ngIf="
+              sucursalForm.get('email')?.invalid &&
+              sucursalForm.get('email')?.touched
+            "
+            class="invalid-feedback"
+          >
+            <div *ngIf="sucursalForm.get('email')?.errors?.['required']">
+              El email es un campo obligatorio.
+            </div>
+            <div *ngIf="sucursalForm.get('email')?.errors?.['email']">
+              El formato del email es inválido.
+            </div>
+          </div>
         </div>
       </div>
-
-
-
-
 
       <div class="form-row">
         <div class="col-md-6">
@@ -80,8 +146,6 @@
               >Estados</label
             >
             <div class="col-md-8 col-lg-9">
-
-
               <div class="form-check">
                 <input
                   class="form-check-input"
@@ -92,18 +156,28 @@
                 />
                 <label class="form-check-label" for="activo"> activo </label>
               </div>
-
-
             </div>
           </div>
         </div>
       </div>
       <div class="text-center">
-        <div class=" btn-group">
-          <button  class="btn btn-outline-success" type="submit" class="btn btn-outline-success">@if(id()){ Actualizar <i class="bi bi-file-earmark-plus"></i>} @else { Crear <i class="bi bi-file-earmark-plus"></i>}      </button>
-          <button type="button" (click)="ngOnInit()" class="btn btn-outline-danger">Cancelar <i class="bi bi-x-lg"></i></button>
+        <div class="btn-group">
+          <button
+            class="btn btn-outline-success"
+            type="submit"
+            class="btn btn-outline-success"
+          >
+            @if(id()){ Actualizar <i class="bi bi-file-earmark-plus"></i>} @else
+            { Crear <i class="bi bi-file-earmark-plus"></i>}
+          </button>
+          <button
+            type="button"
+            (click)="ngOnInit()"
+            class="btn btn-outline-danger"
+          >
+            Cancelar <i class="bi bi-x-lg"></i>
+          </button>
         </div>
-
       </div>
     </form>
   </div>

@@ -1,134 +1,155 @@
 <div class="card">
-    <div class="card-header">
-      @if(id()){
-        Actualizar Numeracion
-      }@else {
-        Crear Numeracion
-      }
-    </div>
-
+  <div class="card-header">
+    @if(id()){ Actualizar Numeracion }@else { Crear Numeracion }
+  </div>
 
   <div class="card-body">
-    <form
-      [formGroup]="numeracionForm"
-      (ngSubmit)="onSubmit($event)"
-    >
+    <form [formGroup]="numeracionForm" (ngSubmit)="onSubmit($event)">
+
+
       <div class="row mb-3">
-        <label for="timbrado" class="col-md-4 col-lg-3 col-form-label"
-          >Timbrado</label
-        >
+        <label for="timbrado" class="col-md-4 col-lg-3 col-form-label">Timbrado</label>
         <div class="col-md-8 col-lg-9">
           <input
             type="text"
             class="form-control"
             id="timbrado"
             formControlName="timbrado"
+            placeholder="16999661"
+            maxlength="8"
           />
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label for="serie" class="col-md-4 col-lg-3 col-form-label"
-          >Serie</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="text"
-            class="form-control"
-            id="serie"
-            formControlName="serie"
-          />
+          <div *ngIf="numeracionForm.get('timbrado')?.touched && numeracionForm.get('timbrado')?.invalid" class="text-danger">
+            <div *ngIf="numeracionForm.get('timbrado')?.errors?.['required']">Este campo es obligatorio.</div>
+            <div *ngIf="numeracionForm.get('timbrado')?.errors?.['pattern']">Debe tener exactamente 8 dígitos.</div>
+          </div>
         </div>
       </div>
 
-      <div class="row mb-3">
-        <label for="inicioTimbrado" class="col-md-4 col-lg-3 col-form-label"
-          >F.inicio</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="date"
-            class="form-control"
-            id="inicioTimbrado"
-            formControlName="inicioTimbrado"
-          />
-        </div>
+     <div class="row mb-3">
+    <label for="serie" class="col-md-4 col-lg-3 col-form-label">Serie</label>
+    <div class="col-md-8 col-lg-9">
+      <input
+        type="text"
+        class="form-control"
+        id="serie"
+        formControlName="serie"
+        placeholder="012-001"
+        maxlength="7"
+      />
+      <div *ngIf="numeracionForm.get('serie')?.touched && numeracionForm.get('serie')?.invalid" class="text-danger">
+        <div *ngIf="numeracionForm.get('serie')?.errors?.['required']">Este campo es obligatorio.</div>
+        <div *ngIf="numeracionForm.get('serie')?.errors?.['pattern']">Formato incorrecto. Ejemplo: 012-001</div>
       </div>
-
-      <div class="row mb-3">
-        <label for="finTimbrado" class="col-md-4 col-lg-3 col-form-label"
-          >F.fin</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="date"
-            class="form-control"
-            id="finTimbrado"
-            formControlName="finTimbrado"
-          />
-        </div>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="inicioTimbrado" class="col-md-4 col-lg-3 col-form-label">
+      F.inicio <span style="color:red">(*)</span>
+    </label>
+    <div class="col-md-8 col-lg-9">
+      <input
+        type="date"
+        class="form-control"
+        id="inicioTimbrado"
+        formControlName="inicioTimbrado"
+      />
+      <div *ngIf="numeracionForm.get('inicioTimbrado')?.touched && numeracionForm.get('inicioTimbrado')?.invalid" class="text-danger">
+        <div *ngIf="numeracionForm.get('inicioTimbrado')?.errors?.['required']">Este campo es obligatorio.</div>
       </div>
+    </div>
+  </div>
 
-      <div class="row mb-3">
-        <label for="numeroInicio" class="col-md-4 col-lg-3 col-form-label"
-          >Nº Inicio</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="number"
-            class="form-control"
-            id="numeroInicio"
-            formControlName="numeroInicio"
-          />
-        </div>
+  <div class="row mb-3">
+    <label for="finTimbrado" class="col-md-4 col-lg-3 col-form-label">
+      F.fin <span style="color:red">(*)</span>
+    </label>
+    <div class="col-md-8 col-lg-9">
+      <input
+        type="date"
+        class="form-control"
+        id="finTimbrado"
+        formControlName="finTimbrado"
+      />
+      <div *ngIf="numeracionForm.get('finTimbrado')?.touched && numeracionForm.get('finTimbrado')?.invalid" class="text-danger">
+        <div *ngIf="numeracionForm.get('finTimbrado')?.errors?.['required']">Este campo es obligatorio.</div>
       </div>
-
-      <div class="row mb-3">
-        <label for="numeroFin" class="col-md-4 col-lg-3 col-form-label"
-          >Nº Fin</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="number"
-            class="form-control"
-            id="numeroFin"
-            formControlName="numeroFin"
-          />
-        </div>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="numeroInicio" class="col-md-4 col-lg-3 col-form-label">Nº Inicio</label>
+    <div class="col-md-8 col-lg-9">
+      <input
+        type="number"
+        class="form-control"
+        id="numeroInicio"
+        formControlName="numeroInicio"
+        min="1"
+        max="999999999"
+      />
+      <div *ngIf="numeracionForm.get('numeroInicio')?.touched && numeracionForm.get('numeroInicio')?.invalid" class="text-danger">
+        <div *ngIf="numeracionForm.get('numeroInicio')?.errors?.['required']">Este campo es obligatorio.</div>
+        <div *ngIf="numeracionForm.get('numeroInicio')?.errors?.['min'] || numeracionForm.get('numeroInicio')?.errors?.['max']">El número debe estar entre 1 y 999999999.</div>
       </div>
+    </div>
+  </div>
 
 
-      <div class="row mb-3">
-        <label for="ultimoNumero" class="col-md-4 col-lg-3 col-form-label"
-          >Ultimo numero</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="number"
-            class="form-control"
-            id="ultimoNumero"
-            formControlName="ultimoNumero"
-          />
-        </div>
+  <div class="row mb-3">
+    <label for="numeroFin" class="col-md-4 col-lg-3 col-form-label">Nº Fin</label>
+    <div class="col-md-8 col-lg-9">
+      <input
+        type="number"
+        class="form-control"
+        id="numeroFin"
+        formControlName="numeroFin"
+        min="1"
+        max="999999999"
+      />
+      <div *ngIf="numeracionForm.get('numeroFin')?.touched && numeracionForm.get('numeroFin')?.invalid" class="text-danger">
+        <div *ngIf="numeracionForm.get('numeroFin')?.errors?.['required']">Este campo es obligatorio.</div>
+        <div *ngIf="numeracionForm.get('numeroFin')?.errors?.['min'] || numeracionForm.get('numeroFin')?.errors?.['max']">El número debe estar entre 1 y 999999999.</div>
       </div>
+    </div>
+  </div>
 
-      <div class="row mb-3">
-        <label for="sucursalId" class="col-md-4 col-lg-3 col-form-label"
-          >Sucursal</label
-        >
-        <div class="col-md-8 col-lg-9">
-          <select
-            class="form-control"
-            id="sucursalId"
-            formControlName="sucursalId"
-          >
-            <option *ngFor="let s of sucursales()" [value]="s.id">
-              {{ s.descripcion }}
-            </option>
-          </select>
-        </div>
+
+
+
+     <!-- Campo Último Número -->
+  <div class="row mb-3">
+    <label for="ultimoNumero" class="col-md-4 col-lg-3 col-form-label">Último número</label>
+    <div class="col-md-8 col-lg-9">
+      <input
+        type="number"
+        class="form-control"
+        id="ultimoNumero"
+        formControlName="ultimoNumero"
+        min="0"
+      />
+      <div *ngIf="numeracionForm.get('ultimoNumero')?.touched && numeracionForm.get('ultimoNumero')?.invalid" class="text-danger">
+        <div *ngIf="numeracionForm.get('ultimoNumero')?.errors?.['required']">Este campo es obligatorio.</div>
+        <div *ngIf="numeracionForm.get('ultimoNumero')?.errors?.['min']">El número debe ser al menos 0.</div>
       </div>
+    </div>
+  </div>
 
-
+  <div class="row mb-3">
+    <label for="sucursalId" class="col-md-4 col-lg-3 col-form-label">Sucursal</label>
+    <div class="col-md-8 col-lg-9">
+      <select
+        class="form-control"
+        id="sucursalId"
+        formControlName="sucursalId"
+      >
+        <option *ngFor="let s of sucursales()" [value]="s.id">
+          {{ s.descripcion }}
+        </option>
+      </select>
+      <div *ngIf="numeracionForm.get('sucursalId')?.touched && numeracionForm.get('sucursalId')?.invalid" class="text-danger">
+        <div *ngIf="numeracionForm.get('sucursalId')?.errors?.['required']">Este campo es obligatorio.</div>
+      </div>
+    </div>
+  </div>
 
       <div class="form-row">
         <div class="col-md-6">
@@ -137,8 +158,6 @@
               >Estados</label
             >
             <div class="col-md-8 col-lg-9">
-
-
               <div class="form-check">
                 <input
                   class="form-check-input"
@@ -149,18 +168,28 @@
                 />
                 <label class="form-check-label" for="activo"> activo </label>
               </div>
-
-
             </div>
           </div>
         </div>
       </div>
       <div class="text-center">
-        <div class=" btn-group">
-          <button  class="btn btn-outline-success" type="submit" class="btn btn-outline-success">@if(id()){ Actualizar <i class="bi bi-file-earmark-plus"></i>} @else { Crear <i class="bi bi-file-earmark-plus"></i>}      </button>
-          <button type="button" (click)="ngOnInit()" class="btn btn-outline-danger">Cancelar <i class="bi bi-x-lg"></i></button>
+        <div class="btn-group">
+          <button
+            class="btn btn-outline-success"
+            type="submit"
+            class="btn btn-outline-success"
+          >
+            @if(id()){ Actualizar <i class="bi bi-file-earmark-plus"></i>} @else
+            { Crear <i class="bi bi-file-earmark-plus"></i>}
+          </button>
+          <button
+            type="button"
+            (click)="ngOnInit()"
+            class="btn btn-outline-danger"
+          >
+            Cancelar <i class="bi bi-x-lg"></i>
+          </button>
         </div>
-
       </div>
     </form>
   </div>

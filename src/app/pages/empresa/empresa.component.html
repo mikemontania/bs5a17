@@ -11,7 +11,7 @@
         />
         <img *ngIf="imgTemps[0]" [src]="imgTemps[0]" class="img-avatar" />
         <img
-          *ngIf="empresaForm.get('img')!.value && !imgTemps[0]"
+          *ngIf="empresaForm.get('img')?.value && !imgTemps[0]"
           [attr.src]="
             empresaForm.get('img')?.value | imagen: 'empresas' | async
           "
@@ -26,13 +26,9 @@
         />
       </div>
 
-
-
-
-
       <div class="row mb-3">
         <label for="ruc" class="col-md-4 col-lg-3 col-form-label"
-          >Ruc</label
+          >Ruc <span style="color: red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <input
@@ -41,11 +37,24 @@
             id="ruc"
             formControlName="ruc"
           />
+          <div
+            *ngIf="
+              empresaForm.get('ruc')?.touched && empresaForm.get('ruc')?.invalid
+            "
+            class="text-danger"
+          >
+            <div *ngIf="empresaForm.get('ruc')?.errors?.['required']">
+              Este campo es obligatorio.
+            </div>
+            <div *ngIf="empresaForm.get('ruc')?.errors?.['pattern']">
+              Debe ser un formato válido (ej. 4353456-7).
+            </div>
+          </div>
         </div>
       </div>
       <div class="row mb-3">
         <label for="razonSocial" class="col-md-4 col-lg-3 col-form-label"
-          >Razon social</label
+          >Razon social <span style="color: red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <input
@@ -54,26 +63,55 @@
             id="razonSocial"
             formControlName="razonSocial"
           />
+          <div
+            *ngIf="
+              empresaForm.get('razonSocial')?.touched &&
+              empresaForm.get('razonSocial')?.invalid
+            "
+            class="text-danger"
+          >
+            <div *ngIf="empresaForm.get('razonSocial')?.errors?.['required']">
+              Este campo es obligatorio.
+            </div>
+            <div *ngIf="empresaForm.get('razonSocial')?.errors?.['minlength']">
+              Debe tener al menos 6 caracteres.
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
         <label for="telefono" class="col-md-4 col-lg-3 col-form-label"
-          >Telefono</label
+          >Teléfono <span style="color: red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <input
-            type="telefono"
-            class="form-control form-control-sm"
+            type="text"
+            class="form-control"
             id="telefono"
             formControlName="telefono"
+            placeholder="(021) 588 9000"
           />
+          <div
+            *ngIf="
+              empresaForm.get('telefono')?.touched &&
+              empresaForm.get('telefono')?.invalid
+            "
+            class="text-danger"
+          >
+            <div *ngIf="empresaForm.get('telefono')?.errors?.['required']">
+              El teléfono es obligatorio.
+            </div>
+            <div *ngIf="empresaForm.get('telefono')?.errors?.['pattern']">
+              Debe seguir el formato (021) 588 9000.
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
         <label for="actividad1" class="col-md-4 col-lg-3 col-form-label"
-          >actividad1</label
+          >Actividad 1 <span style="color: red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <textarea
@@ -82,12 +120,26 @@
             id="actividad1"
             formControlName="actividad1"
           ></textarea>
+          <div
+            *ngIf="
+              empresaForm.get('actividad1')?.touched &&
+              empresaForm.get('actividad1')?.invalid
+            "
+            class="text-danger"
+          >
+            <div *ngIf="empresaForm.get('actividad1')?.errors?.['required']">
+              Este campo es obligatorio.
+            </div>
+            <div *ngIf="empresaForm.get('actividad1')?.errors?.['minlength']">
+              Debe tener al menos 6 caracteres.
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
         <label for="actividad2" class="col-md-4 col-lg-3 col-form-label"
-          >actividad1</label
+          >Actividad 2</label
         >
         <div class="col-md-8 col-lg-9">
           <textarea
@@ -101,7 +153,7 @@
 
       <div class="row mb-3">
         <label for="actividad3" class="col-md-4 col-lg-3 col-form-label"
-          >actividad3</label
+          >Actividad 3</label
         >
         <div class="col-md-8 col-lg-9">
           <textarea
@@ -113,10 +165,9 @@
         </div>
       </div>
 
-
       <div class="row mb-3">
         <label for="web" class="col-md-4 col-lg-3 col-form-label"
-          >Web</label
+          >Web <span style="color: red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <input
@@ -125,12 +176,25 @@
             id="web"
             formControlName="web"
           />
+          <div
+            *ngIf="
+              empresaForm.get('web')?.touched && empresaForm.get('web')?.invalid
+            "
+            class="text-danger"
+          >
+            <div *ngIf="empresaForm.get('web')?.errors?.['required']">
+              Este campo es obligatorio.
+            </div>
+            <div *ngIf="empresaForm.get('web')?.errors?.['pattern']">
+              Debe ser una URL válida.
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
         <label for="email" class="col-md-4 col-lg-3 col-form-label"
-          >Email</label
+          >Email <span style="color: red">(*)</span></label
         >
         <div class="col-md-8 col-lg-9">
           <input
@@ -139,6 +203,20 @@
             id="email"
             formControlName="email"
           />
+          <div
+            *ngIf="
+              empresaForm.get('email')?.touched &&
+              empresaForm.get('email')?.invalid
+            "
+            class="text-danger"
+          >
+            <div *ngIf="empresaForm.get('email')?.errors?.['required']">
+              Este campo es obligatorio.
+            </div>
+            <div *ngIf="empresaForm.get('email')?.errors?.['email']">
+              Debe ser un email válido.
+            </div>
+          </div>
         </div>
       </div>
       <div class="text-center">
@@ -148,9 +226,8 @@
             type="submit"
             class="btn btn-outline-success"
           >
-         Actualizar <i class="bi bi-file-earmark-plus"></i>
+            Actualizar <i class="bi bi-file-earmark-plus"></i>
           </button>
-
         </div>
       </div>
     </form>

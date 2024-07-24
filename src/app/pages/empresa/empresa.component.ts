@@ -41,12 +41,7 @@ export class EmpresaComponent implements OnInit {
     // Initialize the property in the constructor
     this.empresaForm = this.initForm()
 
-    forkJoin([
-      this._empresaService.getById(this._authService.currentUser()?.empresaId!),
-
-    ]).subscribe(([empresa]) => {
-      this.empresaForm.patchValue(empresa);
-    });
+    this.init()
 
   }
 
@@ -55,53 +50,78 @@ export class EmpresaComponent implements OnInit {
   ngOnInit() {
 
   }
+  init() {
+    forkJoin([
+      this._empresaService.getById(this._authService.currentUser()?.empresaId!),
 
+    ]).subscribe(([empresa]) => {
+      this.empresaForm.patchValue(empresa);
+    });
+  }
 
   initForm() {
     return this.fb.group({
-      id: [null],
-      razonSocial: [null, Validators.required],
-      actividad1: [null],
+      id: [1],
+      razonSocial: [null, [Validators.required, Validators.minLength(6)]],
+      actividad1: [null, [Validators.required, Validators.minLength(6)]],
       actividad2: [null],
       actividad3: [null],
-      ruc: [null, Validators.required],
-      telefono: [null],
+      ruc: [null, [Validators.required, Validators.pattern(/^\d{6,9}-\d{1}$/)]],
+      telefono: [null, [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3} \d{4}$/)]],
       email: [null, [Validators.required, Validators.email]],
       img: [''],
-      web: [null],
+      web: [null, [Validators.required, Validators.pattern(/^(https?:\/\/)?([\w\d-]+\.)+[a-z]{2,6}(\/[\w\d]*)*$/)]],
     });
   }
+
+  getFormErrors() {
+    const errors: { field: string; errors: any }[] = [];
+
+    Object.keys(this.empresaForm.controls).forEach(key => {
+      const control = this.empresaForm.get(key);
+      if (control && control.invalid && (control.touched || control.dirty)) {
+        errors.push({ field: key, errors: control.errors });
+      }
+    });
+
+    return errors;
+  }
+
   onSubmit(e: Event) {
     e.preventDefault()
+    if (this.empresaForm.invalid) {
+      this.empresaForm.markAllAsTouched();
+      // Log the errors to the console
+      console.log(this.getFormErrors());
+
+      return;
+    }
     const empresaData = this.empresaForm.value;
     Swal.showLoading();
 
-    if (  empresaData?.razonSocial === '' ||empresaData?.razonSocial === null) {
+    if (empresaData?.razonSocial === '' || empresaData?.razonSocial === null) {
       Swal.fire("Error", 'Las Razon social es un campo obligatorio', "error");
       return;
     }
-    if (  empresaData?.ruc === '' ||empresaData?.ruc === null) {
+    if (empresaData?.ruc === '' || empresaData?.ruc === null) {
       Swal.fire("Error", 'Las Ruc es un campo obligatorio', "error");
       return;
     }
 
 
-      this._empresaService.update(empresaData).subscribe({
-        next: async (resp) => {
-          const img = await this.subirImagen(resp.id);
-          this.empresaForm.patchValue({ ...empresaData, img });
-          Swal.close()
-          Swal.fire("Actualización exitosa!!!", "Guardado con exito !!!"  , "success");
-          this.router.navigateByUrl('/empresa');
-        },
-        error: (error) => {
-          Swal.close()
-          Swal.fire("Error", error, "error");
-        },
-        complete: () => {
-          this.empresaForm = this.fb.group({});
-        }// Use 'complete' instead of 'finally'
-      });
+    this._empresaService.update(empresaData).subscribe({
+      next: async (resp) => {
+        const img = await this.subirImagen(resp.id);
+
+        Swal.close()
+        Swal.fire("Actualización exitosa!!!", "Guardado con exito !!!", "success");
+        this.init()
+      },
+      error: (error) => {
+        Swal.close()
+        Swal.fire("Error", error, "error");
+      }
+    });
 
 
   }

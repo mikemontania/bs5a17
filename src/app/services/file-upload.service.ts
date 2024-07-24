@@ -30,10 +30,11 @@ export class FileUploadService {
     return this.http.put<UploadResponse>(url, formData)
       .pipe(
         map((resp:any) => {
-          if (resp.ok) {
+          console.log(resp)
+          if (resp) {
             return resp.nombreArchivo;
           } else {
-            console.error(resp.msg); // Log specific error message
+            console.error(resp); // Log specific error message
             return false;
           }
         }),

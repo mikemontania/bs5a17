@@ -7,11 +7,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { SucursalService } from '../../../services/service.index';
 import { Sucursal } from '../../../interfaces/sucursal.interface';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-sucursal',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule,NgxMaskDirective],
+  providers: [provideNgxMask()],
   templateUrl: './sucursal.component.html',
   styleUrl: './sucursal.component.css'
 })
@@ -59,17 +61,38 @@ export class SucursalComponent implements OnInit {
   }
   private initForm() {
     return this.fb.group({
-      id: [null, Validators.required],
-      descripcion: [null, Validators.required],
-      direccion: [null, Validators.required],
-      telefono: [null, Validators.required],
-      empresasId: [null, Validators.required],
-      email: [null, Validators.required],
+      empresasId: [1, Validators.required],
+      descripcion:[null, [Validators.required, Validators.minLength(5)]],
+      direccion: [null, [Validators.required, Validators.minLength(5)]],
+      cel: [null, [Validators.required, Validators.minLength(10)]],
+      telefono: [null, [Validators.required, Validators.minLength(9)]],
+      email: [null, [Validators.required, Validators.email]],
       activo: [true]
     });
   }
+  getFormErrors() {
+    const errors: { field: string; errors: any }[] = [];
+
+    Object.keys(this.sucursalForm.controls).forEach(key => {
+      const control = this.sucursalForm.get(key);
+      if (control && control.invalid && (control.touched || control.dirty)) {
+        errors.push({ field: key, errors: control.errors });
+      }
+    });
+
+    return errors;
+  }
   onSubmit(e:Event) {
-    e.preventDefault()
+    e.preventDefault();
+
+    if (this.sucursalForm.invalid) {
+      this.sucursalForm.markAllAsTouched();
+
+      // Log the errors to the console
+      console.log(this.getFormErrors());
+
+      return;
+    }
     const sucursalData: Sucursal = this.sucursalForm.value;
     Swal.showLoading();
     if (this.id()) {
@@ -80,7 +103,7 @@ export class SucursalComponent implements OnInit {
       this._sucursalService.update(sucursal).subscribe({
         next: (resp) => {
           Swal.close()
-          Swal.fire("Actualización exitosa!!!", "Se ha actualizado al sucursal: " + resp.serie, "success");
+          Swal.fire("Actualización exitosa!!!", "Se ha actualizado al sucursal: " + resp.descripcion, "success");
           this.router.navigateByUrl('/sucursales');
         },
         error: (error) => {

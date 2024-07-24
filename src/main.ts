@@ -7,11 +7,17 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app/app.routes';
 import { interceptorServ } from './app/interceptor/interceptor.interceptor';
 import { ServiceModule } from './app/services/service.module';
+import {   provideEnvironmentNgxMask, IConfig } from 'ngx-mask';
 
+// Configuración opcional
+const maskConfig: Partial<IConfig> = {
+  validation: false,
+};
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideAnimations(),
+    provideEnvironmentNgxMask(maskConfig),
     provideRouter(routes),
      provideHttpClient(withInterceptors([interceptorServ])),
     ServiceModule
