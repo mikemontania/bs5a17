@@ -53,7 +53,7 @@
         name="sucursalSeleccionada"
         id="sucursal"
       >
-        <option [value]="0">TODAS LAS SUCURSALES</option>
+
         <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
           {{ sucursal.descripcion }}
         </option>

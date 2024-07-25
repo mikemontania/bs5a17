@@ -68,7 +68,7 @@ export class ListComponent {
     }).subscribe({
       next: (results) => {
         // Procesar los resultados
-        this.sucursales = results.sucursales;
+        this.sucursales = [...results.sucursales,{descripcion:'TODAS LAS SUCURSALES',id:0}];
         this.listas = [...results.listas,{id:0,descripcion:'Todas las listas'}];
         this.listaPrecio=results.predeterminada;
         this.listaSeleccionada = results.predeterminada.id;

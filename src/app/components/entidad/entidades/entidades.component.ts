@@ -66,7 +66,7 @@ export class EntidadesComponent {
     if (this.tipo == 'subcategorias') {
       return this.fb.group({
         descripcion: [null, Validators.required],
-        categoriasId: [null, Validators.required],
+        categoriaId: [null, Validators.required],
         activo: [true]
       });
     } else if (this.tipo == 'presentaciones') {
@@ -124,6 +124,7 @@ export class EntidadesComponent {
     e.preventDefault();
 
     const entidadData = { ...this.entidadForm.value, productoId: this.id() };
+    console.log(entidadData)
     this._entidadService.create(this.tipo, entidadData).subscribe({
       next: async (resp: any) => {
         console.log(resp)

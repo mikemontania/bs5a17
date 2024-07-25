@@ -11,7 +11,7 @@
               <th>Categoria</th>
             }
             @if(tipo == 'presentaciones'){
-              <th>Sice</th>
+              <th>Size</th>
             }
             @if(tipo == 'variedades'){
               <th>Color</th>
@@ -35,7 +35,7 @@
             @if(tipo == 'subcategorias'){
 
               <td class="field">
-                <select class="custom-select custom-select-sm" formControlName="categoriaId">
+                <select class="custom-select custom-select-sm" formControlName="categoriaId" id="categoriaId">
                   <option *ngFor="let categoria of categorias" [value]="categoria.id">
                     {{ categoria.descripcion }}
                   </option>
