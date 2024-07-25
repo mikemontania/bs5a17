@@ -38,9 +38,11 @@ export class ProductsListComponent implements OnInit {
 
   productos = computed(() => this.productosPage().productos ?? []);
 
-  constructor(private _productosService: ProductosService) { }
+  constructor(private _productosService: ProductosService) {
+  }
 
   ngOnInit() {
+    console.log(this.listaPrecioId)
     this.getProductosPage(1);
   }
   buscar(event: any) {

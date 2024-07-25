@@ -24,7 +24,15 @@ export class NgSucursalSearchComponent implements OnInit {
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
   @Output() sucursal = new EventEmitter<Sucursal>();
-
+  todas:any ={
+    "id": '0',
+    "descripcion": "T.LAS SUCURSALES",
+    "direccion": "RUTA DEPARTAMENTAL D027 (EX RUTA 1 ) E/ISRAEL",
+    "telefono": "(021) 588 9000",
+    "empresasId": 1,
+    "email": "sucursal@example.com",
+    "activo": true
+  }
   sucursales: Sucursal[] = [];
   sucursalesAux: Sucursal[] = [];
   _sucursalesService = inject(SucursalService);
@@ -49,7 +57,7 @@ export class NgSucursalSearchComponent implements OnInit {
   buscar(termino: string) {
       this._sucursalesService.findAll().subscribe(resp=> {
         this.sucursalesAux=resp;
-       ( this._authService.currentUser()?.rol == 'admin' )? this.sucursalesAux.push({descripcion:'TODAS LAS SUCURSALES',id:0} as Sucursal):null;
+       ( this._authService.currentUser()?.rol == 'admin' )? this.sucursalesAux.push( this.todas ):null;
       });
     console.log("sucursales aux", this.sucursalesAux);
 

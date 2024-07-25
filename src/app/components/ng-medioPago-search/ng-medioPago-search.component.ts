@@ -20,6 +20,20 @@ import { MedioPago } from "../../interfaces/facturas.interface";
 export class NgMedioPagoSearchComponent implements OnInit {
   size = "medium";
   delay = 200;
+  mTodos:any ={
+    "fechaCreacion": "2024-07-24 21:09:25",
+    "fechaModificacion": "2024-07-24 21:09:25",
+    "id":"0",
+    "empresaId": 1,
+    "descripcion": "TODOS M.PAGOS",
+    "esCheque": false,
+    "tieneBanco": false,
+    "tieneRef": false,
+    "tieneTipo": false,
+    "esObsequio": false,
+    "usuarioCreacionId": null,
+    "usuarioModificacionId": null
+}
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
   @Output() medioPago = new EventEmitter<MedioPago>();
@@ -30,7 +44,7 @@ export class NgMedioPagoSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.medioPagos = [];
-    this._medioPagosService.findAll().subscribe(resp=> this.medioPagosAux=resp);
+    this._medioPagosService.findAll().subscribe(resp=> this.medioPagosAux=[...resp,this.mTodos]);
     console.log("medioPagos aux", this.medioPagosAux);
     this.buscar("");
   }
@@ -56,7 +70,7 @@ export class NgMedioPagoSearchComponent implements OnInit {
           .includes(termino.toLowerCase());
       });
     }else{
-      this._medioPagosService.findAll().subscribe(resp=> this.medioPagosAux=resp);
+      this._medioPagosService.findAll().subscribe(resp=> this.medioPagosAux=[...resp,this.mTodos]);
     }
 
    // this.medioPagos = this.medioPagosAux;

@@ -174,31 +174,28 @@ export class VentasComponent implements OnInit {
   }
 
   async selectCliente(cliente: Cliente) {
-    this.showShop = false;
-    console.log("Selected client:", cliente);
-    // Actualiza la señal del cliente
-    this.cliente.set(cliente);
-    // Espera a la lista de precios y actualiza la señal correspondiente
     try {
-      const listaPrecio = await this.seleccionarLista(cliente.listaPrecioId);
-      this.listaPrecio.set(listaPrecio);
+       console.log("Selected client:", cliente);
+      // Actualiza la señal del cliente
+      this.cliente.set(cliente);
+      // Espera a la lista de precios y actualiza la señal correspondiente
+      this.listaPrecio.set({ ...cliente.listaPrecio ,id:cliente.listaPrecioId} as ListaPrecio);
+
+      // Cierra el modal y realiza otras operaciones necesarias
+      this.searchCliente = false;
+      this.actualizarCargador();
+      this.reCalcular();
+      this.refresh();
+
+
     } catch (error) {
       console.error("Error al seleccionar la lista de precios:", error);
       // Maneja el error de manera apropiada aquí
     }
-    // Cierra el modal y realiza otras operaciones necesarias
-    this.searchCliente = false;
-    this.actualizarCargador();
-    this.reCalcular();
-    this.refresh();
-    this.showShop = true;
 
   }
 
-  seleccionarLista(listaPrecioId: number): Promise<ListaPrecio> {
-    // Retorna directamente la promesa del servicio
-    return this._listaPrecioService.getById(listaPrecioId).toPromise();
-  }
+
   selectSucursal(sucursal: Sucursal) {
     console.log("Selected sucursal:", sucursal);
     this.sucursal.set(sucursal); // Update the client signal
