@@ -50,5 +50,24 @@ export class VentasService {
       );
   }
 
+  generarXML(ventaId: number) {
+    return this.http.get(BASE_URL + `/ventas/generar-xml/${ventaId}`, { responseType: 'blob' })
+      .pipe(
+        map((respo: Blob) => {
+          return respo;
+        })
+      );
+  }
+
+  firmarXML(id: number) {
+
+    return this.http.get(BASE_URL + `/ventas/firmar-xml/${id}` )
+      .pipe(
+        map((respo: any) => {
+          return respo as any;
+        })
+      );
+  }
+
 
 }

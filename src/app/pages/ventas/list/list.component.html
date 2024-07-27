@@ -126,6 +126,7 @@
                 <th scope="col">anular</th>
                 <th scope="col">detalles</th>
                 <th scope="col">doc</th>
+                <th scope="col">xml</th>
               </tr>
             </thead>
             <tbody>
@@ -179,6 +180,14 @@
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Ver documento"  (click)="getDoc(venta.id)">
+                    <i class="bi bi-card-list"></i>
+                  </button>
+                </td>
+                <td  class="text-sm">
+                  <button class="btn btn-sm btn-outline-success text-success"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ver documento"  (click)="generarXml(venta.id)">
                     <i class="bi bi-card-list"></i>
                   </button>
                 </td>

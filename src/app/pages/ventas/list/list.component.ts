@@ -169,6 +169,26 @@ export class ListComponent {
     this._router.navigate(['/ventas/detalles', ventaId]);
 
   }
+  generarXml(ventaId: number) {
+    this._ventasService.generarXML(ventaId).subscribe((response: any) => {
+      const fileURL = URL.createObjectURL(response);
+      window.open(fileURL, '_blank');
+
+    })
+
+  }
+
+
+
+  firmarXml(ventaId: number) {
+    this._ventasService.firmarXML(ventaId).subscribe((response: any) => {
+      const fileURL = URL.createObjectURL(response);
+      window.open(fileURL, '_blank');
+
+    })
+
+  }
+
   getDoc(id: number) {
     this._reportService.getPdf(id).subscribe((response: any) => {
       const fileURL = URL.createObjectURL(response);
