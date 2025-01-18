@@ -132,7 +132,7 @@ export class ListComponent {
     }));
 
     this._ventasService
-      .search(this.page(), this.pageSize(), this.fechaDesde, this.fechaHasta, this.clienteId(), this.sucursalSeleccionada,  1, this.listaSeleccionada, this.searchComprobante())
+      .search(this.page(), this.pageSize(), this.fechaDesde, this.fechaHasta, this.clienteId(), this.sucursalSeleccionada,  0, this.listaSeleccionada, this.searchComprobante())
       .subscribe({
         next: (resp) => {
           this.ventasPage.set(resp);

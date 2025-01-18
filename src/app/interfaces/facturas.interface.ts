@@ -32,6 +32,7 @@ export interface Venta {
   clienteId:          string;
   modoEntrega:        string;
   totalKg:            string;
+  estadoSifen:        string;
   vendedorCreacion:   VendedorCreacion;
   vendedorAnulacion: VendedorCreacion;
   cliente:            Cliente;

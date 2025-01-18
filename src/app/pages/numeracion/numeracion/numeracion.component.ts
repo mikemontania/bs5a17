@@ -5,8 +5,9 @@ import { ListaPrecio } from '../../../interfaces/listaPrecio.interface';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { NumeracionService, SucursalService } from '../../../services/service.index';
+import { NumeracionService, SucursalService,TablaSifenService } from '../../../services/service.index';
 import { Numeracion } from '../../../interfaces/numeracion.interface';
+import { TablaSifen } from '../../../interfaces/tablaSifen.interface';
 
 @Component({
   selector: 'app-numeracion',
@@ -18,11 +19,14 @@ import { Numeracion } from '../../../interfaces/numeracion.interface';
 export class NumeracionComponent implements OnInit {
   id = signal<number>(0)
   sucursales = signal<ListaPrecio[]>([])
+  sifenRecords = signal<TablaSifen[]>([])
   numeracionForm: FormGroup ;
   private fb = inject(FormBuilder)
   private _sucursalService = inject(SucursalService)
   private _numeracionService = inject(NumeracionService)
   private activatedRoute= inject(ActivatedRoute);
+  private _sifenService = inject(TablaSifenService)
+
   private router = inject(Router);
 
   constructor() {
@@ -31,11 +35,12 @@ export class NumeracionComponent implements OnInit {
 
     forkJoin([
       this._sucursalService.findAll(),
+      this._sifenService.findAllrecords('iTiDE'),
 
 
-    ]).subscribe(([sucursales ]) => {
+    ]).subscribe(([sucursales, sifenRecords]) => {
       this.sucursales.set(sucursales);
-
+      this.sifenRecords.set(sifenRecords);
     });
 
   }
@@ -64,6 +69,7 @@ export class NumeracionComponent implements OnInit {
       inicioTimbrado: [null, Validators.required],
       finTimbrado: [null, Validators.required],
       sucursalId: [null, Validators.required],
+      itide: [null, Validators.required],
       numeroInicio: [null, [Validators.required, Validators.min(1), Validators.max(999999999)]],
       numeroFin: [null, [Validators.required, Validators.min(1), Validators.max(999999999)]],
       serie: ['', [Validators.required, Validators.pattern(/^\d{3}-\d{3}$/)]],

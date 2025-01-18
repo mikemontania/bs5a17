@@ -1,9 +1,10 @@
 import { Sucursal } from "./sucursal.interface";
-
+import { TablaSifen } from "./tablaSifen.interface";
 export interface Numeracion {
   inicioTimbrado:  string;
   finTimbrado:     string;
   id:              number;
+  itide:              number;
   empresaId:       number;
   sucursalId:      number;
   numeroInicio:    number;
@@ -15,4 +16,5 @@ export interface Numeracion {
   tipoImpresion:   string;
   activo:          boolean;
   sucursal:        Sucursal;
+  tipoDocumento:        TablaSifen;
 }

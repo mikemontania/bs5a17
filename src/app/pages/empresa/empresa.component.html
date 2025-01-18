@@ -81,6 +81,20 @@
       </div>
 
       <div class="row mb-3">
+        <label for="nombreFantasia" class="col-md-4 col-lg-3 col-form-label"
+          >Nombre fantasia</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="nombreFantasia"
+            formControlName="nombreFantasia"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
         <label for="telefono" class="col-md-4 col-lg-3 col-form-label"
           >Teléfono <span style="color: red">(*)</span></label
         >
@@ -110,38 +124,32 @@
       </div>
 
       <div class="row mb-3">
-        <label for="actividad1" class="col-md-4 col-lg-3 col-form-label"
-          >Actividad 1 <span style="color: red">(*)</span></label
-        >
+        <label for="actividad1" class="col-md-4 col-lg-3 col-form-label">Actividad 1</label>
         <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="actividadcode1"
+            formControlName="actividadcode1"
+          />
           <textarea
             type="text"
             class="form-control"
             id="actividad1"
             formControlName="actividad1"
           ></textarea>
-          <div
-            *ngIf="
-              empresaForm.get('actividad1')?.touched &&
-              empresaForm.get('actividad1')?.invalid
-            "
-            class="text-danger"
-          >
-            <div *ngIf="empresaForm.get('actividad1')?.errors?.['required']">
-              Este campo es obligatorio.
-            </div>
-            <div *ngIf="empresaForm.get('actividad1')?.errors?.['minlength']">
-              Debe tener al menos 6 caracteres.
-            </div>
-          </div>
         </div>
       </div>
 
       <div class="row mb-3">
-        <label for="actividad2" class="col-md-4 col-lg-3 col-form-label"
-          >Actividad 2</label
-        >
+        <label for="actividad2" class="col-md-4 col-lg-3 col-form-label">Actividad 2</label>
         <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="actividadcode2"
+            formControlName="actividadcode2"
+          />
           <textarea
             type="text"
             class="form-control"
@@ -152,10 +160,14 @@
       </div>
 
       <div class="row mb-3">
-        <label for="actividad3" class="col-md-4 col-lg-3 col-form-label"
-          >Actividad 3</label
-        >
+        <label for="actividad3" class="col-md-4 col-lg-3 col-form-label">Actividad 3</label>
         <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="actividadcode3"
+            formControlName="actividadcode3"
+          />
           <textarea
             type="text"
             class="form-control"

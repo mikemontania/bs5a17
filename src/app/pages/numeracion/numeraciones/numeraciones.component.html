@@ -22,6 +22,7 @@
                 <th scope="col">Nº INICIO</th>
                 <th scope="col">Nº FIN</th>
                 <th scope="col">Nº ULTIMO</th>
+                <th scope="col">Tipo Doc.</th>
                 <th scope="col">ACT</th>
                 <th scope="col">Edit</th>
               </tr>
@@ -41,6 +42,7 @@
                 <td  class="text-sm">{{ numeracion.numeroInicio }}</td>
                 <td  class="text-sm">{{ numeracion.numeroFin }}</td>
                 <td  class="text-sm">{{ numeracion.ultimoNumero }}</td>
+                <td  class="text-sm">{{ numeracion.tipoDocumento.descripcion }}</td>
                 <td  class="text-sm">{{ (numeracion.activo)?'SI':'NO' }}</td>
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-info text-info"

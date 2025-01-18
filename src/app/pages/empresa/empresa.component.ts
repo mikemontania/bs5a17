@@ -48,7 +48,7 @@ export class EmpresaComponent implements OnInit {
 
 
   ngOnInit() {
-
+    this.onChanges()
   }
   init() {
     forkJoin([
@@ -58,12 +58,45 @@ export class EmpresaComponent implements OnInit {
       this.empresaForm.patchValue(empresa);
     });
   }
+  onChanges(): void {
+    this.empresaForm.get('actividadcode1')?.valueChanges.subscribe(value => {
+      if (value) {
+        this.empresaForm.get('actividad1')?.enable();
+      } else {
+        this.empresaForm.get('actividad1')?.disable();
+        this.empresaForm.get('actividad1')?.setValue(null);
+      }
+    });
 
+    this.empresaForm.get('actividadcode2')?.valueChanges.subscribe(value => {
+      if (value) {
+        this.empresaForm.get('actividad2')?.enable();
+      } else {
+        this.empresaForm.get('actividad2')?.disable();
+        this.empresaForm.get('actividad2')?.setValue(null);
+      }
+    });
+
+    this.empresaForm.get('actividadcode3')?.valueChanges.subscribe(value => {
+      if (value) {
+        this.empresaForm.get('actividad3')?.enable();
+      } else {
+        this.empresaForm.get('actividad3')?.disable();
+        this.empresaForm.get('actividad3')?.setValue(null);
+      }
+    });
+  }
   initForm() {
     return this.fb.group({
       id: [1],
+      codigoMoneda: [null],
+      nombreFantasia: [null],
+      simboloMoneda: [null],
       razonSocial: [null, [Validators.required, Validators.minLength(6)]],
-      actividad1: [null, [Validators.required, Validators.minLength(6)]],
+      actividadcode1: [null],
+      actividadcode2: [null],
+      actividadcode3: [null],
+      actividad1: [null],
       actividad2: [null],
       actividad3: [null],
       ruc: [null, [Validators.required, Validators.pattern(/^\d{6,9}-\d{1}$/)]],

@@ -150,7 +150,25 @@
       </div>
     </div>
   </div>
-
+  <div class="row mb-3">
+    <label for="itide" class="col-md-4 col-lg-3 col-form-label"
+      >T.documento Electronico</label
+    >
+    <div class="col-md-8 col-lg-9">
+      <select
+        class="form-control"
+        id="itide"
+        formControlName="itide"
+      >
+        <option *ngFor="let s of sifenRecords()" [value]="s.id">
+          {{ s.descripcion }}
+        </option>
+      </select>
+      <div *ngIf="numeracionForm.get('itide')?.touched && numeracionForm.get('itide')?.invalid" class="text-danger">
+        <div *ngIf="numeracionForm.get('itide')?.errors?.['required']">Este campo es obligatorio.</div>
+      </div>
+    </div>
+  </div>
       <div class="form-row">
         <div class="col-md-6">
           <div class="row mb-3">
