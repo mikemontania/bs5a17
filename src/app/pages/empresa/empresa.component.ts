@@ -5,19 +5,19 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { forkJoin } from "rxjs";
 import Swal from "sweetalert2";
 import { AuthService } from "../../auth/services/auth.service";
-import { Numeracion } from "../../interfaces/numeracion.interface";
-import { Sucursal } from "../../interfaces/sucursal.interface";
 import { ImagenPipe } from "../../pipes/imagen.pipe";
 import { FileUploadService } from "../../services/file-upload.service";
-import { SucursalService } from "../../services/sucursal.service";
 import { UsuariosService } from "../../services/usuarios.service";
 import { Location } from '@angular/common';
 import { EmpresaService } from "../../services/empresas.service";
+import { TablaSifenService } from "../../services/tablaSifen.service";
+import { EstablecimientoService } from "../../services/establecimiento.service";
+import { ActividadComponent } from "../../components/actividad/actividad.component";
 
 @Component({
   selector: 'app-empresa',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, ImagenPipe],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, ImagenPipe,ActividadComponent],
   templateUrl: './empresa.component.html',
   styleUrl: './empresa.component.css'
 })
@@ -25,11 +25,22 @@ export class EmpresaComponent implements OnInit {
   sinImagen: string = '../../../../assets/no-img.jpg';
   public imagenesSubir: (File | null)[] = [];
   public imgTemps: any[] = [];
+  actividadesDisponibles: any[] = [];
+  contribuyentes: any[] = [];
+  transacciones: any[] = [];
+  impuestos: any[] = [];
+
+  departamentos: any[] = [];
+  ciudades: any[] = [];
+  barrios: any[] = [];
+
 
   empresaForm: FormGroup;
   private fb = inject(FormBuilder)
   private _authService = inject(AuthService)
   private _empresaService = inject(EmpresaService)
+  private _tablaSifenService = inject(TablaSifenService)
+  private _establecimiento = inject(EstablecimientoService)
   private location = inject(Location)
   private _fileUploadService = inject(FileUploadService);
   private router = inject(Router);
@@ -46,67 +57,116 @@ export class EmpresaComponent implements OnInit {
   }
 
 
+  onChangeCodDepartamento(): void {
+    this.empresaForm.get('codDepartamento')?.valueChanges.subscribe(value => {
+      if (value) {
+        forkJoin([
+          this._establecimiento.getCiudades(value),
+        ]).subscribe(([ciudades]) => {
+          console.log(ciudades)
+          this.ciudades = ciudades;
+          //si ya hay
+          if (this.empresaForm.get('codCiudad')?.value) {
+            //verificar sie el codigo de ciudad esta en el de array obtenido
+            // si es asi es porque se esta mostrando el formulario guardado, si no esta es porque se hizo un cambio de  departamentos
+            const existe = ciudades.some((ciudad: any) => ciudad.codigo === this.empresaForm.get('codCiudad')?.value);
+            if (existe) {// no hacer nada ya que se esta mostrando formulario guardado
+            } else {//se asigna el primer elemento
+              this.empresaForm.get('codCiudad')?.setValue(ciudades[0].codigo);
+            }
+          } else {// si no hay asignar el primero
+            this.empresaForm.get('codCiudad')?.setValue(ciudades[0].codigo);
+          }
+
+        });
+      }
+    });
+  }
+  onChangeCodCiudad(): void {
+    this.empresaForm.get('codCiudad')?.valueChanges.subscribe(value => {
+      if (value) {
+        forkJoin([
+          this._establecimiento.getBarrios(value),
+        ]).subscribe(([barrios]) => {
+          console.log(barrios)
+          this.barrios = barrios;
+          //si ya hay codBarrio
+          if (this.empresaForm.get('codBarrio')?.value) {
+            //verificar si el codigo de barrio esta en el de array obtenido
+            // si es asi es porque se esta mostrando el formulario guardado, si no esta es porque se hizo un cambio de  ciuadad
+            const existe = barrios.some((barrios: any) => barrios.codigo === this.empresaForm.get('codBarrio')?.value);
+            if (existe) {// no hacer nada ya que se esta mostrando formulario guardado
+            } else {//se asigna el primer elemento
+              this.empresaForm.get('codBarrio')?.setValue(barrios[0].codigo);
+            }
+          } else {// si no hay asignar el primero
+            this.empresaForm.get('codBarrio')?.setValue(barrios[0].codigo);
+          }
+        });
+      }
+    });
+  }
+
+
+  seleccionCiudad() {
+
+  }
 
   ngOnInit() {
-    this.onChanges()
+    this.onChangeCodDepartamento();
+    this.onChangeCodCiudad();
   }
   init() {
     forkJoin([
       this._empresaService.getById(this._authService.currentUser()?.empresaId!),
-
-    ]).subscribe(([empresa]) => {
+      this._empresaService.getActividades(),
+      this._tablaSifenService.findAllrecords('iTipCont'),
+      this._tablaSifenService.findAllrecords('iTipTra'),
+      this._tablaSifenService.findAllrecords('iTImp'),
+      this._establecimiento.getDepartamentos(),
+    ]).subscribe(([empresa, actividades, contribuyentes, transacciones, impuestos, departamentos]) => {
+      console.log(empresa)
+      console.log(actividades)
+      console.log(contribuyentes)
+      console.log(transacciones)
+      console.log(impuestos)
       this.empresaForm.patchValue(empresa);
+      this.actividadesDisponibles = actividades;
+      this.contribuyentes = contribuyentes;
+      this.transacciones = transacciones;
+      this.impuestos = impuestos;
+      this.departamentos = departamentos;
     });
   }
-  onChanges(): void {
-    this.empresaForm.get('actividadcode1')?.valueChanges.subscribe(value => {
-      if (value) {
-        this.empresaForm.get('actividad1')?.enable();
-      } else {
-        this.empresaForm.get('actividad1')?.disable();
-        this.empresaForm.get('actividad1')?.setValue(null);
-      }
-    });
 
-    this.empresaForm.get('actividadcode2')?.valueChanges.subscribe(value => {
-      if (value) {
-        this.empresaForm.get('actividad2')?.enable();
-      } else {
-        this.empresaForm.get('actividad2')?.disable();
-        this.empresaForm.get('actividad2')?.setValue(null);
-      }
-    });
-
-    this.empresaForm.get('actividadcode3')?.valueChanges.subscribe(value => {
-      if (value) {
-        this.empresaForm.get('actividad3')?.enable();
-      } else {
-        this.empresaForm.get('actividad3')?.disable();
-        this.empresaForm.get('actividad3')?.setValue(null);
-      }
-    });
-  }
-  initForm() {
+  private initForm() {
     return this.fb.group({
-      id: [1],
-      codigoMoneda: [null],
-      nombreFantasia: [null],
-      simboloMoneda: [null],
+      id: [null],
       razonSocial: [null, [Validators.required, Validators.minLength(6)]],
-      actividadcode1: [null],
-      actividadcode2: [null],
-      actividadcode3: [null],
-      actividad1: [null],
-      actividad2: [null],
-      actividad3: [null],
+      nombreFantasia: [''],
       ruc: [null, [Validators.required, Validators.pattern(/^\d{6,9}-\d{1}$/)]],
-      telefono: [null, [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3} \d{4}$/)]],
-      email: [null, [Validators.required, Validators.email]],
-      img: [''],
+      moneda: [''],
+      simboloMoneda: [''],
+      codigoMoneda: [''],
+      idCSC: [''],
+      csc: [''],
+      tipoContId: [null, Validators.required],
+      tipoTransaId: [null, Validators.required],
+      tipoImpId: [null, Validators.required],
+      numCasa: [null, Validators.required],
+      codDepartamento: [null, Validators.required],
+      codCiudad: [null, Validators.required],
+      codBarrio: [null, Validators.required],
+      telefono: [''],
+      email: ['', Validators.email],
       web: [null, [Validators.required, Validators.pattern(/^(https?:\/\/)?([\w\d-]+\.)+[a-z]{2,6}(\/[\w\d]*)*$/)]],
+      img: [''],
     });
   }
 
+  eliminarActividad(i:number){
+
+  }
   getFormErrors() {
     const errors: { field: string; errors: any }[] = [];
 
@@ -148,7 +208,7 @@ export class EmpresaComponent implements OnInit {
 
         Swal.close()
         Swal.fire("Actualización exitosa!!!", "Guardado con exito !!!", "success");
-        this.init()
+        // this.init()
       },
       error: (error) => {
         Swal.close()
@@ -177,6 +237,7 @@ export class EmpresaComponent implements OnInit {
   }
 
   subirImagen(id: number): Promise<string> {
+    console.log("subiendo imagen")
     return new Promise((resolve, reject) => {
       if (this.imagenesSubir[0]) {
         this._fileUploadService.actualizarFoto(this.imagenesSubir[0]!, 'empresas', id).subscribe(

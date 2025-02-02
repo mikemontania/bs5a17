@@ -1,0 +1,62 @@
+<div class="card-body">
+  <div id="details" style="overflow-x: auto">
+    <table class="table table-responsive-sm table-sm mt-2" id="tableProducts">
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody id="actividades">
+        <tr class="custom-row" [formGroup]="actividadForm"  >
+          <td class="field">
+            <input
+              type="text"
+              class="form-control custom-input custom-input-sm validation"
+              placeholder="codigo"
+              formControlName="codigo"
+            />
+          </td>
+          <td class="field">
+            <input
+              type="text"
+              class="form-control custom-input custom-input-sm validation"
+              placeholder="descripcion"
+              formControlName="descripcion"
+            />
+          </td>
+          <td class="field">
+
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-success"
+              (click)="crear($event)"
+            >
+              <i class="bi bi-file-earmark-plus"></i>
+            </button>
+          </td>
+        </tr>
+        @for (actividad of actividades;let index = $index; track
+        actividad.codigo; ) {
+        <tr class="custom-row">
+          <td class="field">{{ actividad.codigo }}</td>
+          <td class="field">{{ actividad.descripcion }}</td>
+          <td class="field">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-danger"
+              (click)="eliminarActiviadad(actividad)"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+        }@empty {
+        <tr></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -94,10 +94,6 @@ export class EntidadesComponent {
       });
     }
 
-
-
-
-
   }
 
 

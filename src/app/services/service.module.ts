@@ -14,7 +14,7 @@ import {
   ValoracionService,
   CalculoService,
   ReportesService,
-  MedioPagoService, BancoService,
+  MedioPagoService, BancoService,EstablecimientoService,
   CobranzaService,FileUploadService,
   UsuariosService,EmpresaService,EntidadesService,AuditoriaService,TablaSifenService
 } from './service.index';
@@ -36,7 +36,7 @@ import {
     CalculoService,
     ReportesService,
     MedioPagoService, BancoService,
-    CobranzaService,FileUploadService,
+    CobranzaService,FileUploadService,EstablecimientoService,
     UsuariosService,EmpresaService,EntidadesService,AuditoriaService,TablaSifenService
   ],
   declarations: []

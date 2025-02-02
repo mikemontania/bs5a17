@@ -20,6 +20,26 @@ export class EmpresaService {
       .pipe(map((resp: any) => resp));
   }
 
+  getActividades() {
+    return this.http
+      .get(BASE_URL + "/empresas/actividades")
+      .pipe(map((resp: any) => resp));
+  }
+
+  addActividad(actividad:any) {
+    return this.http
+      .post(BASE_URL + "/empresas/add-actividades", actividad)
+      .pipe(map((resp: any) => resp));
+  }
+
+  quitarActividad(id:number) {
+    return this.http
+      .delete(BASE_URL + "/empresas/remove-actividad/"+ id)
+      .pipe(map((resp: any) => resp));
+  }
+
+
+
   update(empresa: Empresa): Observable<any> {
     console.log(empresa);
     return this.http.put(BASE_URL + '/empresas/'+empresa.id, empresa)

@@ -33,7 +33,7 @@
         <div class="col-md-8 col-lg-9">
           <input
             type="text"
-            class="form-control form-control-sm"
+            class="form-control custom-input custom-input-sm"
             id="ruc"
             formControlName="ruc"
           />
@@ -59,7 +59,7 @@
         <div class="col-md-8 col-lg-9">
           <input
             type="text"
-            class="form-control form-control-sm"
+            class="form-control custom-input custom-input-sm"
             id="razonSocial"
             formControlName="razonSocial"
           />
@@ -87,10 +87,166 @@
         <div class="col-md-8 col-lg-9">
           <input
             type="text"
-            class="form-control form-control-sm"
+            class="form-control custom-input custom-input-sm"
             id="nombreFantasia"
             formControlName="nombreFantasia"
           />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="moneda" class="col-md-4 col-lg-3 col-form-label"
+          >Moneda</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control custom-input custom-input-sm"
+            id="moneda"
+            formControlName="moneda"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="simboloMoneda" class="col-md-4 col-lg-3 col-form-label"
+          >Simbolo</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control custom-input custom-input-sm"
+            id="simboloMoneda"
+            formControlName="simboloMoneda"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="idCSC" class="col-md-4 col-lg-3 col-form-label"
+          >idCSC</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control custom-input custom-input-sm"
+            id="idCSC"
+            formControlName="idCSC"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="csc" class="col-md-4 col-lg-3 col-form-label">CSC</label>
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control custom-input custom-input-sm"
+            id="csc"
+            formControlName="csc"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="tipoContId" class="col-md-4 col-lg-3 col-form-label"
+          >Tipo Contribuyente</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <select
+            class="custom-select custom-select-sm"
+            formControlName="tipoContId"
+            id="tipoContId"
+          >
+            <option *ngFor="let c of contribuyentes" [value]="c.codigo">
+              {{ c.descripcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="tipoTransaId" class="col-md-4 col-lg-3 col-form-label"
+          >Tipo Transacción</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <select
+            class="custom-select custom-select-sm"
+            formControlName="tipoTransaId"
+            id="tipoTransaId"
+          >
+            <option *ngFor="let t of transacciones" [value]="t.codigo">
+              {{ t.descripcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="tipoImpId" class="col-md-4 col-lg-3 col-form-label"
+          >Tipo Impuesto</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <select
+            class="custom-select custom-select-sm"
+            formControlName="tipoImpId"
+            id="tipoImpId"
+          >
+            <option *ngFor="let i of impuestos" [value]="i.codigo">
+              {{ i.descripcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="codDepartamento" class="col-md-4 col-lg-3 col-form-label"
+          >Departamento</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <select
+            class="custom-select custom-select-sm"
+            formControlName="codDepartamento"
+            id="codDepartamento"
+          >
+            <option *ngFor="let i of departamentos" [value]="i.codigo">
+              {{ i.descripcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="codCiudad" class="col-md-4 col-lg-3 col-form-label"
+          >Ciudad</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <select
+            class="custom-select custom-select-sm"
+            formControlName="codCiudad"
+            id="codCiudad"
+          >
+            <option *ngFor="let i of ciudades" [value]="i.codigo">
+              {{ i.descripcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="codBarrio" class="col-md-4 col-lg-3 col-form-label"
+          >Barrio</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <select
+            class="custom-select custom-select-sm"
+            formControlName="codBarrio"
+            id="codBarrio"
+          >
+            <option *ngFor="let i of barrios" [value]="i.codigo">
+              {{ i.descripcion }}
+            </option>
+          </select>
         </div>
       </div>
 
@@ -101,7 +257,7 @@
         <div class="col-md-8 col-lg-9">
           <input
             type="text"
-            class="form-control"
+            class="form-control custom-input custom-input-sm"
             id="telefono"
             formControlName="telefono"
             placeholder="(021) 588 9000"
@@ -122,60 +278,8 @@
           </div>
         </div>
       </div>
+      <!-- actividades econonomicas en tabla  -->
 
-      <div class="row mb-3">
-        <label for="actividad1" class="col-md-4 col-lg-3 col-form-label">Actividad 1</label>
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="actividadcode1"
-            formControlName="actividadcode1"
-          />
-          <textarea
-            type="text"
-            class="form-control"
-            id="actividad1"
-            formControlName="actividad1"
-          ></textarea>
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <label for="actividad2" class="col-md-4 col-lg-3 col-form-label">Actividad 2</label>
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="actividadcode2"
-            formControlName="actividadcode2"
-          />
-          <textarea
-            type="text"
-            class="form-control"
-            id="actividad2"
-            formControlName="actividad2"
-          ></textarea>
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <label for="actividad3" class="col-md-4 col-lg-3 col-form-label">Actividad 3</label>
-        <div class="col-md-8 col-lg-9">
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="actividadcode3"
-            formControlName="actividadcode3"
-          />
-          <textarea
-            type="text"
-            class="form-control"
-            id="actividad3"
-            formControlName="actividad3"
-          ></textarea>
-        </div>
-      </div>
 
       <div class="row mb-3">
         <label for="web" class="col-md-4 col-lg-3 col-form-label"
@@ -184,7 +288,7 @@
         <div class="col-md-8 col-lg-9">
           <input
             type="text"
-            class="form-control form-control-sm"
+            class="form-control custom-input custom-input-sm"
             id="web"
             formControlName="web"
           />
@@ -211,7 +315,7 @@
         <div class="col-md-8 col-lg-9">
           <input
             type="email"
-            class="form-control form-control-sm"
+            class="form-control custom-input custom-input-sm"
             id="email"
             formControlName="email"
           />
@@ -229,6 +333,15 @@
               Debe ser un email válido.
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-md-4 col-lg-3 col-form-label">
+          Actividades <span style="color: red">(*)</span>
+        </label>
+        <div class="col-md-8 col-lg-9">
+          <app-activiadad></app-activiadad>
         </div>
       </div>
       <div class="text-center">
