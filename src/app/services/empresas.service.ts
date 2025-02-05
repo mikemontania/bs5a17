@@ -55,4 +55,33 @@ export class EmpresaService {
   }
 
 
+/*************Certificado******** */
+getCertificado() {
+  console.log(BASE_URL + "/certificados/")
+  return this.http
+    .get(BASE_URL + "/certificados/get")
+    .pipe(map((resp: any) => resp));
+}
+
+createCertificado(certificado:any) {
+  return this.http
+    .post(BASE_URL + "/certificados/create", certificado)
+    .pipe(map((resp: any) => resp));
+}
+
+updateCertificado(certificado: any): Observable<any> {
+  console.log(certificado);
+  return this.http.put(BASE_URL + '/certificados/update/'+certificado.id, certificado)
+    .pipe(
+      map((response: any) => response ),
+      catchError(e => {
+
+        console.error('ERROR', e.error);
+        Swal.fire(e.error.header, e.error.error, 'error');
+       return throwError(() => e.error.error);
+      })
+    );
+  }
+
+
 }

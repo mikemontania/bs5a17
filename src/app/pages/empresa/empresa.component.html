@@ -1,9 +1,14 @@
+
 <div class="card">
   <div class="card-header">Datos de empresa</div>
 
   <div class="card-body">
     <form [formGroup]="empresaForm" (ngSubmit)="onSubmit($event)">
       <div class="row mb-3">
+        <label for="ruc" class="col-md-4 col-lg-3 col-form-label"
+        >Logo reporte  </label
+      >
+      <div class="col-md-8 col-lg-9">
         <img
           *ngIf="!imgTemps[0] && !empresaForm.get('img')?.value"
           [src]="sinImagen"
@@ -24,6 +29,7 @@
           id="fileInput"
           (change)="actualizarImagen($event, empresaForm.get('id')?.value)"
         />
+      </div>
       </div>
 
       <div class="row mb-3">
@@ -278,7 +284,6 @@
           </div>
         </div>
       </div>
-      <!-- actividades econonomicas en tabla  -->
 
 
       <div class="row mb-3">
@@ -344,6 +349,20 @@
           <app-activiadad></app-activiadad>
         </div>
       </div>
+
+
+
+      <div class="row mb-3">
+        <label class="col-md-4 col-lg-3 col-form-label">
+          Certificado <span style="color: red">(*)</span>
+        </label>
+        <div class="col-md-8 col-lg-9">
+          <app-certificado></app-certificado>
+        </div>
+      </div>
+
+
+
       <div class="text-center">
         <div class="btn-group">
           <button

@@ -20,12 +20,39 @@ export class FileUploadService {
 
   actualizarFoto(
     archivo: File,
-    tipo: 'usuarios' | 'productos' | 'empresas',
+    tipo: 'usuarios' | 'productos' | 'empresas'| 'certificados',
     id: number
   ) {
     const formData = new FormData();
     formData.append('imagen', archivo);
     const url = `${BASE_URL}/uploads/${tipo}/${id}`;
+
+    return this.http.put<UploadResponse>(url, formData)
+      .pipe(
+        map((resp:any) => {
+          console.log(resp)
+          if (resp) {
+            return resp.nombreArchivo;
+          } else {
+            console.error(resp); // Log specific error message
+            return false;
+          }
+        }),
+        catchError(error => {
+          console.error('Upload error:', error);
+          return of(false); // Return false on error
+        })
+      );
+  }
+
+
+  actualizarp12(
+    archivo: File,
+    id: number
+  ) {
+    const formData = new FormData();
+    formData.append('certificado', archivo);
+    const url = `${BASE_URL}/uploads/certificado/${id}`;
 
     return this.http.put<UploadResponse>(url, formData)
       .pipe(

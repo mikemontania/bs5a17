@@ -13,11 +13,12 @@ import { EmpresaService } from "../../services/empresas.service";
 import { TablaSifenService } from "../../services/tablaSifen.service";
 import { EstablecimientoService } from "../../services/establecimiento.service";
 import { ActividadComponent } from "../../components/actividad/actividad.component";
+import { CertificadoComponent } from "../../components/certificado/certificado.component";
 
 @Component({
   selector: 'app-empresa',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, ImagenPipe,ActividadComponent],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, ImagenPipe, ActividadComponent, CertificadoComponent],
   templateUrl: './empresa.component.html',
   styleUrl: './empresa.component.css'
 })

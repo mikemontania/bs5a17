@@ -1,0 +1,28 @@
+ /* Define a custom class to make text smaller */
+ .small-table th,
+ .small-table td {
+   font-size: 0.5rem; /* Adjust the font size as needed */
+ }
+.custom-row {
+  font-size: 0.7rem; /* Tamaño de letra similar al de .custom-select */
+  font-weight: 400; /* Peso de la letra */
+  line-height: 1.5; /* Altura de línea para mayor legibilidad */
+  color: #768192; /* Color de texto */
+}
+
+.custom-row .field {
+  padding: 0.375rem 0.75rem; /* Espaciado dentro de las celdas */
+  color: #768192; /* Mismo color de texto */
+  font-size: 0.7rem; /* Tamaño de letra igual al del select */
+}
+
+
+
+.custom-row .bi-trash {
+  font-size: 1rem; /* Tamaño adecuado para el ícono */
+}
+
+.custom-row .btn:focus {
+  border-color: #958bef; /* Color del borde cuando está enfocado */
+  box-shadow: 0 0 0 0.2rem rgba(50, 31, 219, 0.25); /* Sombra suave en el enfoque */
+}

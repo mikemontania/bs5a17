@@ -1,0 +1,77 @@
+
+<form [formGroup]="certificadoForm" (ngSubmit)="guardarCertificado()" style="background-color: #d8dbe0;padding: 10px;border-radius: 0.5rem;" >
+
+  <div class="row mb-3">    <small *ngIf="certificadoForm.get('path')?.value">
+      Certificado actual: <strong>{{ certificadoForm.get('path')?.value }}</strong>
+    </small>
+    <small *ngIf="!certificadoForm.get('path')?.value">
+      <strong style="color: red;" >Falta agregar certificado .p12</strong>
+    </small>
+  </div>
+
+  <div class="row mb-3">
+    <label for="validoDesde" class="col-md-4 col-lg-3 col-form-label"
+      >Válido Desde: <span style="color: red">(*)</span></label
+    >
+    <div class="col-md-8 col-lg-9">
+      <input
+        type="date"
+        class="form-control custom-input custom-input-sm"
+        id="validoDesde"
+        formControlName="validoDesde"
+      />
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <label for="validoHasta" class="col-md-4 col-lg-3 col-form-label"
+      >Válido Hasta: <span style="color: red">(*)</span></label
+    >
+    <div class="col-md-8 col-lg-9">
+      <input
+        type="date"
+        class="form-control custom-input custom-input-sm"
+        id="validoHasta"
+        formControlName="validoHasta"
+      />
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <label for="passphrase" class="col-md-4 col-lg-3 col-form-label"
+      >Passphrase: <span style="color: red">(*)</span></label
+    >
+    <div class="col-md-8 col-lg-9">
+      <input
+        type="text"
+        class="form-control custom-input custom-input-sm"
+        id="passphrase"
+        formControlName="passphrase"
+      />
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <label for="passphrase" class="col-md-4 col-lg-3 col-form-label"
+      >Certificado: <span style="color: red">(*)</span></label
+    >
+    <div class="col-md-8 col-lg-9">
+      <input
+        class="form-control custom-input custom-input-sm validation"
+        type="file"
+        id="fileInput"
+        (change)="actualizarArchivo($event)"
+      />
+    </div>
+  </div>
+
+
+    <button
+      type="button"
+      class="btn btn-outline-info mt-2"
+      (click)="guardarCertificado()"
+    >Actualizar Certificado</button>
+
+</form>
+
+
