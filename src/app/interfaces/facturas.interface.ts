@@ -32,7 +32,7 @@ export interface Venta {
   clienteId:          string;
   modoEntrega:        string;
   totalKg:            string;
-  estadoSifen:        string;
+  estado:        string;
   vendedorCreacion:   VendedorCreacion;
   vendedorAnulacion: VendedorCreacion;
   cliente:            Cliente;

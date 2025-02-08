@@ -158,7 +158,7 @@
                   </div>
                  </td>
                 <td  class="text-sm">{{ venta.importeTotal | number }} Gs</td>
-                <td  class="text-sm">{{ venta.estadoSifen   }} </td>
+                <td  class="text-sm">{{ venta.estado   }} </td>
                 <td  class="text-sm">{{ (venta.anulado )?'SI':'NO' }}</td>
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(venta.id)"[disabled]="venta.anulado"
