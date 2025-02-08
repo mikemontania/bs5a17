@@ -26,4 +26,13 @@ export class TablaSifenService {
         })
       );
   }
+  getMonedas() {
+    return this.http
+      .get(BASE_URL + "/monedas")
+      .pipe(
+        map((respo: any) => {
+          return respo;
+        })
+      );
+  }
 }

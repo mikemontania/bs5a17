@@ -26,11 +26,10 @@ export class EmpresaComponent implements OnInit {
   sinImagen: string = '../../../../assets/no-img.jpg';
   public imagenesSubir: (File | null)[] = [];
   public imgTemps: any[] = [];
-  actividadesDisponibles: any[] = [];
   contribuyentes: any[] = [];
   transacciones: any[] = [];
   impuestos: any[] = [];
-
+  monedas: any[] = [];
   departamentos: any[] = [];
   ciudades: any[] = [];
   barrios: any[] = [];
@@ -116,23 +115,27 @@ export class EmpresaComponent implements OnInit {
   ngOnInit() {
     this.onChangeCodDepartamento();
     this.onChangeCodCiudad();
+
   }
   init() {
     forkJoin([
       this._empresaService.getById(this._authService.currentUser()?.empresaId!),
-      this._empresaService.getActividades(),
+
       this._tablaSifenService.findAllrecords('iTipCont'),
       this._tablaSifenService.findAllrecords('iTipTra'),
       this._tablaSifenService.findAllrecords('iTImp'),
       this._establecimiento.getDepartamentos(),
-    ]).subscribe(([empresa, actividades, contribuyentes, transacciones, impuestos, departamentos]) => {
+      this._tablaSifenService.getMonedas(),
+    ]).subscribe(([empresa, contribuyentes, transacciones, impuestos, departamentos, monedas]) => {
       console.log(empresa)
-      console.log(actividades)
       console.log(contribuyentes)
       console.log(transacciones)
       console.log(impuestos)
-      this.empresaForm.patchValue(empresa);
-      this.actividadesDisponibles = actividades;
+      this.empresaForm.patchValue({
+        ...empresa
+
+      });
+      this.monedas = monedas;
       this.contribuyentes = contribuyentes;
       this.transacciones = transacciones;
       this.impuestos = impuestos;
@@ -146,11 +149,12 @@ export class EmpresaComponent implements OnInit {
       razonSocial: [null, [Validators.required, Validators.minLength(6)]],
       nombreFantasia: [''],
       ruc: [null, [Validators.required, Validators.pattern(/^\d{6,9}-\d{1}$/)]],
-      moneda: [''],
       simboloMoneda: [''],
-      codigoMoneda: [''],
+      codMoneda: [''],
       idCSC: [''],
       csc: [''],
+      generarXml: ["SI"],
+      envioXml: ["SI"],
       tipoContId: [null, Validators.required],
       tipoTransaId: [null, Validators.required],
       tipoImpId: [null, Validators.required],
@@ -165,9 +169,7 @@ export class EmpresaComponent implements OnInit {
     });
   }
 
-  eliminarActividad(i:number){
 
-  }
   getFormErrors() {
     const errors: { field: string; errors: any }[] = [];
 
@@ -190,7 +192,7 @@ export class EmpresaComponent implements OnInit {
 
       return;
     }
-    const empresaData = this.empresaForm.value;
+    let empresaData = this.empresaForm.value;
     Swal.showLoading();
 
     if (empresaData?.razonSocial === '' || empresaData?.razonSocial === null) {
@@ -202,11 +204,17 @@ export class EmpresaComponent implements OnInit {
       return;
     }
 
+    if (empresaData?.generarXml === 'NO') {
+      empresaData.envioXml = 'NO';
+    }
+
 
     this._empresaService.update(empresaData).subscribe({
-      next: async (resp) => {
-        const img = await this.subirImagen(resp.id);
-
+      next: async (empresa) => {
+        console.log(empresa)
+        this.empresaForm.patchValue({ ...empresa });
+        const img = await this.subirImagen(empresa.id);
+        console.log(img)
         Swal.close()
         Swal.fire("Actualización exitosa!!!", "Guardado con exito !!!", "success");
         // this.init()
