@@ -297,7 +297,9 @@ export class VentasComponent implements OnInit {
       importeSubtotal: 0,
       importeTotal: 0,
       totalKg: 0,
-      tipoDescuento: ""
+      tipoDescuento: "",
+      ivaBase:100,
+      ivaTipo:1
     };
   }
   seleccionarProducto(item: ProductosItem) {
@@ -305,6 +307,7 @@ export class VentasComponent implements OnInit {
       Swal.fire("Atención", "El producto no tiene precio", "warning");
       return;
     }
+
     try {
       console.log(this.detalles);
       console.log(item);
@@ -331,6 +334,9 @@ export class VentasComponent implements OnInit {
 
         }
       }
+
+      this.detalles[indice].ivaBase = 100;
+      this.detalles[indice].ivaTipo = 1;
       this.detalles[indice].cantidad += this.cantidad;
       this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * this.detalles[indice].importePrecio;
       this.detalles[indice].totalKg = this.detalles[indice].cantidad * item.peso;

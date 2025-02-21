@@ -138,6 +138,8 @@ export interface ModelDet {
   importeTotal: number;
   totalKg: number ;
   tipoDescuento: string ;
+  ivaTipo: number;
+  ivaBase:number
 }
 
 export interface Cobranza {
