@@ -13,7 +13,7 @@ import {
   NumeracionService,
   ValoracionService,
   CalculoService,
-  ReportesService,
+  ReportesService,SifenService,
   MedioPagoService, BancoService,EstablecimientoService,
   CobranzaService,FileUploadService,
   UsuariosService,EmpresaService,EntidadesService,AuditoriaService,TablaSifenService
@@ -34,7 +34,7 @@ import {
     NumeracionService,
     ValoracionService,
     CalculoService,
-    ReportesService,
+    ReportesService,SifenService,
     MedioPagoService, BancoService,
     CobranzaService,FileUploadService,EstablecimientoService,
     UsuariosService,EmpresaService,EntidadesService,AuditoriaService,TablaSifenService

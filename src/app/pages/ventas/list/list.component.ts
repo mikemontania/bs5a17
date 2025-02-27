@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { InputDebounceComponent } from '../../../components/inputDebounce/inputDebounce.component';
 import { PaginatorComponent } from '../../../components/paginator/paginator.component';
 import { VentasPage } from '../../../interfaces/pages.interfaces';
-import { FormaVenta } from '../../../interfaces/formaventa.interface';
 import { Cliente } from '../../../interfaces/clientes.interface';
 import { Sucursal } from '../../../interfaces/sucursal.interface';
 import { ListaPrecio } from '../../../interfaces/listaPrecio.interface';
@@ -20,7 +19,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { SucursalService } from '../../../services/sucursal.service';
-import { ListaPrecioService } from '../../../services/service.index';
+import { ListaPrecioService, SifenService } from '../../../services/service.index';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -53,6 +52,7 @@ export class ListComponent {
 
   private _router = inject(Router)
   _ventasService = inject(VentasService);
+  _sifenService = inject(SifenService);
   _sucursalesService = inject(SucursalService);
   _listasPrecioService = inject(ListaPrecioService);
   _reportService = inject(ReportesService)
@@ -195,6 +195,61 @@ export class ListComponent {
       window.open(fileURL, '_blank');
 
     })
+  }
+
+  concultarCDC(item: any) {
+        this._sifenService.consultaCDC(item.id, item.cdc).subscribe((response: any) => {
+
+          Swal.fire('Respuesta', response.data, 'success');
+
+        })
+
+  }
+
+
+  reintentar(id: number) {
+    this._sifenService.reintentarSifen(id)
+    .subscribe({
+      next: (resp) => {
+        Swal.fire('Respuesta', resp.data, 'success');
+      },
+      error: message => {
+        Swal.fire('Error', message.error, 'error');
+      }
+    });
+
+
+
+}
+
+
+
+
+  anularSifen(id: number) {
+    Swal.fire({
+      title: 'Está segur@ que desea inutilizar/cancelar la factura?',
+      text: `La factura serà anulada`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, Anular',
+      cancelButtonText: 'No, No anular ',
+      customClass: {
+        confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
+        cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
+      },
+      buttonsStyling: false,
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.value) {
+        this._sifenService.anulacionSifen(id).subscribe((response: any) => {
+          this.buscar()
+          Swal.fire('Factura anulada!!!', 'factura anulada con exito!!! comprobante:', 'success');
+
+        })
+      }
+    });
   }
   anular(id: number) {
     Swal.fire({
