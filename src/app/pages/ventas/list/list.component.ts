@@ -21,12 +21,13 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { SucursalService } from '../../../services/sucursal.service';
 import { ListaPrecioService, SifenService } from '../../../services/service.index';
 import { forkJoin } from 'rxjs';
+import { NgHistorialComponent } from '../../../components/ng-historial/ng-historial.component';
 
 @Component({
   selector: 'app-list',
   standalone: true,
   imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent,
-    NgClienteSearchComponent, NgFormaVentaSearchComponent, NgListaPrecioSearchComponent],
+    NgClienteSearchComponent, NgFormaVentaSearchComponent, NgListaPrecioSearchComponent,NgHistorialComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
@@ -40,6 +41,8 @@ export class ListComponent {
   fechaDesde = moment(new Date()).format("YYYY-MM-DD");
   fechaHasta = moment(new Date()).format("YYYY-MM-DD");
   role: string = '';
+  openHistorial = false;
+  ventaId: number = 0;
   sucursalSeleccionada: number = 0;
   listaSeleccionada: number = 1;
   searchCliente = false;
@@ -161,6 +164,12 @@ export class ListComponent {
     this.cliente.set(cliente); // Update the client signal
     this.searchCliente = false; // Close the modal
 
+  }
+
+
+  verHistorial(ventaId:number){
+    this.openHistorial = true;
+    this.ventaId = ventaId;
   }
 
 

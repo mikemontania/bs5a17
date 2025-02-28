@@ -1,0 +1,132 @@
+.modal-background {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+}
+.pointer {
+  cursor: pointer;
+}
+.small {
+  width: 300px;
+}
+
+.medium {
+  width: 500px;
+}
+
+.large {
+  width: 800px;
+}
+.list-group-item:hover {
+  background-color: #fd9a6ce5; /* Cambiar el color de fondo al pasar el cursor */
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.input-debounce {
+  flex-grow: 1; /* Allow input to expand */
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  color: #bbb;
+  cursor: pointer;
+}
+
+.btn-close:hover {
+  color: #333;
+}
+.card-body-p0 {
+  padding: 0;
+}
+
+.selector{
+  cursor: pointer;
+}
+/* detalles */
+#details {
+  width: 100%;
+  height: 150px;
+  overflow-y: auto; /* Solo mostrará la barra de desplazamiento vertical */
+  overflow-x: hidden; /* Ocultará la barra de desplazamiento horizontal */
+}
+
+/* Estilos del scrollbar */
+#details::-webkit-scrollbar {
+  width: 10px; /* Ancho del scrollbar */
+}
+
+/* Fija la cabecera de la tabla al hacer scroll */
+#details thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff; /* Color de fondo para la cabecera fija */
+  z-index: 1; /* Asegura que la cabecera esté por encima del contenido */
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-left: 5px solid #007bff;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+.step-number {
+  font-size: 16px;
+  font-weight: bold;
+  background: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 50%;
+}
+
+.step-title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.step-date {
+  font-size: 12px;
+  color: #666;
+}
+
+.step-actions {
+  flex-shrink: 0;
+}

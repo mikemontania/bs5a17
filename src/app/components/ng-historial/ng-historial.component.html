@@ -1,0 +1,45 @@
+<div class="modal-background" *ngIf="isOpen" (click)="close()">
+  <div class="modal-container" [ngClass]="{
+      small: size === 'small',
+      medium: size === 'medium',
+      large: size === 'large'
+    }">
+    <div class="modal-header">
+      <h5 class="modal-title">Historial</h5>
+      <button type="button" class="btn-close" (click)="close()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Contenido del modal -->
+    <div (click)="$event.stopPropagation()">
+      <div class="scroll-container p-3" style="max-height: 600px; overflow-y: auto;">
+
+        <!-- Lista de pasos -->
+        <div class="steps">
+          <div *ngFor="let item of historialXml" class="step">
+            <div class="step-content">
+              <div class="step-header">
+                <span class="step-number">{{ item.orden }}</span>
+                <span class="step-title">{{ item.estado }}</span>
+                <span class="step-date">{{ item.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+              <div class="step-actions">
+                <button class="btn btn-primary btn-sm" (click)="verXml(item)">
+                  Ver XML <i class="bi bi-file-earmark-code"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button (click)="close()" type="button" class="btn btn-secondary">
+          Cerrar <i class="bi bi-x-circle"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
