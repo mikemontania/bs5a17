@@ -32,6 +32,20 @@
           </div>
         </div>
       </div>
+      <div class="row mb-3">
+        <label for="nombreFantasia" class="col-md-4 col-lg-3 col-form-label"
+          >Nombre fantasia   </label
+        >
+        <div class="col-md-8 col-lg-9">
+          <input
+            type="text"
+            class="form-control"
+            id="nombreFantasia"
+            formControlName="nombreFantasia"
+          />
+
+        </div>
+      </div>
 
       <div class="row mb-3">
         <label for="nroDocumento" class="col-md-4 col-lg-3 col-form-label">
@@ -69,6 +83,107 @@
           </div>
         </div>
       </div>
+      <div class="row mb-3">
+        <label for="tipoOperacionId" class="col-md-4 col-lg-3 col-form-label">
+          Tipo de Operación <span style="color: red">(*)</span>
+        </label>
+        <div class="col-md-8 col-lg-9">
+          <select class="form-control" id="tipoOperacionId" formControlName="tipoOperacionId">
+            <option [value]="null" disabled selected>Seleccione una opción</option>
+            <option *ngFor="let tipo of [
+              { id: 1, name: 'B2B (CLIENTE CON RUC)' },
+              { id: 2, name: 'B2C (CLIENTE CON CI)' },
+              { id: 3, name: 'B2G (CLIENTE CON GUBERNAMENTAL)' },
+              { id: 4, name: 'B2F (CLIENTE EXTRAJERO)' }
+            ]" [value]="tipo.id">
+              {{ tipo.name }}
+            </option>
+          </select>
+          <div *ngIf="clienteForm.get('tipoOperacionId')?.touched && clienteForm.get('tipoOperacionId')?.invalid" class="text-danger">
+            <div *ngIf="clienteForm.get('tipoOperacionId')?.errors?.['required']">
+              Tipo de Operación es obligatorio.
+            </div>
+            <div *ngIf="clienteForm.get('tipoOperacionId')?.errors?.['pattern']">
+              Seleccione un valor válido.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="naturalezaReceptor" class="col-md-4 col-lg-3 col-form-label">
+          Naturaleza del Receptor <span style="color: red">(*)</span>
+        </label>
+        <div class="col-md-8 col-lg-9">
+          <select class="form-control" id="naturalezaReceptor" formControlName="naturalezaReceptor">
+            <option [value]="null" disabled selected>Seleccione una opción</option>
+            <option [value]="1">Contribuyente</option>
+            <option [value]="2">No contribuyente</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="row mb-3" *ngIf="clienteForm.get('naturalezaReceptor')?.value == 2">
+        <label for="tipoDocIdentidad" class="col-md-4 col-lg-3 col-form-label">
+          Tipo de Documento <span style="color: red">(*)</span>
+        </label>
+        <div class="col-md-8 col-lg-9">
+          <select class="form-control" id="tipoDocIdentidad" formControlName="tipoDocIdentidad">
+            <option [value]="null" disabled selected>Seleccione una opción</option>
+            <option [value]="1">Cédula paraguaya</option>
+            <option [value]="2">Pasaporte</option>
+            <option [value]="3">Cédula extranjera</option>
+            <option [value]="4">Carnet de residencia</option>
+            <option [value]="5">Innominado</option>
+            <option [value]="6">Tarjeta Diplomática</option>
+            <option [value]="9">Otro</option>
+          </select>
+          <div
+            *ngIf="clienteForm.get('tipoDocIdentidad')?.touched && clienteForm.get('tipoDocIdentidad')?.invalid"
+            class="text-danger"
+          >
+            <div *ngIf="clienteForm.get('tipoDocIdentidad')?.errors?.['required']">
+              Tipo de Documento es obligatorio.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="row mb-3">
+        <label for="codigoPais" class="col-md-4 col-lg-3 col-form-label"
+          >Pais</label
+        >
+        <div class="col-md-8 col-lg-9">
+          <select
+            class="form-control"
+            formControlName="codigoPais"
+            id="codigoPais"
+          >
+            <option *ngFor="let i of paises" [value]="i.codigo">
+              {{ i.codigo }} - {{ i.descripcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="tipoContribuyente" class="col-md-4 col-lg-3 col-form-label">
+          Tipo de Contribuyente
+        </label>
+        <div class="col-md-8 col-lg-9">
+          <select class="form-control" id="tipoContribuyente" formControlName="tipoContribuyente">
+            <option [value]="null" disabled selected>Seleccione una opción</option>
+            <option [value]="1">Persona Física</option>
+            <option [value]="2">Persona Jurídica</option>
+          </select>
+        </div>
+      </div>
+
+
+
 
       <div class="row mb-3">
         <label for="direccion" class="col-md-4 col-lg-3 col-form-label"
