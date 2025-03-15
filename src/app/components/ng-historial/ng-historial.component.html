@@ -1,9 +1,12 @@
 <div class="modal-background" *ngIf="isOpen" (click)="close()">
-  <div class="modal-container" [ngClass]="{
+  <div
+    class="modal-container"
+    [ngClass]="{
       small: size === 'small',
       medium: size === 'medium',
       large: size === 'large'
-    }">
+    }"
+  >
     <div class="modal-header">
       <h5 class="modal-title">Historial</h5>
       <button type="button" class="btn-close" (click)="close()">
@@ -13,7 +16,62 @@
 
     <!-- Contenido del modal -->
     <div (click)="$event.stopPropagation()">
-      <div class="scroll-container p-3" style="max-height: 600px; overflow-y: auto;">
+      <div
+        class="scroll-container p-3"
+        style="max-height: 600px; overflow-y: auto"
+      >
+        <div class="card-body">
+          <h5 class="card-title">
+            <small>ID:{{ venta.id }}</small>
+            <small>CDC:{{ venta.cdc }}</small>
+          </h5>
+
+          <div class="card p-3 mb-3">
+            <div class="row">
+              <div class="col-6">
+                <strong>Comprobante:</strong> {{ venta.nroComprobante }}
+              </div>
+              <div class="col-6">
+                <strong>Timbrado:</strong> {{ venta.timbrado }}
+              </div>
+
+              <div class="col-6">
+                <strong>Estado:</strong> {{ venta.estado }}
+              </div>
+              <div class="col-6">
+                <strong>Fecha:</strong> {{ venta.fechaVenta }}
+              </div>
+              <div class="col-6">
+                <strong>Descuento:</strong>
+                {{ venta.importeDescuento | number }} Gs
+              </div>
+              <div class="col-6">
+                <strong>Total:</strong> {{ venta.importeTotal | number }} Gs
+              </div>
+              <div class="col-12">
+                <strong>Cliente:</strong> {{ venta.cliente.razonSocial }} -
+                {{ venta.cliente.nroDocumento }}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex gap-2 mb-3">
+            @if(venta.estado == 'Rechazado'){
+            <button class="btn btn-warning btn-sm" (click)="reintentar()">
+              Reintentar <i class="bi bi-arrow-repeat"></i>
+            </button>
+            } @if( ['Rechazado', 'Pendiente', 'Recibido', 'Aprobado',
+            'RechazadoInutil'].includes(venta.estado)){
+            <button class="btn btn-danger btn-sm" (click)="anularSifen()">
+              Anular <i class="bi bi-x-circle"></i>
+            </button>
+            } @if( ['Rechazado', 'Recibido', 'Aprobado'].includes(venta.estado)
+            ){
+            <button class="btn btn-info btn-sm" (click)="concultarCDC()">
+              Consulta CDC <i class="bi bi-search"></i>
+            </button>
+            }
+          </div>
+        </div>
 
         <!-- Lista de pasos -->
         <div class="steps">
@@ -22,17 +80,26 @@
               <div class="step-header">
                 <span class="step-number">{{ item.orden }}</span>
                 <span class="step-title">{{ item.estado }}</span>
-                <span class="step-date">{{ item.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span>
+                <span class="step-date">{{
+                  item.fechaCreacion | date: 'dd/MM/yyyy HH:mm'
+                }}</span>
               </div>
               <div class="step-actions">
                 <button class="btn btn-primary btn-sm" (click)="verXml(item)">
                   Ver XML <i class="bi bi-file-earmark-code"></i>
                 </button>
+                <!-- Botón para generar KUDE, solo cuando estado sea "FIRMADO" y orden sea 2 -->
+                <button
+                  *ngIf="item.estado === 'FIRMADO' && item.orden === 2"
+                  class="btn btn-success btn-sm"
+                  (click)="generateKude(item.id)"
+                >
+                  Generar KUDE <i class="bi bi-file-text"></i>
+                </button>
               </div>
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="modal-footer">

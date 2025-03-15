@@ -42,7 +42,7 @@ export class ListComponent {
   fechaHasta = moment(new Date()).format("YYYY-MM-DD");
   role: string = '';
   openHistorial = false;
-  ventaId: number = 0;
+  ventaSeleccionada: any = {};
   sucursalSeleccionada: number = 0;
   listaSeleccionada: number = 1;
   searchCliente = false;
@@ -167,9 +167,9 @@ export class ListComponent {
   }
 
 
-  verHistorial(ventaId:number){
+  verHistorial(venta:any){
+    this.ventaSeleccionada = venta;
     this.openHistorial = true;
-    this.ventaId = ventaId;
   }
 
 
@@ -178,16 +178,20 @@ export class ListComponent {
     this._router.navigate(['/ventas/detalles', ventaId]);
 
   }
-  generarXml(ventaId: number) {
-    this._ventasService.generarXML(ventaId).subscribe((response: any) => {
-      const fileURL = URL.createObjectURL(response);
-      window.open(fileURL, '_blank');
+    cambiarEstadoVenta(venta:any) {
+      // Buscar la venta por su id
+      const index = this.ventas().findIndex(v => v.id === venta.id);  // Buscar índice de la venta por ID
 
-    })
-
-  }
-
-
+      if (index !== -1) {
+        // Actualizar la venta en el arreglo
+        this.ventas()[index].estado = venta.estado;  // Modificar el estado, por ejemplo
+        this.ventas()[index].anulado = venta.anulado;
+        // Si se necesita una notificación o actualización adicional, puedes hacerlo aquí.
+        console.log("Venta actualizada:", this.ventas()[index]);
+      } else {
+        console.error("Venta no encontrada");
+      }
+    }
 
   firmarXml(ventaId: number) {
     this._ventasService.firmarXML(ventaId).subscribe((response: any) => {
@@ -206,60 +210,6 @@ export class ListComponent {
     })
   }
 
-  concultarCDC(item: any) {
-        this._sifenService.consultaCDC(item.id, item.cdc).subscribe((response: any) => {
-
-          Swal.fire('Respuesta', response.data, 'success');
-
-        })
-
-  }
-
-
-  reintentar(id: number) {
-    this._sifenService.reintentarSifen(id)
-    .subscribe({
-      next: (resp) => {
-        Swal.fire('Respuesta', resp.data, 'success');
-      },
-      error: message => {
-        Swal.fire('Error', message.error, 'error');
-      }
-    });
-
-
-
-}
-
-
-
-
-  anularSifen(id: number) {
-    Swal.fire({
-      title: 'Está segur@ que desea inutilizar/cancelar la factura?',
-      text: `La factura serà anulada`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, Anular',
-      cancelButtonText: 'No, No anular ',
-      customClass: {
-        confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
-        cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
-      },
-      buttonsStyling: false,
-      reverseButtons: true
-    }).then(async (result) => {
-      if (result.value) {
-        this._sifenService.anulacionSifen(id).subscribe((response: any) => {
-          this.buscar()
-          Swal.fire('Factura anulada!!!', 'factura anulada con exito!!! comprobante:', 'success');
-
-        })
-      }
-    });
-  }
   anular(id: number) {
     Swal.fire({
       title: 'Está segur@ que desea anular la factura?',

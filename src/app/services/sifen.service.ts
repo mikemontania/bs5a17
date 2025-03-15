@@ -19,8 +19,8 @@ export class SifenService {
       .pipe(map((resp: any) => resp));
   }
 
-  anulacionSifen(id: number): Observable<any> {
-     return this.http.put(BASE_URL + '/sifens/anular/'+ id, null)
+  anulacionSifen(id: number, tipoAnulacion:number): Observable<any> {
+     return this.http.put(BASE_URL + '/sifens/anular/'+ id+'/'+tipoAnulacion, null)
       .pipe(
         map((response: any) => response ),
         catchError(e => {
@@ -31,6 +31,19 @@ export class SifenService {
         })
       );
   }
+
+  getKude(id: number ) {
+    const url = BASE_URL + "/sifens/kude/" + id;
+
+    return this.http
+     .get(url, { responseType: 'blob' })
+     .pipe(
+      map((response: any) => {
+        return new Blob([response], { type: 'application/pdf' });
+      })
+     );
+    }
+
   reintentarSifen(id: number): Observable<any> {
     return this.http.post(BASE_URL + '/sifens/reintentar/'+ id, null)
      .pipe(

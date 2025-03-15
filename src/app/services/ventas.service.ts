@@ -60,7 +60,7 @@ export class VentasService {
       );
   }
 
-  generarXML(ventaId: number) {
+  generaXml(ventaId: number) {
     return this.http.get(BASE_URL + `/ventas/generar-xml/${ventaId}`, { responseType: 'blob' })
       .pipe(
         map((respo: Blob) => {

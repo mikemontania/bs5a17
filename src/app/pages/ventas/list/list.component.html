@@ -123,14 +123,10 @@
                 <th scope="col">DESCUENTO</th>
                 <th scope="col">total</th>
                 <th scope="col">estado</th>
-                <th scope="col">anulado</th>
-                <th scope="col">Reintentar</th>
-                <th scope="col">anular</th>
-                <th scope="col">Inuti/Cancel</th>
-                <th scope="col">detalles</th>
-                <th scope="col">CDC</th>
-                <th scope="col">doc</th>
-                <th scope="col">xml</th>
+                <th scope="col">anulado</th> 
+                <th scope="col">anular</th> 
+                <th scope="col">detalles</th> 
+                <th scope="col">doc</th> 
                 <th scope="col">historial</th>
               </tr>
             </thead>
@@ -164,14 +160,7 @@
                 <td  class="text-sm">{{ venta.importeTotal | number }} Gs</td>
                 <td  class="text-sm">{{ venta.estado   }} </td>
                 <td  class="text-sm">{{ (venta.anulado )?'SI':'NO' }}</td>
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-danger text-danger"(click)="reintentar(venta.id)"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="reintentar"   >
-                  <i class="bi bi-arrow-repeat"></i>
-                </button>
-                </td>
+              
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(venta.id)"[disabled]="venta.anulado"
                   data-bs-toggle="tooltip"
@@ -180,14 +169,7 @@
                     <i class="bi bi-cart-x"></i>
                   </button>
                 </td>
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-danger text-danger"(click)="anularSifen(venta.id)"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Anular ventas"   >
-                    <i class="bi bi-cart-x"></i>
-                  </button>
-                </td>
+               
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-info text-info"
                   data-bs-toggle="tooltip"
@@ -197,15 +179,7 @@
                     <i class="bi bi-card-list"></i>
                   </button>
                 </td>
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-info text-info"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Ver detalles de ventas"
-                  (click)="concultarCDC(venta )">
-                    <i class="bi bi-card-list"></i>
-                  </button>
-                </td>
+           
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-success text-success"
                   data-bs-toggle="tooltip"
@@ -214,19 +188,12 @@
                     <i class="bi bi-card-list"></i>
                   </button>
                 </td>
+              
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-success text-success"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
-                  title="Ver documento"  (click)="generarXml(venta.id)">
-                    <i class="bi bi-card-list"></i>
-                  </button>
-                </td>
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-success text-success"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Ver historial"  (click)="verHistorial(venta.id)">
+                  title="Ver historial"  (click)="verHistorial(venta)">
                   <i class="bi bi-list-ul"></i>
                                   </button>
                 </td>
@@ -271,7 +238,8 @@
 @if(openHistorial ) {
   <app-historial
     [isOpen]="openHistorial"
-    [id]="ventaId"
+    [venta]="ventaSeleccionada"
+    (stateChanged)="cambiarEstadoVenta($event)"
     (closeModal)="openHistorial = false"
   ></app-historial>
 }
