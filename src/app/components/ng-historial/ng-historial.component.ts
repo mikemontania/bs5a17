@@ -57,7 +57,11 @@ export class NgHistorialComponent implements OnInit {
     this._sifenService.reintentarSifen(this.venta.id)
       .subscribe({
         next: (resp) => {
-          Swal.fire('Respuesta', resp.data, 'success');
+          console.log(resp);
+          this.venta.anulado = resp.venta.anulado;
+          this.venta.estado = resp.venta.estado;
+          this.stateChanged.emit(this.venta);
+          Swal.fire('Respuesta', resp.mensaje, 'success');
         },
         error: message => {
           Swal.fire('Error', message.error, 'error');
