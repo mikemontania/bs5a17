@@ -22,49 +22,49 @@
       >
         <div class="card-body">
           <h5 class="card-title">
-            <small>ID:{{ venta.id }}</small>
-            <small>CDC:{{ venta.cdc }}</small>
+            <small>ID:{{ documento.id }}</small>
+            <small>CDC:{{ documento.cdc }}</small>
           </h5>
 
           <div class="card p-3 mb-3">
             <div class="row">
               <div class="col-6">
-                <strong>Comprobante:</strong> {{ venta.nroComprobante }}
+                <strong>Comprobante:</strong> {{ documento.nroComprobante }}
               </div>
               <div class="col-6">
-                <strong>Timbrado:</strong> {{ venta.timbrado }}
+                <strong>Timbrado:</strong> {{ documento.timbrado }}
               </div>
 
               <div class="col-6">
-                <strong>Estado:</strong> {{ venta.estado }}
+                <strong>Estado:</strong> {{ documento.estado }}
               </div>
               <div class="col-6">
-                <strong>Fecha:</strong> {{ venta.fechaVenta }}
+                <strong>Fecha:</strong> {{ documento.fecha }}
               </div>
               <div class="col-6">
                 <strong>Descuento:</strong>
-                {{ venta.importeDescuento | number }} Gs
+                {{ documento.importeDescuento | number }} Gs
               </div>
               <div class="col-6">
-                <strong>Total:</strong> {{ venta.importeTotal | number }} Gs
+                <strong>Total:</strong> {{ documento.importeTotal | number }} Gs
               </div>
               <div class="col-12">
-                <strong>Cliente:</strong> {{ venta.cliente.razonSocial }} -
-                {{ venta.cliente.nroDocumento }}
+                <strong>Cliente:</strong> {{ documento.cliente.razonSocial }} -
+                {{ documento.cliente.nroDocumento }}
               </div>
             </div>
           </div>
           <div class="d-flex gap-2 mb-3">
-            @if( ['Rechazado', 'EstadoDesconocido'].includes(venta.estado)){
+            @if( ['Rechazado', 'EstadoDesconocido'].includes(documento.estado)){
             <button class="btn btn-warning btn-sm" (click)="reintentar()">
               Reintentar <i class="bi bi-arrow-repeat"></i>
             </button>
             } @if( ['Rechazado', 'Pendiente', 'Recibido', 'Aprobado',
-            'RechazadoInutil'].includes(venta.estado)){
+            'RechazadoInutil'].includes(documento.estado)){
             <button class="btn btn-danger btn-sm" (click)="anularSifen()">
               Anular <i class="bi bi-x-circle"></i>
             </button>
-            } @if( ['Rechazado', 'Recibido', 'Aprobado'].includes(venta.estado)
+            } @if( ['Rechazado', 'Recibido', 'Aprobado'].includes(documento.estado)
             ){
             <button class="btn btn-info btn-sm" (click)="concultarCDC()">
               Consulta CDC <i class="bi bi-search"></i>

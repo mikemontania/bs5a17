@@ -6,8 +6,8 @@ import { CommonModule } from '@angular/common';
 import {
   ClientesService,
   ProductosService,
-  VentasService,
-  FormaVentaService,
+ DocumentosService,
+  CondicionPagoService,
   ListaPrecioService,
   SucursalService,
   NumeracionService,
@@ -27,8 +27,8 @@ import {
   providers: [
     ClientesService,
     ProductosService,
-    VentasService,
-    FormaVentaService,
+   DocumentosService,
+    CondicionPagoService,
     ListaPrecioService,
     SucursalService,
     NumeracionService,

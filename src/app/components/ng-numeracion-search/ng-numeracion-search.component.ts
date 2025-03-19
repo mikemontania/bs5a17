@@ -23,6 +23,7 @@ export class NgNumeracionSearchComponent implements OnInit {
   delay = 200;
   @Input() isOpen = false;
   @Input() sucursalId = 0;
+  @Input() itide = 0;
   @Output() closeModal = new EventEmitter<void>();
   @Output() numeracion = new EventEmitter<Numeracion>();
 
@@ -49,7 +50,7 @@ export class NgNumeracionSearchComponent implements OnInit {
 
   buscar(termino: string) {
     this._numeracionesService
-      .findAll(this.sucursalId)
+      .findAll(this.sucursalId,this.itide)
       .subscribe(resp => (this.numeracionesAux = resp));
     console.log("numeraciones aux", this.numeracionesAux);
 

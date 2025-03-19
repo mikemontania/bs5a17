@@ -6,9 +6,9 @@ import { Cliente } from '../../interfaces/clientes.interface';
 import { ClientesService } from "../../services/clientes.service";
 import Swal from "sweetalert2";
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from "@angular/forms";
-import { FormaVenta } from "../../interfaces/formaventa.interface";
+import { CondicionPago } from "../../interfaces/condicionPago.interface";
 import { ListaPrecio } from "../../interfaces/listaPrecio.interface";
-import { FormaVentaService } from "../../services/formaVenta.service";
+import { CondicionPagoService } from "../../services/condicionPago.service";
 import { ListaPrecioService } from "../../services/listaPrecio.service";
 
 @Component({
@@ -26,12 +26,12 @@ export class NgClienteCreateComponent implements OnInit {
   @Output() cliente = new EventEmitter<Cliente>();
 
   listas = signal<ListaPrecio[]>([])
-  formas = signal<FormaVenta[]>([])
+  formas = signal<CondicionPago[]>([])
   clienteForm: FormGroup;
 
   private fb = inject(FormBuilder)
   private _listaPrecioService = inject(ListaPrecioService)
-  private _formaventaService = inject(FormaVentaService)
+  private _formadocumentoService = inject(CondicionPagoService)
   private _clienteService = inject(ClientesService)
   constructor() {
     // Initialize the property in the constructor
@@ -41,7 +41,7 @@ export class NgClienteCreateComponent implements OnInit {
     this.clienteForm = this.fb.group({
       empresaId: [1, Validators.required],
       listaPrecioId: [1, Validators.required], // Valor por defecto
-      formaVentaId: [1, Validators.required],
+      condicionPagoId: [1, Validators.required],
       razonSocial: [null, [Validators.required, Validators.minLength(7)]],
       nroDocumento: [null, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-zA-Z0-9-]+$/)]],
       direccion: [null, Validators.required],
@@ -68,13 +68,13 @@ export class NgClienteCreateComponent implements OnInit {
     });
 
     this.getListas();
-    this.getFormaVenta();
+    this.getCondicionPago();
   }
   getListas() {
     this._listaPrecioService.findAll().subscribe((resp: any) => this.listas.set(resp));
   }
-  getFormaVenta() {
-    this._formaventaService.findAll().subscribe((resp: any) => this.formas.set(resp));
+  getCondicionPago() {
+    this._formadocumentoService.findAll().subscribe((resp: any) => this.formas.set(resp));
   }
   onSubmit(e: Event) {
     e.preventDefault()

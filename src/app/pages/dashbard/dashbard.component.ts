@@ -62,7 +62,7 @@ export class DashbardComponent implements OnInit {
   dashcliente_totalimporte:number=0;
   dashcliente_totalfacturas:number=0;
   dashsucursal_totalimporte:number=0;
-  dashsucursal_totalventas:number=0;
+  dashsucursal_totaldocumentos:number=0;
   dashvariante_peso:number=0;
   dashvariante_vendidos:number=0;
   dashmedio_importeCobrado:number=0;
@@ -113,7 +113,7 @@ export class DashbardComponent implements OnInit {
       this.fechaHasta = moment(new Date()).format("YYYY-MM-DD");
     }
     forkJoin([
-      this._reportService.getReporteVentasPorSucursal(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
+      this._reportService.getReporteDocumentosPorSucursal(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
       this._reportService.getTopVariantes(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
       this._reportService.getTopClientes(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
       this._reportService.getInformeMediosDePago(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
@@ -160,7 +160,7 @@ export class DashbardComponent implements OnInit {
     this.dashsucursal_totalimporte =  this.rptSucursales.reduce((total, detalle) => total + +detalle.totalimporte, 0) ;
     this.dashcliente_totalimporte =  this.rptClientes.reduce((total, detalle) => total + +detalle.totalimporte, 0) ;
     this.dashcliente_totalfacturas =  this.rptClientes.reduce((total, detalle) => total + +detalle.totalfacturas, 0) ;
-    this.dashsucursal_totalventas =  this.rptSucursales.reduce((total, detalle) => total + +detalle.totalventas, 0) ;
+    this.dashsucursal_totaldocumentos =  this.rptSucursales.reduce((total, detalle) => total + +detalle.totaldocumentos, 0) ;
     this.dashvariante_totalimporte =  this.rptVariantes.reduce((total, detalle) => total + +detalle.totalimporte, 0) ;
     this.dashvariante_peso =  this.rptVariantes.reduce((total, detalle) => total + +detalle.peso, 0) ;
     this.dashvariante_vendidos =  this.rptVariantes.reduce((total, detalle) => total + +detalle.vendidos, 0) ;

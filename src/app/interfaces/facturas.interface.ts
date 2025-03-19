@@ -1,20 +1,20 @@
  import { Cliente } from "./clientes.interface";
-import { FormaVenta } from "./formaventa.interface";
+import { CondicionPago } from "./condicionPago.interface";
 import { VendedorCreacion } from "./pages.interfaces";
 import { Sucursal } from "./sucursal.interface";
 
-export interface Venta {
+export interface Documento {
   fechaCreacion:      string;
   fechaModificacion:  string;
   fechaAnulacion:     string;
-  fechaVenta:         string;
+  fecha:         string;
   fechaInicio:        string;
   fechaFin:           string;
   id:                 number;
   empresaId:          number;
   sucursalId:         number;
   listaPrecioId:      number;
-  formaVentaId:       number;
+  condicionPagoId:       number;
   anulado:            boolean;
   enviado:            boolean;
   usuarioCreacionId:  number;
@@ -36,13 +36,13 @@ export interface Venta {
   vendedorCreacion:   VendedorCreacion;
   vendedorAnulacion: VendedorCreacion;
   cliente:            Cliente;
-  formaVenta:         FormaVenta;
-  listaPrecio:        FormaVenta;
+  condicionPago:         CondicionPago;
+  listaPrecio:        CondicionPago;
   sucursal:           Sucursal;
 }
-export interface VentaDetalle {
+export interface DocumentoDetalle {
   id:               number;
-  ventaId:          number;
+  documentoId:          number;
   varianteId:       number;
   cantidad:         number;
   importePrecio:    number;
@@ -107,7 +107,7 @@ export interface ModelCab {
   sucursalId: number  ;
   numeracionId: number  ;
   listaPrecioId: number;
-  formaVentaId: number;
+  condicionPagoId: number;
   porcDescuento: number;
   importeIva5: number ;
   importeIva10: number ;

@@ -1,17 +1,17 @@
 import { Component, computed, inject, signal } from '@angular/core';
 
-import { VentasService } from '../../../services/ventas.service';
+import {DocumentosService } from '../../../services/documentos.service';
 import { CommonModule } from '@angular/common';
 import { InputDebounceComponent } from '../../../components/inputDebounce/inputDebounce.component';
 import { PaginatorComponent } from '../../../components/paginator/paginator.component';
-import { VentasPage } from '../../../interfaces/pages.interfaces';
+import {DocumentosPage } from '../../../interfaces/pages.interfaces';
 import { Cliente } from '../../../interfaces/clientes.interface';
 import { Sucursal } from '../../../interfaces/sucursal.interface';
 import { ListaPrecio } from '../../../interfaces/listaPrecio.interface';
 import moment from 'moment';
 import { NgSucursalSearchComponent } from '../../../components/ng-sucursal-search/ng-sucursal-search.component';
 import { NgClienteSearchComponent } from '../../../components/ng-cliente-search/ng-cliente-search.component';
-import { NgFormaVentaSearchComponent } from '../../../components/ng-forma-venta-search/ng-forma-venta-search.component';
+import { NgCondicionPagoSearchComponent } from '../../../components/ng-condicion-pago-search/ng-condicion-pago-search.component';
 import { NgListaPrecioSearchComponent } from '../../../components/ng-lista-precio-search/ng-lista-precio-search.component';
 import { FormsModule } from '@angular/forms';
 import { ReportesService } from '../../../services/reportes.service';
@@ -27,13 +27,13 @@ import { NgHistorialComponent } from '../../../components/ng-historial/ng-histor
   selector: 'app-list',
   standalone: true,
   imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent,
-    NgClienteSearchComponent, NgFormaVentaSearchComponent, NgListaPrecioSearchComponent,NgHistorialComponent],
+    NgClienteSearchComponent, NgCondicionPagoSearchComponent, NgListaPrecioSearchComponent,NgHistorialComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
 export class ListComponent {
   searchComprobante = signal<string>('');
-  ventasPage = signal<VentasPage>({} as VentasPage);
+  documentosPage = signal<DocumentosPage>({} as DocumentosPage);
   page = signal<number>(1);
   totalPages = signal<number>(1);
   pageSize = signal<number>(15);
@@ -42,7 +42,7 @@ export class ListComponent {
   fechaHasta = moment(new Date()).format("YYYY-MM-DD");
   role: string = '';
   openHistorial = false;
-  ventaSeleccionada: any = {};
+  documentoSeleccionada: any = {};
   sucursalSeleccionada: number = 0;
   listaSeleccionada: number = 1;
   searchCliente = false;
@@ -50,18 +50,18 @@ export class ListComponent {
   sucursales: Sucursal[] = [];
   listas: ListaPrecio[] = [];
   listaPrecio:ListaPrecio ={}as ListaPrecio;
-  ventas = computed(() => this.ventasPage().ventas ?? []);
+  documentos = computed(() => this.documentosPage().documentos ?? []);
   clienteId = computed(() => this.cliente()?.id ?? 0);
 
   private _router = inject(Router)
-  _ventasService = inject(VentasService);
+  _documentosService = inject(DocumentosService);
   _sifenService = inject(SifenService);
   _sucursalesService = inject(SucursalService);
   _listasPrecioService = inject(ListaPrecioService);
   _reportService = inject(ReportesService)
   _authService = inject(AuthService)
   constructor( ) {
-    const storedSearchData = localStorage.getItem('searchDataVenta');
+    const storedSearchData = localStorage.getItem('searchDataDocumento');
 //coment
     // Realizar las dos solicitudes HTTP simultáneamente
     forkJoin({
@@ -123,7 +123,7 @@ export class ListComponent {
     }
     this.page.set(page);
 
-    localStorage.setItem('searchDataVenta', JSON.stringify({
+    localStorage.setItem('searchDataDocumento', JSON.stringify({
       searchComprobante: this.searchComprobante(),
       cliente: this.cliente(),
       sucursalId: this.sucursalSeleccionada,
@@ -134,11 +134,11 @@ export class ListComponent {
       fechaHasta: this.fechaHasta,
     }));
 
-    this._ventasService
+    this._documentosService
       .search(this.page(), this.pageSize(), this.fechaDesde, this.fechaHasta, this.clienteId(), this.sucursalSeleccionada,  0, this.listaSeleccionada, this.searchComprobante())
       .subscribe({
         next: (resp) => {
-          this.ventasPage.set(resp);
+          this.documentosPage.set(resp);
           console.log(resp)
           this.page.set(resp.page);
           this.totalPages.set(resp.totalPages);
@@ -167,34 +167,34 @@ export class ListComponent {
   }
 
 
-  verHistorial(venta:any){
-    this.ventaSeleccionada = venta;
+  verHistorial(documento:any){
+    this.documentoSeleccionada = documento;
     this.openHistorial = true;
   }
 
 
 
-  verDetalles(ventaId: number) {
-    this._router.navigate(['/ventas/detalles', ventaId]);
+  verDetalles(documentoId: number) {
+    this._router.navigate(['/documentos/detalles', documentoId]);
 
   }
-    cambiarEstadoVenta(venta:any) {
-      // Buscar la venta por su id
-      const index = this.ventas().findIndex(v => v.id === venta.id);  // Buscar índice de la venta por ID
+    cambiarEstadoDocumento(documento:any) {
+      // Buscar la documento por su id
+      const index = this.documentos().findIndex(v => v.id === documento.id);  // Buscar índice de la documento por ID
 
       if (index !== -1) {
-        // Actualizar la venta en el arreglo
-        this.ventas()[index].estado = venta.estado;  // Modificar el estado, por ejemplo
-        this.ventas()[index].anulado = venta.anulado;
+        // Actualizar la documento en el arreglo
+        this.documentos()[index].estado = documento.estado;  // Modificar el estado, por ejemplo
+        this.documentos()[index].anulado = documento.anulado;
         // Si se necesita una notificación o actualización adicional, puedes hacerlo aquí.
-        console.log("Venta actualizada:", this.ventas()[index]);
+        console.log("Documento actualizada:", this.documentos()[index]);
       } else {
-        console.error("Venta no encontrada");
+        console.error("Documento no encontrada");
       }
     }
 
-  firmarXml(ventaId: number) {
-    this._ventasService.firmarXML(ventaId).subscribe((response: any) => {
+  firmarXml(documentoId: number) {
+    this._documentosService.firmarXML(documentoId).subscribe((response: any) => {
       const fileURL = URL.createObjectURL(response);
       window.open(fileURL, '_blank');
 
@@ -228,7 +228,7 @@ export class ListComponent {
       reverseButtons: true
     }).then(async (result) => {
       if (result.value) {
-        this._ventasService.anular(id).subscribe((response: any) => {
+        this._documentosService.anular(id).subscribe((response: any) => {
           this.buscar()
           Swal.fire('Factura anulada!!!', 'factura anulada con exito!!! comprobante:', 'success');
 

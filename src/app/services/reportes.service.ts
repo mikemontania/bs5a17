@@ -32,8 +32,8 @@ export class ReportesService {
       );
   }
 
-  getReporteVentasPorSucursal(fechaDesde: string, fechaHasta: string, sucursalId: number) {
-    const url = BASE_URL + `/reportes/ventasPorSucursal/${fechaDesde}/${fechaHasta}/${sucursalId}`;
+  getReporteDocumentosPorSucursal(fechaDesde: string, fechaHasta: string, sucursalId: number) {
+    const url = BASE_URL + `/reportes/documentosPorSucursal/${fechaDesde}/${fechaHasta}/${sucursalId}`;
     return this.http
       .get(url)
       .pipe(

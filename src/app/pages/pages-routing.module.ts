@@ -35,10 +35,10 @@ export default [
         component: EmpresaComponent
       },
       {
-        path: "ventas",
+        path: "documentos",
         canActivate: [authGuard],
 
-        loadChildren: () => import('./ventas/ventas-routing.module')
+        loadChildren: () => import('./documentos/documentos-routing.module')
        },
        {
         path: "productos",

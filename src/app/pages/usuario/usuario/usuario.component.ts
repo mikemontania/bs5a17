@@ -2,10 +2,10 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ListaPrecioService } from '../../../services/listaPrecio.service';
-import { FormaVentaService } from '../../../services/formaVenta.service';
+import { CondicionPagoService } from '../../../services/condicionPago.service';
 import { UsuariosService } from '../../../services/usuarios.service';
 import { ListaPrecio } from '../../../interfaces/listaPrecio.interface';
-import { FormaVenta } from '../../../interfaces/formaventa.interface';
+import { CondicionPago } from '../../../interfaces/condicionPago.interface';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -59,14 +59,13 @@ export class UsuarioComponent implements OnInit {
     this.numeraciones.set([]);
     // Restablecer el campo "numPrefId" a null
     this.usuarioForm.controls['numPrefId'].patchValue(null);
-    this._numeracionService.findAll(sucursalId).subscribe((resp: any) => {
+    //Factura
+    this._numeracionService.findAll(sucursalId,1).subscribe((resp: any) => {
       // Establecer las numeraciones mapeadas en el estado
       this.numeraciones.set(resp);
       console.log(this.usuarioForm.value);
     });
   }
-
-
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -78,7 +77,8 @@ export class UsuarioComponent implements OnInit {
           next: async (usuarioData) => {
             this.numeraciones.set([]);
             this.usuarioForm.controls['numPrefId'].patchValue(null);
-            this._numeracionService.findAll(usuarioData.sucursalId).subscribe((resp: any) => {
+            //factura
+            this._numeracionService.findAll(usuarioData.sucursalId,1).subscribe((resp: any) => {
               // Establecer las numeraciones mapeadas en el estado
               this.numeraciones.set(resp);
               console.log(this.usuarioForm.value);

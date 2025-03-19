@@ -15,7 +15,7 @@ export interface Agrupado {
 }
 
 export interface Detalle {
-  fechaVenta:     string;
+  fecha:     string;
   id:             string;
   nroComprobante: string;
   importeTotal:   string;
@@ -31,7 +31,7 @@ export interface Detalle {
 export interface ReporteSucursal {
   sucursalid:     number;
   sucursalnombre: string;
-  totalventas:    string;
+  totaldocumentos:    string;
   totalimporte:   string;
 }
 

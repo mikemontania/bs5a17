@@ -93,22 +93,22 @@
             </div>
           </div> -->
 
-          <!-- Agrupación de Forma de Venta y Lista de Precio -->
-          <!--   <div class="d-flex w-100">
+          <!-- Agrupación de condicion de pago y Lista de Precio -->
+          <div class="d-flex w-100">
             <div class="input-group mb-3 p w-50 d-flex selector">
               <span
-                (click)="buscarFormaVenta()"
+                (click)="buscarCondicionPago()"
                 class="input-group-text flex-grow-1 d-flex justify-content-between"
                 id="basic-addon3"
               >
-                @if(formaVenta().id) {
+                @if(condicionPago().id) {
                 <span class="client-info"
-                  >Forma venta:
-                  <small>{{ formaVenta().descripcion }}</small></span
+                  >Condicion Pago:
+                  <small>{{ condicionPago().descripcion }}</small></span
                 >
                 } @else {
                 <span class="bg-danger text-white"
-                  ><small>Atención seleccione Forma Venta</small></span
+                  ><small>Atención seleccione Condicion Pago</small></span
                 >
                 }
                 <span class="dropdown-icon">
@@ -135,7 +135,7 @@
                 </span>
               </span>
             </div>
-          </div> -->
+          </div>
           <div class="container ">
             <div class="row">
               <div class="col-md-6">
@@ -333,17 +333,19 @@
   (listaPrecio)="selectListaPrecio($event)"
   (closeModal)="searchListaPrecio = false"
 ></app-lista-precio-search>
-} @if(searchFormaVenta ) {
-<app-forma-venta-search
-  [isOpen]="searchFormaVenta"
-  (formaVenta)="selectFormaVenta($event)"
-  (closeModal)="searchFormaVenta = false"
-></app-forma-venta-search>
+} @if(searchCondicionPago ) {
+<app-condicion-pago-search
+  [isOpen]="searchCondicionPago"
+  (condicionPago)="selectCondicionPago($event)"
+  (closeModal)="searchCondicionPago = false"
+></app-condicion-pago-search>
 } @if(searchNumeracion && sucursal().id && _authService.currentUser()?.rol !=
 'vendedor' ) {
+   <!-- tipofactura   [itide]="1"  -->
 <app-numeracion-search
   [isOpen]="searchNumeracion"
   [sucursalId]="sucursal().id"
+  [itide]="1"
   (numeracion)="selectNumeracion($event)"
   (closeModal)="searchNumeracion = false"
 >

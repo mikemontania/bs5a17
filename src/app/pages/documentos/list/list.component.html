@@ -98,14 +98,14 @@
 
 <div class="card">
   <div class="card-body">
-    @if(ventas() && ventas().length > 0) {
+    @if(documentos() && documentos().length > 0) {
 
       <div class=" pt-4 d-flex flex-column align-items-center">
         <div id="details" style="overflow-x: auto">
           <table class="table caption-top table-sm small-table">
             <caption>
               Facturas({{
-                ventas().length | number
+                documentos().length | number
               }})
             </caption>
             <thead>
@@ -131,41 +131,41 @@
               </tr>
             </thead>
             <tbody>
-              @for (venta of ventas(); track venta.id; let index = $index) {
+              @for (documento of documentos(); track documento.id; let index = $index) {
               <tr>
                 <th scope="row">{{ index + 1 }}</th>
-                <td>{{ venta.id }}</td>
+                <td>{{ documento.id }}</td>
                 <td>
                   <div class="text-truncate">
-                    <span class="d-block text-sm">{{ venta.cliente.razonSocial }}</span>
-                    <small class="d-block text-sm">{{ venta.cliente.nroDocumento }}</small>
+                    <span class="d-block text-sm">{{ documento.cliente.razonSocial }}</span>
+                    <small class="d-block text-sm">{{ documento.cliente.nroDocumento }}</small>
                   </div>
                 </td>
-                <td  class="text-sm">{{ venta.sucursal.descripcion }}</td>
-                <td  class="text-sm">{{ venta.listaPrecio.descripcion }}</td>
-                <td  class="text-sm">{{ venta.formaVenta.descripcion }}</td>
-                <td  class="text-sm">{{ venta.vendedorCreacion.usuario }}</td>
+                <td  class="text-sm">{{ documento.sucursal.descripcion }}</td>
+                <td  class="text-sm">{{ documento.listaPrecio.descripcion }}</td>
+                <td  class="text-sm">{{ documento.condicionPago.descripcion }}</td>
+                <td  class="text-sm">{{ documento.vendedorCreacion.usuario }}</td>
                 <td  class="text-sm">
-                  <span class="d-block text-sm">{{ venta.nroComprobante }}</span>
-                  <small class="d-block text-sm">{{ venta.timbrado }}</small>
+                  <span class="d-block text-sm">{{ documento.nroComprobante }}</span>
+                  <small class="d-block text-sm">{{ documento.timbrado }}</small>
                 </td>
-                <td  class="text-sm">{{ venta.fechaVenta }}</td>
-                <td  class="text-sm">{{ venta.importeSubtotal | number }} Gs</td>
+                <td  class="text-sm">{{ documento.fecha }}</td>
+                <td  class="text-sm">{{ documento.importeSubtotal | number }} Gs</td>
                 <td  class="text-sm">
                   <div class="text-truncate">
-                    <span class="d-block text-sm">{{venta.porcDescuento | number }}%</span>
-                    <small class="d-block text-sm"> {{ venta.importeDescuento | number }} Gs</small>
+                    <span class="d-block text-sm">{{documento.porcDescuento | number }}%</span>
+                    <small class="d-block text-sm"> {{ documento.importeDescuento | number }} Gs</small>
                   </div>
                  </td>
-                <td  class="text-sm">{{ venta.importeTotal | number }} Gs</td>
-                <td  class="text-sm">{{ venta.estado   }} </td>
-                <td  class="text-sm">{{ (venta.anulado )?'SI':'NO' }}</td>
+                <td  class="text-sm">{{ documento.importeTotal | number }} Gs</td>
+                <td  class="text-sm">{{ documento.estado   }} </td>
+                <td  class="text-sm">{{ (documento.anulado )?'SI':'NO' }}</td>
               
                 <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(venta.id)"[disabled]="venta.anulado"
+                  <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(documento.id)"[disabled]="documento.anulado"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
-                  title="Anular ventas"   >
+                  title="Anular documentos"   >
                     <i class="bi bi-cart-x"></i>
                   </button>
                 </td>
@@ -174,8 +174,8 @@
                   <button class="btn btn-sm btn-outline-info text-info"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
-                  title="Ver detalles de ventas"
-                  (click)="verDetalles(venta.id)">
+                  title="Ver detalles de documentos"
+                  (click)="verDetalles(documento.id)">
                     <i class="bi bi-card-list"></i>
                   </button>
                 </td>
@@ -184,7 +184,7 @@
                   <button class="btn btn-sm btn-outline-success text-success"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
-                  title="Ver documento"  (click)="getDoc(venta.id)">
+                  title="Ver documento"  (click)="getDoc(documento.id)">
                     <i class="bi bi-card-list"></i>
                   </button>
                 </td>
@@ -193,7 +193,7 @@
                   <button class="btn btn-sm btn-outline-success text-success"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
-                  title="Ver historial"  (click)="verHistorial(venta)">
+                  title="Ver historial"  (click)="verHistorial(documento)">
                   <i class="bi bi-list-ul"></i>
                                   </button>
                 </td>
@@ -210,7 +210,7 @@
     <div class="w-100 empty-message-container">
       <div class="alert alert-info alert-dismissible fade show" role="alert">
         <h4 class="alert-heading">Atención</h4>
-        <p>No se han encontrado ventas...</p>
+        <p>No se han encontrado documentos...</p>
       </div>
     </div>
     }
@@ -238,8 +238,8 @@
 @if(openHistorial ) {
   <app-historial
     [isOpen]="openHistorial"
-    [venta]="ventaSeleccionada"
-    (stateChanged)="cambiarEstadoVenta($event)"
+    [documento]="documentoSeleccionada"
+    (stateChanged)="cambiarEstadoDocumento($event)"
     (closeModal)="openHistorial = false"
   ></app-historial>
 }

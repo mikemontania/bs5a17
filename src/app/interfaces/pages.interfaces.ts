@@ -1,16 +1,16 @@
 import { Cliente } from './clientes.interface';
-import { Venta } from './facturas.interface';
+import {Documento } from './facturas.interface';
 import { Numeracion } from './numeracion.interface';
 import { Sucursal } from './sucursal.interface';
 import { Usuario } from './usuario.interface';
 
 
-export interface VentasPage {
+export interface DocumentosPage {
   total:      number;
   totalPages: number;
   page:       number;
   pageSize:   number;
-  ventas:     Venta[];
+  documentos:    Documento[];
 }
 
 

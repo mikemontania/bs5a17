@@ -138,7 +138,7 @@
               <tr>
                 <th scope="row">{{ index + 1 }}</th>
                 <td>{{ detalle.id }}</td>
-                <td  class="text-sm">{{ detalle.fechaVenta | date:'dd/MM/yyyy'}}</td>
+                <td  class="text-sm">{{ detalle.fecha | date:'dd/MM/yyyy'}}</td>
                 <td  class="text-sm">{{ detalle.nroComprobante }}</td>
                 <td  class="text-sm">{{ detalle.sucursal.descripcion }}</td>
                 <td  class="text-sm">{{ detalle.cliente.razonSocial }}-{{ detalle.cliente.nroDocumento }}</td>

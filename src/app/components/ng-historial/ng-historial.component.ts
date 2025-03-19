@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, computed, inject, signal } from "@angular/core";
 import {   FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { forkJoin, of } from "rxjs";
-import { SifenService, VentasService } from "../../services/service.index";
+import { SifenService,DocumentosService } from "../../services/service.index";
 import Swal from "sweetalert2";
 
 @Component({
@@ -15,25 +15,25 @@ import Swal from "sweetalert2";
 export class NgHistorialComponent implements OnInit {
   size = "large";
   delay = 200;
-  @Input() venta: any = null;
+  @Input() documento: any = null;
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
   @Output() stateChanged = new EventEmitter<any>();
   // Observables
   historialXml: any[] = [];
   private _sifenService = inject(SifenService);
-  private _ventaService = inject(VentasService);
+  private _documentoService = inject(DocumentosService);
 
   constructor() {
 
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['venta'] && this.venta?.id > 0) {
-      console.log(this.venta);
-      forkJoin([this._ventaService.historialXml(this.venta.id)]).subscribe(([ventasXml]) => {
-        console.log(ventasXml);
-        this.historialXml = ventasXml;
+    if (changes['documento'] && this.documento?.id > 0) {
+      console.log(this.documento);
+      forkJoin([this._documentoService.historialXml(this.documento.id)]).subscribe(([documentosXml]) => {
+        console.log(documentosXml);
+        this.historialXml = documentosXml;
       });
     }
   }
@@ -54,13 +54,13 @@ export class NgHistorialComponent implements OnInit {
 
 
   reintentar() {
-    this._sifenService.reintentarSifen(this.venta.id)
+    this._sifenService.reintentarSifen(this.documento.id)
       .subscribe({
         next: (resp) => {
           console.log(resp);
-          this.venta.anulado = resp.venta.anulado;
-          this.venta.estado = resp.venta.estado;
-          this.stateChanged.emit(this.venta);
+          this.documento.anulado = resp.documento.anulado;
+          this.documento.estado = resp.documento.estado;
+          this.stateChanged.emit(this.documento);
           Swal.fire('Respuesta', resp.mensaje, 'success');
         },
         error: message => {
@@ -71,12 +71,12 @@ export class NgHistorialComponent implements OnInit {
   }
 
   concultarCDC() {
-    this._sifenService.consultaCDC(this.venta.id, this.venta.cdc).subscribe((response: any) => {
+    this._sifenService.consultaCDC(this.documento.id, this.documento.cdc).subscribe((response: any) => {
       console.log(response);
-      this.venta.anulado =response.venta.anulado;
-      this.venta.estado = response.venta.estado;
-      this.stateChanged.emit(this.venta);
-      Swal.fire('Respuesta', 'Nuevo estado '+response.venta.estado, 'success');
+      this.documento.anulado =response.documento.anulado;
+      this.documento.estado = response.documento.estado;
+      this.stateChanged.emit(this.documento);
+      Swal.fire('Respuesta', 'Nuevo estado '+response.documento.estado, 'success');
 
     })
 
@@ -102,18 +102,18 @@ export class NgHistorialComponent implements OnInit {
       if (result.value) {
 
         let tipoId = 2;
-        // si this.venta.estado in( Pendiente, Rechazado, Recibido) entonces tipo 2 que es inutilizar
-        // si this.venta.estado in( Aprobado, RechazInutilizado) entonces tipo 1 que es inutilizar
+        // si this.documento.estado in( Pendiente, Rechazado, Recibido) entonces tipo 2 que es inutilizar
+        // si this.documento.estado in( Aprobado, RechazInutilizado) entonces tipo 1 que es inutilizar
 
-        if (['Aprobado', 'RechazInutilizado'].includes(this.venta.estado)) {
+        if (['Aprobado', 'RechazInutilizado'].includes(this.documento.estado)) {
           tipoId = 1; // Inutilizar
-        } else if (['Pendiente', 'Rechazado', 'Recibido'].includes(this.venta.estado)) {
+        } else if (['Pendiente', 'Rechazado', 'Recibido'].includes(this.documento.estado)) {
           tipoId = 2; // Anular
         }
-        this._sifenService.anulacionSifen(this.venta.id, tipoId).subscribe((data: any) => {
-        this.venta.anulado =data.venta.anulado;
-        this.venta.estado = data.venta.estado;
-        this.stateChanged.emit(this.venta);  // Enviar la venta actualizada al padre
+        this._sifenService.anulacionSifen(this.documento.id, tipoId).subscribe((data: any) => {
+        this.documento.anulado =data.documento.anulado;
+        this.documento.estado = data.documento.estado;
+        this.stateChanged.emit(this.documento);  // Enviar la documento actualizada al padre
 
 
           Swal.fire('Factura anulada!!!', 'factura anulada con exito!!! comprobante:', 'success');

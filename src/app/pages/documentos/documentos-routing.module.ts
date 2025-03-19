@@ -7,7 +7,7 @@ export default [
         path: "",
         canActivate: [authGuard],
 
-        loadComponent: () => import('./ventas/ventas.component').then((c) => c.VentasComponent)
+        loadComponent: () => import('./documentos/documentos.component').then((c) => c.DocumentosComponent)
       },
       {
         path: "reporteCobranza",

@@ -10,24 +10,24 @@ export const navbarData: INavbarData[] = [
 
 
   {
-    routeLink: 'ventas',
+    routeLink: 'documentos',
     icon: 'fa-solid fa-cash-register',
     label: 'Facturación',
     rol:['vendedor','admin'],
     items: [
       {
-        routeLink: 'ventas',
+        routeLink: 'documentos',
         rol:['vendedor','admin'],
-        label: 'Ventas'
+        label: 'Documentos'
       },
       {
-        routeLink: 'ventas/listar',
+        routeLink: 'documentos/listar',
         rol:['vendedor','admin'],
 
         label: 'Listado'
       },
       {
-        routeLink: 'ventas/reporteCobranza',
+        routeLink: 'documentos/reporteCobranza',
         rol:['vendedor','admin'],
         label: 'Reporte Cobranza'
       },

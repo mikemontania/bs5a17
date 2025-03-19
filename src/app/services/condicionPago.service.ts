@@ -6,19 +6,19 @@ import {  map } from "rxjs/operators";
 @Injectable({
   providedIn: "root"
 })
-export class FormaVentaService {
+export class CondicionPagoService {
   http = inject(HttpClient);
   router = inject(Router);
 
   getById(id:number) {
     return this.http
-      .get(BASE_URL + "/forma-venta/"+id)
+      .get(BASE_URL + "/condicion-pago/"+id)
       .pipe(map((resp: any) => resp));
   }
 
   findAll() {
     return this.http
-      .get(BASE_URL + "/forma-venta/")
+      .get(BASE_URL + "/condicion-pago/")
       .pipe(
         map((respo: any) => {
           return respo;
@@ -28,7 +28,7 @@ export class FormaVentaService {
 
   findPredeterminado() {
     return this.http
-      .get(BASE_URL + "/forma-venta/predeterminado")
+      .get(BASE_URL + "/condicion-pago/predeterminado")
       .pipe(map((resp: any) => resp));
   }
 

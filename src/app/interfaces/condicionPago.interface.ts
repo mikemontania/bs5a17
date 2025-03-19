@@ -1,4 +1,4 @@
-export interface FormaVenta {
+export interface CondicionPago {
   id: number;
   empresaId: number;
   descripcion: string;

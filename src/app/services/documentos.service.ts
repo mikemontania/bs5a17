@@ -7,20 +7,20 @@ import { map } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class VentasService {
+export class DocumentosService {
   http = inject(HttpClient);
   router = inject(Router);
 
   getById(id:number) {
     return this.http
-      .get(BASE_URL + "/ventas/"+id)
+      .get(BASE_URL + "/documentos/"+id)
       .pipe(map((resp: any) => resp));
   }
 
 
   create(body:any) {
     return this.http
-      .post(BASE_URL + "/ventas",body)
+      .post(BASE_URL + "/documentos",body)
       .pipe(map((resp: any) => resp));
   }
 
@@ -28,10 +28,10 @@ export class VentasService {
     pageSize: number,
     fechaDesde:any,
     fechaHasta:any,
-    clienteId:number,sucursalId: number,formaVentaId:number,listaPrecioId: number, nroComprobante: string) {
+    clienteId:number,sucursalId: number,condicionPagoId:number,listaPrecioId: number, nroComprobante: string) {
       console.log(nroComprobante)
     return this.http
-      .get(BASE_URL + `/ventas/${page}/${pageSize}/${fechaDesde}/${fechaHasta}/${clienteId}/${sucursalId}/${formaVentaId}/${listaPrecioId}/${nroComprobante}`)
+      .get(BASE_URL + `/documentos/${page}/${pageSize}/${fechaDesde}/${fechaHasta}/${clienteId}/${sucursalId}/${condicionPagoId}/${listaPrecioId}/${nroComprobante}`)
       .pipe(
         map((respo: any) => {
           return respo as any;
@@ -52,7 +52,7 @@ export class VentasService {
 
   anular(id: number) {
 
-    return this.http.put(BASE_URL + `/ventas/anular/${id}`,null)
+    return this.http.put(BASE_URL + `/documentos/anular/${id}`,null)
       .pipe(
         map((respo: any) => {
           return respo as any;
@@ -60,8 +60,8 @@ export class VentasService {
       );
   }
 
-  generaXml(ventaId: number) {
-    return this.http.get(BASE_URL + `/ventas/generar-xml/${ventaId}`, { responseType: 'blob' })
+  generaXml(documentoId: number) {
+    return this.http.get(BASE_URL + `/documentos/generar-xml/${documentoId}`, { responseType: 'blob' })
       .pipe(
         map((respo: Blob) => {
           return respo;
@@ -71,7 +71,7 @@ export class VentasService {
 
   firmarXML(id: number) {
 
-    return this.http.get(BASE_URL + `/ventas/firmar-xml/${id}` )
+    return this.http.get(BASE_URL + `/documentos/firmar-xml/${id}` )
       .pipe(
         map((respo: any) => {
           return respo as any;

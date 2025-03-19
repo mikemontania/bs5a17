@@ -5,9 +5,9 @@
 
   </div>
   <div class="card-body">
-    @if(venta() ) {
+    @if(documento() ) {
 
-    <div id="venta" class="table-responsive">
+    <div id="documento" class="table-responsive">
       <table class="table table-bordered ">
         <thead>
           <tr>
@@ -21,35 +21,35 @@
 
             <th scope="col">sucursal</th>
             <th scope="col">lista-precio</th>
-            <th scope="col">forma-venta</th>
+            <th scope="col">condicion-pago</th>
             <th scope="col">modo-entr</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{{ venta().id }}</td>
+            <td>{{ documento().id }}</td>
             <td>
               <div class="text-truncate">
                 <span class="d-block text-sm">{{
-                  venta().cliente.razonSocial
+                  documento().cliente.razonSocial
                 }}</span>
                 <small class="d-block text-sm">{{
-                  venta().cliente.nroDocumento
+                  documento().cliente.nroDocumento
                 }}</small>
               </div>
             </td>
-            <td>{{ venta().vendedorCreacion.usuario }}</td>
+            <td>{{ documento().vendedorCreacion.usuario }}</td>
             <td>
-              <span class="d-block text-sm">{{ venta().nroComprobante }}</span>
-              <small class="d-block text-sm">{{ venta().timbrado }}</small>
+              <span class="d-block text-sm">{{ documento().nroComprobante }}</span>
+              <small class="d-block text-sm">{{ documento().timbrado }}</small>
             </td>
-            <td>{{ venta().fechaVenta }}</td>
-            <td>{{ venta().fechaCreacion }}</td>
-            <td>{{ venta().fechaModificacion }}</td>
-            <td>{{ venta().sucursal.descripcion }}</td>
-            <td>{{ venta().listaPrecio.descripcion }}</td>
-            <td>{{ venta().formaVenta.descripcion }}</td>
-            <td>{{ venta().modoEntrega }}</td>
+            <td>{{ documento().fecha }}</td>
+            <td>{{ documento().fechaCreacion }}</td>
+            <td>{{ documento().fechaModificacion }}</td>
+            <td>{{ documento().sucursal.descripcion }}</td>
+            <td>{{ documento().listaPrecio.descripcion }}</td>
+            <td>{{ documento().condicionPago.descripcion }}</td>
+            <td>{{ documento().modoEntrega }}</td>
           </tr>
         </tbody>
       </table>
@@ -74,31 +74,31 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ venta().id }}</td>
+            <td>{{ documento().id }}</td>
 
-            <td>{{ venta().importeSubtotal | number }} Gs</td>
+            <td>{{ documento().importeSubtotal | number }} Gs</td>
             <td>
               <div class="text-truncate">
                 <span class="d-block text-sm"
-                  >{{ venta().porcDescuento | number }}%</span
+                  >{{ documento().porcDescuento | number }}%</span
                 >
                 <small class="d-block text-sm">
-                  {{ venta().importeDescuento | number }} Gs</small
+                  {{ documento().importeDescuento | number }} Gs</small
                 >
               </div>
             </td>
-            <td>{{ venta().importeIva5 | number }} Gs</td>
-            <td>{{ venta().importeIva10 | number }} Gs</td>
-            <td>{{ venta().importeIvaExenta | number }} Gs</td>
-            <td>{{ venta().importeNeto | number }} Gs</td>
-            <td>{{ venta().importeTotal | number }} Gs</td>
+            <td>{{ documento().importeIva5 | number }} Gs</td>
+            <td>{{ documento().importeIva10 | number }} Gs</td>
+            <td>{{ documento().importeIvaExenta | number }} Gs</td>
+            <td>{{ documento().importeNeto | number }} Gs</td>
+            <td>{{ documento().importeTotal | number }} Gs</td>
 
-            <td>{{ venta().totalKg }}</td>
+            <td>{{ documento().totalKg }}</td>
           </tr>
         </tbody>
       </table>
     </div>
-@if(venta().anulado){
+@if(documento().anulado){
   <div id="anulado" class="table-responsive">
     <table class="table table-bordered ">
       <thead>
@@ -110,9 +110,9 @@
       </thead>
       <tbody>
         <tr>
-          <td>{{ venta().vendedorAnulacion.usuario }}</td>
-          <td>{{ venta().fechaAnulacion }}</td>
-          <td>{{ venta().anulado }}</td>
+          <td>{{ documento().vendedorAnulacion.usuario }}</td>
+          <td>{{ documento().fechaAnulacion }}</td>
+          <td>{{ documento().anulado }}</td>
         </tr>
       </tbody>
     </table>
@@ -190,7 +190,7 @@
     <div class="w-100 empty-message-container">
       <div class="alert alert-info alert-dismissible fade show" role="alert">
         <h4 class="alert-heading">Atención</h4>
-        <p>No se han encontrado ventas...</p>
+        <p>No se han encontrado documentos...</p>
       </div>
     </div>
     }

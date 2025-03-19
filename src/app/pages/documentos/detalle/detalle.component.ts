@@ -1,7 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { VentasService } from '../../../services/ventas.service';
-import { Venta, VentaDetalle } from '../../../interfaces/facturas.interface';
+import {DocumentosService } from '../../../services/documentos.service';
+import {Documento, DocumentoDetalle } from '../../../interfaces/facturas.interface';
 import { CommonModule } from '@angular/common';
 import { ImagenPipe } from '../../../pipes/imagen.pipe';
 import { Location } from '@angular/common';
@@ -14,26 +14,26 @@ import { Location } from '@angular/common';
   styleUrls: ['./detalle.component.css']
 })
 export class DetalleComponent implements OnInit {
-  venta =signal<Venta>( {}as Venta); // Almacenará la información de la venta
-  detalles=signal<VentaDetalle[]>([]as VentaDetalle[]);
+  documento =signal<Documento>( {}as Documento); // Almacenará la información de la documento
+  detalles=signal<DocumentoDetalle[]>([]as DocumentoDetalle[]);
 
 
-  cargado = computed(() => (this.venta()?.id && this.detalles()?.length > 0 )?true:false);
+  cargado = computed(() => (this.documento()?.id && this.detalles()?.length > 0 )?true:false);
 
 
 
   private location= inject(Location)
    private activatedRoute= inject(ActivatedRoute);
-    private ventasService= inject(VentasService);
+    private documentosService= inject(DocumentosService);
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
       let id = params.get('id') ?? 0; // Maneja la posibilidad de valor nulo
       console.log(id)
       if (id) {
-        this.ventasService.getById(+id).subscribe({
+        this.documentosService.getById(+id).subscribe({
           next: (resp) => {
-            this.venta.set(resp.venta); // Guarda la respuesta en la propiedad venta
+            this.documento.set(resp.documento); // Guarda la respuesta en la propiedad documento
             this.detalles.set(resp.detalles);
           },
           error: message => {

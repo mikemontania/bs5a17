@@ -327,14 +327,14 @@
       </div>
 
             <div class="row mb-3">
-        <label for="formaVentaId" class="col-md-4 col-lg-3 col-form-label"
-          >Forma Venta</label
+        <label for="condicionPagoId" class="col-md-4 col-lg-3 col-form-label"
+          >Condicion Pago</label
         >
         <div class="col-md-8 col-lg-9">
           <select
             class="form-control"
-            id="formaVentaId"
-            formControlName="formaVentaId"
+            id="condicionPagoId"
+            formControlName="condicionPagoId"
           >
             <option *ngFor="let forma of formas()" [value]="forma.id">
               {{ forma.descripcion }}

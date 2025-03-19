@@ -2,7 +2,7 @@
   <div class="modal-container"
     [ngClass]="{'small': size === 'small', 'medium': size === 'medium', 'large': size === 'large'}">
     <div class="modal-header">
-      <h5 class="modal-title">Buscador de Forma venta</h5>
+      <h5 class="modal-title">Buscador de Condicion Pago</h5>
       <button type="button" class="btn-close" (click)="close()"> <i class="fas fa-times"></i></button>
     </div>
     <!-- Contenido del modal -->
@@ -12,16 +12,16 @@
 
           <div class="w-100 mb-3">
             <input-debounce  #inputSearch [delay]=delay id="inputSearch"
-              type="text" placeholder="Ingrese forma venta ..." required="" aria-invalid="false"
+              type="text" placeholder="Ingrese forma documento ..." required="" aria-invalid="false"
               (value)="buscar($event)" />
             </div>
         </div>
 
         <ul class="list-group">
-          @for (formaVenta of formasVentaAux; track formaVenta.id) {
-            <li class="list-group-item"  (click)="selectFormaVenta(formaVenta)">
+          @for (condicionPago of condicionesPagoAux; track condicionPago.id) {
+            <li class="list-group-item"  (click)="selectCondicionPago(condicionPago)">
               <span class="text-center pointer">
-                {{formaVenta.descripcion}}
+                {{condicionPago.descripcion}}
               </span>
             </li>
           } @empty {

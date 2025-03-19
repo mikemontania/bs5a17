@@ -6,7 +6,7 @@ import { Sucursal } from '../../../interfaces/sucursal.interface';
 import moment from 'moment';
 import { NgSucursalSearchComponent } from '../../../components/ng-sucursal-search/ng-sucursal-search.component';
 import { NgMedioPagoSearchComponent } from '../../../components/ng-medioPago-search/ng-medioPago-search.component';
-import { NgFormaVentaSearchComponent } from '../../../components/ng-forma-venta-search/ng-forma-venta-search.component';
+import { NgCondicionPagoSearchComponent } from '../../../components/ng-condicion-pago-search/ng-condicion-pago-search.component';
 import { NgListaPrecioSearchComponent } from '../../../components/ng-lista-precio-search/ng-lista-precio-search.component';
 import { FormsModule } from '@angular/forms';
 import { ReportesService } from '../../../services/reportes.service';
@@ -19,7 +19,7 @@ import { AuthService } from '../../../auth/services/auth.service';
   selector: 'app-reporteCobranza',
   standalone: true,
   imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent,
-    NgMedioPagoSearchComponent, NgFormaVentaSearchComponent, NgListaPrecioSearchComponent],
+    NgMedioPagoSearchComponent, NgCondicionPagoSearchComponent, NgListaPrecioSearchComponent],
   templateUrl: './reporteCobranza.component.html',
   styleUrl: './reporteCobranza.component.css'
 })
@@ -33,7 +33,7 @@ export class ReporteCobranzaComponent {
   searchMedioPago = false;
   searchSucursal = false;
   searchListaPrecio = false;
-  searchFormaVenta = false;
+  searchCondicionPago = false;
 
   detalles = computed(() => this.reporte().detalles ?? []);
   agrupados = computed(() => this.reporte().agrupado ?? []);
@@ -102,7 +102,7 @@ export class ReporteCobranzaComponent {
   }
   buscarMedioPago() { this.searchMedioPago = true; }
 
-  buscarFormaVenta() { this.searchFormaVenta = true; }
+  buscarCondicionPago() { this.searchCondicionPago = true; }
   buscarSucursal() { this.searchSucursal = true }
   buscarListaPrecio() { this.searchListaPrecio = true }
 
@@ -124,8 +124,8 @@ export class ReporteCobranzaComponent {
   }
 
 
-  verDetalles(ventaId: number) {
-    this._router.navigate(['/ventas/detalles', ventaId]);
+  verDetalles(documentoId: number) {
+    this._router.navigate(['/documentos/detalles', documentoId]);
 
   }
   getDoc(id: number) {

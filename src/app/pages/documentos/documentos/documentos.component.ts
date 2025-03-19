@@ -5,7 +5,7 @@ import { FormsModule } from "@angular/forms";
 
 import { Cliente } from "../../../interfaces/clientes.interface";
 import { ProductosItem } from "../../../interfaces/productoItem.inteface";
-import { FormaVenta } from "../../../interfaces/formaventa.interface";
+import { CondicionPago } from "../../../interfaces/condicionPago.interface";
 import { ListaPrecio } from "../../../interfaces/listaPrecio.interface";
 import { Sucursal } from "../../../interfaces/sucursal.interface";
 import { AuthService } from "../../../auth/services/auth.service";
@@ -13,10 +13,10 @@ import { Numeracion } from "../../../interfaces/numeracion.interface";
 import {
   NumeracionService,
   ListaPrecioService,
-  FormaVentaService,
+  CondicionPagoService,
   SucursalService,
   ClientesService,
-  VentasService,
+ DocumentosService,
   ValoracionService,
   ReportesService
 } from "../../../services/service.index";
@@ -26,15 +26,16 @@ import { Cobranza, ModelCab, ModelDet } from "../../../interfaces/facturas.inter
 import { ProductsListComponent } from "../../../components/product-list/product-list.component";
 import { NgSucursalSearchComponent } from "../../../components/ng-sucursal-search/ng-sucursal-search.component";
 import { NgNumeracionSearchComponent } from "../../../components/ng-numeracion-search/ng-numeracion-search.component";
-import { NgFormaVentaSearchComponent } from "../../../components/ng-forma-venta-search/ng-forma-venta-search.component";
+import { NgCondicionPagoSearchComponent } from "../../../components/ng-condicion-pago-search/ng-condicion-pago-search.component";
 import { NgListaPrecioSearchComponent } from "../../../components/ng-lista-precio-search/ng-lista-precio-search.component";
 import { NgClienteCreateComponent } from "../../../components/ng-cliente-create/ng-cliente-create.component";
 import { NgClienteSearchComponent } from "../../../components/ng-cliente-search/ng-cliente-search.component";
 import { NgCobranzaCreateComponent } from '../../../components/ng-cobranza-create/ng-cobranza-create.component';
 import { Valoracion } from "../../../interfaces/valoracion.interface";
+import { Router } from '@angular/router';
 
 @Component({
-  selector: "app-ventas",
+  selector: "app-documentos",
   standalone: true,
   imports: [
     CommonModule,
@@ -43,18 +44,18 @@ import { Valoracion } from "../../../interfaces/valoracion.interface";
     NgClienteSearchComponent,
     NgSucursalSearchComponent,
     NgNumeracionSearchComponent,
-    NgFormaVentaSearchComponent,
+    NgCondicionPagoSearchComponent,
     NgListaPrecioSearchComponent,
     ProductsListComponent,
     NgClienteCreateComponent,
     NgCobranzaCreateComponent
   ],
-  templateUrl: "./ventas.component.html",
-  styleUrl: "./ventas.component.css"
+  templateUrl: "./documentos.component.html",
+  styleUrl: "./documentos.component.css"
 })
-export class VentasComponent implements OnInit {
+export class DocumentosComponent implements OnInit {
   cliente = signal<Cliente>({ nroDocumento: "", razonSocial: "" } as Cliente);
-  formaVenta = signal<FormaVenta>({} as FormaVenta);
+  condicionPago = signal<CondicionPago>({} as CondicionPago);
   listaPrecio = signal<ListaPrecio>({} as ListaPrecio);
   sucursal = signal<Sucursal>({} as Sucursal);
   numeracion = signal<Numeracion>({} as Numeracion);
@@ -69,23 +70,30 @@ export class VentasComponent implements OnInit {
   searchSucursal = false;
   searchNumeracion = false;
   searchListaPrecio = false;
-  searchFormaVenta = false;
+  searchCondicionPago = false;
   createCliente = false;
   createCobranza = false;
   detalles: ModelDet[] = [];
   descuentosEscala: Valoracion[] = [];
 
+
+  private _router = inject(Router);
   _authService = inject(AuthService);
   _clienteService = inject(ClientesService);
   _sucursalService = inject(SucursalService);
-  _formaVentaService = inject(FormaVentaService);
+  _condicionPagoService = inject(CondicionPagoService);
   _listaPrecioService = inject(ListaPrecioService);
   _numeracionService = inject(NumeracionService);
-  _ventasService = inject(VentasService);
+  _documentosService = inject(DocumentosService);
   _valoracionService = inject(ValoracionService);
   _reportService = inject(ReportesService);
 
   constructor() {
+    //para realizar ventas es necesario que se tenga
+    if (!this._authService.numeracionPrefId()) {
+       Swal.fire("Atención","Acceso denegado!!" , "error");
+      this._router.navigate(['/dashboard']);
+    }
     this.initValues();
   }
 
@@ -93,6 +101,7 @@ export class VentasComponent implements OnInit {
   ngOnInit() { }
 
   initValues() {
+
     forkJoin([
       this._sucursalService.getById(this._authService.sucursalId()!),
       this._numeracionService.getById(this._authService.numeracionPrefId()!),
@@ -108,10 +117,10 @@ export class VentasComponent implements OnInit {
 
   actualizarCargador() {
     forkJoin([
-      this._formaVentaService.getById(this.cliente().formaVentaId),
+      this._condicionPagoService.getById(this.cliente().condicionPagoId),
       this._listaPrecioService.getById(this.cliente().listaPrecioId)
-    ]).subscribe(([formaVenta, listaPrecio]) => {
-      this.formaVenta.set(formaVenta);
+    ]).subscribe(([condicionPago, listaPrecio]) => {
+      this.condicionPago.set(condicionPago);
       this.listaPrecio.set(listaPrecio);
       this.factura.update(prevValue => ({
         ...prevValue,
@@ -119,7 +128,7 @@ export class VentasComponent implements OnInit {
         sucursalId: this.sucursal().id,
         numeracionId: this.numeracion().id,
         listaPrecioId: this.listaPrecio().id,
-        formaVentaId: this.formaVenta().id,
+        condicionPagoId: this.condicionPago().id,
       }));
       this.obtenerDescuentoEscala()
     });
@@ -128,7 +137,7 @@ export class VentasComponent implements OnInit {
   createClienteModal() { this.createCliente = true; }
   buscarCliente() { this.searchCliente = true; }
   buscarNumeracion() { this.searchNumeracion = true; }
-  buscarFormaVenta() { this.searchFormaVenta = true; }
+  buscarCondicionPago() { this.searchCondicionPago = true; }
   buscarSucursal() {
 
     this.searchSucursal = true;
@@ -159,7 +168,7 @@ export class VentasComponent implements OnInit {
     }, 100);
   }
   registrar() {
-    if (this.formaVenta().predeterminado) {
+    if (this.condicionPago().predeterminado) {
       this.createCobranzaModal();
     } else {
       this.pagar()
@@ -208,10 +217,10 @@ export class VentasComponent implements OnInit {
     this.numeracion.set(numeracion); // Update the client signal
     this.searchNumeracion = false; // Close the modal
   }
-  selectFormaVenta(formaVenta: FormaVenta) {
-    console.log("Selected formaVenta:", formaVenta);
-    this.formaVenta.set(formaVenta); // Update the client signal
-    this.searchFormaVenta = false; // Close the modal
+  selectCondicionPago(condicionPago: CondicionPago) {
+    console.log("Selected condicionPago:", condicionPago);
+    this.condicionPago.set(condicionPago); // Update the client signal
+    this.searchCondicionPago = false; // Close the modal
   }
   selectListaPrecio(listaPrecio: ListaPrecio) {
     console.log("Selected listaPrecio:", listaPrecio);
@@ -453,7 +462,7 @@ export class VentasComponent implements OnInit {
 
   pagar() {
 
-    if (!this.cliente().id || !this.listaPrecio().id || !this.sucursal().id || !this.formaVenta().id || !this.numeracion().id) {
+    if (!this.cliente().id || !this.listaPrecio().id || !this.sucursal().id || !this.condicionPago().id || !this.numeracion().id) {
       Swal.fire("Atención", "Hay datos de cabecera incompletos", "warning");
       return;
     }
@@ -470,7 +479,7 @@ export class VentasComponent implements OnInit {
       sucursalId: this.sucursal().id,
       numeracionId: this.numeracion().id,
       listaPrecioId: this.listaPrecio().id,
-      formaVentaId: this.formaVenta().id,
+      condicionPagoId: this.condicionPago().id,
       clienteId: this.cliente().id,
       cobranza: this.cobranza(),
       detalles: this.detalles
@@ -482,7 +491,7 @@ export class VentasComponent implements OnInit {
     });
     Swal.showLoading();
     // Actualización: Utiliza la sintaxis de suscripción más reciente
-    this._ventasService.create(this.factura()).subscribe({
+    this._documentosService.create(this.factura()).subscribe({
       next: async (resp) => {
         try {
           console.log(resp)

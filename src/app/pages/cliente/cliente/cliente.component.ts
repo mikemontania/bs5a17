@@ -3,10 +3,10 @@ import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } 
 import { Cliente } from '../../../interfaces/clientes.interface';
 import { CommonModule } from '@angular/common';
 import { ListaPrecioService } from '../../../services/listaPrecio.service';
-import { FormaVentaService } from '../../../services/formaVenta.service';
+import { CondicionPagoService } from '../../../services/condicionPago.service';
 import { ClientesService } from '../../../services/clientes.service';
 import { ListaPrecio } from '../../../interfaces/listaPrecio.interface';
-import { FormaVenta } from '../../../interfaces/formaventa.interface';
+import { CondicionPago } from '../../../interfaces/condicionPago.interface';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -21,12 +21,12 @@ import { forkJoin } from 'rxjs';
 export class ClienteComponent implements OnInit {
   id = signal<number>(0)
   listas = signal<ListaPrecio[]>([])
-  formas = signal<FormaVenta[]>([])
+  formas = signal<CondicionPago[]>([])
   clienteForm: FormGroup ;
   paises :any[]=[...paises_codigos]
    private fb = inject(FormBuilder)
   private _listaPrecioService = inject(ListaPrecioService)
-  private _formaventaService = inject(FormaVentaService)
+  private _formadocumentoService = inject(CondicionPagoService)
   private _clienteService = inject(ClientesService)
   private activatedRoute= inject(ActivatedRoute);
   private router= inject(Router);
@@ -36,7 +36,7 @@ export class ClienteComponent implements OnInit {
 
     forkJoin([
       this._listaPrecioService.findAll(),
-      this._formaventaService.findAll(),
+      this._formadocumentoService.findAll(),
 
     ]).subscribe(([listas, formas]) => {
       this.listas.set(listas);
@@ -81,7 +81,7 @@ initForm(){
   return this.fb.group({
     empresaId: [1, Validators.required],
     listaPrecioId: [1, Validators.required],
-    formaVentaId: [1, Validators.required],
+    condicionPagoId: [1, Validators.required],
     razonSocial: [null, [Validators.required, Validators.minLength(7)]],
     nombreFantasia: [null ],
     nroDocumento: [null, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-zA-Z0-9-]+$/)]],

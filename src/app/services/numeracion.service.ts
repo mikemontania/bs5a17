@@ -22,10 +22,10 @@ export class NumeracionService {
 
 
 
-  findAll(sucursalId:number) {
+  findAll(sucursalId:number, itide:number) {
 
     return this.http
-      .get(BASE_URL + "/numeraciones/list/"+sucursalId)
+      .get(BASE_URL + "/numeraciones/list/"+sucursalId+"/"+itide)
       .pipe(
         map((respo: any) => {
           return respo;
