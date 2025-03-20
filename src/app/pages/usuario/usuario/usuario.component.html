@@ -184,36 +184,45 @@
 
       <div class="row mb-3">
         <label for="numPrefId" class="col-md-4 col-lg-3 col-form-label"
-          >Numeración <span style="color: red">(*)</span></label
+          >Numeración Factura</label
         >
         <div class="col-md-8 col-lg-9">
           <select
             class="custom-select custom-select-sm"
             formControlName="numPrefId"
-            [ngClass]="{
-              'is-invalid':
-                usuarioForm.get('numPrefId')?.invalid &&
-                usuarioForm.get('numPrefId')?.touched
-            }"
+
           >
+          <option [value]="null">Sin Numeración</option>
             <option
               *ngFor="let numeracion of numeraciones()"
               [value]="numeracion.id"
             >
-              {{ numeracion.timbrado }} {{ numeracion.serie }}-00000000
+              {{ numeracion.timbrado }} {{ numeracion.serie }}-{{ formattedUltimoNumero(numeracion.ultimoNumero) }}
             </option>
           </select>
-          <div
-            *ngIf="
-              usuarioForm.get('numPrefId')?.touched &&
-              usuarioForm.get('numPrefId')?.invalid
-            "
-            class="invalid-feedback"
+
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="numPrefId" class="col-md-4 col-lg-3 col-form-label"
+          >Numeración NC </label
+        >
+        <div class="col-md-8 col-lg-9">
+          <select
+            class="custom-select custom-select-sm"
+            formControlName="numNcPrefId"
+
           >
-            <div *ngIf="usuarioForm.get('numPrefId')?.errors?.['required']">
-              El número de preferencia es obligatorio.
-            </div>
-          </div>
+          <option [value]="null">Sin Numeración</option>
+            <option
+              *ngFor="let numeracionNc of numeracionesNc()"
+              [value]="numeracionNc.id"
+            >
+            {{ numeracionNc.timbrado }} {{ numeracionNc.serie }}-{{ formattedUltimoNumero(numeracionNc.ultimoNumero) }}
+          </option>
+          </select>
+
         </div>
       </div>
 

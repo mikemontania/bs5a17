@@ -32,6 +32,7 @@ export class UsuarioComponent implements OnInit {
   id = signal<number>(0)
   sucursales = signal<Sucursal[]>([])
   numeraciones = signal<Numeracion[]>([])
+  numeracionesNc = signal<Numeracion[]>([])
   usuarioForm: FormGroup;
   private fb = inject(FormBuilder)
   private _authService = inject(AuthService)
@@ -48,51 +49,59 @@ export class UsuarioComponent implements OnInit {
 
     forkJoin([
       this._sucursalService.findAll(),
-
     ]).subscribe(([sucursales]) => {
       this.sucursales.set(sucursales);
     });
 
   }
 
-  sucursalChange(sucursalId: number) {
-    this.numeraciones.set([]);
-    // Restablecer el campo "numPrefId" a null
-    this.usuarioForm.controls['numPrefId'].patchValue(null);
-    //Factura
-    this._numeracionService.findAll(sucursalId,1).subscribe((resp: any) => {
-      // Establecer las numeraciones mapeadas en el estado
-      this.numeraciones.set(resp);
-      console.log(this.usuarioForm.value);
+  async sucursalChange(sucursalId: number) {
+    this.resetNumeraciones(sucursalId).then(() => {
+
     });
   }
 
+  formattedUltimoNumero(ultimoNumero: number) {
+    console.log(ultimoNumero)
+    return `${String(ultimoNumero).padStart(8, '0')}`;
+  }
+
+  private resetNumeraciones(sucursalId: number): Promise<void> {
+    return new Promise((resolve) => {
+      this.numeraciones.set([]);
+      this.numeracionesNc.set([]);
+      this.usuarioForm.controls['numPrefId'].patchValue(null);
+      this.usuarioForm.controls['numNcPrefId'].patchValue(null);
+
+      forkJoin([
+        this._numeracionService.findAll(sucursalId, 1),
+        this._numeracionService.findAll(sucursalId, 6)
+      ]).subscribe(([numFactura, numNotaCred]) => {
+        this.numeraciones.set(numFactura || []);
+        this.numeracionesNc.set(numNotaCred || []);
+        resolve(); // Solo cuando se completan los datos, resolvemos la promesa
+      });
+    });
+  }
+
+
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
-      const id = params.get('id')
-      console.log(id)
+      const id = params.get('id');
+      console.log(id);
       if (id) {
-        this.id.set(+id ?? 0); // Maneja la posibilidad de valor nulo
+        this.id.set(+id ?? 0);
         this._usuarioService.getById(this.id()).subscribe({
-          next: async (usuarioData) => {
-            this.numeraciones.set([]);
-            this.usuarioForm.controls['numPrefId'].patchValue(null);
-            //factura
-            this._numeracionService.findAll(usuarioData.sucursalId,1).subscribe((resp: any) => {
-              // Establecer las numeraciones mapeadas en el estado
-              this.numeraciones.set(resp);
-              console.log(this.usuarioForm.value);
+          next: (usuarioData) => {
+            this.resetNumeraciones(usuarioData.sucursalId).then(() => {
               this.usuarioForm.patchValue(usuarioData);
-               // Update the form based on the presence of an id
-               this.updateFormForEdit();
             });
           },
           error: message => {
             console.error(message);
-            // Maneja el error de forma adecuada (por ejemplo, mostrando un mensaje al usuario)
           }
         });
-      }else {
+      } else {
         this.updateFormForCreate();
       }
     });
@@ -113,7 +122,8 @@ export class UsuarioComponent implements OnInit {
     return this.fb.group({
       empresaId: [1, Validators.required],
       sucursalId: [null, Validators.required],
-      numPrefId: [null, Validators.required],
+      numPrefId: [null],
+      numNcPrefId: [null],
       rol: [null, Validators.required],
       usuario: [null, [Validators.required, Validators.minLength(3)]],
       img: [''],
