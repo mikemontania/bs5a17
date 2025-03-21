@@ -14,6 +14,9 @@ export interface Documento {
   empresaId:          number;
   sucursalId:         number;
   listaPrecioId:      number;
+  cdc:                string;
+  cdcAsociado:           string;
+  docAsociadoId:       number;
   condicionPagoId:       number;
   anulado:            boolean;
   enviado:            boolean;
@@ -27,6 +30,7 @@ export interface Documento {
   importeIvaExenta:   string;
   importeDescuento:   string;
   importeNeto:        string;
+  tipoDocumento:TipoDocumento;
   importeSubtotal:    string;
   importeTotal:       string;
   clienteId:          string;
@@ -65,7 +69,11 @@ export interface Variedad {
   descripcion: string;
   color:       string;
 }
-
+export interface TipoDocumento {
+  id:          string;
+  codigo:  string;
+  descripcion: string;
+}
 
 export interface Variante {
   id:             number;

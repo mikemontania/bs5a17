@@ -18,9 +18,15 @@ export class DocumentosService {
   }
 
 
+  createNc(body:any) {
+    return this.http
+      .post(BASE_URL + "/documentos/notacredito",body)
+      .pipe(map((resp: any) => resp));
+  }
+
   create(body:any) {
     return this.http
-      .post(BASE_URL + "/documentos",body)
+      .post(BASE_URL + "/documentos/factura",body)
       .pipe(map((resp: any) => resp));
   }
 
@@ -29,7 +35,6 @@ export class DocumentosService {
     fechaDesde:any,
     fechaHasta:any,
     clienteId:number,sucursalId: number,condicionPagoId:number,listaPrecioId: number, nroComprobante: string) {
-      console.log(nroComprobante)
     return this.http
       .get(BASE_URL + `/documentos/${page}/${pageSize}/${fechaDesde}/${fechaHasta}/${clienteId}/${sucursalId}/${condicionPagoId}/${listaPrecioId}/${nroComprobante}`)
       .pipe(

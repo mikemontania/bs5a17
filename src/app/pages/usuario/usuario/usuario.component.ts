@@ -90,7 +90,7 @@ export class UsuarioComponent implements OnInit {
       const id = params.get('id');
       console.log(id);
       if (id) {
-        this.id.set(+id ?? 0);
+        this.id.set(+id);
         this._usuarioService.getById(this.id()).subscribe({
           next: (usuarioData) => {
             this.resetNumeraciones(usuarioData.sucursalId).then(() => {

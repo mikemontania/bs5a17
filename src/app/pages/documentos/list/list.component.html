@@ -114,6 +114,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">CLIENTE</th>
                 <th scope="col">SUCURSAL</th>
+                <th scope="col">TIPO</th>
                 <th scope="col">LISTA</th>
                 <th scope="col">FORMAVENTA</th>
                 <th scope="col">VENDEDOR</th>
@@ -123,10 +124,11 @@
                 <th scope="col">DESCUENTO</th>
                 <th scope="col">total</th>
                 <th scope="col">estado</th>
-                <th scope="col">anulado</th> 
-                <th scope="col">anular</th> 
-                <th scope="col">detalles</th> 
-                <th scope="col">doc</th> 
+                <th scope="col">anulado</th>
+                <th scope="col">anular</th>
+                <th scope="col">detalles</th>
+                <th scope="col">doc</th>
+                <th scope="col">NC</th>
                 <th scope="col">historial</th>
               </tr>
             </thead>
@@ -142,6 +144,7 @@
                   </div>
                 </td>
                 <td  class="text-sm">{{ documento.sucursal.descripcion }}</td>
+                <td  class="text-sm">{{ documento.tipoDocumento.descripcion }}</td>
                 <td  class="text-sm">{{ documento.listaPrecio.descripcion }}</td>
                 <td  class="text-sm">{{ documento.condicionPago.descripcion }}</td>
                 <td  class="text-sm">{{ documento.vendedorCreacion.usuario }}</td>
@@ -160,7 +163,7 @@
                 <td  class="text-sm">{{ documento.importeTotal | number }} Gs</td>
                 <td  class="text-sm">{{ documento.estado   }} </td>
                 <td  class="text-sm">{{ (documento.anulado )?'SI':'NO' }}</td>
-              
+
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(documento.id)"[disabled]="documento.anulado"
                   data-bs-toggle="tooltip"
@@ -169,7 +172,7 @@
                     <i class="bi bi-cart-x"></i>
                   </button>
                 </td>
-               
+
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-info text-info"
                   data-bs-toggle="tooltip"
@@ -179,7 +182,7 @@
                     <i class="bi bi-card-list"></i>
                   </button>
                 </td>
-           
+
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-success text-success"
                   data-bs-toggle="tooltip"
@@ -188,7 +191,14 @@
                     <i class="bi bi-card-list"></i>
                   </button>
                 </td>
-              
+                <td  class="text-sm">
+                  <button class="btn btn-sm btn-outline-success text-success"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ver documento"  (click)="crearNotaCredito(documento.id)">
+                    <i class="bi bi-card-list"></i>
+                  </button>
+                </td>
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-success text-success"
                   data-bs-toggle="tooltip"

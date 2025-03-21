@@ -20,6 +20,7 @@
             <th scope="col">modificado</th>
 
             <th scope="col">sucursal</th>
+            <th scope="col">tipoDocumento</th>
             <th scope="col">lista-precio</th>
             <th scope="col">condicion-pago</th>
             <th scope="col">modo-entr</th>
@@ -47,6 +48,7 @@
             <td>{{ documento().fechaCreacion }}</td>
             <td>{{ documento().fechaModificacion }}</td>
             <td>{{ documento().sucursal.descripcion }}</td>
+            <td>{{ documento().tipoDocumento.descripcion }}</td>
             <td>{{ documento().listaPrecio.descripcion }}</td>
             <td>{{ documento().condicionPago.descripcion }}</td>
             <td>{{ documento().modoEntrega }}</td>
@@ -145,7 +147,7 @@
             </tr>
           </thead>
 
-          <tbody>
+          <tbody >
             @for (detalle of detalles(); track detalle.id; let index = $index)
             {
               <tr>
@@ -186,7 +188,15 @@
       </div>
 
 
-    } } @else {
+    }  @else {
+      <div class="w-100 empty-message-container">
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+          <h4 class="alert-heading">Atención</h4>
+          <p>Documento no posee detalles...</p>
+        </div>
+      </div>
+    }
+  } @else {
     <div class="w-100 empty-message-container">
       <div class="alert alert-info alert-dismissible fade show" role="alert">
         <h4 class="alert-heading">Atención</h4>
@@ -201,7 +211,7 @@
 <div class="w-100 empty-message-container">
   <div class="alert alert-info alert-dismissible fade show" role="alert">
     <h4 class="alert-heading">Atención</h4>
-    <p>No se han datos</p>
+    <p>No se han encontrado datos</p>
   </div>
 </div>
 }

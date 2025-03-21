@@ -172,7 +172,10 @@ export class ListComponent {
     this.openHistorial = true;
   }
 
+  crearNotaCredito(documentoId: number) {
+    this._router.navigate(['/documentos/nc', documentoId]);
 
+  }
 
   verDetalles(documentoId: number) {
     this._router.navigate(['/documentos/detalles', documentoId]);

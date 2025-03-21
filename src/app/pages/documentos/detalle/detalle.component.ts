@@ -18,7 +18,7 @@ export class DetalleComponent implements OnInit {
   detalles=signal<DocumentoDetalle[]>([]as DocumentoDetalle[]);
 
 
-  cargado = computed(() => (this.documento()?.id && this.detalles()?.length > 0 )?true:false);
+  cargado = computed(() => (this.documento()?.id   > 0 )?true:false);
 
 
 
@@ -34,7 +34,7 @@ export class DetalleComponent implements OnInit {
         this.documentosService.getById(+id).subscribe({
           next: (resp) => {
             this.documento.set(resp.documento); // Guarda la respuesta en la propiedad documento
-            this.detalles.set(resp.detalles);
+            this.detalles.set(resp.detalles || []);
           },
           error: message => {
             console.error(message);

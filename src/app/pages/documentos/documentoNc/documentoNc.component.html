@@ -1,0 +1,107 @@
+<section class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-body" *ngIf="factura">
+      <!-- Cabecera con Referencia y Datos de la Factura y Cliente -->
+      <div class="row mb-4">
+        <!-- Referencia a la Nota de Crédito -->
+        <div class="col-12 mb-3">
+          <h6 class="text-info">  Nota de Crédito</h6>
+        </div>
+
+        <!-- Datos del Documento -->
+        <div class="col-md-6">
+          <div class="mb-3">
+            <h6 class="text-primary">Datos del Documento</h6>
+            <p><strong>Timbrado:</strong> {{ factura.timbrado }}</p>
+            <p><strong>Nro. Comprobante:</strong> {{ factura.nroComprobante }}</p>
+            <p><strong>CDC:</strong> {{ factura.cdc }}</p>
+          </div>
+        </div>
+
+        <!-- Datos del Cliente -->
+        <div class="col-md-6">
+          <div class="mb-3">
+            <h6 class="text-success">Datos del Cliente</h6>
+            <p><strong>Razón Social:</strong> {{ factura.cliente?.razonSocial }}</p>
+            <p><strong>Documento:</strong> {{ factura.cliente?.nroDocumento }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Totales de la Nota de Crédito -->
+      <div class="mt-4 mb-4">
+        <h6 class="text-primary">Totales</h6>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th class="bg-light">Subtotal</th>
+              <td>{{ factura.importeSubtotal | currency: 'PYG':'symbol':'1.0-0' }}</td>
+              <th class="bg-light">Descuento</th>
+              <td>{{ factura.importeDescuento | currency: 'PYG':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <th class="bg-light">IVA 5%</th>
+              <td>{{ factura.importeIva5 | currency: 'PYG':'symbol':'1.0-0' }}</td>
+              <th class="bg-light">IVA 10%</th>
+              <td>{{ factura.importeIva10 | currency: 'PYG':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <th class="bg-light">Exento</th>
+              <td>{{ factura.importeIvaExenta | currency: 'PYG':'symbol':'1.0-0' }}</td>
+              <th class="bg-light">Total</th>
+              <td><strong>{{ factura.importeTotal | currency: 'PYG':'symbol':'1.0-0' }}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tabla de productos -->
+      <div class="table-responsive mt-3 mb-4">
+        <table class="table table-bordered">
+          <thead class="table-dark">
+            <tr>
+              <th>IMG</th>
+              <th>Activo</th>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio</th>
+              <th>%Desc</th>
+              <th>Subtotal</th>
+              <th>Descuento</th>
+              <th>Total</th>
+              <th>T.Kilos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of detalles; let index = index">
+              <td class="text-center">
+                <img *ngIf="item.variante.img" [attr.src]="item.variante.img | imagen: 'productos' | async" class="img-producto60" />
+              </td>
+              <td><app-check-toggle [isChecked]="item.isSelected" (toggleCheck)="toggleIncluir(index)"></app-check-toggle></td>
+               <td><small>{{ item.variante.codErp }} {{ item.variante.producto.nombre }} {{ item.variante.presentacion.descripcion }} {{ item.variante.variedad.descripcion }}</small></td>
+              <td>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-outline-primary" (click)="ajusteCantidad(index, -1)">-</button>
+                  <span class="btn btn-outline-secondary">{{ item.cantidad | number }}</span>
+                  <button type="button" class="btn btn-outline-primary" (click)="ajusteCantidad(index, 1)">+</button>
+                </div>
+              </td>
+              <td>{{ item.importePrecio | currency: 'PYG':'symbol':'1.0-0' }}</td>
+              <td>{{ item.porcDescuento }}</td>
+              <td>{{ item.importeSubtotal | currency: 'PYG':'symbol':'1.0-0' }}</td>
+              <td>{{ item.importeDescuento | currency: 'PYG':'symbol':'1.0-0' }}</td>
+              <td>{{ item.importeTotal | currency: 'PYG':'symbol':'1.0-0' }}</td>
+              <td>{{ item.totalKg }}kg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="d-flex justify-content-end mt-3">
+        <button class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
+        <button class="btn btn-success" (click)="guardarNotaCredito()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</section>

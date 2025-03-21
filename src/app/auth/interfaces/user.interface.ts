@@ -5,6 +5,7 @@ export interface User {
    empresaId: number
    sucursalId: number,
    numPrefId:number,
+   numNcPrefId:number,
    username: string,
    usuario: string,
    img: string,

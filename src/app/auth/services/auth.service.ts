@@ -20,6 +20,7 @@ export class AuthService {
   //! Valores publicos
   public sucursalId = computed( () => this.user()?.sucursalId );
   public numeracionPrefId = computed( () => this.user()?.numPrefId );
+  public numeracionNotaCredId = computed( () => this.user()?.numNcPrefId );
   public currentUser = computed( () => this.user() );
   public authStatus = computed( () => this._authStatus() );
   constructor() {
