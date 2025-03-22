@@ -4,6 +4,7 @@ import { VendedorCreacion } from "./pages.interfaces";
 import { Sucursal } from "./sucursal.interface";
 
 export interface Documento {
+  tipoDoc: string;
   fechaCreacion:      string;
   fechaModificacion:  string;
   fechaAnulacion:     string;
@@ -15,7 +16,7 @@ export interface Documento {
   sucursalId:         number;
   listaPrecioId:      number;
   cdc:                string;
-  cdcAsociado:           string;
+  cdcAsociado:        string;
   docAsociadoId:       number;
   condicionPagoId:       number;
   anulado:            boolean;
@@ -25,17 +26,18 @@ export interface Documento {
   timbrado:           string;
   nroComprobante:     string;
   porcDescuento:      string;
-  importeIva5:        string;
-  importeIva10:       string;
-  importeIvaExenta:   string;
-  importeDescuento:   string;
-  importeNeto:        string;
+  importeIva5:        number;
+  importeIva10:       number;
+  importeIvaExenta:   number;
+  importeDescuento:   number;
+  importeNeto:        number;
+  importeDevuelto:   number;
   tipoDocumento:TipoDocumento;
-  importeSubtotal:    string;
-  importeTotal:       string;
+  importeSubtotal:    number;
+  importeTotal:       number;
   clienteId:          string;
   modoEntrega:        string;
-  totalKg:            string;
+  totalKg:            number;
   estado:        string;
   vendedorCreacion:   VendedorCreacion;
   vendedorAnulacion: VendedorCreacion;

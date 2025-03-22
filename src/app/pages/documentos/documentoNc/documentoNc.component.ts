@@ -29,7 +29,7 @@ export class DocumentoNcComponent implements OnInit {
   private _documentosService = inject(DocumentosService);
   private activatedRoute = inject(ActivatedRoute);
   private _authService = inject(AuthService);
-
+importeAnterior:number=0;
   factura: Documento = {} as Documento; // Almacenará la información de la documento
   detalles: any[] = [];
 
@@ -46,13 +46,32 @@ export class DocumentoNcComponent implements OnInit {
       if (id) {
         this._documentosService.getById(+id).subscribe({
           next: (resp) => {
-            this.factura = resp.documento; // Guarda la respuesta en la propiedad documento
+            console.log(resp)
+            if (resp.documento?.anulado == true) {
+              Swal.fire("Atención", "Documento anulado!! no se puede aplicar Nota de credito", "error");
+              this._router.navigate(['/documentos/listar']);
+              return; // Detiene la ejecución del resto del código, evitando que se lea la siguiente condición
+            }
 
+            if (resp.documento?.calculables == 'NO') {
+              Swal.fire("Atención", "Documento NO calculable!!, Documento podría tener documento hijo o ha sido compensado", "error");
+              this._router.navigate(['/documentos/listar']);
+              return; // Detiene la ejecución si el documento no es calculable
+            }
+
+            if (resp.documento?.calculables == 'NO' && resp.documento?.anulado == false) {
+              Swal.fire("Atención", "Documento NO calculable!!, Documento podría tener documento hijo o ha sido compensado", "error");
+              this._router.navigate(['/documentos/listar']);
+              return; // Salir del método para evitar que se realicen más operaciones
+            }
+            this.factura = {...resp.documento}; // Guarda la respuesta en la propiedad documento
+            this.importeAnterior = +resp.documento.importeTotal;
             if (resp.detalles && resp.detalles.length > 0) {
               this.detalles = resp.detalles.map((det: DocumentoDetalle) => ({
                 ...det,
                 isSelected: true,
                 id: null,
+                documentoId:null,
                 //solo puede ajustar cantidad hasta el cantidadMax
                 //y disminuir hasta 1 o desmarcarlo
                 cantidad: +det.cantidad,
@@ -187,7 +206,6 @@ export class DocumentoNcComponent implements OnInit {
           const detalles =   this.detalles
           .filter((det: any) => det.isSelected) // Filtra solo los seleccionados
           .map((det: any) => ({
-            documentoId: det.documentoId,
             varianteId: det.varianteId,
             cantidad: det.cantidad,
             importePrecio: det.importePrecio,
@@ -204,7 +222,10 @@ export class DocumentoNcComponent implements OnInit {
             tipoDescuento: det.tipoDescuento,
             variante: det.variante,
           }));
-
+         let porcDescuento =0
+          if ( this.factura.importeDescuento > 0 ) {
+            porcDescuento = (this.factura.importeDescuento/this.factura.importeSubtotal)*100;
+          }
     const notaCredito: any = {
       docAsociadoId:this.factura.id,
       cdcAsociado:this.factura.cdc,
@@ -215,6 +236,16 @@ export class DocumentoNcComponent implements OnInit {
        clienteId:this.factura.clienteId,
        detalles,
        totalKg:this.factura.totalKg,
+       importeNeto: this.factura.importeNeto,
+       importeSubtotal : this.factura.importeSubtotal,
+       importeTotal : this.factura.importeTotal,
+       importeDescuento : this.factura.importeDescuento,
+       importeIva5 : this.factura.importeIva5,
+       importeIva10 : this.factura.importeIva10,
+       importeIvaExenta : this.factura.importeIvaExenta,
+       porcDescuento:porcDescuento,
+       importeAnterior:this.importeAnterior,
+       importeDevuelto:this.importeAnterior - this.factura.importeTotal
 
 
     };
