@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ImagenPipe } from "../../../pipes/imagen.pipe";
 import { CheckToggleComponent } from '../../../components/check-toggle/check-toggle.component';
 import { AuthService } from '../../../auth/services/auth.service';
+import { motivosNotaCredito } from '../../../interfaces/motivosNotaCred';
 
 @Component({
   selector: "app-docNc",
@@ -29,10 +30,10 @@ export class DocumentoNcComponent implements OnInit {
   private _documentosService = inject(DocumentosService);
   private activatedRoute = inject(ActivatedRoute);
   private _authService = inject(AuthService);
-importeAnterior:number=0;
-  factura: Documento = {} as Documento; // Almacenará la información de la documento
+  importeAnterior:number=0;
+   factura: Documento = {} as Documento; // Almacenará la información de la documento
   detalles: any[] = [];
-
+motivos = motivosNotaCredito;
   constructor() { }
 
   ngOnInit(): void {
@@ -64,7 +65,7 @@ importeAnterior:number=0;
               this._router.navigate(['/documentos/listar']);
               return; // Salir del método para evitar que se realicen más operaciones
             }
-            this.factura = {...resp.documento}; // Guarda la respuesta en la propiedad documento
+            this.factura = {...resp.documento,idMotEmi:1}; // Guarda la respuesta en la propiedad documento
             this.importeAnterior = +resp.documento.importeTotal;
             if (resp.detalles && resp.detalles.length > 0) {
               this.detalles = resp.detalles.map((det: DocumentoDetalle) => ({
@@ -245,8 +246,8 @@ importeAnterior:number=0;
        importeIvaExenta : this.factura.importeIvaExenta,
        porcDescuento:porcDescuento,
        importeAnterior:this.importeAnterior,
-       importeDevuelto:this.importeAnterior - this.factura.importeTotal
-
+       importeDevuelto:this.importeAnterior - this.factura.importeTotal,
+       idMotEmi:this.factura.idMotEmi
 
     };
 

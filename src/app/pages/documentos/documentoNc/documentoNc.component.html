@@ -8,10 +8,11 @@
           <h6 class="text-info">  Nota de Crédito</h6>
         </div>
 
+
         <!-- Datos del Documento -->
         <div class="col-md-6">
           <div class="mb-3">
-            <h6 class="text-primary">Datos del Documento</h6>
+            <h6 class="text-primary">Datos del Documento Asociado</h6>
             <p><strong>Timbrado:</strong> {{ factura.timbrado }}</p>
             <p><strong>Nro. Comprobante:</strong> {{ factura.nroComprobante }}</p>
             <p><strong>CDC:</strong> {{ factura.cdc }}</p>
@@ -27,7 +28,16 @@
           </div>
         </div>
       </div>
+   <!-- Datos del motivo -->
 
+   <div class="col-md-6">
+    <div class="mb-3">
+       <h6 class="text-succcess">Motivo de Nota de Crédito</h6>
+      <select id="motivo" class="form-select" [(ngModel)]="factura.idMotEmi">
+        <option *ngFor="let motivo of motivos" [value]="motivo.id">{{ motivo.descripcion }}</option>
+      </select>
+    </div>
+  </div>
       <!-- Totales de la Nota de Crédito -->
       <div class="mt-4 mb-4">
         <h6 class="text-primary">Totales</h6>

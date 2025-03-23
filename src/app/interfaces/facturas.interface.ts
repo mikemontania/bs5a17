@@ -5,6 +5,7 @@ import { Sucursal } from "./sucursal.interface";
 
 export interface Documento {
   tipoDoc: string;
+  idMotEmi:number;
   fechaCreacion:      string;
   fechaModificacion:  string;
   fechaAnulacion:     string;
