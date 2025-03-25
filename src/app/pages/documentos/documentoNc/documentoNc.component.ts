@@ -54,13 +54,13 @@ motivos = motivosNotaCredito;
               return; // Detiene la ejecución del resto del código, evitando que se lea la siguiente condición
             }
 
-            if (resp.documento?.calculables == 'NO') {
+            if (resp.documento?.calculable == false) {
               Swal.fire("Atención", "Documento NO calculable!!, Documento podría tener documento hijo o ha sido compensado", "error");
               this._router.navigate(['/documentos/listar']);
               return; // Detiene la ejecución si el documento no es calculable
             }
 
-            if (resp.documento?.calculables == 'NO' && resp.documento?.anulado == false) {
+            if (resp.documento?.calculable == false && resp.documento?.anulado == false) {
               Swal.fire("Atención", "Documento NO calculable!!, Documento podría tener documento hijo o ha sido compensado", "error");
               this._router.navigate(['/documentos/listar']);
               return; // Salir del método para evitar que se realicen más operaciones
