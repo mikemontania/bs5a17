@@ -86,7 +86,8 @@ motivos = motivosNotaCredito;
                 importeSubtotal: +det.importeSubtotal,
                 importeTotal: +det.importeTotal,
                 porcDescuento: +det.porcDescuento || 0,
-                totalKg: +det.totalKg,
+                peso: +det.variante.presentacion?.size ||0,
+                totalKg: (+det.variante.presentacion?.size ||0)* +det.cantidad,
               }));
             }
           },
@@ -115,6 +116,7 @@ motivos = motivosNotaCredito;
       this.detalles[index].importeIvaExenta = 0;
       this.detalles[index].totalKg = 0;
     } else {
+      console.log(this.detalles[index])
       // Si se marca nuevamente, recalculamos los valores originales
       this.detalles[index].importeSubtotal = this.detalles[index].cantidad * this.detalles[index].importePrecio;
       this.detalles[index].importeDescuento = Math.round(this.detalles[index].importeSubtotal * (this.detalles[index].porcDescuento / 100));
@@ -168,8 +170,8 @@ motivos = motivosNotaCredito;
     if (valor == -1 && this.detalles[indice].cantidad == 1) return;
 
     this.detalles[indice].cantidad += valor;
-    const pesoUnitario = this.detalles[indice].totalKg / this.detalles[indice].cantidad;
-    this.detalles[indice].totalKg = this.detalles[indice].cantidad * pesoUnitario;
+     console.log('peso',this.detalles[indice].peso)
+    this.detalles[indice].totalKg = this.detalles[indice].cantidad * this.detalles[indice].peso;
     this.detalles[indice].importeSubtotal = this.detalles[indice].cantidad * this.detalles[indice].importePrecio;
 
     if (this.detalles[indice].porcDescuento) {
@@ -246,7 +248,7 @@ motivos = motivosNotaCredito;
        importeIvaExenta : this.factura.importeIvaExenta,
        porcDescuento:porcDescuento,
        importeAnterior:this.importeAnterior,
-       importeDevuelto:this.importeAnterior - this.factura.importeTotal,
+       importeDevuelto:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.factura.importeTotal-this.importeAnterior,
        idMotEmi:this.factura.idMotEmi
 
     };

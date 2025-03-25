@@ -1,4 +1,13 @@
 <div class="chart-container">
-    <ngx-charts-pie-chart [legendTitle]="legendTitle" [scheme]="dashTema" [results]="results" [gradient]="gradient" [legend]="showLegend" [labels]="showLabels" [doughnut]="isDoughnut" (select)="onSelect($event)" style="fill: grey;">
-    </ngx-charts-pie-chart>
+  <div class="chart-wrapper">
+      <span class="chart-title">{{ legendTitle }}</span>
+      <ngx-charts-pie-chart
+          [scheme]="dashTema"
+          [results]="results"
+          [gradient]="gradient"
+          [labels]="showLabels"
+          [doughnut]="isDoughnut"
+          (select)="onSelect($event)">
+      </ngx-charts-pie-chart>
+  </div>
 </div>

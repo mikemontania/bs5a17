@@ -30,6 +30,7 @@ export interface Documento {
   importeIva5:        number;
   importeIva10:       number;
   importeIvaExenta:   number;
+  valorNeto:   number;
   importeDescuento:   number;
   importeNeto:        number;
   importeDevuelto:   number;

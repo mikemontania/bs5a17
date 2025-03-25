@@ -89,7 +89,19 @@ export class ReportesService {
         })
       );
   }
-
+  getInformeMediosDePagoNc(fechaDesde: string, fechaHasta: string, sucursalId: number) {
+    const url = BASE_URL + `/reportes/topMediosDePagoNc/${fechaDesde}/${fechaHasta}/${sucursalId}`;
+    return this.http
+      .get(url)
+      .pipe(
+        map((response: any) => response.resultados)
+        ,
+        catchError(e => {
+          console.error('ERROR', e.error); ;
+         return of([]);
+        })
+      );
+  }
 
   getVendedoresPorTotal(fechaDesde: string, fechaHasta: string, sucursalId: number) {
     const url = BASE_URL + `/reportes/vendedoresPorTotal/${fechaDesde}/${fechaHasta}/${sucursalId}`;

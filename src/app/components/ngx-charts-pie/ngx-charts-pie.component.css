@@ -2,3 +2,16 @@
     display: grid;
     height: 300px;
 }
+
+.chart-wrapper {
+  display: flex;
+  align-items: center; /* Alinea verticalmente */
+  gap: 15px; /* Espacio entre el título y el gráfico */
+}
+
+.chart-title {
+  writing-mode: vertical-rl; /* Escribe el texto en vertical (de abajo hacia arriba) */
+  transform: rotate(180deg); /* Ajusta la dirección para que se lea correctamente */
+  font-size: 16px;
+  white-space: nowrap; /* Evita que el texto se divida */
+}

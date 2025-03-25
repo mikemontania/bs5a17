@@ -123,6 +123,7 @@
                 <th scope="col">SUBTOTAL</th>
                 <th scope="col">DESCUENTO</th>
                 <th scope="col">total</th>
+                <th scope="col">V.Neto</th>
                 <th scope="col">estado</th>
                 <th scope="col">anulado</th>
                 <th scope="col">anular</th>
@@ -161,6 +162,7 @@
                   </div>
                  </td>
                 <td  class="text-sm">{{ documento.importeTotal | number }} Gs</td>
+                <td  class="text-sm">{{ documento.valorNeto | number }} Gs</td>
                 <td  class="text-sm">{{ documento.estado   }} </td>
                 <td  class="text-sm">{{ (documento.anulado )?'SI':'NO' }}</td>
 

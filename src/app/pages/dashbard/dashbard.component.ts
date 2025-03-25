@@ -12,11 +12,12 @@ import { NgxBarraVerticalComponent } from '../../components/ngx-charts-barra-ver
 import { NGXPieComponent } from '../../components/ngx-charts-pie/ngx-charts-pie.component';
 import { NGXPieAdvancedComponent } from '../../components/ngx-pie-chart-advanced/ngx-pie-chart-advanced.component';
 import { AuthService } from '../../auth/services/auth.service';
+import { NGXBarraHorizontalComponent } from '../../components/ngx-charts-barra-horizontal/ngx-charts-barra-horizontal.component';
 
 @Component({
   selector: 'app-dashbard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NGXPieComponent, NGXPieAdvancedComponent, NgxBarraVerticalComponent],
+  imports: [CommonModule, FormsModule, NGXPieComponent, NGXPieAdvancedComponent, NgxBarraVerticalComponent,NGXBarraHorizontalComponent],
   templateUrl: './dashbard.component.html',
   styleUrl: './dashbard.component.css'
 })
@@ -27,16 +28,19 @@ export class DashbardComponent implements OnInit {
   rptVariantes: ReporteVariante[] = [];
   rptClientes: ReporteCliente[] = [];
   rptMediosPago: ReporteMedioPago[] = [];
+  rptMediosPagoNc: ReporteMedioPago[] = [];
   rptVendedores: ReporteVendedor[] = [];
   chatResulsSucursales: any[] = [];
   chatResulsVariantes: any[] = [];
   chatResulsClientes: any[] = [];
   chatResulsMediosPago: any[] = [];
+  chatResulsMediosPagoNc: any[] = [];
   chatResulsVendedores: any[] = [];
   cargadoSucursales: boolean = false;
   cargadoVariantes: boolean = false;
   cargadoClientes: boolean = false
   cargadoMediosPago: boolean = false;
+  cargadoMediosPagoNc: boolean = false;
   cargadoVendedores: boolean = false;
   role: string = '';
 
@@ -67,6 +71,8 @@ export class DashbardComponent implements OnInit {
   dashvariante_vendidos:number=0;
   dashmedio_importeCobrado:number=0;
   dashmedio_cantidad:number=0;
+  dashmedioNc_importeCobrado:number=0;
+  dashmedioNc_cantidad:number=0;
   dashvend_peso:number=0;
   dashvend_total:number=0;
   dashvend_cantidad:number=0;
@@ -77,6 +83,8 @@ export class DashbardComponent implements OnInit {
     this.cargadoClientes = false
     this.cargadoMediosPago = false;
     this.cargadoVendedores = false;
+    this.cargadoMediosPagoNc = false;
+
     this._sucursalesService.findAll().subscribe(resp => this.sucursales = resp);
 
   }
@@ -102,6 +110,8 @@ export class DashbardComponent implements OnInit {
     this.cargadoClientes = false
     this.cargadoMediosPago = false;
     this.cargadoVendedores = false;
+    this.cargadoMediosPagoNc = false;
+
     console.log(this.sucursalSeleccionada)
     if (!this.sucursalSeleccionada) {
       this.sucursalSeleccionada = 0;
@@ -118,32 +128,36 @@ export class DashbardComponent implements OnInit {
       this._reportService.getTopClientes(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
       this._reportService.getInformeMediosDePago(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
       this._reportService.getVendedoresPorTotal(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
+      this._reportService.getInformeMediosDePagoNc(this.fechaDesde, this.fechaHasta, this.sucursalSeleccionada),
 
-    ]).subscribe(async ([rptSucursales, rptVariantes, rptClientes, rptMediosPago, rptVendedores]) => {
+    ]).subscribe(async ([rptSucursales, rptVariantes, rptClientes, rptMediosPago, rptVendedores,rptMediosPagoNc]) => {
       console.log({ rptSucursales, rptVariantes, rptClientes, rptMediosPago, rptVendedores })
       this.rptSucursales = rptSucursales;//
       this.rptVariantes = rptVariantes;//
       this.rptClientes = rptClientes;//
       this.rptMediosPago = rptMediosPago;//
       this.rptVendedores = rptVendedores;//
-
+      this.rptMediosPagoNc = rptMediosPagoNc;//
       this.chatResulsSucursales = await rptSucursales.map((suc: ReporteSucursal) => { return { ...suc, name: suc.sucursalnombre, value: +suc.totalimporte } })
       this.chatResulsVariantes = await rptVariantes.map((va: ReporteVariante) => { return { ...va, name: va.producto + ' ' + va.variedad + ' ' + va.presentacion, value: +va.totalimporte } });
       this.chatResulsClientes = await rptClientes.map((cli: ReporteCliente) => { return { ...cli, name: cli.razonsocial + ' ' + cli.doc, value: +cli.totalimporte } })
       this.chatResulsMediosPago = await rptMediosPago.map((med: ReporteMedioPago) => { return { ...med, name: med.mediopago, value: +med.totalimportecobrado } })
       this.chatResulsVendedores = await rptVendedores.map((ven: ReporteVendedor) => { return { ...ven, name: ven.vendedor, value: +ven.total } })
+      this.chatResulsMediosPagoNc = await rptMediosPagoNc.map((med: ReporteMedioPago) => { return { ...med, name: med.mediopago, value: +med.totalimportecobrado  } })
 
       console.log(this.chatResulsSucursales)
       console.log(this.chatResulsVariantes)
       console.log(this.chatResulsClientes)
       console.log(this.chatResulsMediosPago)
       console.log(this.chatResulsVendedores)
+      console.log(rptMediosPagoNc)
       this.sumTotales();
       this.cargadoSucursales = true;
       this.cargadoVariantes = true;
       this.cargadoClientes = true
       this.cargadoMediosPago = true;
       this.cargadoVendedores = true;
+      this.cargadoMediosPagoNc = true;
 
     });
 
@@ -156,7 +170,10 @@ export class DashbardComponent implements OnInit {
   onSeleccionVariante(event: any) { console.log(event) }
   onSeleccionCliente(event: any) { console.log(event) }
   sumTotales(){
+    this.dashmedioNc_importeCobrado =  this.rptMediosPagoNc.reduce((total, detalle) => total + +detalle.totalimportecobrado, 0) ;
+    this.dashmedioNc_cantidad =  this.rptMediosPagoNc?.length || 0 ;
     this.dashmedio_importeCobrado =  this.rptMediosPago.reduce((total, detalle) => total + +detalle.totalimportecobrado, 0) ;
+    this.dashmedio_cantidad =  this.rptMediosPago?.length || 0 ;
     this.dashsucursal_totalimporte =  this.rptSucursales.reduce((total, detalle) => total + +detalle.totalimporte, 0) ;
     this.dashcliente_totalimporte =  this.rptClientes.reduce((total, detalle) => total + +detalle.totalimporte, 0) ;
     this.dashcliente_totalfacturas =  this.rptClientes.reduce((total, detalle) => total + +detalle.totalfacturas, 0) ;
@@ -164,7 +181,6 @@ export class DashbardComponent implements OnInit {
     this.dashvariante_totalimporte =  this.rptVariantes.reduce((total, detalle) => total + +detalle.totalimporte, 0) ;
     this.dashvariante_peso =  this.rptVariantes.reduce((total, detalle) => total + +detalle.peso, 0) ;
     this.dashvariante_vendidos =  this.rptVariantes.reduce((total, detalle) => total + +detalle.vendidos, 0) ;
-    this.dashmedio_cantidad =  this.rptMediosPago?.length || 0 ;
     this.dashvend_peso =  this.rptVendedores.reduce((total, detalle) => total + +detalle.peso, 0) ;
     this.dashvend_total =  this.rptVendedores.reduce((total, detalle) => total + +detalle.total, 0) ;
     this.dashvend_cantidad =  this.rptVendedores.reduce((total, detalle) => total + +detalle.cantidad, 0) ;
