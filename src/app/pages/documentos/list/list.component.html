@@ -203,7 +203,7 @@
                 </td>
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-success text-success"
-                  data-bs-toggle="tooltip"
+                  data-bs-toggle="tooltip"[disabled]="documento.estado == 'Pendiente'"
                   data-bs-placement="top"
                   title="Ver historial"  (click)="verHistorial(documento)">
                   <i class="bi bi-list-ul"></i>

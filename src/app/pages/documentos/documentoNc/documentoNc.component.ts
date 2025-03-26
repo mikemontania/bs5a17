@@ -73,6 +73,8 @@ motivos = motivosNotaCredito;
                 isSelected: true,
                 id: null,
                 documentoId:null,
+                ivaBase : 100,
+                ivaTipo : 1,
                 //solo puede ajustar cantidad hasta el cantidadMax
                 //y disminuir hasta 1 o desmarcarlo
                 cantidad: +det.cantidad,
@@ -209,6 +211,8 @@ motivos = motivosNotaCredito;
           const detalles =   this.detalles
           .filter((det: any) => det.isSelected) // Filtra solo los seleccionados
           .map((det: any) => ({
+            ivaBase : 100,
+            ivaTipo : 1,
             varianteId: det.varianteId,
             cantidad: det.cantidad,
             importePrecio: det.importePrecio,
