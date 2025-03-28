@@ -2,7 +2,14 @@
   <div class="row">
     <div class="col-xl-8">
       @if(sucursal().id && listaPrecio().id && showShop ) {
-
+        <div class="card">
+          <div class="card-body">
+            <div class="row mb-4">
+              <!-- Referencia a la Nota de Crédito -->
+              <div class="col-12 mb-3">
+                <h6 class="text-info">Factura</h6>
+              </div>
+            </div>
       <app-product-list
         (cantidadChange)="changeCantidad($event)"
         (productClicked)="seleccionarProducto($event)"
@@ -10,6 +17,8 @@
         [cantidad]="cantidad"
         [listaPrecioId]="listaPrecio().id"
       ></app-product-list>
+          </div>
+        </div>
 
       } @else {
       <span class="client-info">cargando ...</span>
@@ -48,50 +57,6 @@
             </span>
           </div>
 
-          <!-- Agrupación de Sucursal y Serie -->
-          <!--  <div class="d-flex w-100">
-            <div class="input-group mb-3 w-50 d-flex selector">
-              <span
-                (click)="buscarSucursal()"
-                class="input-group-text flex-grow-1 d-flex justify-content-between"
-                id="basic-addon3"
-              >
-                @if(sucursal().id) {
-                <span class="client-info">
-                  <small>{{ sucursal().descripcion }}</small></span
-                >
-                } @else {
-                <span class="bg-danger text-white"
-                  ><small>Atención seleccione Sucursal</small></span
-                >
-                }
-                <span class="dropdown-icon">
-                  <i class="mh-1 fa-solid fa-sort-down"></i>
-                </span>
-              </span>
-            </div>
-
-            <div class="input-group mb-3 w-50 d-flex selector">
-              <span
-                (click)="buscarNumeracion()"
-                class="input-group-text flex-grow-1 d-flex justify-content-between"
-                id="basic-addon3"
-              >
-                @if(numeracion().id) {
-                <span class="client-info"
-                  >Serie: <small>{{ numeracion().serie }}</small>
-                </span>
-                } @else {
-                <span class="bg-danger text-white"
-                  ><small>Atención seleccione Numeración</small></span
-                >
-                }
-                <span class="dropdown-icon">
-                  <i class="mh-1 fa-solid fa-sort-down"></i>
-                </span>
-              </span>
-            </div>
-          </div> -->
 
           <!-- Agrupación de condicion de pago y Lista de Precio -->
           <div class="d-flex w-100">

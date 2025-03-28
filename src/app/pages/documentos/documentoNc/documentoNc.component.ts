@@ -12,6 +12,7 @@ import { ImagenPipe } from "../../../pipes/imagen.pipe";
 import { CheckToggleComponent } from '../../../components/check-toggle/check-toggle.component';
 import { AuthService } from '../../../auth/services/auth.service';
 import { motivosNotaCredito } from '../../../interfaces/motivosNotaCred';
+import { Location } from '@angular/common';
 
 @Component({
   selector: "app-docNc",
@@ -29,6 +30,7 @@ export class DocumentoNcComponent implements OnInit {
   private _documentosService = inject(DocumentosService);
   private activatedRoute = inject(ActivatedRoute);
   private _authService = inject(AuthService);
+  private location= inject(Location)
   importeAnterior:number=0;
    factura: Documento = {} as Documento; // Almacenará la información de la documento
   detalles: any[] = [];
@@ -284,9 +286,9 @@ motivos = motivosNotaCredito;
 
   }
 
-  /**
-   * Cancela la operación y redirige al dashboard.
-   */
+  volverAtras() {
+    this.location.back();
+  }
   cancelar() {
     this._router.navigate(["/dashboard"]);
   }

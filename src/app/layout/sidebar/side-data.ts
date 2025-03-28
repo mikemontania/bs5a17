@@ -93,12 +93,7 @@ export const navbarData: INavbarData[] = [
     label: 'usuarios',
     rol:['admin'],
   },
-  {
-    routeLink: 'auditorias',
-    icon: 'fa-solid fa-clipboard-list',
-    rol:[ 'admin'],
-    label: 'Auditoria'
-  },
+
 
   {
     routeLink: 'empresa',

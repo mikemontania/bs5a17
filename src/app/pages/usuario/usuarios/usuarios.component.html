@@ -1,15 +1,20 @@
 <div class="card">
-  <div class="card-header"> Usuarios <button type="button" class="btn btn-sm btn-outline-success" (click)="agregar()"> <i class="bi bi-plus"></i></button></div>
+
 
   <div class="card-body">
-
+    <div class="row mb-4">
+      <div class="col-12 mb-3">
+        <h6 class="text-info">Usuarios</h6>
+      </div>
+    </div>
     <!-- Comprobante Numero Input -->
-    <div class="input-group mb-3 w-50 d-flex selector">
-      <div class="w-100 mb-3">
+    <div class="d-flex align-items-center gap-2 w-100"><button type="button" class="btn btn btn-outline-success" (click)="agregar()"><i class="bi bi-plus"></i></button>
+    <div class="input-group   w-50 d-flex selector">
+      <div class="w-100  ">
         <input-debounce #inputSearch [delay]="300" id="inputSearch" type="text" placeholder="Buscar usuario ..." required="" aria-invalid="false" (value)="debounceSearch($event)" />
       </div>
     </div>
-
+  </div>
 
     @if(usuarios() && usuarios().length > 0) {
 

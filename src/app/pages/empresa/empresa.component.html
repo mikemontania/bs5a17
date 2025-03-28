@@ -1,7 +1,12 @@
 <div class="card">
-  <div class="card-header">Datos de empresa</div>
+
 
   <div class="card-body">
+    <div class="row mb-4">
+      <div class="col-12 mb-3">
+        <h6 class="text-info">Datos de empresa</h6>
+      </div>
+    </div>
     <form [formGroup]="empresaForm" (ngSubmit)="onSubmit($event)">
       <div class="row mb-3">
         <label for="ruc" class="col-md-4 col-lg-3 col-form-label"

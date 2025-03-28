@@ -1,6 +1,17 @@
 <div class="card">
   <div class="card-body">
 
+        <div class="row mb-4">
+          <div class="col-12 d-flex align-items-center justify-content-between">
+            <h6 class="text-info m-0">Listado de envios de kude</h6>
+            <button class="btn btn-sm btn-outline-success text-success" (click)="volverAtras()">
+              <i class="bi bi-arrow-left-square-fill"></i>
+            </button>
+          </div>
+        </div>
+
+
+
     <!-- Comprobante Numero Input -->
     <div class="input-group mb-3 w-50 d-flex selector">
       <div class="w-100 mb-3">
@@ -124,7 +135,7 @@
                 <th scope="col">V.Neto</th>
                 <th scope="col">estado envio</th>
                 <th scope="col">Obs</th>
-                <th scope="col">anular</th>
+                <th scope="col">enviar</th>
 
               </tr>
             </thead>
@@ -153,14 +164,16 @@
                 <td  class="text-sm">{{ documento.valorNeto | number }} Gs</td>
                 <td  class="text-sm">{{ documento.estadoEnvioKude   }} </td>
                 <td  class="text-sm">{{ documento.obsEnvioKude }}</td>
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(documento.id)"[disabled]="documento.anulado"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Anular documentos"   >
-                    <i class="bi bi-cart-x"></i>
+                <td class="text-sm">
+                  <button class="btn btn-sm btn-success"
+                          (click)="enviarEmail(documento.id)"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Enviar factura por email">
+                    <i class="bi bi-envelope-check"></i>
                   </button>
                 </td>
+
 
 
               </tr>

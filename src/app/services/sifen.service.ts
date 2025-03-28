@@ -44,6 +44,22 @@ export class SifenService {
      );
     }
 
+
+ sendKude(id: number ) {
+    const url = BASE_URL + "/sifens/sendKude/" + id;
+
+    return this.http
+     .get(url )
+     .pipe(
+      map((response: any) => response ),
+      catchError(e => {
+
+        console.error('ERROR', e.error);
+        Swal.fire(e.error.header, e.error.error, 'error');
+       return throwError(() => e.error.error);
+      })
+    );
+}
   reintentarSifen(id: number): Observable<any> {
     return this.http.post(BASE_URL + '/sifens/reintentar/'+ id, null)
      .pipe(

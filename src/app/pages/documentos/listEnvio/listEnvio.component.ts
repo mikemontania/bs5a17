@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { Location } from '@angular/common';
 
 import {DocumentosService } from '../../../services/documentos.service';
 import { CommonModule } from '@angular/common';
@@ -58,6 +59,8 @@ export class ListEnvioComponent {
   _sucursalesService = inject(SucursalService);
   _listasPrecioService = inject(ListaPrecioService);
   _reportService = inject(ReportesService)
+  private location= inject(Location)
+
   _authService = inject(AuthService)
   constructor( ) {
     const storedSearchData = localStorage.getItem('searchListaDocumento');
@@ -166,33 +169,49 @@ export class ListEnvioComponent {
   }
 
 
-  anular(id: number) {
+  enviarEmail(id: number) {
     Swal.fire({
-      title: 'Está segur@ que desea anular la factura?',
-      text: `La factura serà anulada`,
-      icon: 'warning',
+      title: '¿Está segur@ que desea enviar manualmente el KUDE?',
+      text: 'Envío de KUDE a cliente',
+      icon: 'info',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, Anular',
-      cancelButtonText: 'No, No anular ',
+      confirmButtonText: 'Sí, enviar',
+      cancelButtonText: 'No, cancelar',
       customClass: {
-        confirmButton: 'btn btn-success',  // Clase personalizada para el botón de confirmación
-        cancelButton: 'btn btn-danger'    // Clase personalizada para el botón de cancelación
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
       },
       buttonsStyling: false,
       reverseButtons: true
     }).then(async (result) => {
-      if (result.value) {
-        this._documentosService.anular(id).subscribe((response: any) => {
-          this.buscar()
-          Swal.fire('Factura anulada!!!', 'factura anulada con exito!!! comprobante:', 'success');
+      if (result.isConfirmed) {
+        // 🌀 Mostrar Swal con loading mientras se envía el email
+        Swal.fire({
+          title: 'Enviando KUDE...',
+          text: 'Por favor, espere mientras se envía el documento.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
 
-        })
+        // Enviar el documento
+        this._sifenService.sendKude(id).subscribe(
+          (response: any) => {
+            this.buscar(); // Refresca la lista de documentos
+
+            // ✅ Muestra el mensaje de éxito
+            Swal.fire('Enviado', response.mensaje, 'success');
+          },
+          (error) => {
+            // ❌ Muestra el mensaje de error
+            Swal.fire('Error', 'No se pudo enviar el email', 'error');
+          }
+        );
       }
     });
-
-
   }
 
 
@@ -218,6 +237,8 @@ export class ListEnvioComponent {
 
   }
 
-
+  volverAtras() {
+    this.location.back();
+  }
 
 }
