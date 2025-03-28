@@ -40,7 +40,9 @@ export interface Documento {
   clienteId:          string;
   modoEntrega:        string;
   totalKg:            number;
+  obsEnvioKude:        string;
   estado:        string;
+  estadoEnvioKude:string;
   vendedorCreacion:   VendedorCreacion;
   vendedorAnulacion: VendedorCreacion;
   cliente:            Cliente;

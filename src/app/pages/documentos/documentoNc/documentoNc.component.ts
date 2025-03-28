@@ -6,7 +6,6 @@ import { FormsModule } from "@angular/forms";
 import {
   DocumentosService,
 } from "../../../services/service.index";
-import { forkJoin, lastValueFrom } from "rxjs";
 import Swal from "sweetalert2";
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImagenPipe } from "../../../pipes/imagen.pipe";
@@ -166,7 +165,6 @@ motivos = motivosNotaCredito;
     this.factura.importeIvaExenta = totales.importeIvaExenta;
   }
   ajusteCantidad(indice: number, valor: number) {
-
     if (this.detalles[indice].isSelected == false) return;
     if (valor == 1 && this.detalles[indice].cantidad >= this.detalles[indice].cantidadMax) return;
     if (valor == -1 && this.detalles[indice].cantidad == 1) return;
@@ -196,76 +194,94 @@ motivos = motivosNotaCredito;
     this.calcularTotales(); // Recalcular totales
   }
 
-  /**
-   * Guarda la Nota de Crédito con los datos modificados.
-   */
   async guardarNotaCredito() {
-    if (!this.factura) return;
+  Swal.fire({
+      title: 'Está seguro que deseas guardar el Documento NC?.',
+      text: `Guardar Nota de Credito`,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, guardar',
+      cancelButtonText: 'No, Seguir',
+      customClass: {
+        confirmButton: 'btn btn-outline-success',  // Clase personalizada para el botón de confirmación
+        cancelButton: 'btn btn-outline-danger'    // Clase personalizada para el botón de cancelación
+      },
+      buttonsStyling: false,
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.value) {
+        if (!this.factura) return;
+              const detalles =   this.detalles
+              .filter((det: any) => det.isSelected) // Filtra solo los seleccionados
+              .map((det: any) => ({
+                ivaBase : 100,
+                ivaTipo : 1,
+                varianteId: det.varianteId,
+                cantidad: det.cantidad,
+                importePrecio: det.importePrecio,
+                importeIva5: det.importeIva5,
+                importeIva10: det.importeIva10,
+                importeIvaExenta: det.importeIvaExenta,
+                importeDescuento: det.importeDescuento,
+                porcIva:det.porcIva,
+                importeNeto: det.importeNeto,
+                importeSubtotal: det.importeSubtotal,
+                importeTotal: det.importeTotal,
+                porcDescuento: det.porcDescuento,
+                totalKg: det.totalKg,
+                tipoDescuento: det.tipoDescuento,
+                variante: det.variante,
+              }));
+             let porcDescuento =0
+              if ( this.factura.importeDescuento > 0 ) {
+                porcDescuento = (this.factura.importeDescuento/this.factura.importeSubtotal)*100;
+              }
+        const notaCredito: any = {
+          docAsociadoId:this.factura.id,
+          cdcAsociado:this.factura.cdc,
+           sucursalId:this.factura.sucursalId,
+           numeracionNotaCredId:this._authService.numeracionNotaCredId(),
+           listaPrecioId:this.factura.listaPrecioId,
+           condicionPagoId:this.factura.condicionPagoId,
+           clienteId:this.factura.clienteId,
+           detalles,
+           totalKg:this.factura.totalKg,
+           importeNeto: this.factura.importeNeto,
+           importeSubtotal : this.factura.importeSubtotal,
+           importeTotal : this.factura.importeTotal,
+           importeDescuento : this.factura.importeDescuento,
+           importeIva5 : this.factura.importeIva5,
+           importeIva10 : this.factura.importeIva10,
+           importeIvaExenta : this.factura.importeIvaExenta,
+           porcDescuento:porcDescuento,
+           importeAnterior:this.importeAnterior,
+           importeDevuelto:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.factura.importeTotal-this.importeAnterior,
+           idMotEmi:this.factura.idMotEmi
 
-    //const detallesFiltrados:any[] = this.detalles.filter(d => d.incluir);
-    /*
-        if (detallesFiltrados.length === 0) {
-          Swal.fire("Advertencia", "Debe incluir al menos un producto", "warning");
-          return;
-        } */
-          const detalles =   this.detalles
-          .filter((det: any) => det.isSelected) // Filtra solo los seleccionados
-          .map((det: any) => ({
-            ivaBase : 100,
-            ivaTipo : 1,
-            varianteId: det.varianteId,
-            cantidad: det.cantidad,
-            importePrecio: det.importePrecio,
-            importeIva5: det.importeIva5,
-            importeIva10: det.importeIva10,
-            importeIvaExenta: det.importeIvaExenta,
-            importeDescuento: det.importeDescuento,
-            porcIva:det.porcIva,
-            importeNeto: det.importeNeto,
-            importeSubtotal: det.importeSubtotal,
-            importeTotal: det.importeTotal,
-            porcDescuento: det.porcDescuento,
-            totalKg: det.totalKg,
-            tipoDescuento: det.tipoDescuento,
-            variante: det.variante,
-          }));
-         let porcDescuento =0
-          if ( this.factura.importeDescuento > 0 ) {
-            porcDescuento = (this.factura.importeDescuento/this.factura.importeSubtotal)*100;
-          }
-    const notaCredito: any = {
-      docAsociadoId:this.factura.id,
-      cdcAsociado:this.factura.cdc,
-       sucursalId:this.factura.sucursalId,
-       numeracionNotaCredId:this._authService.numeracionNotaCredId(),
-       listaPrecioId:this.factura.listaPrecioId,
-       condicionPagoId:this.factura.condicionPagoId,
-       clienteId:this.factura.clienteId,
-       detalles,
-       totalKg:this.factura.totalKg,
-       importeNeto: this.factura.importeNeto,
-       importeSubtotal : this.factura.importeSubtotal,
-       importeTotal : this.factura.importeTotal,
-       importeDescuento : this.factura.importeDescuento,
-       importeIva5 : this.factura.importeIva5,
-       importeIva10 : this.factura.importeIva10,
-       importeIvaExenta : this.factura.importeIvaExenta,
-       porcDescuento:porcDescuento,
-       importeAnterior:this.importeAnterior,
-       importeDevuelto:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.factura.importeTotal-this.importeAnterior,
-       idMotEmi:this.factura.idMotEmi
+        };
 
-    };
+        try {
+          console.log(notaCredito)
+          await this._documentosService.createNc(notaCredito).toPromise();
+          Swal.fire("Éxito", "Nota de Crédito guardada correctamente", "success").then(() => {
+            this._router.navigate(["/dashboard"]);
+          });
+        } catch (error) {
+          Swal.fire("Error", "No se pudo guardar la Nota de Crédito", "error");
+        }
 
-    try {
-      console.log(notaCredito)
-      await this._documentosService.createNc(notaCredito).toPromise();
-      Swal.fire("Éxito", "Nota de Crédito guardada correctamente", "success").then(() => {
-        this._router.navigate(["/dashboard"]);
-      });
-    } catch (error) {
-      Swal.fire("Error", "No se pudo guardar la Nota de Crédito", "error");
-    }
+        }
+
+    })
+
+
+
+
+
+
+
   }
 
   /**

@@ -332,7 +332,23 @@
         </div>
       </div>
 
-    
+      <div class="row mb-3">
+        <label for="envioKude" class="col-md-4 col-lg-3 col-form-label"
+          >Envio de kude<span style="color: red">(*)</span></label
+        >
+        <div class="col-md-8 col-lg-9">
+          <select
+            class="custom-select custom-select-sm"
+            formControlName="envioKude"
+            name="envioKude"
+            id="envioKude"
+          >
+          <option [value]="'SI'">Sí</option>
+          <option [value]="'NO'">No</option>
+          </select>
+        </div>
+      </div>
+
 
       <div class="row mb-3">
         <label for="email" class="col-md-4 col-lg-3 col-form-label"

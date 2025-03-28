@@ -19,19 +19,18 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { SucursalService } from '../../../services/sucursal.service';
-import { EmpresaService, ListaPrecioService, SifenService } from '../../../services/service.index';
+import { ListaPrecioService, SifenService } from '../../../services/service.index';
 import { forkJoin } from 'rxjs';
-import { NgHistorialComponent } from '../../../components/ng-historial/ng-historial.component';
 
 @Component({
-  selector: 'app-list',
+  selector: 'app-listEnvio',
   standalone: true,
   imports: [CommonModule, FormsModule, InputDebounceComponent, PaginatorComponent, NgSucursalSearchComponent,
-    NgClienteSearchComponent, NgCondicionPagoSearchComponent, NgListaPrecioSearchComponent,NgHistorialComponent],
-  templateUrl: './list.component.html',
-  styleUrl: './list.component.css'
+    NgClienteSearchComponent, NgCondicionPagoSearchComponent, NgListaPrecioSearchComponent, ],
+  templateUrl: './listEnvio.component.html',
+  styleUrl: './listEnvio.component.css'
 })
-export class ListComponent {
+export class ListEnvioComponent {
   searchComprobante = signal<string>('');
   documentosPage = signal<DocumentosPage>({} as DocumentosPage);
   page = signal<number>(1);
@@ -45,7 +44,6 @@ export class ListComponent {
   documentoSeleccionada: any = {};
   sucursalSeleccionada: number = 0;
   listaSeleccionada: number = 1;
-  empresa:any =null;
   searchCliente = false;
   searchSucursal = false;
   sucursales: Sucursal[] = [];
@@ -60,24 +58,21 @@ export class ListComponent {
   _sucursalesService = inject(SucursalService);
   _listasPrecioService = inject(ListaPrecioService);
   _reportService = inject(ReportesService)
-  _empresaService = inject(EmpresaService)
   _authService = inject(AuthService)
   constructor( ) {
-    const storedSearchData = localStorage.getItem('searchDataDocumento');
+    const storedSearchData = localStorage.getItem('searchListaDocumento');
 //coment
     // Realizar las dos solicitudes HTTP simultáneamente
     forkJoin({
       sucursales: this._sucursalesService.findAll(),
       listas: this._listasPrecioService.findAll(),
-      predeterminada: this._listasPrecioService.findPredeterminado(),
-      empresa:       this._empresaService.getById(this._authService.currentUser()?.empresaId!)
+      predeterminada: this._listasPrecioService.findPredeterminado()
     }).subscribe({
       next: (results) => {
         // Procesar los resultados
         this.sucursales = [...results.sucursales,{descripcion:'TODAS LAS SUCURSALES',id:0}];
         this.listas = [...results.listas,{id:0,descripcion:'Todas las listas'}];
         this.listaPrecio=results.predeterminada;
-        this.empresa =results.empresa;
         this.listaSeleccionada = results.predeterminada.id;
         // Resto del código para manejar los datos almacenados, si es necesario
         if (storedSearchData) {
@@ -127,7 +122,7 @@ export class ListComponent {
     }
     this.page.set(page);
 
-    localStorage.setItem('searchDataDocumento', JSON.stringify({
+    localStorage.setItem('searchListaDocumento', JSON.stringify({
       searchComprobante: this.searchComprobante(),
       cliente: this.cliente(),
       sucursalId: this.sucursalSeleccionada,
@@ -170,55 +165,6 @@ export class ListComponent {
 
   }
 
-
-  verHistorial(documento:any){
-    this.documentoSeleccionada = documento;
-    this.openHistorial = true;
-  }
-
-  crearNotaCredito(documentoId: number) {
-    this._router.navigate(['/documentos/nc', documentoId]);
-
-  }
-  irAListaEnvios(){
-    this._router.navigate(['documentos/listarenvios'   ]);
-
-  }
-  verDetalles(documentoId: number) {
-    this._router.navigate(['/documentos/detalles', documentoId]);
-
-  }
-    cambiarEstadoDocumento(documento:any) {
-      // Buscar la documento por su id
-      const index = this.documentos().findIndex(v => v.id === documento.id);  // Buscar índice de la documento por ID
-
-      if (index !== -1) {
-        // Actualizar la documento en el arreglo
-        this.documentos()[index].estado = documento.estado;  // Modificar el estado, por ejemplo
-        this.documentos()[index].anulado = documento.anulado;
-        // Si se necesita una notificación o actualización adicional, puedes hacerlo aquí.
-        console.log("Documento actualizada:", this.documentos()[index]);
-      } else {
-        console.error("Documento no encontrada");
-      }
-    }
-
-  firmarXml(documentoId: number) {
-    this._documentosService.firmarXML(documentoId).subscribe((response: any) => {
-      const fileURL = URL.createObjectURL(response);
-      window.open(fileURL, '_blank');
-
-    })
-
-  }
-
-  getDoc(id: number) {
-    this._reportService.getPdf(id).subscribe((response: any) => {
-      const fileURL = URL.createObjectURL(response);
-      window.open(fileURL, '_blank');
-
-    })
-  }
 
   anular(id: number) {
     Swal.fire({

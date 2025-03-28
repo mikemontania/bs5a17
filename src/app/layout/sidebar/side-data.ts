@@ -7,8 +7,6 @@ export const navbarData: INavbarData[] = [
     label: 'Dashboard',
     rol:['vendedor','admin']
   },
-
-
   {
     routeLink: 'documentos',
     icon: 'fa-solid fa-cash-register',
@@ -23,7 +21,6 @@ export const navbarData: INavbarData[] = [
       {
         routeLink: 'documentos/listar',
         rol:['vendedor','admin'],
-
         label: 'Listado'
       },
       {
@@ -31,7 +28,6 @@ export const navbarData: INavbarData[] = [
         rol:['vendedor','admin'],
         label: 'Reporte Cobranza'
       },
-
     ]
 
   },

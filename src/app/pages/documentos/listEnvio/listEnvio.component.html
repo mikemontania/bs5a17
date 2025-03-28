@@ -90,9 +90,6 @@
       <div class="btn-group">
         <button type="button" class="btn btn-outline-success" (click)="buscar()">Buscar</button>
         <button type="button" class="btn btn-outline-danger" (click)="cancelar()">Cancelar</button>
-        @if(  empresa?.envioKude =='SI') {
-        <button type="button" class="btn btn-outline-success" (click)="irAListaEnvios()">Listado de envios</button>
-        }
       </div>
     </div>
 
@@ -123,17 +120,12 @@
                 <th scope="col">VENDEDOR</th>
                 <th scope="col">COMPROBANTE</th>
                 <th scope="col">FECHA</th>
-               <!--  <th scope="col">SUBTOTAL</th> -->
-                <th scope="col">DESCUENTO</th>
                 <th scope="col">total</th>
                 <th scope="col">V.Neto</th>
-                <th scope="col">estado</th>
-                <th scope="col">anulado</th>
+                <th scope="col">estado envio</th>
+                <th scope="col">Obs</th>
                 <th scope="col">anular</th>
-                <th scope="col">detalles</th>
-                <th scope="col">doc</th>
-                <th scope="col">NC</th>
-                <th scope="col">historial</th>
+
               </tr>
             </thead>
             <tbody>
@@ -157,18 +149,10 @@
                   <small class="d-block text-sm">{{ documento.timbrado }}</small>
                 </td>
                 <td  class="text-sm">{{ documento.fecha }}</td>
-<!--                 <td  class="text-sm">{{ documento.importeSubtotal | number }} Gs</td>
- -->                <td  class="text-sm">
-                  <div class="text-truncate">
-                    <span class="d-block text-sm">{{documento.porcDescuento | number }}%</span>
-                    <small class="d-block text-sm"> {{ documento.importeDescuento | number }} Gs</small>
-                  </div>
-                 </td>
                 <td  class="text-sm">{{ documento.importeTotal | number }} Gs</td>
                 <td  class="text-sm">{{ documento.valorNeto | number }} Gs</td>
-                <td  class="text-sm">{{ documento.estado   }} </td>
-                <td  class="text-sm">{{ (documento.anulado )?'SI':'NO' }}</td>
-
+                <td  class="text-sm">{{ documento.estadoEnvioKude   }} </td>
+                <td  class="text-sm">{{ documento.obsEnvioKude }}</td>
                 <td  class="text-sm">
                   <button class="btn btn-sm btn-outline-danger text-danger"(click)="anular(documento.id)"[disabled]="documento.anulado"
                   data-bs-toggle="tooltip"
@@ -178,40 +162,7 @@
                   </button>
                 </td>
 
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-info text-info"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Ver detalles de documentos"
-                  (click)="verDetalles(documento.id)">
-                    <i class="bi bi-card-list"></i>
-                  </button>
-                </td>
 
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-success text-success"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Ver documento"  (click)="getDoc(documento.id)">
-                    <i class="bi bi-card-list"></i>
-                  </button>
-                </td>
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-success text-success"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Ver documento"  (click)="crearNotaCredito(documento.id)">
-                    <i class="bi bi-card-list"></i>
-                  </button>
-                </td>
-                <td  class="text-sm">
-                  <button class="btn btn-sm btn-outline-success text-success"
-                  data-bs-toggle="tooltip"[disabled]="documento.estado == 'Pendiente'"
-                  data-bs-placement="top"
-                  title="Ver historial"  (click)="verHistorial(documento)">
-                  <i class="bi bi-list-ul"></i>
-                                  </button>
-                </td>
               </tr>
               } @empty {
               <tr></tr>
@@ -249,12 +200,3 @@
 
 }
 
-
-@if(openHistorial ) {
-  <app-historial
-    [isOpen]="openHistorial"
-    [documento]="documentoSeleccionada"
-    (stateChanged)="cambiarEstadoDocumento($event)"
-    (closeModal)="openHistorial = false"
-  ></app-historial>
-}

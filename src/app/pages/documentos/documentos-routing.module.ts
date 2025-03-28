@@ -28,6 +28,11 @@ export default [
     loadComponent: () => import('./list/list.component').then((c) => c.ListComponent)
   },
   {
+    path: "listarenvios",
+    canActivate: [authGuard],
+    loadComponent: () => import('./listEnvio/listEnvio.component').then((c) => c.ListEnvioComponent)
+  },
+  {
     path: "detalles/:id",
     canActivate: [authGuard],
 

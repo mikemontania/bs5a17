@@ -153,7 +153,8 @@ export class EmpresaComponent implements OnInit {
       codMoneda: [''],
       idCSC: [''],
       csc: [''],
-      modoSifen: ["SI"], 
+      modoSifen: ["SI"],
+      envioKude: ["NO"],
       tipoContId: [null, Validators.required],
       tipoTransaId: [null, Validators.required],
       tipoImpId: [null, Validators.required],
@@ -203,7 +204,7 @@ export class EmpresaComponent implements OnInit {
       return;
     }
 
-    
+
 
     this._empresaService.update(empresaData).subscribe({
       next: async (empresa) => {

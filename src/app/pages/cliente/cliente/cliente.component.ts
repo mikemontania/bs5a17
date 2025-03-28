@@ -86,18 +86,8 @@ initForm(){
     nombreFantasia: [null ],
     nroDocumento: [null, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-zA-Z0-9-]+$/)]],
     direccion: [null, Validators.required],
-    telefono: [null, [
-      Validators.required,
-      Validators.pattern(/^[0-9]+$/),
-      Validators.minLength(6),
-      Validators.maxLength(15)
-    ]],
-    cel: [null, [
-      Validators.required,
-      Validators.pattern(/^[0-9]+$/),
-      Validators.minLength(10),
-      Validators.maxLength(15)
-    ]],
+    telefono: [null ],
+    cel: [null ],
     email: [null, [Validators.required, Validators.email]],
     excentoIva: [false],
     latitud: [null],
