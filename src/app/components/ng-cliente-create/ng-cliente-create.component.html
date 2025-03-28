@@ -2,249 +2,223 @@
   <div class="modal-container"
     [ngClass]="{'small': size === 'small', 'medium': size === 'medium', 'large': size === 'large'}">
     <div class="modal-header">
-      <h5 class="modal-title">Creacion de Cliente</h5>
+      <h5 class="modal-title">Creación de Cliente</h5>
       <button type="button" class="btn-close" (click)="close()"> <i class="fas fa-times"></i></button>
     </div>
     <!-- Contenido del modal -->
-    <div (click)="$event.stopPropagation()">
-
+    <div (click)="$event.stopPropagation()" class="modal-content">
       <div class="card">
         <div class="card-body">
-          <form
-          [formGroup]="clienteForm"
-          (ngSubmit)="onSubmit($event)"
-        >
-        <div class="row mb-3">
-          <label for="razonSocial" class="col-md-4 col-lg-3 col-form-label">Razón Social <span style="color:red">(*)</span></label>
-          <div class="col-md-8 col-lg-9">
-            <input
-              type="text"
-              class="form-control"
-              id="razonSocial"
-              formControlName="razonSocial"
-            />
-            <div *ngIf="clienteForm.get('razonSocial')?.touched && clienteForm.get('razonSocial')?.invalid" class="text-danger">
-              <div *ngIf="clienteForm.get('razonSocial')?.errors?.['required']">Razón Social es un campo obligatorio.</div>
-              <div *ngIf="clienteForm.get('razonSocial')?.errors?.['minlength']">Razón Social debe tener al menos 7 caracteres.</div>
-            </div>
-          </div>
-        </div>
+          <form [formGroup]="clienteForm" (ngSubmit)="onSubmit($event)">
+            <div class="row mb-3">
+             <div class="col-sm-12 col-md-6">
+                <label for="razonSocial" class="col-md-12 col-form-label">Razón Social <span style="color: red">(*)</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="razonSocial"
+                  formControlName="razonSocial"
+                />
+                <div *ngIf="clienteForm.get('razonSocial')?.touched && clienteForm.get('razonSocial')?.invalid" class="text-danger">
+                  <div *ngIf="clienteForm.get('razonSocial')?.errors?.['required']">Razón Social es un campo obligatorio.</div>
+                  <div *ngIf="clienteForm.get('razonSocial')?.errors?.['minlength']">Razón Social debe tener al menos 7 caracteres.</div>
+                </div>
+              </div>
 
-        <div class="row mb-3">
-          <label for="nroDocumento" class="col-md-4 col-lg-3 col-form-label">
-            Nro Documento <span style="color:red">(*)</span>
-          </label>
-          <div class="col-md-8 col-lg-9">
-            <input
-              type="text"
-              class="form-control"
-              id="nroDocumento"
-              formControlName="nroDocumento"
-              [ngClass]="{ 'is-invalid': clienteForm.get('nroDocumento')?.invalid && clienteForm.get('nroDocumento')?.touched }"
-            />
-            <div *ngIf="clienteForm.get('nroDocumento')?.invalid && clienteForm.get('nroDocumento')?.touched" class="invalid-feedback">
-              <div *ngIf="clienteForm.get('nroDocumento')?.errors?.['required']">RUC/CI/CE es un campo obligatorio.</div>
-              <div *ngIf="clienteForm.get('nroDocumento')?.errors?.['minlength']">RUC/CI/CE debe tener al menos 7 caracteres.</div>
-              <div *ngIf="clienteForm.get('nroDocumento')?.errors?.['pattern']">RUC/CI/CE solo puede contener números, letras y guiones. ej 1258654-0</div>
-            </div>
-          </div>
-        </div>
-
-          <div class="row mb-3">
-            <label for="direccion" class="col-md-4 col-lg-3 col-form-label"
-              >direccion</label
-            >
-            <div class="col-md-8 col-lg-9">
-              <input
-                type="text"
-                class="form-control"
-                id="direccion"
-                formControlName="direccion"
-              />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="telefono" class="col-md-4 col-lg-3 col-form-label">Teléfono <span style="color:red">(*)</span></label>
-            <div class="col-md-8 col-lg-9">
-              <input
-                type="text"
-                class="form-control"
-                id="telefono"
-                formControlName="telefono"
-                [ngClass]="{ 'is-invalid': clienteForm.get('telefono')?.invalid && clienteForm.get('telefono')?.touched }"
-              />
-              <div *ngIf="clienteForm.get('telefono')?.invalid && clienteForm.get('telefono')?.touched" class="invalid-feedback">
-                <div *ngIf="clienteForm.get('telefono')?.errors?.['required']">Teléfono es un campo obligatorio.</div>
-                <div *ngIf="clienteForm.get('telefono')?.errors?.['pattern']">El teléfono solo puede contener números.</div>
-                <div *ngIf="clienteForm.get('telefono')?.errors?.['minlength']">El teléfono debe tener al menos 6 caracteres.</div>
-                <div *ngIf="clienteForm.get('telefono')?.errors?.['maxlength']">El teléfono debe tener como máximo 15 caracteres.</div>
+             <div class="col-sm-12 col-md-6">
+                <label for="nombreFantasia" class="col-md-12 col-form-label">Nombre Fantasía</label>
+                <input type="text" class="form-control" id="nombreFantasia" formControlName="nombreFantasia" />
               </div>
             </div>
-          </div>
 
-          <div class="row mb-3">
-            <label for="cel" class="col-md-4 col-lg-3 col-form-label">Celular <span style="color:red">(*)</span></label>
-            <div class="col-md-8 col-lg-9">
-              <input
-                type="text"
-                class="form-control"
-                id="cel"
-                formControlName="cel"
-                [ngClass]="{ 'is-invalid': clienteForm.get('cel')?.invalid && clienteForm.get('cel')?.touched }"
-              />
-              <div *ngIf="clienteForm.get('cel')?.invalid && clienteForm.get('cel')?.touched" class="invalid-feedback">
-                <div *ngIf="clienteForm.get('cel')?.errors?.['required']">Celular es un campo obligatorio.</div>
-                <div *ngIf="clienteForm.get('cel')?.errors?.['pattern']">El celular solo puede contener números.</div>
-                <div *ngIf="clienteForm.get('cel')?.errors?.['minlength']">El celular debe tener al menos 10 caracteres.</div>
-                <div *ngIf="clienteForm.get('cel')?.errors?.['maxlength']">El celular debe tener como máximo 15 caracteres.</div>
+            <div class="row mb-3">
+             <div class="col-sm-12 col-md-6">
+                <label for="nroDocumento" class="col-md-12 col-form-label">Nro Documento <span style="color: red">(*)</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nroDocumento"
+                  formControlName="nroDocumento"
+                  [ngClass]="{
+                    'is-invalid': clienteForm.get('nroDocumento')?.invalid && clienteForm.get('nroDocumento')?.touched
+                  }"
+                />
+                <div *ngIf="clienteForm.get('nroDocumento')?.invalid && clienteForm.get('nroDocumento')?.touched" class="invalid-feedback">
+                  <div *ngIf="clienteForm.get('nroDocumento')?.errors?.['required']">RUC/CI/CE es un campo obligatorio.</div>
+                  <div *ngIf="clienteForm.get('nroDocumento')?.errors?.['minlength']">RUC/CI/CE debe tener al menos 7 caracteres.</div>
+                  <div *ngIf="clienteForm.get('nroDocumento')?.errors?.['pattern']">RUC/CI/CE solo puede contener números, letras y guiones. ej 1258654-0</div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div class="row mb-3">
-            <label for="email" class="col-md-4 col-lg-3 col-form-label">Email <span style="color:red">(*)</span></label>
-            <div class="col-md-8 col-lg-9">
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                formControlName="email"
-                [ngClass]="{ 'is-invalid': clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched }"
-              />
-              <div *ngIf="clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched" class="invalid-feedback">
-                <div *ngIf="clienteForm.get('email')?.errors?.['required']">El email es un campo obligatorio.</div>
-                <div *ngIf="clienteForm.get('email')?.errors?.['email']">El formato del email es inválido.</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="listaPrecioId" class="col-md-4 col-lg-3 col-form-label">
-              Lista de Precio <span style="color:red">(*)</span>
-            </label>
-            <div class="col-md-8 col-lg-9">
-              <select
-                class="form-control"
-                id="listaPrecioId"
-                formControlName="listaPrecioId"
-                required
-              >
-                <option *ngFor="let lista of listas()" [value]="lista.id">
-                  {{ lista.descripcion }}
-                </option>
-              </select>
-              <div *ngIf="clienteForm.get('listaPrecioId')?.invalid && clienteForm.get('listaPrecioId')?.touched" class="invalid-feedback">
-                <div *ngIf="clienteForm.get('listaPrecioId')?.errors?.['required']">Lista de Precio es un campo obligatorio.</div>
-              </div>
-            </div>
-          </div>
-         <div class="row mb-3">
-            <label for="condicionPagoId" class="col-md-4 col-lg-3 col-form-label"
-              >Condicion Pago</label
-            >
-            <div class="col-md-8 col-lg-9">
-              <select
-                class="form-control"
-                id="condicionPagoId"
-                formControlName="condicionPagoId"
-              >
-                <option *ngFor="let forma of formas()" [value]="forma.id">
-                  {{ forma.descripcion }}
-                </option>
-              </select>
-            </div>
-          </div>
-
-             <div class="row mb-3">
-            <label for="latitud" class="col-md-4 col-lg-3 col-form-label"
-              >latitud</label
-            >
-            <div class="col-md-8 col-lg-9">
-              <input
-                type="text"
-                class="form-control"
-                id="latitud"
-                formControlName="latitud"
-              />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="longitud" class="col-md-4 col-lg-3 col-form-label"
-              >longitud</label
-            >
-            <div class="col-md-8 col-lg-9">
-              <input
-                type="text"
-                class="form-control"
-                id="longitud"
-                formControlName="longitud"
-              />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="col-md-6">
-              <div class="row mb-3">
-                <label for="fullName" class="col-md-4 col-lg-3 col-form-label"
-                  >Estados</label
-                >
-                <div class="col-md-8 col-lg-9">
-
-
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="excentoIva"
-                      formControlName="excentoIva"
-                      checked=""
-                    />
-                    <label class="form-check-label" for="excentoIva">
-                      excentoIva
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="empleado"
-                      formControlName="empleado"
-                      checked=""
-                    />
-                    <label class="form-check-label" for="empleado">
-                      empleado
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="activo"
-                      formControlName="activo"
-                      checked
-                    />
-                    <label class="form-check-label" for="activo"> activo </label>
-                  </div>
-
-
+             <div class="col-sm-12 col-md-6">
+                <label for="tipoOperacionId" class="col-md-12 col-form-label">Tipo de Operación <span style="color: red">(*)</span></label>
+                <select class="form-control" id="tipoOperacionId" formControlName="tipoOperacionId">
+                  <option [value]="null" disabled selected>Seleccione una opción</option>
+                  <option *ngFor="let tipo of [
+                    { id: 1, name: 'B2B (CLIENTE CON RUC)' },
+                    { id: 2, name: 'B2C (CLIENTE CON CI)' },
+                    { id: 3, name: 'B2G (CLIENTE CON GUBERNAMENTAL)' },
+                    { id: 4, name: 'B2F (CLIENTE EXTRAJERO)' }
+                  ]" [value]="tipo.id">{{ tipo.name }}</option>
+                </select>
+                <div *ngIf="clienteForm.get('tipoOperacionId')?.touched && clienteForm.get('tipoOperacionId')?.invalid" class="text-danger">
+                  <div *ngIf="clienteForm.get('tipoOperacionId')?.errors?.['required']">Tipo de Operación es obligatorio.</div>
+                  <div *ngIf="clienteForm.get('tipoOperacionId')?.errors?.['pattern']">Seleccione un valor válido.</div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="text-center">
-            <div class=" btn-group">
+            <div class="row mb-3">
+             <div class="col-sm-12 col-md-6">
+                <label for="naturalezaReceptor" class="col-md-12 col-form-label">Naturaleza del Receptor <span style="color: red">(*)</span></label>
+                <select class="form-control" id="naturalezaReceptor" formControlName="naturalezaReceptor">
+                  <option [value]="null" disabled selected>Seleccione una opción</option>
+                  <option [value]="1">Contribuyente</option>
+                  <option [value]="2">No contribuyente</option>
+                </select>
+              </div>
 
-              <button type="submit" class="btn btn-outline-primary">Guardar</button>
-
-              <button type="button" (click)="ngOnInit()" class="btn btn-outline-secondary">Limpiar  </button>
+              <div class="col-md-6"*ngIf="clienteForm.get('naturalezaReceptor')?.value == 2">
+                <label for="tipoDocIdentidad" class="col-md-12 col-form-label">Tipo de Documento <span style="color: red">(*)</span></label>
+                <select class="form-control" id="tipoDocIdentidad" formControlName="tipoDocIdentidad">
+                  <option [value]="null" disabled selected>Seleccione una opción</option>
+                  <option [value]="1">Cédula paraguaya</option>
+                  <option [value]="2">Pasaporte</option>
+                  <option [value]="3">Cédula extranjera</option>
+                  <option [value]="4">Carnet de residencia</option>
+                  <option [value]="5">Innominado</option>
+                  <option [value]="6">Tarjeta Diplomática</option>
+                  <option [value]="9">Otro</option>
+                </select>
+                <div *ngIf="clienteForm.get('tipoDocIdentidad')?.touched && clienteForm.get('tipoDocIdentidad')?.invalid" class="text-danger">
+                  <div *ngIf="clienteForm.get('tipoDocIdentidad')?.errors?.['required']">Tipo de Documento es obligatorio.</div>
+                </div>
+              </div>
             </div>
 
-          </div>
-        </form>
+            <div class="row mb-3">
+             <div class="col-sm-12 col-md-6">
+                <label for="codigoPais" class="col-md-12 col-form-label">País</label>
+                <select class="form-control" formControlName="codigoPais" id="codigoPais">
+                  <option *ngFor="let i of paises" [value]="i.codigo">{{ i.codigo }} - {{ i.descripcion }}</option>
+                </select>
+              </div>
+
+             <div class="col-sm-12 col-md-6">
+                <label for="tipoContribuyente" class="col-md-12 col-form-label">Tipo de Contribuyente</label>
+                <select class="form-control" id="tipoContribuyente" formControlName="tipoContribuyente">
+                  <option [value]="null" disabled selected>Seleccione una opción</option>
+                  <option [value]="1">Persona Física</option>
+                  <option [value]="2">Persona Jurídica</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+             <div class="col-sm-12 col-md-6">
+                <label for="direccion" class="col-md-12 col-form-label">Dirección</label>
+                <input type="text" class="form-control" id="direccion" formControlName="direccion" />
+              </div>
+
+             <div class="col-sm-12 col-md-6">
+                <label for="telefono" class="col-md-12 col-form-label">Teléfono</label>
+                <input type="text" class="form-control" id="telefono" formControlName="telefono" />
+              </div>
+            </div>
+
+            <div class="row mb-3">
+             <div class="col-sm-12 col-md-6">
+                <label for="cel" class="col-md-12 col-form-label">Celular</label>
+                <input type="text" class="form-control" id="cel" formControlName="cel" />
+              </div>
+
+             <div class="col-sm-12 col-md-6">
+                <label for="email" class="col-md-12 col-form-label">Email <span style="color: red">(*)</span></label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  formControlName="email"
+                  [ngClass]="{
+                    'is-invalid': clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched
+                  }"
+                />
+                <div *ngIf="clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched" class="invalid-feedback">
+                  <div *ngIf="clienteForm.get('email')?.errors?.['required']">El email es un campo obligatorio.</div>
+                  <div *ngIf="clienteForm.get('email')?.errors?.['email']">El formato del email es inválido.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+             <div class="col-sm-12 col-md-6">
+                <label for="listaPrecioId" class="col-md-12 col-form-label">Lista de Precio <span style="color: red">(*)</span></label>
+                <select class="form-control" id="listaPrecioId" formControlName="listaPrecioId">
+                  <option *ngFor="let lista of listas()" [value]="lista.id">{{ lista.descripcion }}</option>
+                </select>
+              </div>
+
+             <div class="col-sm-12 col-md-6">
+                <label for="condicionPagoId" class="col-md-12 col-form-label">Condición Pago</label>
+                <select class="form-control" id="condicionPagoId" formControlName="condicionPagoId">
+                  <option *ngFor="let forma of formas()" [value]="forma.id">{{ forma.descripcion }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+             <div class="col-sm-12 col-md-6">
+                <label for="latitud" class="col-md-12 col-form-label">Latitud</label>
+                <input type="text" class="form-control" id="latitud" formControlName="latitud" />
+              </div>
+
+             <div class="col-sm-12 col-md-6">
+                <label for="longitud" class="col-md-12 col-form-label">Longitud</label>
+                <input type="text" class="form-control" id="longitud" formControlName="longitud" />
+              </div>
+            </div>
+
+            <div class="form-row">
+             <div class="col-sm-12 col-md-6">
+                <div class="row mb-3">
+                  <label for="fullName" class="col-md-12 col-form-label">Estados</label>
+                  <div class="col-md-12">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="predeterminado" formControlName="predeterminado" checked="" />
+                      <label class="form-check-label" for="predeterminado">Predeterminado</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="excentoIva" formControlName="excentoIva" checked="" />
+                      <label class="form-check-label" for="excentoIva">Exento IVA</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="empleado" formControlName="empleado" checked="" />
+                      <label class="form-check-label" for="empleado">Empleado</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="activo" formControlName="activo" checked />
+                      <label class="form-check-label" for="activo">Activo</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="propietario" formControlName="propietario" checked="" />
+                      <label class="form-check-label" for="propietario">Propietario</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <div class="btn-group">
+                <button class="btn btn-outline-success" type="submit">Crear <i class="bi bi-file-earmark-plus"></i></button>
+                <button type="button" (click)="ngOnInit()" class="btn btn-outline-danger">Cancelar <i class="bi bi-x-lg"></i></button>
+              </div>
+            </div>
+          </form>
+
         </div>
       </div>
 

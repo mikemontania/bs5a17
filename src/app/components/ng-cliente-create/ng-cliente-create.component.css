@@ -15,10 +15,20 @@
   background: #fff;
   padding: 20px;
   border-radius: 5px;
+  width: 80%; /* Establecer un ancho flexible */
+  max-height: 95%; /* La altura máxima será el 90% de la ventana */
+  overflow: hidden; /* Evitar que el contenido se desborde */
 }
+
+.modal-content {
+  max-height: 80vh; /* 80% de la altura visible de la ventana */
+  overflow-y: auto; /* Habilitar el scroll vertical */
+}
+
 .pointer {
   cursor: pointer;
 }
+
 .small {
   width: 300px;
 }
@@ -30,9 +40,11 @@
 .large {
   width: 800px;
 }
+
 .list-group-item:hover {
   background-color: #fd9a6ce5; /* Cambiar el color de fondo al pasar el cursor */
 }
+
 .modal-header {
   display: flex;
   align-items: center;

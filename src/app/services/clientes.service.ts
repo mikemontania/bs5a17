@@ -62,7 +62,7 @@ export class ClientesService {
 
 
 
-  update(cliente: Cliente): Observable<any> {
+  update(cliente: any): Observable<any> {
     console.log(cliente);
     return this.http.put(BASE_URL + '/clientes/'+cliente.id, cliente)
       .pipe(

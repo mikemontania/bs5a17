@@ -111,14 +111,10 @@
   <div class="card-body">
     @if(documentos() && documentos().length > 0) {
 
-      <div class=" pt-4 d-flex flex-column align-items-center">
+      <div class="pt-4 d-flex flex-column align-items-center">
         <div id="details" style="overflow-x: auto">
           <table class="table caption-top table-sm small-table">
-            <caption>
-              Facturas({{
-                documentos().length | number
-              }})
-            </caption>
+            <caption>Facturas({{ documentos().length | number }})</caption>
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -131,59 +127,64 @@
                 <th scope="col">VENDEDOR</th>
                 <th scope="col">COMPROBANTE</th>
                 <th scope="col">FECHA</th>
-                <th scope="col">total</th>
+                <th scope="col">TOTAL</th>
                 <th scope="col">V.Neto</th>
-                <th scope="col">estado envio</th>
-                <th scope="col">Obs</th>
-                <th scope="col">enviar</th>
-
+                <th scope="col">ESTADO ENVIO</th>
+                <th scope="col">OBS</th>
+                <th scope="col">ENVIAR</th>
               </tr>
             </thead>
             <tbody>
               @for (documento of documentos(); track documento.id; let index = $index) {
-              <tr>
-                <th scope="row">{{ index + 1 }}</th>
-                <td>{{ documento.id }}</td>
-                <td>
-                  <div class="text-truncate">
-                    <span class="d-block text-sm">{{ documento.cliente.razonSocial }}</span>
-                    <small class="d-block text-sm">{{ documento.cliente.nroDocumento }}</small>
-                  </div>
-                </td>
-                <td  class="text-sm">{{ documento.sucursal.descripcion }}</td>
-                <td  class="text-sm">{{ documento.tipoDocumento.descripcion }}</td>
-                <td  class="text-sm">{{ documento.listaPrecio.descripcion }}</td>
-                <td  class="text-sm">{{ documento.condicionPago.descripcion }}</td>
-                <td  class="text-sm">{{ documento.vendedorCreacion.usuario }}</td>
-                <td  class="text-sm">
-                  <span class="d-block text-sm">{{ documento.nroComprobante }}</span>
-                  <small class="d-block text-sm">{{ documento.timbrado }}</small>
-                </td>
-                <td  class="text-sm">{{ documento.fecha }}</td>
-                <td  class="text-sm">{{ documento.importeTotal | number }} Gs</td>
-                <td  class="text-sm">{{ documento.valorNeto | number }} Gs</td>
-                <td  class="text-sm">{{ documento.estadoEnvioKude   }} </td>
-                <td  class="text-sm">{{ documento.obsEnvioKude }}</td>
-                <td class="text-sm">
-                  <button class="btn btn-sm btn-success"
-                          (click)="enviarEmail(documento.id)"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Enviar factura por email">
-                    <i class="bi bi-envelope-check"></i>
-                  </button>
-                </td>
-
-
-
-              </tr>
+                <tr>
+                  <th scope="row">{{ index + 1 }}</th>
+                  <td>{{ documento.id }}</td>
+                  <td>
+                    <div class="text-truncate">
+                      <span class="d-block text-sm">{{ documento.cliente.razonSocial }}</span>
+                      <small class="d-block text-sm">{{ documento.cliente.nroDocumento }}</small>
+                    </div>
+                  </td>
+                  <td class="text-sm">{{ documento.sucursal.descripcion }}</td>
+                  <td class="text-sm">{{ documento.tipoDocumento.descripcion }}</td>
+                  <td class="text-sm">{{ documento.listaPrecio.descripcion }}</td>
+                  <td class="text-sm">{{ documento.condicionPago.descripcion }}</td>
+                  <td class="text-sm">{{ documento.vendedorCreacion.usuario }}</td>
+                  <td class="text-sm">
+                    <span class="d-block text-sm">{{ documento.nroComprobante }}</span>
+                    <small class="d-block text-sm">{{ documento.timbrado }}</small>
+                  </td>
+                  <td class="text-sm">{{ documento.fecha }}</td>
+                  <td class="text-sm">{{ documento.importeTotal | number }} Gs</td>
+                  <td class="text-sm">{{ documento.valorNeto | number }} Gs</td>
+                  <td class="text-sm">
+                    <span [ngClass]="{
+                      'bg-success text-white': documento.estadoEnvioKude === 'ENVIADO',
+                      'bg-warning text-white': documento.estadoEnvioKude === 'NOENVIADO',
+                      'bg-danger text-white': documento.estadoEnvioKude === 'ERROR'
+                    }" class="p-1 rounded">
+                      {{ documento.estadoEnvioKude }}
+                    </span>
+                  </td>
+                  <td class="text-sm">{{ documento.obsEnvioKude }}</td>
+                  <td class="text-sm">
+                    <button class="btn btn-sm btn-success"
+                            (click)="enviarEmail(documento.id)"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="Enviar factura por email">
+                      <i class="bi bi-envelope-check"></i>
+                    </button>
+                  </td>
+                </tr>
               } @empty {
-              <tr></tr>
+                <tr></tr>
               }
             </tbody>
           </table>
         </div>
       </div>
+
 
     } @else {
     <div class="w-100 empty-message-container">
