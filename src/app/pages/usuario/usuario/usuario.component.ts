@@ -43,6 +43,22 @@ export class UsuarioComponent implements OnInit {
   private router = inject(Router);
   private _usuarioService = inject(UsuariosService)
   private activatedRoute = inject(ActivatedRoute);
+  sinNumeracion ={
+    "id": null,
+    "empresaId": null,
+    "sucursalId":null,
+    "itide": null,
+    "inicioTimbrado": "2022-06-17",
+    "finTimbrado": "9999-12-31",
+    "numeroInicio": 1,
+    "numeroFin": 999999999,
+    "serie": "Sin Numeración",
+    "timbrado": "",
+    "tipoComprobante": "TICKET",
+    "ultimoNumero": 0,
+    "tipoImpresion": "TICKET",
+    "activo": true
+}
   constructor() {
     // Initialize the property in the constructor
     this.usuarioForm = this.initForm()
@@ -77,8 +93,8 @@ export class UsuarioComponent implements OnInit {
         this._numeracionService.findAll(sucursalId, 1),
         this._numeracionService.findAll(sucursalId, 6)
       ]).subscribe(([numFactura, numNotaCred]) => {
-        this.numeraciones.set(numFactura || []);
-        this.numeracionesNc.set(numNotaCred || []);
+        this.numeraciones.set([...(numFactura || []),  {...this.sinNumeracion}]);
+        this.numeracionesNc.set([...(numNotaCred || []), {...this.sinNumeracion}]);
         resolve(); // Solo cuando se completan los datos, resolvemos la promesa
       });
     });
@@ -145,8 +161,13 @@ export class UsuarioComponent implements OnInit {
 
       return;
     }
-    const usuarioData = this.usuarioForm.value;
+    let usuarioData = this.usuarioForm.value;
     Swal.showLoading();
+    if (usuarioData?.numPrefId == 'null'  )
+      usuarioData.numPrefId =null;
+
+    if (usuarioData?.numNcPrefId == 'null'  )
+      usuarioData.numNcPrefId =null;
 
     // Verificar que las contraseñas coincidan y no estén vacías
     if (usuarioData?.password1 !== usuarioData?.password2 || usuarioData?.password1 === '') {
@@ -175,6 +196,7 @@ export class UsuarioComponent implements OnInit {
           Swal.fire("Error", error, "error");
         },
         complete: () => {
+            this._authService.checkAuthStatus().subscribe();
           this.usuarioForm = this.fb.group({});
         }// Use 'complete' instead of 'finally'
       });
@@ -194,10 +216,10 @@ export class UsuarioComponent implements OnInit {
         },
         complete: () => {
           this.usuarioForm = this.fb.group({});
+          this._authService.checkAuthStatus()
         }// Use 'complete' instead of 'finally'
       });
     }
-
   }
   getFormErrors() {
     const errors: { field: string; errors: any }[] = [];

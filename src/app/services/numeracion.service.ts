@@ -22,16 +22,16 @@ export class NumeracionService {
 
 
 
-  findAll(sucursalId:number, itide:number) {
-
+  findAll(sucursalId: number, itide: number): Observable<any[]> {
     return this.http
-      .get(BASE_URL + "/numeraciones/list/"+sucursalId+"/"+itide)
+      .get<any[]>(`${BASE_URL}/numeraciones/list/${sucursalId}/${itide}`)
       .pipe(
-        map((respo: any) => {
+        map((respo: any[]) => {
           return respo;
         })
       );
   }
+
   paginado(page: number, size: number ) {
     return this.http
       .get(BASE_URL + "/numeraciones/paginados/" + page + "/" + size )
