@@ -24,6 +24,11 @@ export const navbarData: INavbarData[] = [
         label: 'Listado'
       },
       {
+        routeLink: 'documentos/creditos',
+        rol:['vendedor','admin'],
+        label: 'Creditos'
+      },
+      {
         routeLink: 'documentos/reporteCobranza',
         rol:['vendedor','admin'],
         label: 'Reporte Cobranza'

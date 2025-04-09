@@ -1,0 +1,200 @@
+<div class="card">
+  <div class="card-body row">
+    <div class="col-12 mb-3">
+      <h5 class="text-primary">Resumen de Créditos</h5>
+    </div>
+
+    <div class="col-md-6">
+      <div class="input-group mb-3">
+        <span class="input-group-text">Fecha</span>
+        <input type="date" class="form-control" [(ngModel)]="fechaDesde">
+        <input type="date" class="form-control" [(ngModel)]="fechaHasta">
+      </div>
+
+
+ <div class="input-group mb-3 w-100 d-flex selector">
+  <span (click)="buscarCliente()" class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
+    @if(cliente()?.id) {
+      <span class="client-info">
+        Cliente:
+      </span>
+
+         <small>{{ cliente()?.razonSocial }}-{{ cliente()?.nroDocumento }}</small>
+
+    } @else {
+      <span class="client-info"><small>Cliente: </small></span>
+    }
+    <span class="dropdown-icon">
+      <i class="mh-1 fa-solid fa-sort-down"></i>
+    </span>
+  </span>
+</div>
+
+
+<!-- Estado Input -->
+<div class="input-group mb-3 w-100 d-flex selector">
+  <span (click)="buscarEstado()" class="input-group-text flex-grow-1 d-flex justify-content-between" id="basic-addon3">
+    @if(estado?.id) {
+      <span class="client-info">
+        Estado:
+      </span>
+
+         <small>{{ estado.descripcion   }}</small>
+
+    } @else {
+      <span class="client-info"><small>Estado: TODOS..</small></span>
+    }
+    <span class="dropdown-icon">
+      <i class="mh-1 fa-solid fa-sort-down"></i>
+    </span>
+  </span>
+</div>
+
+
+
+  <!-- Comprobante Numero Input -->
+  <div class="input-group mb-3 w-100">
+    <label class="input-group-text" for="inputSearch">Comprobante:</label>
+    <input-debounce
+      #inputSearch
+      [delay]="300"
+      id="inputSearch"
+      type="text"
+      class="form-control"
+      placeholder="Comprobante número ..."
+      required
+      (value)="debounceSearch($event)" />
+  </div>
+
+      <div class="btn-group">
+        <button class="btn btn-outline-success" (click)="buscar()">Buscar</button>
+        <button class="btn btn-outline-danger" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
+
+
+    <div class="col-lg-3">
+      <app-resumen-credito
+      [resumen]="resumenCreditoFecha"
+      titulo="Período Completo">
+    </app-resumen-credito>
+
+
+
+    </div>
+    <div class="col-lg-3">
+
+    <app-resumen-credito
+    [resumen]="resumenCredito"
+    titulo="Fechas Seleccionadas">
+  </app-resumen-credito>
+
+  </div>
+
+
+
+    <div class="col-md-12 mt-4" >
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+              <th>Nro Comprobante</th>
+              <th>Estado</th>
+              <th>F.Vencimiento</th>
+              <th>Credito</th>
+              <th>Dias de Mora</th>
+              <th>Restantes</th>
+              <th align="center">Importe Total</th>
+              <th align="center">Saldo Pendiente</th>
+              <th>Pagar</th>
+              <th>Historial</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of creditos"
+                    [ngClass]="{'table-danger': item.diasMora > 0, 'table-success': item.estado === 'PAGADO'}">
+                    <td align="center">{{ item.id}}</td>
+                    <td>
+                        <h6>{{item.cliente.docNro}}</h6>
+                        <small class="text-muted">{{ item.cliente.razonSocial }}</small>
+                    </td>
+                    <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
+                    <td>
+                        <h6>{{item.nroComprobante}}</h6>
+                        <small class="text-muted">{{ item.timbrado }}</small>
+                    </td>
+                    <td>{{ item.estado }}</td>
+                    <td>{{ item.fechaVencimiento | date:'dd/MM/yyyy'}}</td>
+                    <td>{{ item.cantDias }} día</td>
+                    <td>{{ item.diasMora }} día</td>
+                    <td *ngIf="item.diasRestante!== 999" >{{ item.diasRestantes }} día</td>
+                    <td *ngIf="item.diasRestante=== 999" >-</td>
+                    <td align="center">GS.{{ formatNumberWithThousandsSeparator(item.importeTotal)   }}</td>
+                    <td align="center">GS.{{ formatNumberWithThousandsSeparator(item.saldoPendiente)   }}</td>
+                    <td align="center">
+
+                        <button
+                        class="btn btn-sm btn-outline-success text-success"
+                          type="button"
+                          data-bs-toggle="tooltip" data-bs-placement="top" title="Pagar"
+                          [disabled]="item.estado === 'PAGADO'"
+                          (click)="pagarCredito(item)">
+                          <i class="fas fa-money-bill-wave"></i>
+                        </button>
+                    </td>
+                     <td align="center">
+                        <button
+                        class="btn btn-sm btn-outline-secondary text-secondary"
+                          type="button"
+                          data-bs-toggle="tooltip" data-bs-placement="top" title="Historial"
+                          (click)="getHistorial(item.id)">
+                          <i class="fas fa-scroll"></i>
+                        </button>
+
+                    </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <tr *ngIf="creditos.length === 0">
+      <td colspan="4" class="text-center">No se encontraron resultados</td>
+    </tr>
+    <div class="d-flex justify-content-center">
+      <app-paginator
+      [totalPages]="totalPages()"
+      [currentPage]="page()"
+      (pageChanged)="onPageChanged($event)">
+    </app-paginator>
+    </div>
+  </div>
+
+
+
+</div>
+@if(searchCliente ) {
+  <app-cliente-search
+    [isOpen]="searchCliente"
+    (cliente)="selectCliente($event)"
+    (closeModal)="searchCliente = false"
+  ></app-cliente-search>
+
+  }
+  @if(searchEstado ) {
+    <app-estado-credito
+      [isOpen]="searchEstado"
+      (estado)="selectEstado($event)"
+      (closeModal)="searchEstado = false"
+    ></app-estado-credito>
+
+    }
+    @if(searchHistorial ) {
+      <app-historial-credito
+        [isOpen]="searchHistorial"
+        [id]="creditoHistorialId"
+        (closeModal)="searchHistorial = false"
+      ></app-historial-credito>
+
+      }

@@ -1,0 +1,39 @@
+<div class="modal-background" *ngIf="isOpen" (click)="close()">
+  <div class="modal-container"
+    [ngClass]="{'small': size === 'small', 'medium': size === 'medium', 'large': size === 'large'}">
+    <div class="modal-header">
+      <h5 class="modal-title">Historial de Crédito</h5>
+      <button type="button" class="btn-close" (click)="close()"> <i class="fas fa-times"></i></button>
+    </div>
+    <!-- Contenido del modal -->
+    <div (click)="$event.stopPropagation()">
+      <div class="modal-body">
+        <table class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Comprobante</th>
+              <th>Importe</th>
+              <th>Saldo Anterior</th>
+              <th>Saldo Nuevo</th>
+              <th>Observación</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let h of historialCredito">
+              <td>{{ h.fecha | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <small>{{ h.nroComprobante }}</small><br />
+                <span class="text-muted">{{ h.timbrado }}</span>
+              </td>
+              <td class="text-end">Gs.{{ formatNumberWithThousandsSeparator(+h.importe) }}</td>
+              <td class="text-end">Gs.{{ formatNumberWithThousandsSeparator(+h.saldoAnterior) }}</td>
+              <td class="text-end">Gs.{{ formatNumberWithThousandsSeparator(+h.saldoNuevo) }}</td>
+              <td>{{ h.observacion }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

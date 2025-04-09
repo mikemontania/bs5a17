@@ -22,6 +22,12 @@ export default [
     loadComponent: () => import('./reporteCobranza/reporteCobranza.component').then((c) => c.ReporteCobranzaComponent)
   },
   {
+    path: "creditos",
+    canActivate: [authGuard],
+
+    loadComponent: () => import('./creditos/creditos.component').then((c) => c.CreditoComponent)
+  },
+  {
     path: "listar",
     canActivate: [authGuard],
 
