@@ -16,7 +16,7 @@ import {
   CondicionPagoService,
   SucursalService,
   ClientesService,
- DocumentosService,
+  DocumentosService,
   ValoracionService,
   ReportesService
 } from "../../../services/service.index";
@@ -91,7 +91,7 @@ export class DocumentosComponent implements OnInit {
   constructor() {
     //para realizar ventas es necesario que se tenga
     if (!this._authService.numeracionPrefId()) {
-       Swal.fire("Atención","Acceso denegado!!" , "error");
+      Swal.fire("Atención", "Acceso denegado!!", "error");
       this._router.navigate(['/dashboard']);
     }
     this.initValues();
@@ -108,7 +108,16 @@ export class DocumentosComponent implements OnInit {
       this._clienteService.findPredeterminado()
     ]).subscribe(([sucursal, numeracion, cliente]) => {
       this.sucursal.set(sucursal);
+      console.log(numeracion)
       this.numeracion.set(numeracion);
+      // Verificar vencimiento del timbrado
+      const hoy = new Date();
+      const finTimbrado = new Date(numeracion.finTimbrado);
+
+      if (finTimbrado < hoy) {
+        Swal.fire("Atención", "El timbrado está vencido", "error");
+        this._router.navigate(['/dashboard']);
+      }
       this.cliente.set(cliente);
       this.actualizarCargador();
     });
@@ -184,11 +193,11 @@ export class DocumentosComponent implements OnInit {
 
   async selectCliente(cliente: Cliente) {
     try {
-       console.log("Selected client:", cliente);
+      console.log("Selected client:", cliente);
       // Actualiza la señal del cliente
       this.cliente.set(cliente);
       // Espera a la lista de precios y actualiza la señal correspondiente
-      this.listaPrecio.set({ ...cliente.listaPrecio ,id:cliente.listaPrecioId} as ListaPrecio);
+      this.listaPrecio.set({ ...cliente.listaPrecio, id: cliente.listaPrecioId } as ListaPrecio);
 
       // Cierra el modal y realiza otras operaciones necesarias
       this.searchCliente = false;
@@ -213,6 +222,14 @@ export class DocumentosComponent implements OnInit {
     this.reCalcular();
   }
   selectNumeracion(numeracion: Numeracion) {
+
+    // Verificar vencimiento del timbrado
+    const hoy = new Date();
+    const finTimbrado = new Date(numeracion.finTimbrado);
+    if (finTimbrado < hoy) {
+      Swal.fire("Atención", "El timbrado está vencido", "error");
+      return
+    }
     console.log("Selected Numeracion:", numeracion);
     this.numeracion.set(numeracion); // Update the client signal
     this.searchNumeracion = false; // Close the modal
@@ -235,56 +252,56 @@ export class DocumentosComponent implements OnInit {
 
   async reCalcular() {
     try {
-        console.log('reCalcular');
+      console.log('reCalcular');
 
-        Swal.fire({
-            title: 'Espere por favor...',
-            allowOutsideClick: false,
-            icon: 'info',
-        });
-        Swal.showLoading();
-        const respuesta: any = await lastValueFrom(this._valoracionService.obtenerDescuentoImporte(this.listaPrecio().id, this.sucursal().id));
-        this.descuentosEscala = (respuesta?.descuentos) ? respuesta?.descuentos : [];
+      Swal.fire({
+        title: 'Espere por favor...',
+        allowOutsideClick: false,
+        icon: 'info',
+      });
+      Swal.showLoading();
+      const respuesta: any = await lastValueFrom(this._valoracionService.obtenerDescuentoImporte(this.listaPrecio().id, this.sucursal().id));
+      this.descuentosEscala = (respuesta?.descuentos) ? respuesta?.descuentos : [];
 
-        for (const detalle of this.detalles) {
-            try {
-                console.log({ variedadID: detalle.varianteId, sucursalID: this.sucursal().id, listaPrecio: this.listaPrecio().id });
-                const valoracion: any = await lastValueFrom(this._valoracionService.obtenerVigente(detalle.varianteId, this.sucursal().id, this.listaPrecio().id));
-                if (valoracion) {
-                    if (valoracion.precio) {
-                        if (this.cliente().excentoIva == true) {
-                            console.log(valoracion)
-                            console.log(+valoracion.precio.variante.porcIva)
-                            detalle.porcIva = 0;
-                            if (+valoracion.precio.variante.porcIva == 0) {
-                                detalle.importePrecio = valoracion.precio.valor;
-                            } else if (+valoracion.precio.variante.porcIva == 5) {
-                                detalle.importePrecio = valoracion.precio.valor - Math.round(valoracion.precio.valor / 21);
-                            } else if (+valoracion.precio.variante.porcIva == 10) {
-                                detalle.importePrecio = valoracion.precio.valor - Math.round(valoracion.precio.valor / 11);
-                            }
-                            console.log(detalle.importePrecio)
-                        } else {
-                            detalle.importePrecio = valoracion.precio.valor;
-                        }
-
-                        detalle.importeSubtotal = detalle.cantidad * detalle.importePrecio;
-                        this.reAjustarDetalles();
-                        this.actualizarCabecera();
-
-                    }
+      for (const detalle of this.detalles) {
+        try {
+          console.log({ variedadID: detalle.varianteId, sucursalID: this.sucursal().id, listaPrecio: this.listaPrecio().id });
+          const valoracion: any = await lastValueFrom(this._valoracionService.obtenerVigente(detalle.varianteId, this.sucursal().id, this.listaPrecio().id));
+          if (valoracion) {
+            if (valoracion.precio) {
+              if (this.cliente().excentoIva == true) {
+                console.log(valoracion)
+                console.log(+valoracion.precio.variante.porcIva)
+                detalle.porcIva = 0;
+                if (+valoracion.precio.variante.porcIva == 0) {
+                  detalle.importePrecio = valoracion.precio.valor;
+                } else if (+valoracion.precio.variante.porcIva == 5) {
+                  detalle.importePrecio = valoracion.precio.valor - Math.round(valoracion.precio.valor / 21);
+                } else if (+valoracion.precio.variante.porcIva == 10) {
+                  detalle.importePrecio = valoracion.precio.valor - Math.round(valoracion.precio.valor / 11);
                 }
-            } catch (error) {
-                // Manejar el error de obtenerDescuentoEscala aquí
-                console.error(`Error al obtener descuento de escala: ${error}`);
-            }
-        }
+                console.log(detalle.importePrecio)
+              } else {
+                detalle.importePrecio = valoracion.precio.valor;
+              }
 
-        Swal.close();
+              detalle.importeSubtotal = detalle.cantidad * detalle.importePrecio;
+              this.reAjustarDetalles();
+              this.actualizarCabecera();
+
+            }
+          }
+        } catch (error) {
+          // Manejar el error de obtenerDescuentoEscala aquí
+          console.error(`Error al obtener descuento de escala: ${error}`);
+        }
+      }
+
+      Swal.close();
     } catch (error) {
-        console.error(`Error al obtener descuento de escala: ${error}`);
+      console.error(`Error al obtener descuento de escala: ${error}`);
     }
-}
+  }
 
 
 
@@ -307,8 +324,8 @@ export class DocumentosComponent implements OnInit {
       importeTotal: 0,
       totalKg: 0,
       tipoDescuento: "",
-      ivaBase:100,
-      ivaTipo:1
+      ivaBase: 100,
+      ivaTipo: 1
     };
   }
   seleccionarProducto(item: ProductosItem) {
